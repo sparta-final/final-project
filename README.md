@@ -1,17 +1,32 @@
 # 최종프로젝트
 
-## 프로젝트 소개
+## **프로젝트 소개**
 
-### 프로젝트 핵심 가치
+### ✨프로젝트 핵심 기능
+
+---
 
 - ??
 - ??
 
-### 최종 구현 범위
+### 📌역할분담
 
-- Swagger-openAPI
+---
+
+- **한정훈**
+  1. ??
+  2. ??
+- **김승일**
+  1. ??
+  2. ??
+
+### ✅최종 구현 범위
+
+---
+
+- **Swagger-openAPI**
   - /api : API Document
-- Auth
+- **Auth**
   - POST :
   - GET :
 - ??
@@ -20,20 +35,22 @@
   - PATCH :
   - DELETE :
 
-### 기술 스택
+### 👨‍💻기술 스택
+
+---
 
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)
 ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white) ![TypeORM](https://img.shields.io/badge/ORM-TYPEORM-red)
 ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 
-### 폴더 구조
+### 🗂️폴더 구조
 
 ```
 .
 ```
 
-### 코드 컨벤션
+### 👀코드 컨벤션
 
 - **패키지 관리**
   - 패키지 매니저는 npm을 사용합니다
@@ -74,11 +91,11 @@
 
 <br/>
 
-### ERD
+### 🖼️ERD
 
 <br /><br />
 
-## 프로젝트 시작 방법
+## 😊프로젝트 시작 방법
 
 이 섹션에서는 프로젝트 시작 방법에 대해서 설명합니다
 
