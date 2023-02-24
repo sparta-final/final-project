@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    // NOTE: 추가
+    "strict": true,
+    "noUnusedParameters": true,
+    "noUncheckedIndexedAccess": true,
+    // NOTE: DTO  프로퍼티는 반드시 초기화할 필요가 없기 때문에 해당 기능 비활성화
+    "strictPropertyInitialization": false
+  }
+}
