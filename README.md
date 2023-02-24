@@ -4,14 +4,10 @@
 
 ### ✨프로젝트 핵심 기능
 
----
-
 - ??
 - ??
 
 ### 📌역할분담
-
----
 
 - **한정훈**
   1. ??
@@ -21,8 +17,6 @@
   2. ??
 
 ### ✅최종 구현 범위
-
----
 
 - **Swagger-openAPI**
   - /api : API Document
@@ -36,8 +30,6 @@
   - DELETE :
 
 ### 👨‍💻기술 스택
-
----
 
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)
 ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white) ![TypeORM](https://img.shields.io/badge/ORM-TYPEORM-red)
