@@ -1,5 +1,5 @@
 import { PostBusinessUserDto } from './dto/postBusinessUser.dto';
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, CACHE_MANAGER, ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/global/entities/Users';
 import { Repository } from 'typeorm';
@@ -9,12 +9,14 @@ import { Busienssusers } from 'src/global/entities/Busienssusers';
 import { LoginUserDto } from './dto/loginUser.dto';
 import { JwtPayload } from './types/jwtPayload.type';
 import { JwtService } from '@nestjs/jwt';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(Users) private userRepo: Repository<Users>,
     @InjectRepository(Busienssusers) private businessUserRepo: Repository<Busienssusers>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private jwtService: JwtService
   ) {}
 
@@ -96,10 +98,10 @@ export class AuthService {
       }),
     ]);
     // RefreshToken 암호화 후 캐시에 저장
-    // const hashRefreshToken = bcrypt.hashSync(RefreshToken, 10);
-    // await this.cacheManager.set(`${userId}-refresh`, hashRefreshToken, {
-    //   ttl: 60 * 60 * 24 * 7, // 7일
-    // });
+    const hashRefreshToken = bcrypt.hashSync(RefreshToken, 10);
+    await this.cacheManager.set(`${userId}-refresh`, hashRefreshToken, {
+      ttl: 60 * 60 * 24 * 7, // 7일
+    });
     return { AccessToken, RefreshToken };
   }
 }
