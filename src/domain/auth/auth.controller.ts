@@ -29,16 +29,23 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: '일반유저 로그인' })
-  @ApiResponse({ status: 201, description: '회원가입 성공' })
-  @ApiResponse({ status: 400, description: '회원가입 실패' })
+  @ApiResponse({ status: 201, description: '로그인 성공' })
+  @ApiResponse({ status: 400, description: '로그인 실패' })
   @Post('user/login')
   async userlogin(@Body() loginUserDto: LoginUserDto, @Res() res: Response) {
     const tokens = await this.authservice.userlogin(loginUserDto);
     res.cookie('access_token', tokens.AccessToken, {
       httpOnly: true,
       // secure: true,
-      sameSite: 'none',
     });
     return res.status(200).json({ message: '로그인 성공' });
+  }
+
+  // TODO: guard 적용
+  @ApiOperation({ summary: '토큰 재발급' })
+  @Post('user/refresh')
+  async restoreRefreshToken() {
+    // TODO: userID : custom decorator 적용, refresh token은 어디서 받아올지? > custom decorator?
+    // return this.authservice.refreshToken(dto.)
   }
 }
