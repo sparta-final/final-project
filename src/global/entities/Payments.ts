@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { paymentStatus } from './common/payment.status';
 import { Users } from './Users';
-import { isCancel } from './common/payment.isCancel';
 
 @Entity('payments', { schema: 'sixpack' })
 export class Payments {
@@ -26,8 +26,8 @@ export class Payments {
   customerUid: string;
 
   @ApiProperty({ example: 0, description: '결제 상태' })
-  @Column({ type: 'enum', enum: isCancel, name: 'isCancel', default: isCancel.NotCancel })
-  isCancel: isCancel;
+  @Column({ type: 'varchar', name: 'status', default: paymentStatus.WAITING })
+  status: paymentStatus;
 
   @ApiProperty({ example: 1000, description: '결제 금액' })
   @Column('int', { name: 'amount' })

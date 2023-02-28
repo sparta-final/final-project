@@ -1,3 +1,4 @@
+import { CurrentUser } from './../../global/common/decorator/current-user.decorator';
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -42,10 +43,10 @@ export class AuthController {
   }
 
   // TODO: guard 적용
-  @ApiOperation({ summary: '토큰 재발급' })
-  @Post('user/refresh')
-  async restoreRefreshToken() {
-    // TODO: userID : custom decorator 적용, refresh token은 어디서 받아올지? > custom decorator?
-    // return this.authservice.refreshToken(dto.)
-  }
+  // @ApiOperation({ summary: '토큰 재발급' })
+  // @Post('user/refresh')
+  // async restoreRefreshToken(@CurrentUser() userId: number) {
+  // refresh token은 어디서 받아올지?  custom decorator?
+  // return this.authservice.restoreRefreshToken({ userId });
+  // }
 }

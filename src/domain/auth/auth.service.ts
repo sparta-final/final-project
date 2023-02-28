@@ -1,5 +1,13 @@
 import { PostBusinessUserDto } from './dto/postBusinessUser.dto';
-import { BadRequestException, CACHE_MANAGER, ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  CACHE_MANAGER,
+  ConflictException,
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/global/entities/Users';
 import { Repository } from 'typeorm';
@@ -103,5 +111,18 @@ export class AuthService {
       ttl: 60 * 60 * 24 * 7, // 7일
     });
     return { AccessToken, RefreshToken };
+  }
+
+  async restoreRefreshToken(userId: number, rt: string) {
+    const existUser = await this.userRepo.findOne({
+      where: { id: userId },
+    });
+    if (!existUser) throw new NotFoundException('유저가 존재하지 않습니다.');
+    const existRt: string = await this.cacheManager.get(`${userId}-refresh`);
+    const rtMatch = await bcrypt.compare(rt, existRt);
+    if (!rtMatch) throw new ForbiddenException('RefreshToken이 일치하지 않습니다.');
+
+    const tokens = await this.getTokens(existUser.id, existUser.email);
+    return tokens;
   }
 }
