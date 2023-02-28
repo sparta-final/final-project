@@ -12,6 +12,7 @@ export class AuthController {
   @ApiResponse({ status: 400, description: '회원가입 실패' })
   @Post('user/signup')
   async postUsers(@Body() postuserDto: PostUserDto) {
-    return this.authservice.postUsers(postuserDto);
+    const user = await this.authservice.postUsers(postuserDto);
+    return user;
   }
 }
