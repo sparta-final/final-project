@@ -19,7 +19,7 @@ export class Users {
   @Column('varchar', { name: 'email', unique: true, length: 30 })
   email: string;
 
-  @ApiProperty({ example: 'sixpack@google.com', description: '일반유저 비밀번호', required: true })
+  @ApiProperty({ example: '1234', description: '일반유저 비밀번호', required: true })
   @IsString()
   @IsNotEmpty()
   @Column('varchar', { name: 'password', length: 100 })
@@ -37,7 +37,7 @@ export class Users {
   nickname: string;
 
   @ApiProperty({ example: 'Basic', description: '일반유저 구독등급' })
-  @Column({ type: 'enum', enum: userMembership, name: 'membership' })
+  @Column({ type: 'enum', enum: userMembership, name: 'membership', default: null, nullable: true })
   membership: userMembership;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
