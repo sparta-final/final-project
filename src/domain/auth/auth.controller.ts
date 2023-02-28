@@ -1,7 +1,7 @@
-import { CurrentUser } from './../../global/common/decorator/current-user.decorator';
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
+import { Request } from 'express';
+import { Public } from 'src/global/common/decorator/public.decorator';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/loginUser.dto';
 import { PostBusinessUserDto } from './dto/postBusinessUser.dto';
@@ -14,6 +14,7 @@ export class AuthController {
   @ApiOperation({ summary: '일반유저 회원가입' })
   @ApiResponse({ status: 201, description: '회원가입 성공' })
   @ApiResponse({ status: 400, description: '회원가입 실패' })
+  @Public()
   @Post('user/signup')
   async postUsers(@Body() postuserDto: PostUserDto) {
     const user = await this.authservice.postUsers(postuserDto);
@@ -23,6 +24,7 @@ export class AuthController {
   @ApiOperation({ summary: '사업자 회원가입' })
   @ApiResponse({ status: 201, description: '회원가입 성공' })
   @ApiResponse({ status: 400, description: '회원가입 실패' })
+  @Public()
   @Post('user/business/signup')
   async postBusinessUsers(@Body() postBusinessUserDto: PostBusinessUserDto) {
     const businessUser = await this.authservice.postBusinessUsers(postBusinessUserDto);
@@ -32,14 +34,16 @@ export class AuthController {
   @ApiOperation({ summary: '일반유저 로그인' })
   @ApiResponse({ status: 201, description: '로그인 성공' })
   @ApiResponse({ status: 400, description: '로그인 실패' })
+  @Public()
   @Post('user/login')
-  async userlogin(@Body() loginUserDto: LoginUserDto, @Res() res: Response) {
+  async userlogin(@Body() loginUserDto: LoginUserDto) {
     const tokens = await this.authservice.userlogin(loginUserDto);
-    res.cookie('access_token', tokens.AccessToken, {
-      httpOnly: true,
-      // secure: true,
-    });
-    return res.status(200).json({ message: '로그인 성공' });
+    return tokens;
+  }
+
+  @Get('test')
+  async test(@Req() req: Request) {
+    return req.headers.authorization;
   }
 
   // TODO: guard 적용

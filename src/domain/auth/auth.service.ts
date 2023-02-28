@@ -3,10 +3,10 @@ import {
   BadRequestException,
   CACHE_MANAGER,
   ConflictException,
-  ForbiddenException,
   Inject,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/global/entities/Users';
@@ -120,7 +120,7 @@ export class AuthService {
     if (!existUser) throw new NotFoundException('유저가 존재하지 않습니다.');
     const existRt: string = await this.cacheManager.get(`${userId}-refresh`);
     const rtMatch = await bcrypt.compare(rt, existRt);
-    if (!rtMatch) throw new ForbiddenException('RefreshToken이 일치하지 않습니다.');
+    if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
 
     const tokens = await this.getTokens(existUser.id, existUser.email);
     return tokens;
