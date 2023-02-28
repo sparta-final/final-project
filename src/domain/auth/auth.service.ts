@@ -113,6 +113,12 @@ export class AuthService {
     return { AccessToken, RefreshToken };
   }
 
+  /**
+   * 토큰 재발급
+   * @author 김승일
+   * @param userId
+   * @param rt
+   */
   async restoreRefreshToken(userId: number, rt: string) {
     const existUser = await this.userRepo.findOne({
       where: { id: userId },
