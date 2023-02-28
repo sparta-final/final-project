@@ -1,9 +1,19 @@
+import { Users } from './../entities/Users';
+import { UserGym } from './../entities/UserGym';
+import { Reviews } from './../entities/Reviews';
+import { GymImg } from './../entities/GymImg';
+import { Gym } from './../entities/Gym';
+import { FeedsImg } from './../entities/FeedsImg';
+import { Feeds } from './../entities/Feeds';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { Busienssusers } from '../entities/Busienssusers';
+import { Comments } from '../entities/Comments';
+import { Payments } from '../entities/Payments';
 
 // TODO: TypeOrmModuleOptions의 속성들을 찾아서 채워넣기
 function ormConfig(): TypeOrmModuleOptions {
   const commonConf = {
-    ENTITIES: [__dirname, '../entities/*.ts'],
+    ENTITIES: [Busienssusers, Comments, Feeds, FeedsImg, Gym, GymImg, Payments, Reviews, UserGym, Users],
   };
   const ormconfig: TypeOrmModuleOptions = {
     type: 'mysql',
@@ -13,7 +23,7 @@ function ormConfig(): TypeOrmModuleOptions {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     entities: commonConf.ENTITIES,
-    synchronize: true,
+    synchronize: false,
     logging: true,
     charset: 'utf8mb4',
     keepConnectionAlive: true,
