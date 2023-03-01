@@ -18,11 +18,14 @@ import { LoginUserDto } from './dto/loginUser.dto';
 import { PostBusinessUserDto } from './dto/postBusinessUser.dto';
 import { PostUserDto } from './dto/postUser.dto';
 import { JwtPayload } from './types/jwtPayload.type';
+import { Public } from 'src/global/common/decorator/public.decorator';
 
 @ApiTags('AUTH')
 @Controller('api/auth')
 export class AuthController {
   constructor(private authservice: AuthService) {}
+
+  @Public()
   @UserSignup()
   @Post('user/signup')
   async postUsers(@Body() postuserDto: PostUserDto) {
@@ -30,6 +33,7 @@ export class AuthController {
     return user;
   }
 
+  @Public()
   @BusinessUserSignup()
   @Post('user/business/signup')
   async postBusinessUsers(@Body() postBusinessUserDto: PostBusinessUserDto) {
@@ -37,6 +41,7 @@ export class AuthController {
     return businessUser;
   }
 
+  @Public()
   @UserLogin()
   @Post('user/login')
   async userlogin(@Body() loginUserDto: LoginUserDto) {
@@ -45,6 +50,7 @@ export class AuthController {
     return tokens.AccessToken;
   }
 
+  @Public()
   @BusinessUserLogin()
   @Post('user/business/login')
   async businessUserlogin(@Body() loginUserDto: LoginUserDto) {
@@ -53,6 +59,7 @@ export class AuthController {
     return tokens.AccessToken;
   }
 
+  @Public()
   @KakaoLogin()
   @Get('login/kakao')
   async KakaoLogin(@CurrentUser() user: KakaoLoginUserDto, @Res() res: Response) {
