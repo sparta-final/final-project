@@ -60,17 +60,17 @@ export class AuthController {
   @ApiBearerAuth('access-token')
   @Post('user/refresh')
   async restoreRefreshTokenForUser(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
-    const tokens = this.authservice.restoreRefreshTokenForUser(user, rt);
+    const tokens = await this.authservice.restoreRefreshTokenForUser(user, rt);
     // TODO: AccessToken만 클라이언트에게 전달 -> 클라이언트에서 RefreshToken을 헤더(authorization)에 저장
-    return (await tokens).AccessToken;
+    return tokens.AccessToken;
   }
 
   @ApiOperation({ summary: '토큰 재발급(사업자)' })
   @ApiBearerAuth('access-token')
   @Post('user/business/refresh')
   async restoreRefreshTokenForBusinessUser(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
-    const tokens = this.authservice.restoreRefreshTokenForBusinessUser(user, rt);
+    const tokens = await this.authservice.restoreRefreshTokenForBusinessUser(user, rt);
     // TODO: AccessToken만 클라이언트에게 전달 -> 클라이언트에서 RefreshToken을 헤더(authorization)에 저장
-    return (await tokens).AccessToken;
+    return tokens.AccessToken;
   }
 }
