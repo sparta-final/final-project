@@ -3,6 +3,14 @@ import { ApiBearerAuth, ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@n
 import { CurrentUserRt } from 'src/global/common/decorator/current-user-at.decorator';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import { Public } from 'src/global/common/decorator/public.decorator';
+import {
+  BusinessUserLogin,
+  BusinessUserRefreshToken,
+  BusinessUserSignup,
+  UserLogin,
+  UserRefreshToken,
+  UserSignup,
+} from './auth.decorators';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/loginUser.dto';
 import { PostBusinessUserDto } from './dto/postBusinessUser.dto';
@@ -13,30 +21,21 @@ import { JwtPayload } from './types/jwtPayload.type';
 @Controller('api/auth')
 export class AuthController {
   constructor(private authservice: AuthService) {}
-  @ApiOperation({ summary: '일반유저 회원가입' })
-  @ApiResponse({ status: 201, description: '회원가입 성공' })
-  @ApiResponse({ status: 400, description: '회원가입 실패' })
-  @Public()
+  @UserSignup()
   @Post('user/signup')
   async postUsers(@Body() postuserDto: PostUserDto) {
     const user = await this.authservice.postUsers(postuserDto);
     return user;
   }
 
-  @ApiOperation({ summary: '사업자 회원가입' })
-  @ApiResponse({ status: 201, description: '회원가입 성공' })
-  @ApiResponse({ status: 400, description: '회원가입 실패' })
-  @Public()
+  @BusinessUserSignup()
   @Post('user/business/signup')
   async postBusinessUsers(@Body() postBusinessUserDto: PostBusinessUserDto) {
     const businessUser = await this.authservice.postBusinessUsers(postBusinessUserDto);
     return businessUser;
   }
 
-  @ApiOperation({ summary: '일반유저 로그인' })
-  @ApiResponse({ status: 201, description: '로그인 성공' })
-  @ApiResponse({ status: 400, description: '로그인 실패' })
-  @Public()
+  @UserLogin()
   @Post('user/login')
   async userlogin(@Body() loginUserDto: LoginUserDto) {
     const tokens = await this.authservice.userlogin(loginUserDto);
@@ -44,10 +43,7 @@ export class AuthController {
     return tokens.AccessToken;
   }
 
-  @ApiOperation({ summary: '사업자 로그인' })
-  @ApiResponse({ status: 201, description: '로그인 성공' })
-  @ApiResponse({ status: 400, description: '로그인 실패' })
-  @Public()
+  @BusinessUserLogin()
   @Post('user/business/login')
   async businessUserlogin(@Body() loginUserDto: LoginUserDto) {
     const tokens = await this.authservice.businessUserlogin(loginUserDto);
@@ -56,15 +52,7 @@ export class AuthController {
   }
 
   // TODO: rt guard,strategy는 필요없을까?
-  @ApiOperation({ summary: '토큰 재발급(일반유저)' })
-  @ApiHeader({
-    name: 'Authorization',
-    schema: {
-      type: 'string',
-      example: 'bearer {accessToken}',
-    },
-  })
-  @ApiBearerAuth('access-token')
+  @UserRefreshToken()
   @Post('user/refresh')
   async restoreRefreshTokenForUser(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
     const tokens = await this.authservice.restoreRefreshTokenForUser(user, rt);
@@ -72,15 +60,7 @@ export class AuthController {
     return tokens.AccessToken;
   }
 
-  @ApiOperation({ summary: '토큰 재발급(사업자)' })
-  @ApiHeader({
-    name: 'Authorization',
-    schema: {
-      type: 'string',
-      example: 'bearer {accessToken}',
-    },
-  })
-  @ApiBearerAuth('access-token')
+  @BusinessUserRefreshToken()
   @Post('user/business/refresh')
   async restoreRefreshTokenForBusinessUser(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
     const tokens = await this.authservice.restoreRefreshTokenForBusinessUser(user, rt);
