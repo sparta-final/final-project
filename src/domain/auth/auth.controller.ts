@@ -1,5 +1,5 @@
 import { Body, Controller, ParseIntPipe, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUserRt } from 'src/global/common/decorator/current-user-at.decorator';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import { Public } from 'src/global/common/decorator/public.decorator';
@@ -57,6 +57,13 @@ export class AuthController {
 
   // TODO: rt guard,strategy는 필요없을까?
   @ApiOperation({ summary: '토큰 재발급(일반유저)' })
+  @ApiHeader({
+    name: 'Authorization',
+    schema: {
+      type: 'string',
+      example: 'bearer {accessToken}',
+    },
+  })
   @ApiBearerAuth('access-token')
   @Post('user/refresh')
   async restoreRefreshTokenForUser(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
@@ -66,6 +73,13 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: '토큰 재발급(사업자)' })
+  @ApiHeader({
+    name: 'Authorization',
+    schema: {
+      type: 'string',
+      example: 'bearer {accessToken}',
+    },
+  })
   @ApiBearerAuth('access-token')
   @Post('user/business/refresh')
   async restoreRefreshTokenForBusinessUser(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
