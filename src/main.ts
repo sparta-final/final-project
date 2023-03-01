@@ -36,7 +36,7 @@ async function bootstrap() {
       whitelist: true,
       // 알수없는 프로퍼티가 유효성 검사를 통과하는거 방지
       forbidUnknownValues: true,
-    }),
+    })
   );
   // INTERCEPTOR (undefined -> null)
   app.useGlobalInterceptors(new UndefinedToNullInterceptor());

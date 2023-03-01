@@ -63,7 +63,8 @@ export class AuthController {
   @KakaoLogin()
   @Get('login/kakao')
   async KakaoLogin(@CurrentUser() user: KakaoLoginUserDto, @Res() res: Response) {
-    await this.authservice.KakaoLogin(user, res);
+    const tokens = await this.authservice.KakaoLogin(user, res);
+    return tokens.AccessToken;
   }
 
   // TODO: rt guard,strategy는 필요없을까?

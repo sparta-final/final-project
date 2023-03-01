@@ -119,7 +119,8 @@ export class AuthService {
         // phone: 'test',
       });
       // 3. 로그인 완료 후 토큰 발급
-      this.getTokens(newUser.id, newUser.email);
+      const tokens = this.getTokens(newUser.id, newUser.email);
+      return tokens;
     }
     // TODO : 나중에 수정 필요할듯?
     res.redirect('http://127.0.0.1:5500/src/kakao.html');
