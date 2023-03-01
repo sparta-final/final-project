@@ -108,7 +108,6 @@ export class AuthService {
   async KakaoLogin(user: KakaoLoginUserDto, res: Response) {
     // 1. 가입 확인
     const existUser = await this.userRepo.findOne({ where: { email: user.email } });
-    if (existUser) throw new ConflictException('이미 존재하는 이메일입니다.');
     // 2. 회원가입
     if (!existUser) {
       const newUser = await this.userRepo.save({
