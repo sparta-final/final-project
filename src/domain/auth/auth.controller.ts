@@ -1,12 +1,14 @@
-import { Body, Controller, ParseIntPipe, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { KakaoLoginUserDto } from './dto/kakaologinUser.dto';
+import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { CurrentUserRt } from 'src/global/common/decorator/current-user-at.decorator';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
-import { Public } from 'src/global/common/decorator/public.decorator';
 import {
   BusinessUserLogin,
   BusinessUserRefreshToken,
   BusinessUserSignup,
+  KakaoLogin,
   UserLogin,
   UserRefreshToken,
   UserSignup,
@@ -49,6 +51,12 @@ export class AuthController {
     const tokens = await this.authservice.businessUserlogin(loginUserDto);
     // TODO: AccessToken만 클라이언트에게 전달 -> 클라이언트에서 RefreshToken을 헤더(authorization)에 저장
     return tokens.AccessToken;
+  }
+
+  @KakaoLogin()
+  @Get('login/kakao')
+  async KakaoLogin(@CurrentUser() user: KakaoLoginUserDto, @Res() res: Response) {
+    await this.authservice.KakaoLogin(user, res);
   }
 
   // TODO: rt guard,strategy는 필요없을까?

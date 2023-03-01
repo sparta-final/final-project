@@ -1,5 +1,6 @@
-import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiHeader, ApiBearerAuth } from '@nestjs/swagger';
+import { applyDecorators, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation, ApiResponse, ApiHeader, ApiBearerAuth, ApiOAuth2 } from '@nestjs/swagger';
 import { Public } from 'src/global/common/decorator/public.decorator';
 
 export const UserSignup = () => {
@@ -35,6 +36,17 @@ export const BusinessUserLogin = () => {
     ApiResponse({ status: 201, description: '로그인 성공' }),
     ApiResponse({ status: 400, description: '로그인 실패' }),
     Public()
+  );
+};
+
+export const KakaoLogin = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '카카오 로그인' }),
+    ApiResponse({ status: 201, description: '로그인 성공' }),
+    ApiResponse({ status: 400, description: '로그인 실패' }),
+    ApiOAuth2(['kakao'], 'kakao'), // TODO : 스웨거에서 되는지 확인 후 수정 필요
+    Public(),
+    UseGuards(AuthGuard('kakao'))
   );
 };
 
