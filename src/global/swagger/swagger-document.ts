@@ -6,14 +6,14 @@ const config = new DocumentBuilder()
   .setDescription('내배캠 노드 최종프로젝트')
   .setVersion('0.1')
   .addBearerAuth(
-    // TODO: 토큰 인증 스웨거 문서에서 되는지 확인 필요
     {
       type: 'http',
       scheme: 'bearer',
       name: 'Authorization',
       in: 'header',
+      bearerFormat: 'JWT',
     },
-    'accessToken',
+    'access-token'
   )
   .build();
 

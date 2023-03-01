@@ -1,5 +1,5 @@
 import { Body, Controller, ParseIntPipe, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUserRt } from 'src/global/common/decorator/current-user-at.decorator';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import { Public } from 'src/global/common/decorator/public.decorator';
@@ -44,11 +44,32 @@ export class AuthController {
     return tokens.AccessToken;
   }
 
+  @ApiOperation({ summary: '사업자 로그인' })
+  @ApiResponse({ status: 201, description: '로그인 성공' })
+  @ApiResponse({ status: 400, description: '로그인 실패' })
+  @Public()
+  @Post('user/business/login')
+  async businessUserlogin(@Body() loginUserDto: LoginUserDto) {
+    const tokens = await this.authservice.businessUserlogin(loginUserDto);
+    // TODO: AccessToken만 클라이언트에게 전달 -> 클라이언트에서 RefreshToken을 헤더(authorization)에 저장
+    return tokens.AccessToken;
+  }
+
   // TODO: rt guard,strategy는 필요없을까?
-  @ApiOperation({ summary: '토큰 재발급' })
+  @ApiOperation({ summary: '토큰 재발급(일반유저)' })
+  @ApiBearerAuth('access-token')
   @Post('user/refresh')
-  async restoreRefreshToken(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
-    const tokens = this.authservice.restoreRefreshToken(user.sub, rt);
+  async restoreRefreshTokenForUser(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
+    const tokens = this.authservice.restoreRefreshTokenForUser(user, rt);
+    // TODO: AccessToken만 클라이언트에게 전달 -> 클라이언트에서 RefreshToken을 헤더(authorization)에 저장
+    return (await tokens).AccessToken;
+  }
+
+  @ApiOperation({ summary: '토큰 재발급(사업자)' })
+  @ApiBearerAuth('access-token')
+  @Post('user/business/refresh')
+  async restoreRefreshTokenForBusinessUser(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
+    const tokens = this.authservice.restoreRefreshTokenForBusinessUser(user, rt);
     // TODO: AccessToken만 클라이언트에게 전달 -> 클라이언트에서 RefreshToken을 헤더(authorization)에 저장
     return (await tokens).AccessToken;
   }

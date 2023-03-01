@@ -84,6 +84,20 @@ export class AuthService {
   }
 
   /**
+   * 사업자 로그인
+   * @author 김승일
+   * @param loginUserDto
+   */
+  async businessUserlogin(loginUserDto: LoginUserDto) {
+    const existUser = await this.businessUserRepo.findOne({ where: { email: loginUserDto.email } });
+    if (!existUser) throw new NotFoundException('이메일이 존재하지 않습니다.');
+    const isMatch = await bcrypt.compare(loginUserDto.password, existUser.password);
+    if (!isMatch) throw new BadRequestException('비밀번호가 일치하지 않습니다.');
+    const tokens = await this.getTokens(existUser.id, existUser.email);
+    return tokens;
+  }
+
+  /**
    * access token, refresh token 발급
    * @author 김승일
    * @param userId
@@ -107,28 +121,52 @@ export class AuthService {
     ]);
     // RefreshToken 암호화 후 캐시에 저장
     const hashRefreshToken = bcrypt.hashSync(RefreshToken, 10);
-    await this.cacheManager.set(`${userId}-refresh`, hashRefreshToken, {
+    await this.cacheManager.set(`${email}-refresh`, hashRefreshToken, {
       ttl: 60 * 60 * 24 * 7, // 7일
     });
     return { AccessToken, RefreshToken };
   }
 
   /**
-   * 토큰 재발급
+   * 토큰 재발급(일반유저)
    * @author 김승일
-   * @param userId
+   * @param user
    * @param rt
    */
-  async restoreRefreshToken(userId: number, rt: string) {
+  async restoreRefreshTokenForUser(user: JwtPayload, rt: string) {
     const existUser = await this.userRepo.findOne({
-      where: { id: userId },
+      where: { id: user.sub },
     });
+
     if (!existUser) throw new NotFoundException('유저가 존재하지 않습니다.');
-    const existRt: string = await this.cacheManager.get(`${userId}-refresh`);
-    const rtMatch = await bcrypt.compare(rt, existRt);
+    const existRt: string = await this.cacheManager.get(`${user.email}-refresh`);
+    const refreshToken = rt.split(' ')[1];
+
+    const rtMatch = await bcrypt.compare(refreshToken, existRt);
     if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
 
     const tokens = await this.getTokens(existUser.id, existUser.email);
+    return tokens;
+  }
+
+  /**
+   * 토큰 재발급(사업자)
+   * @author 김승일
+   * @param user
+   * @param rt
+   */
+  async restoreRefreshTokenForBusinessUser(user: JwtPayload, rt: string) {
+    const existBusinessUser = await this.businessUserRepo.findOne({
+      where: { id: user.sub },
+    });
+    if (!existBusinessUser) throw new NotFoundException('유저가 존재하지 않습니다.');
+    const existRt: string = await this.cacheManager.get(`${user.email}-refresh`);
+    const refreshToken = rt.split(' ')[1];
+
+    const rtMatch = await bcrypt.compare(refreshToken, existRt);
+    if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
+
+    const tokens = await this.getTokens(existBusinessUser.id, existBusinessUser.email);
     return tokens;
   }
 }
