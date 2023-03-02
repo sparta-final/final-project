@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Gym } from './Gym';
-import { Reviews } from './Reviews';
 import { Users } from './Users';
 
 @Entity('user_gym', { schema: 'sixpack' })
@@ -17,9 +16,9 @@ export class UserGym {
   @Column('int', { primary: true, name: 'user_id' })
   userId: number;
 
-  @ApiProperty({ example: 1, description: '리뷰 아이디' })
-  @Column('int', { primary: true, name: 'review_id' })
-  reviewId: number;
+  @ApiProperty({ example: 10, description: '일반유저가 해당 헬스장에 방문한 횟수' })
+  @Column('int', { name: 'count' })
+  count: number;
 
   @ManyToOne(() => Gym, (gym) => gym.userGyms, {
     onDelete: 'CASCADE',
@@ -27,13 +26,6 @@ export class UserGym {
   })
   @JoinColumn([{ name: 'gym_id', referencedColumnName: 'id' }])
   gym: Gym;
-
-  @ManyToOne(() => Reviews, (reviews) => reviews.userGyms, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn([{ name: 'review_id', referencedColumnName: 'id' }])
-  review: Reviews;
 
   @ManyToOne(() => Users, (users) => users.userGyms, {
     onDelete: 'CASCADE',

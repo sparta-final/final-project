@@ -1,7 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { paymentStatus } from './common/payment.status';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn, //
+} from 'typeorm';
 import { Users } from './Users';
+import { isCancel } from './common/payment.isCancel';
 
 @Entity('payments', { schema: 'sixpack' })
 export class Payments {
@@ -13,11 +21,17 @@ export class Payments {
   @Column('int', { primary: true, name: 'user_id' })
   userId: number;
 
-  @ApiProperty({ example: 'imp_0123123', description: '아임포트 결제 고유 아이디' })
+  @ApiProperty({
+    example: 'imp_0123123',
+    description: '아임포트 결제 고유 아이디',
+  })
   @Column('varchar', { name: 'imp_uid', length: 255 })
   impUid: string;
 
-  @ApiProperty({ example: 'merchant_0123123', description: '가맹점 고유 아이디' })
+  @ApiProperty({
+    example: 'merchant_0123123',
+    description: '가맹점 고유 아이디',
+  })
   @Column('varchar', { name: 'merchant_uid', length: 100 })
   merchantUid: string;
 
@@ -26,8 +40,13 @@ export class Payments {
   customerUid: string;
 
   @ApiProperty({ example: 0, description: '결제 상태' })
-  @Column({ type: 'varchar', name: 'status', default: paymentStatus.WAITING })
-  status: paymentStatus;
+  @Column({
+    type: 'enum',
+    enum: isCancel,
+    name: 'isCancel',
+    default: isCancel.NotCancel,
+  })
+  isCancel: isCancel;
 
   @ApiProperty({ example: 1000, description: '결제 금액' })
   @Column('int', { name: 'amount' })

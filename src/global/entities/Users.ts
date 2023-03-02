@@ -19,15 +19,15 @@ export class Users {
   @Column('varchar', { name: 'email', unique: true, length: 30 })
   email: string;
 
-  @ApiProperty({ example: '1234', description: '일반유저 비밀번호' })
+  @ApiProperty({ example: '1234', description: '일반유저 비밀번호', required: true })
   @IsString()
   @IsNotEmpty()
-  @Column('varchar', { name: 'password', length: 100, nullable: true })
+  @Column('varchar', { name: 'password', length: 100 })
   password: string;
 
-  @ApiProperty({ example: '010-1234-5678', description: '일반유저 전화번호' })
+  @ApiProperty({ example: '010-1234-5678', description: '일반유저 전화번호', required: true })
   @IsPhoneNumber('KR')
-  @Column('varchar', { name: 'phone', length: 30, nullable: true })
+  @Column('varchar', { name: 'phone', length: 30 })
   phone: string;
 
   @ApiProperty({ example: '홍길동', description: '일반유저 이름', required: true })
@@ -54,6 +54,9 @@ export class Users {
 
   @OneToMany(() => Payments, (payments) => payments.user)
   payments: Payments[];
+
+  @OneToMany(() => Reviews, (reviews) => reviews.user)
+  reviews: Reviews[];
 
   @OneToMany(() => UserGym, (userGym) => userGym.user)
   userGyms: UserGym[];
