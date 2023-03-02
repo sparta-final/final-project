@@ -7,10 +7,12 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Gym } from './Gym';
+import { UserGym } from './UserGym';
 import { Users } from './Users';
 
 @Entity('reviews', { schema: 'sixpack' })
@@ -18,14 +20,6 @@ export class Reviews {
   @ApiProperty({ example: 1, description: '리뷰 아이디' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
-
-  @ApiProperty({ example: 1, description: '헬스장 아이디' })
-  @Column('int', { primary: true, name: 'gym_id' })
-  gymId: number;
-
-  @ApiProperty({ example: 1, description: '일반유저 아이디' })
-  @Column('int', { primary: true, name: 'user_id' })
-  userId: number;
 
   @ApiProperty({ example: '좋아요~', description: '리뷰 내용' })
   @Column('varchar', { name: 'review', length: 255 })
@@ -48,17 +42,19 @@ export class Reviews {
   @DeleteDateColumn({ type: 'timestamp', name: 'deleted_at' })
   deletedAt: Date | null;
 
-  @ManyToOne(() => Gym, (gym) => gym.reviews, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn([{ name: 'gym_id', referencedColumnName: 'id' }])
-  gym: Gym;
+  // @ManyToOne(() => Gym, (gym) => gym.reviews, {
+  //   onDelete: 'CASCADE',
+  //   onUpdate: 'CASCADE',
+  // })
+  // @JoinColumn([{ name: 'gym_id', referencedColumnName: 'id' }])
+  // gym: Gym;
 
-  @ManyToOne(() => Users, (users) => users.reviews, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
-  user: Users;
+  // @ManyToOne(() => Users, (users) => users.reviews, {
+  //   onDelete: 'CASCADE',
+  //   onUpdate: 'CASCADE',
+  // })
+  // @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
+  // user: Users;
+  @OneToMany(() => UserGym, (userGym) => userGym.review)
+  userGyms: UserGym[];
 }

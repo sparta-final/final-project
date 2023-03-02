@@ -55,9 +55,6 @@ export class Users {
   @OneToMany(() => Payments, (payments) => payments.user)
   payments: Payments[];
 
-  @OneToMany(() => Reviews, (reviews) => reviews.user)
-  reviews: Reviews[];
-
   @OneToMany(() => UserGym, (userGym) => userGym.user)
   userGyms: UserGym[];
 }
