@@ -121,8 +121,10 @@ export class AuthService {
       const tokens = this.getTokens(newUser.id, newUser.email);
       return tokens;
     }
+    const tokens = this.getTokens(existUser.id, existUser.email);
     // TODO : 나중에 수정 필요할듯?
     res.redirect('http://127.0.0.1:5500/src/kakao.html');
+    return tokens;
   }
 
   /**
