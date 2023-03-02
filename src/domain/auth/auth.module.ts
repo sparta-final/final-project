@@ -1,3 +1,4 @@
+import { JwtKakaoStrategy } from './strategy/jwt-kakao.strategy';
 import { Busienssusers } from './../../global/entities/Busienssusers';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -10,6 +11,6 @@ import { JwtAccessStrategy } from './strategy/jwt-access.strategy';
 @Module({
   imports: [TypeOrmModule.forFeature([Users, Busienssusers]), JwtModule.register({})],
   controllers: [AuthController],
-  providers: [AuthService, JwtAccessStrategy],
+  providers: [AuthService, JwtAccessStrategy, JwtKakaoStrategy],
 })
 export class AuthModule {}

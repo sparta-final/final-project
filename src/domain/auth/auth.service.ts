@@ -1,3 +1,4 @@
+import { KakaoLoginUserDto } from './dto/kakaologinUser.dto';
 import { PostBusinessUserDto } from './dto/postBusinessUser.dto';
 import {
   BadRequestException,
@@ -18,6 +19,7 @@ import { LoginUserDto } from './dto/loginUser.dto';
 import { JwtPayload } from './types/jwtPayload.type';
 import { JwtService } from '@nestjs/jwt';
 import { Cache } from 'cache-manager';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -95,6 +97,32 @@ export class AuthService {
     if (!isMatch) throw new BadRequestException('비밀번호가 일치하지 않습니다.');
     const tokens = await this.getTokens(existUser.id, existUser.email);
     return tokens;
+  }
+
+  /**
+   * 카카오 로그인
+   * @author 김승일
+   * @param user
+   * @param res
+   */
+  async KakaoLogin(user: KakaoLoginUserDto, res: Response) {
+    // 1. 가입 확인
+    const existUser = await this.userRepo.findOne({ where: { email: user.email } });
+    // 2. 회원가입
+    if (!existUser) {
+      const newUser = await this.userRepo.save({
+        nickname: user.nickname,
+        email: user.email,
+        // TODO : 카카오 로그인은 비밀번호, 전화번호 못받아옴. 나중에 수정 후 확인 필요
+        // password: 'test',
+        // phone: 'test',
+      });
+      // 3. 로그인 완료 후 토큰 발급
+      const tokens = this.getTokens(newUser.id, newUser.email);
+      return tokens;
+    }
+    // TODO : 나중에 수정 필요할듯?
+    res.redirect('http://127.0.0.1:5500/src/kakao.html');
   }
 
   /**
