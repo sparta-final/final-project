@@ -25,7 +25,7 @@ export class Gym {
   id: number;
 
   @ApiProperty({ example: 1, description: '헬스장 소유자 아이디' })
-  @Column('int', { primary: true, name: 'business_id' })
+  @Column('int', { name: 'business_id' })
   businessId: number;
 
   @ApiProperty({ example: '스파르타 헬스장', description: '헬스장 이름' })

@@ -1,19 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { Gym } from './Gym';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { UserGym } from './UserGym';
-import { Users } from './Users';
 
 @Entity('reviews', { schema: 'sixpack' })
 export class Reviews {
@@ -42,19 +29,6 @@ export class Reviews {
   @DeleteDateColumn({ type: 'timestamp', name: 'deleted_at' })
   deletedAt: Date | null;
 
-  // @ManyToOne(() => Gym, (gym) => gym.reviews, {
-  //   onDelete: 'CASCADE',
-  //   onUpdate: 'CASCADE',
-  // })
-  // @JoinColumn([{ name: 'gym_id', referencedColumnName: 'id' }])
-  // gym: Gym;
-
-  // @ManyToOne(() => Users, (users) => users.reviews, {
-  //   onDelete: 'CASCADE',
-  //   onUpdate: 'CASCADE',
-  // })
-  // @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
-  // user: Users;
   @OneToMany(() => UserGym, (userGym) => userGym.review)
   userGyms: UserGym[];
 }

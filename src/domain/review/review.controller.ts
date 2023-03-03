@@ -4,8 +4,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseInterceptors
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
-import { findReviewByGymId } from './review.decorators';
+import { findReviewByGymId, postReview } from './review.decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
+import { JwtPayload } from 'src/domain/auth/types/jwtPayload.type';
 
 @ApiTags('Review')
 @Controller('api/gym')
@@ -19,15 +21,16 @@ export class ReviewController {
     return this.reviewService.findReviewByGymId(gymId);
   }
 
-  @Post('/:gymId/review')
-  @Public()
   @UseInterceptors(FileInterceptor('reviewImg'))
+  @postReview()
+  @Post('/:gymId/review')
   postReview(
     @Param('gymId') gymId: number,
     @UploadedFile() file: Express.MulterS3.File,
+    @CurrentUser() user: JwtPayload,
     @Body() createReviewDto: CreateReviewDto
   ) {
-    return this.reviewService.postReview(gymId, file, createReviewDto);
+    return this.reviewService.postReview(gymId, user, file, createReviewDto);
   }
 
   // @Put('/:gymId/review/:reviewId')

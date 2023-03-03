@@ -1,5 +1,5 @@
 import { KakaoLoginUserDto } from './dto/kakaologinUser.dto';
-import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { CurrentUserRt } from 'src/global/common/decorator/current-user-at.decorator';
@@ -19,6 +19,7 @@ import { PostBusinessUserDto } from './dto/postBusinessUser.dto';
 import { PostUserDto } from './dto/postUser.dto';
 import { JwtPayload } from './types/jwtPayload.type';
 import { Public } from 'src/global/common/decorator/public.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('AUTH')
 @Controller('api/auth')
@@ -60,6 +61,7 @@ export class AuthController {
   }
 
   @Public()
+  @UseGuards(AuthGuard('kakao'))
   @KakaoLogin()
   @Get('login/kakao')
   async KakaoLogin(@CurrentUser() user: KakaoLoginUserDto, @Res() res: Response) {

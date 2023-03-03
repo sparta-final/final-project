@@ -10,15 +10,15 @@ export class UserGym {
   id: number;
 
   @ApiProperty({ example: 1, description: '헬스장 아이디' })
-  @Column('int', { primary: true, name: 'gym_id' })
+  @Column('int', { name: 'gym_id' })
   gymId: number;
 
   @ApiProperty({ example: 1, description: '일반유저 아이디' })
-  @Column('int', { primary: true, name: 'user_id' })
+  @Column('int', { name: 'user_id' })
   userId: number;
 
   @ApiProperty({ example: 1, description: '리뷰 아이디' })
-  @Column('int', { primary: true, name: 'review_id' })
+  @Column('int', { name: 'review_id', nullable: true })
   reviewId: number;
 
   @ManyToOne(() => Gym, (gym) => gym.userGyms, {

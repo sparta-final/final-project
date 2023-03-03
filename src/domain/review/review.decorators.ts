@@ -5,7 +5,15 @@ import { ApiOperation, ApiResponse, ApiHeader, ApiBearerAuth, ApiOAuth2 } from '
 export const findReviewByGymId = () => {
   return applyDecorators(
     ApiOperation({ summary: '리뷰 조회' }),
-    ApiResponse({ status: 201, description: '리뷰조회 성공' }),
+    ApiResponse({ status: 200, description: '리뷰조회 성공' }),
     ApiResponse({ status: 400, description: '리뷰조회 실패' })
+  );
+};
+
+export const postReview = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '리뷰 작성' }),
+    ApiResponse({ status: 201, description: '리뷰작성 성공' }),
+    ApiResponse({ status: 400, description: '리뷰작성 실패' })
   );
 };

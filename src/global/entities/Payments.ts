@@ -10,7 +10,7 @@ export class Payments {
   id: number;
 
   @ApiProperty({ example: 1, description: '일반유저 아이디' })
-  @Column('int', { primary: true, name: 'user_id' })
+  @Column('int', { name: 'user_id' })
   userId: number;
 
   @ApiProperty({ example: 'imp_0123123', description: '아임포트 결제 고유 아이디' })

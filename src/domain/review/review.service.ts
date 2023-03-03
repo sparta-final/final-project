@@ -1,8 +1,9 @@
-import { UserGym } from './../global/entities/UserGym';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reviews } from 'src/global/entities/Reviews';
+import { UserGym } from 'src/global/entities/UserGym';
 import { Repository } from 'typeorm';
+import { JwtPayload } from '../auth/types/jwtPayload.type';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 
@@ -24,9 +25,23 @@ export class ReviewService {
     return reviews;
   }
 
-  postReview(_gymId: number, _file: Express.MulterS3.File, _createReviewDto: CreateReviewDto) {
-    // console.log(file);
-    return 'postReview';
+  async postReview(gymId: number, user: JwtPayload, file: Express.MulterS3.File, createReviewDto: CreateReviewDto) {
+    const userGym = await this.userGymRepo.findOne({
+      where: { gymId, userId: user.sub },
+    });
+    if (!userGym) {
+      throw new NotFoundException('리뷰를 작성할 수 없습니다');
+    }
+    const review = await this.reviewRepo
+      .save({
+        ...createReviewDto,
+        userGym,
+        img: file.location,
+      })
+      .then((review) => {
+        return this.userGymRepo.update({ gymId, userId: user.sub }, { reviewId: review.id });
+      });
+    return review;
   }
 
   // findOne(id: number) {
