@@ -1,15 +1,19 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Busienssusers } from 'src/global/entities/Busienssusers';
 import { Gym } from 'src/global/entities/Gym';
+import { GymImg } from 'src/global/entities/GymImg';
 import { Repository } from 'typeorm';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
 import { PostGymDto } from './dto/postGym.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class GymService {
   constructor(
-    @InjectRepository(Gym)
-    private gymsrepository: Repository<Gym>
+    @InjectRepository(Gym) private gymsrepository: Repository<Gym>,
+    @InjectRepository(Busienssusers) private businessUserrepository: Repository<Busienssusers>,
+    @InjectRepository(GymImg) private gymImgrepository: Repository<GymImg>
   ) {}
 
   /**
@@ -17,18 +21,20 @@ export class GymService {
    * @author 정호준
    * @param PostGymDto
    */
-  async postGyms(postgymDto: PostGymDto, user: JwtPayload) {
+  async postGyms(file: Express.MulterS3.File, postgymDto: PostGymDto, user: JwtPayload) {
     const existGym = await this.gymsrepository.findOne({
       where: { name: postgymDto.name, address: postgymDto.address },
     });
     if (existGym) throw new ConflictException('이미 등록된 체육관입니다.');
+    if (!file) throw new BadRequestException('파일을 등록해야 합니다.');
+
     return await this.gymsrepository.save({
       businessId: user.sub,
       name: postgymDto.name,
       phone: postgymDto.phone,
       address: postgymDto.address,
       description: postgymDto.description,
-      certification: postgymDto.certification,
+      certification: file.location,
     });
   }
   /**
@@ -57,9 +63,17 @@ export class GymService {
    * @author 정호준
    * @param UpdateGymDto
    */
-  async updateGym(gymId, name, phone, address, description, certification, user: JwtPayload) {
+  async updateGym({ gymId, updateDto, user }) {
+    // console.log('서비스22', password);
+
     await this.checkUser(gymId, user);
-    const updategym = await this.gymsrepository.update(gymId, { name, phone, address, description, certification });
+    await this.checkPassword(updateDto.password, user);
+    const updategym = await this.gymsrepository.update(gymId, {
+      name: updateDto.name,
+      phone: updateDto.phone,
+      address: updateDto.address,
+      description: updateDto.description,
+    });
     return updategym;
   }
 
@@ -68,8 +82,9 @@ export class GymService {
    * @author 정호준
    * @param UpdateGymDto
    */
-  async deleteGym(gymId, user) {
+  async deleteGym({ gymId, password, user }) {
     await this.checkUser(gymId, user);
+    await this.checkPassword(password.password, user);
     const deletegym = await this.gymsrepository.softDelete(gymId);
     return deletegym;
   }
@@ -79,7 +94,21 @@ export class GymService {
    * @author 정호준
    */
   private async checkUser(gymId, user) {
-    const gym = this.getGymsById(gymId);
-    if (user.sub !== (await gym).businessId) throw new UnauthorizedException('글쓴이가 아닙니다.');
+    const gym = await this.getGymsById(gymId);
+
+    if (user.sub !== gym.businessId) throw new UnauthorizedException('글쓴이가 아닙니다.');
+  }
+
+  /**
+   * 비밀번호 확인
+   * @author 정호준
+   */
+  private async checkPassword(password, user) {
+    const findUser = await this.businessUserrepository.findOne({
+      where: { id: user.sub },
+    });
+    const pwMatch = await bcrypt.compare(password, findUser.password);
+
+    if (!pwMatch) throw new ConflictException('비밀번호가 일치하지 않습니다.');
   }
 }

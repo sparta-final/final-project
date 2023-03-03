@@ -22,6 +22,6 @@ export class PostGymDto {
   @IsNotEmpty()
   description: string;
 
-  @ApiProperty({ example: '사업자등록증.pdf', description: '사업자등록증 파일 이름', required: true })
-  certification: string;
+  // @ApiProperty({ example: '사업자등록증.pdf', description: '사업자등록증 파일 이름', required: true })
+  // certification: string;
 }

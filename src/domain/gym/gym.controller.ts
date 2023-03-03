@@ -1,15 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFiles, UseInterceptors } from '@nestjs/common';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
 import { PostGymDto } from './dto/postGym.dto';
 import { UpdateGymDto } from './dto/updateGym.dto';
-import { FileUpload, GymDelete, GymSignup, GymUpdate, MyGymGet } from './gym.decorators';
+import { GymDelete, GymSignup, GymUpdate, MyGymGet } from './gym.decorators';
 import { GymService } from './gym.service';
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
 
 @ApiTags('GYM')
 @Controller('api/gym')
@@ -18,8 +15,9 @@ export class GymController {
 
   @GymSignup()
   @Post()
-  async postGyms(@Body() postgymDto: PostGymDto, @CurrentUser() user: JwtPayload) {
-    const gym = await this.gymservice.postGyms(postgymDto, user);
+  @UseInterceptors(FileInterceptor('certification'))
+  async postGyms(@UploadedFile() file: Express.MulterS3.File, @Body() postgymDto: PostGymDto, @CurrentUser() user: JwtPayload) {
+    const gym = await this.gymservice.postGyms(file, postgymDto, user);
     return gym;
   }
 
@@ -33,20 +31,12 @@ export class GymController {
   @GymUpdate()
   @Put('/:id')
   async updateGym(@Param('id') gymId: number, @Body() updateDto: UpdateGymDto, @CurrentUser() user: JwtPayload) {
-    return await this.gymservice.updateGym(
-      gymId,
-      updateDto.name,
-      updateDto.phone,
-      updateDto.address,
-      updateDto.description,
-      updateDto.certification,
-      user
-    );
+    return await this.gymservice.updateGym({ gymId, updateDto, user });
   }
 
   @GymDelete()
   @Delete('/:id')
-  async deleteGym(@Param('id') gymId: number, @CurrentUser() user: JwtPayload) {
-    return await this.gymservice.deleteGym(gymId, user);
+  async deleteGym(@Param('id') gymId: number, @Body() password: string, @CurrentUser() user: JwtPayload) {
+    return await this.gymservice.deleteGym({ gymId, password, user });
   }
 }

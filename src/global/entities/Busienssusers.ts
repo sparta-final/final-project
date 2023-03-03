@@ -18,7 +18,7 @@ export class Busienssusers {
   @ApiProperty({ example: '1234', description: '사업자 비밀번호' })
   @IsNotEmpty()
   @IsString()
-  @Column('varchar', { name: 'password', length: 100 })
+  @Column('varchar', { name: 'password', length: 255 })
   password: string;
 
   @ApiProperty({ example: '010-1234-5678', description: '사업자 전화번호' })
