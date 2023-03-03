@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
@@ -15,9 +15,18 @@ export class GymController {
 
   @GymSignup()
   @Post()
-  @UseInterceptors(FileInterceptor('certification'))
-  async postGyms(@UploadedFile() file: Express.MulterS3.File, @Body() postgymDto: PostGymDto, @CurrentUser() user: JwtPayload) {
-    const gym = await this.gymservice.postGyms(file, postgymDto, user);
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'certification', maxCount: 3 },
+      { name: 'img', maxCount: 7 },
+    ])
+  )
+  async postGyms(
+    @UploadedFiles() file: { certification: Express.MulterS3.File[]; img: Express.MulterS3.File[] },
+    @Body() postgymDto: PostGymDto,
+    @CurrentUser() user: JwtPayload
+  ) {
+    const gym = await this.gymservice.postGyms({ file, postgymDto, user });
     return gym;
   }
 

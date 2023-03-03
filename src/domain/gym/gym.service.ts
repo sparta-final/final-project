@@ -3,9 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Busienssusers } from 'src/global/entities/Busienssusers';
 import { Gym } from 'src/global/entities/Gym';
 import { GymImg } from 'src/global/entities/GymImg';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
-import { PostGymDto } from './dto/postGym.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -13,7 +12,8 @@ export class GymService {
   constructor(
     @InjectRepository(Gym) private gymsrepository: Repository<Gym>,
     @InjectRepository(Busienssusers) private businessUserrepository: Repository<Busienssusers>,
-    @InjectRepository(GymImg) private gymImgrepository: Repository<GymImg>
+    @InjectRepository(GymImg) private gymImgrepository: Repository<GymImg>,
+    private dataSource: DataSource
   ) {}
 
   /**
@@ -21,22 +21,29 @@ export class GymService {
    * @author 정호준
    * @param PostGymDto
    */
-  async postGyms(file: Express.MulterS3.File, postgymDto: PostGymDto, user: JwtPayload) {
+  async postGyms({ file, postgymDto, user }) {
+    console.log('이거', file.certification[0].location);
+
     const existGym = await this.gymsrepository.findOne({
       where: { name: postgymDto.name, address: postgymDto.address },
     });
     if (existGym) throw new ConflictException('이미 등록된 체육관입니다.');
-    if (!file) throw new BadRequestException('파일을 등록해야 합니다.');
+    if (!file.certification && !file.img) throw new BadRequestException('파일을 등록해야 합니다.');
 
-    return await this.gymsrepository.save({
+    const createGym = await this.gymsrepository.save({
       businessId: user.sub,
       name: postgymDto.name,
       phone: postgymDto.phone,
       address: postgymDto.address,
       description: postgymDto.description,
-      certification: file.location,
+      certification: file.certification[0].location,
+    });
+    await this.gymImgrepository.save({
+      gymId: createGym.id,
+      img: file.img[0].location,
     });
   }
+
   /**
    * 로그인 사업자 체육관 조회
    * @author 정호준
