@@ -22,8 +22,6 @@ export class GymService {
    * @param PostGymDto
    */
   async postGyms({ file, postgymDto, user }) {
-    console.log('이거', file.certification[0].location);
-
     const existGym = await this.gymsrepository.findOne({
       where: { name: postgymDto.name, address: postgymDto.address },
     });
