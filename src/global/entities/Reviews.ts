@@ -1,5 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { UserGym } from './UserGym';
 
 @Entity('reviews', { schema: 'sixpack' })
@@ -29,6 +39,10 @@ export class Reviews {
   @DeleteDateColumn({ type: 'timestamp', name: 'deleted_at' })
   deletedAt: Date | null;
 
-  @OneToMany(() => UserGym, (userGym) => userGym.review)
-  userGyms: UserGym[];
+  @ManyToOne(() => UserGym, (userGym) => userGym.reviews, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn([{ name: 'user_gym_id', referencedColumnName: 'id' }])
+  userGym: UserGym;
 }

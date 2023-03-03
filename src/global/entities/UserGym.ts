@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Gym } from './Gym';
 import { Reviews } from './Reviews';
 import { Users } from './Users';
@@ -21,19 +21,18 @@ export class UserGym {
   @Column('int', { name: 'review_id', nullable: true })
   reviewId: number;
 
+  @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+  createdAt: Date;
+
+  @OneToMany(() => Reviews, (reviews) => reviews.userGym)
+  reviews: Reviews[];
+
   @ManyToOne(() => Gym, (gym) => gym.userGyms, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'gym_id', referencedColumnName: 'id' }])
   gym: Gym;
-
-  @ManyToOne(() => Reviews, (reviews) => reviews.userGyms, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn([{ name: 'review_id', referencedColumnName: 'id' }])
-  review: Reviews;
 
   @ManyToOne(() => Users, (users) => users.userGyms, {
     onDelete: 'CASCADE',

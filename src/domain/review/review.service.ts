@@ -32,15 +32,11 @@ export class ReviewService {
     if (!userGym) {
       throw new NotFoundException('리뷰를 작성할 수 없습니다');
     }
-    const review = await this.reviewRepo
-      .save({
-        ...createReviewDto,
-        userGym,
-        img: file.location,
-      })
-      .then((review) => {
-        return this.userGymRepo.update({ gymId, userId: user.sub }, { reviewId: review.id });
-      });
+    const review = await this.reviewRepo.save({
+      ...createReviewDto,
+      img: file.location,
+      userGym: { id: userGym.id },
+    });
     return review;
   }
 

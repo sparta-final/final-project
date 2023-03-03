@@ -1,3 +1,4 @@
+-- Active: 1677140068456@@127.0.0.1@3306@sixpack
 CREATE TABLE `users` (
 	`id`	int	NOT NULL,
 	`email`	varchar(100)	NOT NULL,
@@ -21,7 +22,8 @@ CREATE TABLE `payments` (
 	`imp_uid`	varchar(255)	NOT NULL,
 	`merchant_uid`	varchar(100)	NOT NULL,
 	`customer_uid`	varchar(100)	NOT NULL,
-	`status`	varchar(255)	NOT NULL	,
+	`status`	varchar(255)	NOT NULL	COMMENT '0 = 취소 전
+0 = 취소',
 	`amount`	int	NOT NULL
 );
 
@@ -53,12 +55,12 @@ CREATE TABLE `comments` (
 CREATE TABLE `user_gym` (
 	`id`	int	NOT NULL,
 	`gym_id`	int	NOT NULL,
-	`user_id`	int	NOT NULL,
-	`review_id`	int	NOT NULL
+	`user_id`	int	NOT NULL
 );
 
 CREATE TABLE `reviews` (
 	`id`	int	NOT NULL,
+	`user_gym_id`	int	NOT NULL,
 	`review`	varchar(100)	NOT NULL,
 	`star`	varchar(100)	NOT NULL,
 	`img`	varchar(255)	NULL
@@ -108,12 +110,12 @@ ALTER TABLE `comments` ADD CONSTRAINT `PK_COMMENTS` PRIMARY KEY (
 ALTER TABLE `user_gym` ADD CONSTRAINT `PK_USER_GYM` PRIMARY KEY (
 	`id`,
 	`gym_id`,
-	`user_id`,
-	`review_id`
+	`user_id`
 );
 
 ALTER TABLE `reviews` ADD CONSTRAINT `PK_REVIEWS` PRIMARY KEY (
-	`id`
+	`id`,
+	`user_gym_id`
 );
 
 ALTER TABLE `gym_img` ADD CONSTRAINT `PK_GYM_IMG` PRIMARY KEY (
@@ -175,10 +177,10 @@ REFERENCES `users` (
 	`id`
 );
 
-ALTER TABLE `user_gym` ADD CONSTRAINT `FK_reviews_TO_user_gym_1` FOREIGN KEY (
-	`review_id`
+ALTER TABLE `reviews` ADD CONSTRAINT `FK_user_gym_TO_reviews_1` FOREIGN KEY (
+	`user_gym_id`
 )
-REFERENCES `reviews` (
+REFERENCES `user_gym` (
 	`id`
 );
 
@@ -195,4 +197,3 @@ ALTER TABLE `feeds_img` ADD CONSTRAINT `FK_feeds_TO_feeds_img_1` FOREIGN KEY (
 REFERENCES `feeds` (
 	`id`
 );
-
