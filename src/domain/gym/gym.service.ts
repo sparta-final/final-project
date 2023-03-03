@@ -51,7 +51,6 @@ export class GymService {
   async getGyms(user: JwtPayload) {
     return await this.gymsrepository.find({
       where: { businessId: user.sub, deletedAt: null },
-      select: ['name', 'address'],
     });
   }
 
@@ -70,18 +69,22 @@ export class GymService {
    * @author 정호준
    * @param UpdateGymDto
    */
-  async updateGym({ gymId, updateDto, user }) {
-    // console.log('서비스22', password);
-
+  async updateGym({ file, gymId, updateDto, user }) {
     await this.checkUser(gymId, user);
     await this.checkPassword(updateDto.password, user);
-    const updategym = await this.gymsrepository.update(gymId, {
+    const findGymsImage = await this.gymImgrepository.findOne({
+      where: { gymId: gymId },
+    });
+    await this.gymsrepository.update(gymId, {
       name: updateDto.name,
       phone: updateDto.phone,
       address: updateDto.address,
       description: updateDto.description,
+      certification: file.certification[0].location,
     });
-    return updategym;
+    await this.gymImgrepository.update(findGymsImage.id, {
+      img: file.img[0].location,
+    });
   }
 
   /**

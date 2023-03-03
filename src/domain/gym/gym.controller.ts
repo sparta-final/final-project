@@ -39,8 +39,19 @@ export class GymController {
 
   @GymUpdate()
   @Put('/:id')
-  async updateGym(@Param('id') gymId: number, @Body() updateDto: UpdateGymDto, @CurrentUser() user: JwtPayload) {
-    return await this.gymservice.updateGym({ gymId, updateDto, user });
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'certification', maxCount: 3 },
+      { name: 'img', maxCount: 7 },
+    ])
+  )
+  async updateGym(
+    @UploadedFiles() file: { certification: Express.MulterS3.File[]; img: Express.MulterS3.File[] },
+    @Param('id') gymId: number,
+    @Body() updateDto: UpdateGymDto,
+    @CurrentUser() user: JwtPayload
+  ) {
+    return await this.gymservice.updateGym({ file, gymId, updateDto, user });
   }
 
   @GymDelete()
