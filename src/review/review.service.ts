@@ -24,9 +24,10 @@ export class ReviewService {
     return reviews;
   }
 
-  // postReview(gymId: number, createReviewDto: CreateReviewDto) {
-  //   return 'This action adds a new review';
-  // }
+  postReview(_gymId: number, _file: Express.MulterS3.File, _createReviewDto: CreateReviewDto) {
+    // console.log(file);
+    return 'postReview';
+  }
 
   // findOne(id: number) {
   //   return `This action returns a #${id} review`;

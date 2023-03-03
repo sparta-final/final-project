@@ -29,7 +29,7 @@ export class Reviews {
   @Column('int', { name: 'star' })
   star: number;
 
-  @ApiProperty({ example: '파일이름.jpg', description: '리뷰 이미지' })
+  @ApiProperty({ example: 'url 주소', description: 's3 업로드된 url' })
   @Column('varchar', { name: 'img', nullable: true, length: 255 })
   img: string | null;
 

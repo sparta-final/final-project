@@ -1,10 +1,11 @@
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/global/common/decorator/public.decorator';
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { findReviewByGymId } from './review.decorators';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Review')
 @Controller('api/gym')
@@ -18,10 +19,16 @@ export class ReviewController {
     return this.reviewService.findReviewByGymId(gymId);
   }
 
-  // @Post('/:gymId/review')
-  // postReview(@Param('gymId') gymId: number, @Body() createReviewDto: CreateReviewDto) {
-  //   return this.reviewService.postReview(gymId, createReviewDto);
-  // }
+  @Post('/:gymId/review')
+  @Public()
+  @UseInterceptors(FileInterceptor('reviewImg'))
+  postReview(
+    @Param('gymId') gymId: number,
+    @UploadedFile() file: Express.MulterS3.File,
+    @Body() createReviewDto: CreateReviewDto
+  ) {
+    return this.reviewService.postReview(gymId, file, createReviewDto);
+  }
 
   // @Put('/:gymId/review/:reviewId')
   // update(@Param('gymId') gymId: number, @Param('reviewId') reviewId: number, @Body() updateReviewDto: UpdateReviewDto) {
