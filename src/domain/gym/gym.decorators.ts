@@ -40,3 +40,11 @@ export const FileUpload = () => {
     ApiResponse({ status: 400, description: '업로드 실패' })
   );
 };
+
+export const GetAllGym = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '전체 체육관 조회' }),
+    ApiResponse({ status: 200, description: '조회 성공' }),
+    ApiResponse({ status: 400, description: '조회 실패' })
+  );
+};

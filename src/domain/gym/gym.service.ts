@@ -98,6 +98,14 @@ export class GymService {
   }
 
   /**
+   * 전체 체육관 조회
+   * @author 정호준
+   */
+  async getAllGym() {
+    return await this.gymsrepository.find({});
+  }
+
+  /**
    * 유저 확인
    * @author 정호준
    */

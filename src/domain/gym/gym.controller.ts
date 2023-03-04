@@ -2,10 +2,11 @@ import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFiles, UseInte
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
+import { Public } from 'src/global/common/decorator/public.decorator';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
 import { PostGymDto } from './dto/postGym.dto';
 import { UpdateGymDto } from './dto/updateGym.dto';
-import { GymDelete, GymSignup, GymUpdate, MyGymGet } from './gym.decorators';
+import { GetAllGym, GymDelete, GymSignup, GymUpdate, MyGymGet } from './gym.decorators';
 import { GymService } from './gym.service';
 
 @ApiTags('GYM')
@@ -31,7 +32,7 @@ export class GymController {
   }
 
   @MyGymGet()
-  @Get()
+  @Get('/my')
   async getGyms(@CurrentUser() user: JwtPayload) {
     const getGym = await this.gymservice.getGyms(user);
     return getGym;
@@ -58,5 +59,12 @@ export class GymController {
   @Delete('/:id')
   async deleteGym(@Param('id') gymId: number, @Body() password: string, @CurrentUser() user: JwtPayload) {
     return await this.gymservice.deleteGym({ gymId, password, user });
+  }
+
+  @GetAllGym()
+  @Public()
+  @Get()
+  async getAllGym() {
+    return this.gymservice.getAllGym();
   }
 }
