@@ -73,22 +73,34 @@ export class GymService {
     const findGymsImage = await this.gymImgrepository.findOne({
       where: { gymId: gymId },
     });
-    await this.gymsrepository.update(gymId, {
-      name: updateDto.name,
-      phone: updateDto.phone,
-      address: updateDto.address,
-      description: updateDto.description,
-      certification: file.certification[0].location,
-    });
-    await this.gymImgrepository.update(findGymsImage.id, {
-      img: file.img[0].location,
-    });
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await this.gymsrepository.update(gymId, {
+        name: updateDto.name,
+        phone: updateDto.phone,
+        address: updateDto.address,
+        description: updateDto.description,
+        certification: file.certification[0].location,
+      });
+      await this.gymImgrepository.update(findGymsImage.id, {
+        img: file.img[0].location,
+      });
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw err;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   /**
    * 체육관 정보 삭제
    * @author 정호준
-   * @param UpdateGymDto
    */
   async deleteGym({ gymId, password, user }) {
     await this.checkUser(gymId, user);
@@ -102,7 +114,9 @@ export class GymService {
    * @author 정호준
    */
   async getAllGym() {
-    return await this.gymsrepository.find({});
+    return await this.gymsrepository.find({
+      where: { deletedAt: null },
+    });
   }
 
   /**
