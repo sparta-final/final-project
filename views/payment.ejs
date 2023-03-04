@@ -10,24 +10,48 @@
     <!-- iamport.payment.js -->
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div>
+      <p id="member-basic">Basic</p>
+      <p id="amount-basic">1000</p>
+      <button id="subscribe-btn">Basic 멤버십 구독하기</button>
+    </div>
+    <div>
+      <p id="member-standard">Standard</p>
+      <p id="amount-standard">2000</p>
+      <button id="subscribe-btn">Standard 멤버십 구독하기</button>
+    </div>
+    <div>
+      <p id="member-premium">Premium</p>
+      <p id="amount-premium">3000</p>
+      <button id="subscribe-btn">Premium 멤버십 구독하기</button>
+    </div>
     <script>
       const IMP = window.IMP;
       IMP.init('imp52616317');
 
+      const body = document.querySelector('body');
+      body.addEventListener('click', function (e) {
+        if (e.target.id !== 'subscribe-btn') return;
+        const membership = e.target.parentElement.firstElementChild.textContent;
+        const amount = Number(e.target.parentElement.children[1].textContent);
+        console.log('✨✨✨', membership, amount, '✨✨✨');
+        requestPay(membership, amount);
+      });
       // pg결제창 이용 빌링키 발급 요청
-      function requestPay() {
-        const amount = Number(document.getElementById('amount').innerText);
-
+      function requestPay(membership, amount) {
+        const now = Math.floor(new Date().getTime());
         // ✨✨✨ 빌링 키 요청 ✨✨✨
         IMP.request_pay(
           {
             pg: 'kakaopay',
             pay_method: 'card',
-            merchant_uid: 'issue_billingkey_monthly_0001', // 빌링키 방급용 고유 주문번호
-            customer_uid: 'sixpack_0001_1234', // 카드(빌링키)와 1:1로 대응하는 값
-            name: '최초 인증 결제',
-            amount: amount, // 빌링키 발급만 진행
-            buyer_email: 'hxxjxxxhxxx@gmail.com',
+            merchant_uid: `${membership}_id_${now}`, // 빌링키 방급용 고유 주문번호
+            customer_uid: 'sixpack_id_1235', // 카드(빌링키)와 1:1로 대응하는 값
+            name: membership,
+            amount: amount,
+            buyer_email: 'sixpack@gmail.com',
             buyer_name: '홍길동',
             buyer_tel: '010-1234-5678',
             buyer_addr: '서울특별시 강남구 신사동',
@@ -38,6 +62,24 @@
             if (rsp.success) {
               // 빌링키 발급 성공
               alert(`빌링키를 발급하였습니다.`);
+              const data = await axios({
+                url: 'http://localhost:3000/api/payment/complete',
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                data: {
+                  imp_uid: rsp.imp_uid,
+                  merchant_uid: rsp.merchant_uid,
+                  customer_uid: rsp.customer_uid,
+                },
+              })
+                .then((data) => {
+                  console.log('✨✨✨', 'then', data, '✨✨✨');
+                  alert('결제에 성공했습니다!!');
+                })
+                .catch((error) => {
+                  console.log(error);
+                  alert('에러발생!');
+                });
             } else {
               // 빌링키 발급 실패
               alert(`빌링키 발급에 실패하였습니다. 에러 내용: ${rsp.error_msg}`);
@@ -89,9 +131,5 @@
         // );
       }
     </script>
-  </head>
-  <body>
-    <p id="amount">10000</p>
-    <button onclick="requestPay()">결제하기</button>
   </body>
 </html>

@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn, //
 } from 'typeorm';
 import { Users } from './Users';
-import { isCancel } from './common/payment.isCancel';
+import { paymentStatus } from './common/payment.status';
 
 @Entity('payments', { schema: 'sixpack' })
 export class Payments {
@@ -18,7 +18,7 @@ export class Payments {
   id: number;
 
   @ApiProperty({ example: 1, description: '일반유저 아이디' })
-  @Column('int', { primary: true, name: 'user_id' })
+  @Column('int', { name: 'user_id' })
   userId: number;
 
   @ApiProperty({
@@ -39,14 +39,13 @@ export class Payments {
   @Column('varchar', { name: 'customer_uid', length: 100 })
   customerUid: string;
 
-  @ApiProperty({ example: 0, description: '결제 상태' })
+  @ApiProperty({ example: 'paid', description: '결제 상태' })
   @Column({
-    type: 'enum',
-    enum: isCancel,
-    name: 'isCancel',
-    default: isCancel.NotCancel,
+    type: 'varchar',
+    name: 'status',
+    default: 'paid',
   })
-  isCancel: isCancel;
+  status: string;
 
   @ApiProperty({ example: 1000, description: '결제 금액' })
   @Column('int', { name: 'amount' })
