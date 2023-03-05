@@ -14,4 +14,10 @@ export class AdminController {
   async getMember() {
     return await this.adminService.getMember();
   }
+
+  @Public()
+  @Get('/gym')
+  async getGym() {
+    return await this.adminService.getGym();
+  }
 }
