@@ -2,13 +2,13 @@ import { ApiTags } from '@nestjs/swagger';
 import { JwtPayload } from 'src/domain/auth/types/jwtPayload.type';
 import { Controller, Param, Post } from '@nestjs/common';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
-import { QrcodeService } from './qrcode.service';
 import { CreateQRCode, UseGym } from './qrcode.decorators';
+import { QRcodeService } from './qrcode.service';
 
 @ApiTags('QRCODE')
 @Controller('api/qrcode')
-export class QrcodeController {
-  constructor(private readonly qrcodeService: QrcodeService) {}
+export class QRcodeController {
+  constructor(private readonly qrcodeService: QRcodeService) {}
 
   @CreateQRCode()
   @Post()

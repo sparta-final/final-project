@@ -7,7 +7,7 @@ import { Gym } from 'src/global/entities/Gym';
 import * as qrcode from 'qrcode';
 
 @Injectable()
-export class QrcodeService {
+export class QRcodeService {
   constructor(
     @InjectRepository(UserGym) private userGymRepo: Repository<UserGym>,
     @InjectRepository(Gym) private gymRepo: Repository<Gym>
