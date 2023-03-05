@@ -54,6 +54,7 @@ export class Gym {
 
   @ApiProperty({ example: '사업자등록증.pdf', description: '사업자등록증 파일 이름' })
   @Column('varchar', { name: 'certification', length: 255 })
+  @IsNotEmpty()
   certification: string;
 
   @ApiProperty({ example: 'Approve', description: '헬스장 승인 여부' })
