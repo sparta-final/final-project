@@ -25,7 +25,7 @@ export class Gym {
   id: number;
 
   @ApiProperty({ example: 1, description: '헬스장 소유자 아이디' })
-  @Column('int', { primary: true, name: 'business_id' })
+  @Column('int', { name: 'business_id' })
   businessId: number;
 
   @ApiProperty({ example: '스파르타 헬스장', description: '헬스장 이름' })
@@ -54,6 +54,7 @@ export class Gym {
 
   @ApiProperty({ example: '사업자등록증.pdf', description: '사업자등록증 파일 이름' })
   @Column('varchar', { name: 'certification', length: 255 })
+  @IsNotEmpty()
   certification: string;
 
   @ApiProperty({ example: 'Approve', description: '헬스장 승인 여부' })
