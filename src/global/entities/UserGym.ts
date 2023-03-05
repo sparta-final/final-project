@@ -1,5 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Gym } from './Gym';
 import { Reviews } from './Reviews';
 import { Users } from './Users';
@@ -23,6 +33,9 @@ export class UserGym {
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp', name: 'updated_at', nullable: true })
+  updatedAt: Date | null;
 
   @OneToMany(() => Reviews, (reviews) => reviews.userGym)
   reviews: Reviews[];

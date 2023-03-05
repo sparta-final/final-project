@@ -4,7 +4,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseInterceptors
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
-import { findReviewByGymId, postReview } from './review.decorators';
+import { deleteReview, findReviewByGymId, postReview, updateReview } from './review.decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import { JwtPayload } from 'src/domain/auth/types/jwtPayload.type';
@@ -33,13 +33,22 @@ export class ReviewController {
     return this.reviewService.postReview(gymId, user, file, createReviewDto);
   }
 
-  // @Put('/:gymId/review/:reviewId')
-  // update(@Param('gymId') gymId: number, @Param('reviewId') reviewId: number, @Body() updateReviewDto: UpdateReviewDto) {
-  //   return this.reviewService.update(gymId, reviewId, updateReviewDto);
-  // }
+  @UseInterceptors(FileInterceptor('reviewImg'))
+  @updateReview()
+  @Put('/:gymId/review/:reviewId')
+  updateReview(
+    @Param('gymId') gymId: number,
+    @Param('reviewId') reviewId: number,
+    @UploadedFile() file: Express.MulterS3.File,
+    @CurrentUser() user: JwtPayload,
+    @Body() updateReviewDto: UpdateReviewDto
+  ) {
+    return this.reviewService.updateReview(gymId, reviewId, file, user, updateReviewDto);
+  }
 
-  // @Delete('/:gymId/review/:reviewId')
-  // remove(@Param('gymId') gymId: number, @Param('reviewId') reviewId: number) {
-  //   return this.reviewService.remove(gymId, reviewId);
-  // }
+  @deleteReview()
+  @Delete('/:gymId/review/:reviewId')
+  removeReview(@Param('gymId') gymId: number, @Param('reviewId') reviewId: number, @CurrentUser() user: JwtPayload) {
+    return this.reviewService.removeReview(gymId, reviewId, user);
+  }
 }
