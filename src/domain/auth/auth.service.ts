@@ -105,7 +105,7 @@ export class AuthService {
    * @param user
    * @param res
    */
-  async KakaoLogin(user: KakaoLoginUserDto, res: Response) {
+  async KakaoLogin(user: KakaoLoginUserDto, _res: Response) {
     // 1. 가입 확인
     const existUser = await this.userRepo.findOne({ where: { email: user.email } });
     // 2. 회원가입
@@ -123,7 +123,7 @@ export class AuthService {
     }
     const tokens = this.getTokens(existUser.id, existUser.email);
     // TODO : 나중에 수정 필요할듯?
-    res.redirect('http://127.0.0.1:5500/src/kakao.html');
+    // res.redirect('http://127.0.0.1:5500/src/kakao.html');
     return tokens;
   }
 

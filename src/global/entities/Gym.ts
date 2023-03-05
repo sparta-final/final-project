@@ -52,7 +52,7 @@ export class Gym {
   @Column('varchar', { name: 'description', length: 255 })
   description: string;
 
-  @ApiProperty({ example: '사업자등록증.pdf', description: '사업자등록증 파일 이름' })
+  @ApiProperty({ type: 'string', format: 'binary', description: '사업자등록증 파일 이름' })
   @Column('varchar', { name: 'certification', length: 255 })
   @IsNotEmpty()
   certification: string;

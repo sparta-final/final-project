@@ -23,7 +23,7 @@ export class GymImg {
   @Column('int', { name: 'gym_id' })
   gymId: number;
 
-  @ApiProperty({ example: '파일이름.jpg', description: '헬스장 이미지' })
+  @ApiProperty({ type: 'string', format: 'binary', description: '헬스장 이미지' })
   @Column('varchar', { name: 'img', length: 255 })
   img: string;
 
