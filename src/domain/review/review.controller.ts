@@ -1,11 +1,10 @@
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/global/common/decorator/public.decorator';
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UploadedFile } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { deleteReview, findReviewByGymId, postReview, updateReview } from './review.decorators';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import { JwtPayload } from 'src/domain/auth/types/jwtPayload.type';
 
@@ -21,7 +20,6 @@ export class ReviewController {
     return this.reviewService.findReviewByGymId(gymId);
   }
 
-  @UseInterceptors(FileInterceptor('reviewImg'))
   @postReview()
   @Post('/:gymId/review')
   postReview(
@@ -33,7 +31,6 @@ export class ReviewController {
     return this.reviewService.postReview(gymId, user, file, createReviewDto);
   }
 
-  @UseInterceptors(FileInterceptor('reviewImg'))
   @updateReview()
   @Put('/:gymId/review/:reviewId')
   updateReview(

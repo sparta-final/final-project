@@ -1,4 +1,5 @@
-import { applyDecorators } from '@nestjs/common';
+import { applyDecorators, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 
 export const findReviewByGymId = () => {
@@ -11,6 +12,7 @@ export const findReviewByGymId = () => {
 
 export const postReview = () => {
   return applyDecorators(
+    UseInterceptors(FileInterceptor('reviewImg')),
     ApiOperation({ summary: '리뷰 작성' }),
     ApiBearerAuth('access-token'),
     ApiConsumes('multipart/form-data'),
@@ -21,6 +23,7 @@ export const postReview = () => {
 
 export const updateReview = () => {
   return applyDecorators(
+    UseInterceptors(FileInterceptor('reviewImg')),
     ApiOperation({ summary: '리뷰 수정' }),
     ApiBearerAuth('access-token'),
     ApiConsumes('multipart/form-data'),

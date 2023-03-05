@@ -44,7 +44,7 @@ export class ReviewService {
       order: { id: 'DESC' },
     });
     if (!userGym) {
-      throw new NotFoundException('리뷰를 작성할 수 없습니다');
+      throw new UnauthorizedException('리뷰를 작성할 수 없습니다');
     }
     // 트랜잭션 처리
     const queryRunner = this.dataSource.createQueryRunner();
@@ -53,7 +53,7 @@ export class ReviewService {
     try {
       const review = await queryRunner.manager.getRepository(Reviews).save({
         ...createReviewDto,
-        img: file.location,
+        reviewImg: file.location,
         userGym: { id: userGym.id },
       });
       await queryRunner.manager.getRepository(UserGym).update({ id: userGym.id }, { reviewId: review.id });
@@ -85,7 +85,7 @@ export class ReviewService {
     if (!userGym) throw new UnauthorizedException('리뷰를 수정할 수 없습니다');
     const updateReview = await this.reviewRepo.update(
       { id: reviewId, userGym: { id: userGym.id } },
-      { ...updateReviewDto, img: file.location }
+      { ...updateReviewDto, reviewImg: file.location }
     );
 
     return updateReview;

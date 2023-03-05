@@ -27,8 +27,8 @@ export class Reviews {
   star: number;
 
   @ApiProperty({ type: 'string', format: 'binary', description: '리뷰 이미지' })
-  @Column('varchar', { name: 'img', nullable: true, length: 255 })
-  img: string | null;
+  @Column('varchar', { name: 'reviewImg', nullable: true, length: 255 })
+  reviewImg: string | null;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
