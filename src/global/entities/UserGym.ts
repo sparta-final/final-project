@@ -1,5 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Gym } from './Gym';
 import { Reviews } from './Reviews';
 import { Users } from './Users';
@@ -18,8 +28,17 @@ export class UserGym {
   userId: number;
 
   @ApiProperty({ example: 1, description: '리뷰 아이디' })
-  @Column('int', { name: 'review_id' })
+  @Column('int', { name: 'review_id', nullable: true })
   reviewId: number;
+
+  @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp', name: 'updated_at', nullable: true })
+  updatedAt: Date | null;
+
+  @OneToMany(() => Reviews, (reviews) => reviews.userGym)
+  reviews: Reviews[];
 
   @ManyToOne(() => Gym, (gym) => gym.userGyms, {
     onDelete: 'CASCADE',
@@ -27,13 +46,6 @@ export class UserGym {
   })
   @JoinColumn([{ name: 'gym_id', referencedColumnName: 'id' }])
   gym: Gym;
-
-  @ManyToOne(() => Reviews, (reviews) => reviews.userGyms, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn([{ name: 'review_id', referencedColumnName: 'id' }])
-  review: Reviews;
 
   @ManyToOne(() => Users, (users) => users.userGyms, {
     onDelete: 'CASCADE',

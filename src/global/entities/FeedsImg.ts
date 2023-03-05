@@ -19,7 +19,7 @@ export class FeedsImg {
   id: number;
 
   @ApiProperty({ example: 1, description: '피드 아이디' })
-  @Column('int', { primary: true, name: 'feed_id' })
+  @Column('int', { name: 'feed_id' })
   feedId: number;
 
   @ApiProperty({ example: '파일이름.jpg', description: '피드 이미지' })

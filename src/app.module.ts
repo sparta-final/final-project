@@ -8,6 +8,7 @@ import type { RedisClientOptions } from 'redis';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAccessGuard } from './domain/auth/guard/jwt-access.guard';
 import { GymModule } from './domain/gym/gym.module';
+import { ReviewModule } from './domain/review/review.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { GymModule } from './domain/gym/gym.module';
     }),
     AuthModule,
     GymModule,
+    ReviewModule,
   ],
   controllers: [],
   providers: [

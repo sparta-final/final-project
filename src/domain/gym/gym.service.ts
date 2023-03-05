@@ -73,6 +73,9 @@ export class GymService {
     const findGymsImage = await this.gymImgrepository.findOne({
       where: { gymId: gymId },
     });
+    const existGym = await this.gymsrepository.findOne({
+      where: { id: gymId },
+    });
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -80,14 +83,14 @@ export class GymService {
 
     try {
       await this.gymsrepository.update(gymId, {
-        name: updateDto.name,
-        phone: updateDto.phone,
-        address: updateDto.address,
-        description: updateDto.description,
-        certification: file.certification[0].location,
+        name: updateDto.name ? updateDto.name : existGym.name,
+        phone: updateDto.phone ? updateDto.phone : existGym.phone,
+        address: updateDto.address ? updateDto.address : existGym.address,
+        description: updateDto.description ? updateDto.description : existGym.description,
+        certification: file.certification ? file.certification[0].location : existGym.certification,
       });
       await this.gymImgrepository.update(findGymsImage.id, {
-        img: file.img[0].location,
+        img: file.img ? file.img[0].location : findGymsImage.img,
       });
       await queryRunner.commitTransaction();
     } catch (err) {

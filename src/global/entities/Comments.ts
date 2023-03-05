@@ -19,11 +19,11 @@ export class Comments {
   id: number;
 
   @ApiProperty({ example: 1, description: '피드 아이디' })
-  @Column('int', { primary: true, name: 'feed_id' })
+  @Column('int', { name: 'feed_id' })
   feedId: number;
 
   @ApiProperty({ example: 1, description: '일반유저 아이디' })
-  @Column('int', { primary: true, name: 'user_id' })
+  @Column('int', { name: 'user_id' })
   userId: number;
 
   @ApiProperty({ example: '댓글 내용', description: '댓글 내용' })
