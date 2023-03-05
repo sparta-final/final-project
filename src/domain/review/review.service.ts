@@ -91,6 +91,11 @@ export class ReviewService {
     return updateReview;
   }
 
+  /**
+   * @description 리뷰 삭제
+   * @author 김승일
+   * @param gymId @param reviewId @param user
+   */
   async removeReview(gymId: number, reviewId: number, user: JwtPayload) {
     const userGym = await this.userGymRepo.findOne({
       where: { gymId, userId: user.sub, reviewId },
