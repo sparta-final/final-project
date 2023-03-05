@@ -48,7 +48,7 @@ export class AuthController {
   async userlogin(@Body() loginUserDto: LoginUserDto) {
     const tokens = await this.authservice.userlogin(loginUserDto);
     // TODO: AccessToken만 클라이언트에게 전달 -> 클라이언트에서 RefreshToken을 헤더(authorization)에 저장
-    return tokens.AccessToken;
+    return { token: tokens.AccessToken };
   }
 
   @Public()
@@ -57,7 +57,7 @@ export class AuthController {
   async businessUserlogin(@Body() loginUserDto: LoginUserDto) {
     const tokens = await this.authservice.businessUserlogin(loginUserDto);
     // TODO: AccessToken만 클라이언트에게 전달 -> 클라이언트에서 RefreshToken을 헤더(authorization)에 저장
-    return tokens.AccessToken;
+    return { token: tokens.AccessToken };
   }
 
   @Public()
