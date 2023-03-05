@@ -26,7 +26,7 @@ export class Reviews {
   @Column('int', { name: 'star' })
   star: number;
 
-  @ApiProperty({ example: 'url 주소', description: 's3 업로드된 url' })
+  @ApiProperty({ type: 'string', format: 'binary', description: '리뷰 이미지' })
   @Column('varchar', { name: 'img', nullable: true, length: 255 })
   img: string | null;
 
