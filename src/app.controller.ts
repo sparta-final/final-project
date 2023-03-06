@@ -36,6 +36,7 @@ export class AppController {
   @Public()
   @Render('map')
   async map() {
+    return;
     return { KEY: process.env.KAKAO_JAVASCRIPT_KEY };
   }
 
