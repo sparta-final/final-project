@@ -11,6 +11,8 @@ import { GymModule } from './domain/gym/gym.module';
 import { ReviewModule } from './domain/review/review.module';
 import { AppController } from './app.controller';
 import { QrcodeModule } from './domain/qrcode/qrcode.module';
+import { UserModule } from './domain/user/user.module';
+import { BusinessUserModule } from './domain/business-user/business-user.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { QrcodeModule } from './domain/qrcode/qrcode.module';
     GymModule,
     ReviewModule,
     QrcodeModule,
+    UserModule,
+    BusinessUserModule,
   ],
   controllers: [AppController],
   providers: [
