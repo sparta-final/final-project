@@ -9,6 +9,7 @@ import {
   BusinessUserRefreshToken,
   BusinessUserSignup,
   KakaoLogin,
+  Logout,
   UserLogin,
   UserRefreshToken,
   UserSignup,
@@ -87,6 +88,7 @@ export class AuthController {
 
   @Public()
   @UseGuards(AuthGuard('refresh'))
+  @Logout()
   @Post('logout')
   async logout(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
     // TODO : 클라이언트에서 로그아웃 요청시, 로컬스토리지에 저장된 토큰 삭제
