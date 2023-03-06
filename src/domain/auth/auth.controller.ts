@@ -84,4 +84,12 @@ export class AuthController {
     const tokens = await this.authservice.restoreRefreshTokenForBusinessUser(user, rt);
     return { at: tokens.AccessToken, rt: tokens.RefreshToken };
   }
+
+  @Public()
+  @UseGuards(AuthGuard('refresh'))
+  @Post('logout')
+  async logout(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
+    // TODO : 클라이언트에서 로그아웃 요청시, 로컬스토리지에 저장된 토큰 삭제
+    return await this.authservice.logout(user, rt);
+  }
 }

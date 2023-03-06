@@ -199,4 +199,20 @@ export class AuthService {
     const tokens = await this.getTokens(existBusinessUser.id, existBusinessUser.email);
     return tokens;
   }
+
+  /**
+   * @description 로그아웃(레디스에 저장된 토큰 삭제)
+   * @author 김승일
+   * @argument user @argument rt
+   */
+  async logout(user: JwtPayload, rt: string) {
+    const hashedRt: string = await this.cacheManager.get(`refresh:${user.email}`);
+    const refreshToken = rt.split(' ')[1]; // Bearer 토큰 형식에서 토큰만 추출
+
+    const rtMatch = await bcrypt.compare(refreshToken, hashedRt);
+    if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
+
+    await this.cacheManager.del(`refresh:${user.email}`);
+    return { success: true };
+  }
 }
