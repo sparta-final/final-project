@@ -7,6 +7,8 @@ import * as redisStore from 'cache-manager-redis-store';
 import type { RedisClientOptions } from 'redis';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAccessGuard } from './domain/auth/guard/jwt-access.guard';
+import { UserModule } from './domain/user/user.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -18,8 +20,9 @@ import { JwtAccessGuard } from './domain/auth/guard/jwt-access.guard';
       store: redisStore,
     }),
     AuthModule,
+    UserModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     {
       provide: APP_GUARD,

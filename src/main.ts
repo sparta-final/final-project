@@ -51,6 +51,12 @@ async function bootstrap() {
   app.useStaticAssets(path.join(__dirname, '..', 'uploads'), {
     prefix: '/uploads',
   });
+
+  // ejs 관련, static 파일들 아래 코드에 저장하는걸로 수정해야 할듯?
+  app.useStaticAssets(path.join(__dirname, '..', 'public'));
+  app.setBaseViewsDir(path.join(__dirname, '..', 'views'));
+  app.setViewEngine('ejs');
+  
   // SWAGGER DOCUMENT
   swaggerDocumentBuilder(app);
 
