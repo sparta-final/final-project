@@ -19,8 +19,8 @@ export const UpdateUserInfo = () => {
 
 export const DeleteUserInfo = () => {
   return applyDecorators(
-    ApiOperation({ summary: '일반유저 정보 삭제' }),
-    ApiResponse({ status: 200, description: '일반유저 정보 삭제 성공' }),
-    ApiResponse({ status: 400, description: '일반유저 정보 삭제 실패' })
+    ApiOperation({ summary: '일반유저 탈퇴' }),
+    ApiResponse({ status: 200, description: '일반유저 탈퇴 성공' }),
+    ApiResponse({ status: 400, description: '일반유저 탈퇴 실패' })
   );
 }

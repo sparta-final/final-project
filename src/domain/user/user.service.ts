@@ -7,10 +7,10 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(Users) private userRepo: Repository<Users>) {}
+  constructor(@InjectRepository(Users) private readonly userRepo: Repository<Users>) {}
 
   /**
-   * 일반유저 회원정보 불러오기
+   * 일반회원 회원정보 불러오기
    * @author 주현진
    */
 
@@ -23,7 +23,7 @@ export class UserService {
   }
 
   /**
-   * 일반유저 회원정보 수정하기
+   * 일반회원 회원정보 수정하기
    * @author 주현진
    * @param UpdateUserInfoDto
    */
@@ -54,7 +54,7 @@ export class UserService {
   }
 
   /**
-   * 일반유저 탈퇴하기
+   * 일반회원 탈퇴하기
    * @author 주현진
    */
 
