@@ -6,7 +6,21 @@ export class AppController {
   @Get()
   @Public()
   @Render('index')
-  async view() {
+  async index() {
+    return;
+  }
+
+  @Get('payment')
+  @Public()
+  @Render('payment')
+  async payment() {
+    return;
+  }
+
+  @Get('complete')
+  @Public()
+  @Render('paymentComplete')
+  async complete() {
     return;
   }
 }
