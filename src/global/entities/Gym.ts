@@ -41,23 +41,35 @@ export class Gym {
   @Column('varchar', { name: 'phone', length: 100 })
   phone: string;
 
-  @ApiProperty({ example: '03253', description: '헬스장 우편번호' })
-  @IsString()
-  @IsNotEmpty()
-  @Column('varchar', { name: 'zipCode', length: 100 })
-  zipCode: string;
+  // @ApiProperty({ example: '03253', description: '헬스장 우편번호' })
+  // @IsString()
+  // @IsNotEmpty()
+  // @Column('varchar', { name: 'zipCode', length: 100 })
+  // zipCode: string;
 
-  @ApiProperty({ example: '서울시 강남구 테헤란로 427', description: '헬스장 주소' })
-  @IsString()
-  @IsNotEmpty()
-  @Column('varchar', { name: 'address', length: 100 })
-  address: string;
+  // @ApiProperty({ example: '서울시 강남구 테헤란로 427', description: '헬스장 주소' })
+  // @IsString()
+  // @IsNotEmpty()
+  // @Column('varchar', { name: 'address', length: 100 })
+  // address: string;
 
-  @ApiProperty({ example: '201호', description: '헬스장 상세주소' })
+  // @ApiProperty({ example: '201호', description: '헬스장 상세주소' })
+  // @IsString()
+  // @IsNotEmpty()
+  // @Column('varchar', { name: 'addressDetail', length: 100 })
+  // addressDetail: string;
+
+  @ApiProperty({ example: '37.4979', description: '헬스장 위도' })
   @IsString()
   @IsNotEmpty()
-  @Column('varchar', { name: 'addressDetail', length: 100 })
-  addressDetail: string;
+  @Column('varchar', { name: 'lat', length: 100 })
+  lat: string;
+
+  @ApiProperty({ example: '127.02761', description: '헬스장 경도' })
+  @IsString()
+  @IsNotEmpty()
+  @Column('varchar', { name: 'lng', length: 100 })
+  lng: string;
 
   @ApiProperty({ example: '헬스장', description: '체육관 유형' })
   @IsString()

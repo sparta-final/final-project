@@ -36,6 +36,12 @@ export class Users {
   @Column('varchar', { name: 'nickname', length: 30 })
   nickname: string;
 
+  // 프로필 사진 컬럼 추가했습니다.
+  @ApiProperty({ example: '', description: '프로필 사진', required: true })
+  @IsString()
+  @Column('varchar', { name: 'profileImage', length: 255, default: null })
+  profileImage: string;
+
   @ApiProperty({ example: 'Basic', description: '일반유저 구독등급' })
   @Column({ type: 'enum', enum: userMembership, name: 'membership', default: null, nullable: true })
   membership: userMembership;

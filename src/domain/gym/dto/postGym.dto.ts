@@ -13,20 +13,13 @@ export class PostGymDto {
   @IsNotEmpty()
   phone: string;
 
-  @ApiProperty({ example: '03253', description: '헬스장 우편번호', required: true })
-  @IsString()
+  @ApiProperty({ example: '37.123456', description: '위도', required: true })
   @IsNotEmpty()
-  zipCode: string;
+  lat: number;
 
-  @ApiProperty({ example: '서울시 강남구 테헤란로 427', description: '헬스장 주소', required: true })
-  @IsString()
+  @ApiProperty({ example: '127.123456', description: '경도', required: true })
   @IsNotEmpty()
-  address: string;
-
-  @ApiProperty({ example: '201호', description: '헬스장 상세주소', required: true })
-  @IsString()
-  @IsNotEmpty()
-  addressDetail: string;
+  lng: number;
 
   @ApiProperty({ example: '헬스장, 필라테스, 요가', description: '체육관 유형' })
   @IsString()
