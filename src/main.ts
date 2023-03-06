@@ -51,6 +51,8 @@ async function bootstrap() {
   app.useStaticAssets(path.join(__dirname, '..', 'uploads'), {
     prefix: '/uploads',
   });
+  app.setBaseViewsDir(path.join(__dirname, '..', 'views'));
+  app.setViewEngine('ejs');
   // SWAGGER DOCUMENT
   swaggerDocumentBuilder(app);
 
