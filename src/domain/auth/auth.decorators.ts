@@ -76,3 +76,12 @@ export const BusinessUserRefreshToken = () => {
     ApiResponse({ status: 400, description: '토큰 재발급 실패' })
   );
 };
+
+export const Logout = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '로그아웃' }),
+    ApiBearerAuth('refresh-token'),
+    ApiResponse({ status: 201, description: '로그아웃 성공' }),
+    ApiResponse({ status: 400, description: '로그아웃 실패' })
+  );
+};

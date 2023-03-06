@@ -40,6 +40,9 @@
           console.log(err);
         });
     }
+    function logout() {
+      localStorage.removeItem('token');
+    }
   </script>
   <body>
     <div class="nav justify-content-center">
