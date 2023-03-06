@@ -19,15 +19,15 @@ export class Users {
   @Column('varchar', { name: 'email', unique: true, length: 30 })
   email: string;
 
-  @ApiProperty({ example: '1234', description: '일반유저 비밀번호', required: true })
+  @ApiProperty({ example: '1234', description: '일반유저 비밀번호' })
   @IsString()
   @IsNotEmpty()
-  @Column('varchar', { name: 'password', length: 100 })
+  @Column('varchar', { name: 'password', length: 100, nullable: true })
   password: string;
 
-  @ApiProperty({ example: '010-1234-5678', description: '일반유저 전화번호', required: true })
+  @ApiProperty({ example: '010-1234-5678', description: '일반유저 전화번호' })
   @IsPhoneNumber('KR')
-  @Column('varchar', { name: 'phone', length: 30 })
+  @Column('varchar', { name: 'phone', length: 30, nullable: true })
   phone: string;
 
   @ApiProperty({ example: '홍길동', description: '일반유저 이름', required: true })
@@ -39,7 +39,7 @@ export class Users {
   // 프로필 사진 컬럼 추가했습니다.
   @ApiProperty({ example: '', description: '프로필 사진', required: true })
   @IsString()
-  @Column('varchar', { name: 'profileImage', length: 255, default:null })
+  @Column('varchar', { name: 'profileImage', length: 255, default: null })
   profileImage: string;
 
   @ApiProperty({ example: 'Basic', description: '일반유저 구독등급' })
@@ -60,9 +60,6 @@ export class Users {
 
   @OneToMany(() => Payments, (payments) => payments.user)
   payments: Payments[];
-
-  @OneToMany(() => Reviews, (reviews) => reviews.user)
-  reviews: Reviews[];
 
   @OneToMany(() => UserGym, (userGym) => userGym.user)
   userGyms: UserGym[];

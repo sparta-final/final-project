@@ -80,13 +80,6 @@ export class Gym {
   @Column({ type: 'enum', enum: isApprove, name: 'isApprove', default: isApprove.NotApprove })
   isApprove: isApprove;
 
-  @ManyToOne(() => Busienssusers, (busienssusers) => busienssusers.gyms, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn([{ name: 'business_id', referencedColumnName: 'id' }])
-  business: Busienssusers;
-
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
 
@@ -96,11 +89,15 @@ export class Gym {
   @DeleteDateColumn({ type: 'timestamp', name: 'deleted_at' })
   deletedAt: Date | null;
 
+  @ManyToOne(() => Busienssusers, (busienssusers) => busienssusers.gyms, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn([{ name: 'business_id', referencedColumnName: 'id' }])
+  business: Busienssusers;
+
   @OneToMany(() => GymImg, (gymImg) => gymImg.gym)
   gymImgs: GymImg[];
-
-  @OneToMany(() => Reviews, (reviews) => reviews.gym)
-  reviews: Reviews[];
 
   @OneToMany(() => UserGym, (userGym) => userGym.gym)
   userGyms: UserGym[];
