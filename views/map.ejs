@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>헬스장 지도</title>
+  </head>
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%= KEY  %>&libraries=clusterer,services"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <body>
+    <div style="background-color: orange">
+      <div style="margin: auto; width: 600px; height: 100vh; background-color: aqua">
+        <div id="map" style="width: 100%; height: 400px"></div>
+        <div id="roadview" style="width: 100%"></div>
+      </div>
+    </div>
+  </body>
+  <script>
+    $(document).ready(() => {
+      getAllGym();
+    });
+    function getAllGym() {
+      axios.get('api/gym').then((res) => {
+        console.log(res.data);
+        const gyms = res.data;
+        const markers = [];
+        gyms.forEach((gym) => {
+          const marker = new kakao.maps.Marker({
+            position: new kakao.maps.LatLng(gym.lat, gym.lng),
+            map: map,
+          });
+          markers.push(marker);
+          // 마커에 인포윈도우 표시
+          // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element
+          const iwContent = `<div style="padding:5px;">${gym.name}</div>`;
+          // 인포윈도우를 생성합니다
+          const infowindow = new kakao.maps.InfoWindow({
+            content: iwContent,
+          });
+          // 인포윈도우 표시
+          infowindow.open(map, marker);
+
+          // 마커 클릭 시 로드뷰 표시
+          kakao.maps.event.addListener(marker, 'click', function () {
+            const rvContainer = document.getElementById('roadview');
+            const rv = new kakao.maps.Roadview(rvContainer);
+            const rvClient = new kakao.maps.RoadviewClient();
+            rvClient.getNearestPanoId(new kakao.maps.LatLng(gym.lat, gym.lng), 50, function (panoId) {
+              rv.setPanoId(panoId, new kakao.maps.LatLng(gym.lat, gym.lng));
+            });
+          });
+        });
+      });
+    }
+  </script>
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <script src="/js/map.js"></script>
+</html>

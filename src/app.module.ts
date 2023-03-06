@@ -9,10 +9,13 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAccessGuard } from './domain/auth/guard/jwt-access.guard';
 import { GymModule } from './domain/gym/gym.module';
 import { ReviewModule } from './domain/review/review.module';
-import { AdminController } from './domain/admin/admin.controller';
-import { AdminService } from './domain/admin/admin.service';
+import { AppController } from './app.controller';
+import { QrcodeModule } from './domain/qrcode/qrcode.module';
+import { UserModule } from './domain/user/user.module';
+import { BusinessUserModule } from './domain/business-user/business-user.module';
+import { PaymentModule } from './domain/payment/payment.module';
+// import { HttpModule } from '@nestjs/axios';
 import { AdminModule } from './domain/admin/admin.module';
-
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -25,9 +28,14 @@ import { AdminModule } from './domain/admin/admin.module';
     AuthModule,
     GymModule,
     ReviewModule,
+    QrcodeModule,
+    UserModule,
+    BusinessUserModule,
+    PaymentModule,
+    // HttpModule,
     AdminModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     {
       provide: APP_GUARD,

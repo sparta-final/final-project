@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
+import { GymType } from 'src/global/entities/common/enums';
 
 export class PostGymDto {
   @ApiProperty({ example: '스파르타 헬스장', description: '헬스장 이름', required: true })
@@ -12,10 +13,18 @@ export class PostGymDto {
   @IsNotEmpty()
   phone: string;
 
-  @ApiProperty({ example: '서울시 강남구 테헤란로 427', description: '헬스장 주소', required: true })
+  @ApiProperty({ example: '37.123456', description: '위도', required: true })
+  @IsNotEmpty()
+  lat: number;
+
+  @ApiProperty({ example: '127.123456', description: '경도', required: true })
+  @IsNotEmpty()
+  lng: number;
+
+  @ApiProperty({ example: '헬스장, 필라테스, 요가', description: '체육관 유형' })
   @IsString()
   @IsNotEmpty()
-  address: string;
+  gymType: GymType;
 
   @ApiProperty({ example: '아주 좋은 헬스장입니다~', description: '헬스장 설명', required: true })
   @IsString()

@@ -23,7 +23,7 @@ function ormConfig(): TypeOrmModuleOptions {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     entities: commonConf.ENTITIES,
-    synchronize: false,
+    synchronize: true,
     logging: true,
     charset: 'utf8mb4',
     keepConnectionAlive: true,

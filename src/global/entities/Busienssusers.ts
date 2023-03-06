@@ -12,7 +12,7 @@ export class Busienssusers {
   @ApiProperty({ example: 'sixpack@gmail.com', description: '사업자 이메일' })
   @IsEmail()
   @IsNotEmpty()
-  @Column('varchar', { name: 'email', length: 100, unique: true })
+  @Column('varchar', { name: 'email', length: 100 })
   email: string;
 
   @ApiProperty({ example: '1234', description: '사업자 비밀번호' })
@@ -32,6 +32,12 @@ export class Busienssusers {
   @IsString()
   @Column('varchar', { name: 'name', length: 30 })
   name: string;
+
+  // 프로필 사진 컬럼 추가했습니다.
+  @ApiProperty({ example: '', description: '프로필 사진', required: true })
+  @IsString()
+  @Column('varchar', { name: 'profileImage', length: 255, default: null })
+  profileImage: string;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

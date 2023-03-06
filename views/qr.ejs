@@ -1,0 +1,61 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>QR 코드 생성기</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+  </head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    function login() {
+      axios
+        .post('/api/auth/user/login', {
+          email: document.getElementById('email').value,
+          password: document.getElementById('pw').value,
+        })
+        .then((res) => {
+          console.log(res);
+          localStorage.setItem('token', res.data.at);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    function getQRCode() {
+      axios
+        .post(
+          'api/qrcode',
+          {},
+          {
+            headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          document.getElementById('qr').innerHTML = `<img src="${res.data}" />`;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    function logout() {
+      localStorage.removeItem('token');
+    }
+  </script>
+  <body>
+    <div class="nav justify-content-center">
+      <div class="card border-primary mb-3" style="max-width: 18rem; margin-top: 20px">
+        <div class="card-header">일반 유저</div>
+        <div class="card-body text-primary">
+          <input type="text" id="email" placeholder="이메일을 입력해주세요" class="form-control" required /><br />
+          <input type="text" id="pw" placeholder="비밀번호를 입력해주세요" class="form-control" required /><br />
+          <button onclick="login()">로그인</button>
+          <button onclick="getQRCode()">qr</button>
+          <div id="qr"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
