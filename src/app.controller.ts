@@ -18,4 +18,18 @@ export class AppController {
   async test() {
     return;
   }
+
+  @Get('map')
+  @Public()
+  @Render('map')
+  async map() {
+    return { KEY: process.env.KAKAO_JAVASCRIPT_KEY };
+  }
+
+  @Get('enrollgym')
+  @Public()
+  @Render('enrollGym')
+  async enrollGym() {
+    return { KEY: process.env.KAKAO_JAVASCRIPT_KEY };
+  }
 }
