@@ -31,9 +31,9 @@ export class AuthService {
   ) {}
 
   /**
-   * 일반유저 회원가입
+   * @description 일반유저 회원가입
    * @author 김승일
-   * @param postuserDto
+   * @argument postuserDto
    */
   async postUsers(postuserDto: PostUserDto) {
     const existUser = await this.userRepo.findOne({
@@ -51,9 +51,9 @@ export class AuthService {
   }
 
   /**
-   * 사업자 회원가입
+   * @description 사업자 회원가입
    * @author 김승일
-   * @param postBusinessUserDto
+   * @argument postBusinessUserDto
    */
   async postBusinessUsers(postBusinessUserDto: PostBusinessUserDto) {
     const existUser = await this.businessUserRepo.findOne({
@@ -72,9 +72,9 @@ export class AuthService {
   }
 
   /**
-   * 일반유저 로그인
+   * @description 일반유저 로그인
    * @author 김승일
-   * @param loginUserDto
+   * @argument loginUserDto
    */
   async userlogin(loginUserDto: LoginUserDto) {
     const existUser = await this.userRepo.findOne({ where: { email: loginUserDto.email } });
@@ -86,9 +86,9 @@ export class AuthService {
   }
 
   /**
-   * 사업자 로그인
+   * @description 사업자 로그인
    * @author 김승일
-   * @param loginUserDto
+   * @argument loginUserDto
    */
   async businessUserlogin(loginUserDto: LoginUserDto) {
     const existUser = await this.businessUserRepo.findOne({ where: { email: loginUserDto.email } });
@@ -100,10 +100,10 @@ export class AuthService {
   }
 
   /**
-   * 카카오 로그인
+   * @description 카카오 로그인
    * @author 김승일
-   * @param user
-   * @param res
+   * @argument user
+   * @argument res
    */
   async KakaoLogin(user: KakaoLoginUserDto, _res: Response) {
     // 1. 가입 확인
@@ -128,10 +128,10 @@ export class AuthService {
   }
 
   /**
-   * access token, refresh token 발급
+   * @description access token, refresh token 발급
    * @author 김승일
-   * @param userId
-   * @param email
+   * @argument userId
+   * @argument email
    */
   async getTokens(userId: number, email: string) {
     const jwtPayload: JwtPayload = {
@@ -151,17 +151,17 @@ export class AuthService {
     ]);
     // RefreshToken 암호화 후 캐시에 저장
     const hashRefreshToken = bcrypt.hashSync(RefreshToken, 10);
-    await this.cacheManager.set(`${email}-refresh`, hashRefreshToken, {
+    await this.cacheManager.set(`refresh:${email}`, hashRefreshToken, {
       ttl: 60 * 60 * 24 * 7, // 7일
     });
     return { AccessToken, RefreshToken };
   }
 
   /**
-   * 토큰 재발급(일반유저)
+   * @description 토큰 재발급(일반유저)
    * @author 김승일
-   * @param user
-   * @param rt
+   * @argument user
+   * @argument rt
    */
   async restoreRefreshTokenForUser(user: JwtPayload, rt: string) {
     const existUser = await this.userRepo.findOne({
@@ -169,10 +169,10 @@ export class AuthService {
     });
 
     if (!existUser) throw new NotFoundException('유저가 존재하지 않습니다.');
-    const existRt: string = await this.cacheManager.get(`${user.email}-refresh`);
-    const refreshToken = rt.split(' ')[1];
+    const hashedRt: string = await this.cacheManager.get(`refresh:${user.email}`);
+    const refreshToken = rt.split(' ')[1]; // Bearer 토큰 형식에서 토큰만 추출
 
-    const rtMatch = await bcrypt.compare(refreshToken, existRt);
+    const rtMatch = await bcrypt.compare(refreshToken, hashedRt);
     if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
 
     const tokens = await this.getTokens(existUser.id, existUser.email);
@@ -180,23 +180,39 @@ export class AuthService {
   }
 
   /**
-   * 토큰 재발급(사업자)
+   * @description 토큰 재발급(사업자)
    * @author 김승일
-   * @param user
-   * @param rt
+   * @argument user
+   * @argument rt
    */
   async restoreRefreshTokenForBusinessUser(user: JwtPayload, rt: string) {
     const existBusinessUser = await this.businessUserRepo.findOne({
       where: { id: user.sub },
     });
     if (!existBusinessUser) throw new NotFoundException('유저가 존재하지 않습니다.');
-    const existRt: string = await this.cacheManager.get(`${user.email}-refresh`);
-    const refreshToken = rt.split(' ')[1];
+    const hashedRt: string = await this.cacheManager.get(`refresh:${user.email}`);
+    const refreshToken = rt.split(' ')[1]; // Bearer 토큰 형식에서 토큰만 추출
 
-    const rtMatch = await bcrypt.compare(refreshToken, existRt);
+    const rtMatch = await bcrypt.compare(refreshToken, hashedRt);
     if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
 
     const tokens = await this.getTokens(existBusinessUser.id, existBusinessUser.email);
     return tokens;
+  }
+
+  /**
+   * @description 로그아웃(레디스에 저장된 토큰 삭제)
+   * @author 김승일
+   * @argument user @argument rt
+   */
+  async logout(user: JwtPayload, rt: string) {
+    const hashedRt: string = await this.cacheManager.get(`refresh:${user.email}`);
+    const refreshToken = rt.split(' ')[1]; // Bearer 토큰 형식에서 토큰만 추출
+
+    const rtMatch = await bcrypt.compare(refreshToken, hashedRt);
+    if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
+
+    await this.cacheManager.del(`refresh:${user.email}`);
+    return { success: true };
   }
 }

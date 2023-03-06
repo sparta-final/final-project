@@ -10,6 +10,7 @@ import { JwtAccessGuard } from './domain/auth/guard/jwt-access.guard';
 import { GymModule } from './domain/gym/gym.module';
 import { ReviewModule } from './domain/review/review.module';
 import { AppController } from './app.controller';
+import { QrcodeModule } from './domain/qrcode/qrcode.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AppController } from './app.controller';
     AuthModule,
     GymModule,
     ReviewModule,
+    QrcodeModule,
   ],
   controllers: [AppController],
   providers: [
