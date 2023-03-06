@@ -4,6 +4,7 @@ import { Users } from './../../global/entities/Users';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { GymType } from 'src/global/entities/common/enums';
 
 @Injectable()
 export class AdminService {
@@ -34,11 +35,15 @@ export class AdminService {
    * @author 한정훈
    */
   async getGym() {
-    const gym = await this.gymRepo.find({
-      where: { isApprove: 1, deletedAt: null },
-      // DB에 Gym type 추가해서 타입별로 가져와야함
-      select: [],
+    const fitness = await this.gymRepo.count({
+      where: { gymType: GymType.fitness, isApprove: 1, deletedAt: null },
     });
-    return gym;
+    const pilates = await this.gymRepo.count({
+      where: { gymType: GymType.pilates, isApprove: 1, deletedAt: null },
+    });
+    const crossfit = await this.gymRepo.count({
+      where: { gymType: GymType.crossfit, isApprove: 1, deletedAt: null },
+    });
+    return [fitness, pilates, crossfit];
   }
 }
