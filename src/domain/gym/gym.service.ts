@@ -32,7 +32,10 @@ export class GymService {
       businessId: user.sub,
       name: postgymDto.name,
       phone: postgymDto.phone,
+      zipCode: postgymDto.zipCode,
       address: postgymDto.address,
+      gymType: postgymDto.gymType,
+      addressDetail: postgymDto.addressDetail,
       description: postgymDto.description,
       certification: file.certification[0].location,
     });
@@ -85,7 +88,10 @@ export class GymService {
       await this.gymsrepository.update(gymId, {
         name: updateDto.name ? updateDto.name : existGym.name,
         phone: updateDto.phone ? updateDto.phone : existGym.phone,
+        zipCode: updateDto.zipCode ? updateDto.zipCode : existGym.zipCode,
         address: updateDto.address ? updateDto.address : existGym.address,
+        addressDetail: updateDto.addressDetail ? updateDto.addressDetail : existGym.addressDetail,
+        gymType: updateDto.gymType ? updateDto.gymType : existGym.gymType,
         description: updateDto.description ? updateDto.description : existGym.description,
         certification: file.certification ? file.certification[0].location : existGym.certification,
       });
