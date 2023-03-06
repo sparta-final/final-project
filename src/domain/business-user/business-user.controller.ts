@@ -36,8 +36,8 @@ export class BusinessUserController {
   }
 
   // 업체별 사용자 데이터 불러오기
-  @Get('user/:month/:gymId')
-  async getBusinessUserByGymId(@Param('month') month: num, @Param('gymId') gymId: number) {
-    return await this.businessUserService.getBusinessUserByGymId(month, gymId);
-  }
+  //   @Get('user/:month/:gymId')
+  //   async getBusinessUserByGymId(@Param('month') month: num, @Param('gymId') gymId: number) {
+  //     return await this.businessUserService.getBusinessUserByGymId(month, gymId);
+  //   }
 }
