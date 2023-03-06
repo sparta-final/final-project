@@ -32,10 +32,9 @@ export class GymService {
       businessId: user.sub,
       name: postgymDto.name,
       phone: postgymDto.phone,
-      zipCode: postgymDto.zipCode,
-      address: postgymDto.address,
+      lat: postgymDto.lat,
+      lng: postgymDto.lng,
       gymType: postgymDto.gymType,
-      addressDetail: postgymDto.addressDetail,
       description: postgymDto.description,
       certification: file.certification[0].location,
     });

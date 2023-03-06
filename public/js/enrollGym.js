@@ -24,6 +24,7 @@ function execDaumPostcode() {
       document.getElementById("address").value = addr;
       // 주소로 상세 정보를 검색
       geocoder.addressSearch(data.address, function (results, status) {
+        console.log('result', results)
         // 정상적으로 검색이 완료됐으면
         if (status === daum.maps.services.Status.OK) {
 
@@ -51,7 +52,7 @@ function businesslogin() {
     .post('/api/auth/user/business/login', {
       email: document.getElementById('loginId').value,
       password: document.getElementById('loginPw').value,
-    })
+    },)
     .then((res) => {
       console.log(res);
       localStorage.setItem('token', res.data.at);
@@ -66,6 +67,7 @@ function enrollGym() {
   const phone = document.getElementById('gymPhone').value;
   const description = document.getElementById('gymDescription').value;
   const certification = document.getElementById('gymCertification');
+  const gymType = document.getElementById('gymType').value;
   const lat = document.getElementById('lat').value;
   const lng = document.getElementById('lng').value;
 
@@ -74,6 +76,7 @@ function enrollGym() {
   formData.append('phone', phone);
   formData.append('description', description);
   formData.append('certification', certification.files[0]);
+  formData.append('gymType', gymType);
   formData.append('lat', lat);
   formData.append('lng', lng);
 
@@ -81,6 +84,7 @@ function enrollGym() {
   axios.post('/api/gym', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
   }).then((res) => {
     console.log(res);
