@@ -1,3 +1,4 @@
+import { userMembership } from './../../global/entities/common/user.membership';
 import { Gym } from './../../global/entities/Gym';
 import { Users } from './../../global/entities/Users';
 import { Injectable } from '@nestjs/common';
@@ -16,11 +17,16 @@ export class AdminService {
    * @author 한정훈
    */
   async getMember() {
-    const member = await this.userRepo.find({
-      where: { membership: null, deletedAt: null },
-      select: ['membership'],
+    const basic = await this.userRepo.count({
+      where: { membership: userMembership.Basic, deletedAt: null },
     });
-    return member;
+    const standard = await this.userRepo.count({
+      where: { membership: userMembership.Standard, deletedAt: null },
+    });
+    const premium = await this.userRepo.count({
+      where: { membership: userMembership.Premium, deletedAt: null },
+    });
+    return [basic, standard, premium];
   }
 
   /**
