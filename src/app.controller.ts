@@ -18,6 +18,19 @@ export class AppController {
   async test() {
     return;
   }
+  @Get('payment')
+  @Public()
+  @Render('payment')
+  async payment() {
+    return;
+  }
+
+  @Get('complete')
+  @Public()
+  @Render('paymentComplete')
+  async complete() {
+    return;
+  }
 
   @Get('map')
   @Public()

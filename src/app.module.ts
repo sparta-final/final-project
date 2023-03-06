@@ -11,6 +11,10 @@ import { GymModule } from './domain/gym/gym.module';
 import { ReviewModule } from './domain/review/review.module';
 import { AppController } from './app.controller';
 import { QrcodeModule } from './domain/qrcode/qrcode.module';
+import { UserModule } from './domain/user/user.module';
+import { BusinessUserModule } from './domain/business-user/business-user.module';
+import { PaymentModule } from './domain/payment/payment.module';
+// import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -25,6 +29,10 @@ import { QrcodeModule } from './domain/qrcode/qrcode.module';
     GymModule,
     ReviewModule,
     QrcodeModule,
+    UserModule,
+    BusinessUserModule,
+    PaymentModule,
+    // HttpModule,
   ],
   controllers: [AppController],
   providers: [
