@@ -4,4 +4,5 @@ export enum paymentStatus {
   SUCCESS = '결제완료',
   CANCEL = '결제취소',
   FAIL = '결제실패',
+  // 'forgery', 'paid', 'uncancelled', 'cancelled', 'failed', 'ready'
 }

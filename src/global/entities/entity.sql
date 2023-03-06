@@ -18,7 +18,7 @@ CREATE TABLE `busienssusers` (
 
 CREATE TABLE `payments` (
 	`id`	int	NOT NULL,
-	`user_id`	int	NOT NULL,
+	`id2`	int	NOT NULL,
 	`imp_uid`	varchar(255)	NOT NULL,
 	`merchant_uid`	varchar(100)	NOT NULL,
 	`customer_uid`	varchar(100)	NOT NULL,
@@ -88,7 +88,7 @@ ALTER TABLE `busienssusers` ADD CONSTRAINT `PK_BUSIENSSUSERS` PRIMARY KEY (
 
 ALTER TABLE `payments` ADD CONSTRAINT `PK_PAYMENTS` PRIMARY KEY (
 	`id`,
-	`user_id`
+	`id2`
 );
 
 ALTER TABLE `gym` ADD CONSTRAINT `PK_GYM` PRIMARY KEY (
@@ -129,7 +129,7 @@ ALTER TABLE `feeds_img` ADD CONSTRAINT `PK_FEEDS_IMG` PRIMARY KEY (
 );
 
 ALTER TABLE `payments` ADD CONSTRAINT `FK_users_TO_payments_1` FOREIGN KEY (
-	`user_id`
+	`id2`
 )
 REFERENCES `users` (
 	`id`

@@ -13,6 +13,8 @@ import { AppController } from './app.controller';
 import { QrcodeModule } from './domain/qrcode/qrcode.module';
 import { UserModule } from './domain/user/user.module';
 import { BusinessUserModule } from './domain/business-user/business-user.module';
+import { PaymentModule } from './domain/payment/payment.module';
+// import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { BusinessUserModule } from './domain/business-user/business-user.module'
     QrcodeModule,
     UserModule,
     BusinessUserModule,
+    PaymentModule,
+    // HttpModule,
   ],
   controllers: [AppController],
   providers: [
