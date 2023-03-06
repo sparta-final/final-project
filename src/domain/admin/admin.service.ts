@@ -46,4 +46,15 @@ export class AdminService {
     });
     return [fitness, pilates, crossfit];
   }
+
+  /**
+   * @description 승인 요청된 제휴업체 승인하기
+   * @author 한정훈
+   * @argument id
+   */
+  async approveGym(id) {
+    return await this.gymRepo.update(id, {
+      isApprove: 1,
+    });
+  }
 }
