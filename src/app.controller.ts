@@ -18,4 +18,11 @@ export class AppController {
   async test() {
     return;
   }
+
+  @Get('map')
+  @Public()
+  @Render('map')
+  async map() {
+    return;
+  }
 }
