@@ -11,11 +11,12 @@
   <script>
     let query = window.location.search;
     let param = new URLSearchParams(query);
-    let userId = param.get('id');
+    let userId = +param.get('id');
+    let date = +param.get('date');
     function useGym() {
       axios
         .post(
-          `api/qrcode/${userId}`,
+          `api/qrcode/${date}/${userId}`,
           {},
           {
             headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
