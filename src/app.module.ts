@@ -7,8 +7,11 @@ import * as redisStore from 'cache-manager-redis-store';
 import type { RedisClientOptions } from 'redis';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAccessGuard } from './domain/auth/guard/jwt-access.guard';
-import { UserModule } from './domain/user/user.module';
+import { GymModule } from './domain/gym/gym.module';
+import { ReviewModule } from './domain/review/review.module';
 import { AppController } from './app.controller';
+import { QrcodeModule } from './domain/qrcode/qrcode.module';
+import { UserModule } from './domain/user/user.module';
 import { BusinessUserModule } from './domain/business-user/business-user.module';
 
 @Module({
@@ -21,6 +24,9 @@ import { BusinessUserModule } from './domain/business-user/business-user.module'
       store: redisStore,
     }),
     AuthModule,
+    GymModule,
+    ReviewModule,
+    QrcodeModule,
     UserModule,
     BusinessUserModule,
   ],
