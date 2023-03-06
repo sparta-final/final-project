@@ -1,15 +1,23 @@
+import { ApiTags } from '@nestjs/swagger';
 import { Controller, Get, Render } from '@nestjs/common';
 import { Public } from './global/common/decorator/public.decorator';
 
-@Controller('')
+@ApiTags('RENDER')
+@Controller()
 export class AppController {
-  @Get()
+  @Get('qr')
   @Public()
-  @Render('index')
-  async index() {
-    return;
+  @Render('qr')
+  async view() {
+    return { qrCodeUrl: 1 };
   }
 
+  @Get('useGym')
+  @Public()
+  @Render('useGym')
+  async test() {
+    return;
+  }
   @Get('payment')
   @Public()
   @Render('payment')

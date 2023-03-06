@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -19,10 +20,10 @@ export class GymImg {
   id: number;
 
   @ApiProperty({ example: 1, description: '헬스장 아이디' })
-  @Column('int', { primary: true, name: 'gym_id' })
+  @Column('int', { name: 'gym_id' })
   gymId: number;
 
-  @ApiProperty({ example: '파일이름.jpg', description: '헬스장 이미지' })
+  @ApiProperty({ type: 'string', format: 'binary', description: '헬스장 이미지' })
   @Column('varchar', { name: 'img', length: 255 })
   img: string;
 

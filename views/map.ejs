@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>헬스장 지도</title>
+  </head>
+  <body>
+    <div class="box_searchbar">
+      <input type="text" id="search.keyword.query" name="q" class="searchbar" maxlength="100" />
+      <button onclick="searchplace()" ,type="button" id="search.keyword.submit" class="searchbutton">검색</button>
+    </div>
+
+    <div id="map" style="width: 90%; height: 90vh"></div>
+
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9aeee9ff016fed561bbb3a8f799b3034&libraries=clusterer,services"></script>
+    <script>
+      const search = document.getElementById('search.keyword.query');
+
+      var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+          center: new kakao.maps.LatLng(37.56683, 126.97211), // 지도의 중심좌표
+          level: 4, // 지도의 확대 레벨
+          mapTypeId: kakao.maps.MapTypeId.ROADMAP, // 지도종류
+        };
+
+      // 지도를 생성한다
+      var map = new kakao.maps.Map(mapContainer, mapOption);
+
+      // 마커 클러스터러를 생성합니다
+      var clusterer = new kakao.maps.MarkerClusterer({
+        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+        minLevel: 10, // 클러스터 할 최소 지도 레벨
+      });
+
+      // 지도 타입 변경 컨트롤을 생성한다
+      var mapTypeControl = new kakao.maps.MapTypeControl();
+
+      // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
+      map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+      // 지도에 확대 축소 컨트롤을 생성한다
+      var zoomControl = new kakao.maps.ZoomControl();
+
+      // 지도의 우측에 확대 축소 컨트롤을 추가한다
+      map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+      // 지도 클릭 이벤트를 등록한다 (좌클릭 : click, 우클릭 : rightclick, 더블클릭 : dblclick)
+      kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+        console.log('지도에서 클릭한 위치의 좌표는 ' + mouseEvent.latLng.toString() + ' 입니다.');
+      });
+
+      // 주소-좌표 변환 객체를 생성합니다
+      var geocoder = new kakao.maps.services.Geocoder();
+
+      // 주소로 좌표를 검색합니다
+      const searchplace = () =>
+        geocoder.addressSearch(search.value, function (result, status) {
+          // 정상적으로 검색이 완료됐으면
+          if (status === kakao.maps.services.Status.OK) {
+            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+            // 결과값으로 받은 위치를 마커로 표시합니다
+            var marker0 = new kakao.maps.Marker({
+              map: map,
+              position: coords,
+            });
+
+            // 인포윈도우로 장소에 대한 설명을 표시합니다
+            var infowindow = new kakao.maps.InfoWindow({
+              content: '<div style="width:150px;text-align:center;padding:6px 0;">검색한 주소</div>',
+            });
+            infowindow.open(map, marker0);
+
+            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+            map.setCenter(coords);
+          }
+        });
+
+      var positions = [
+        {
+          content: '<div style="width:150px;text-align:center;padding:6px 0;">카카오</div>',
+          latlng: new kakao.maps.LatLng(37.56683, 126.97211),
+        },
+        {
+          content: '<div style="width:150px;text-align:center;padding:6px 0;">카카오2</div>',
+          latlng: new kakao.maps.LatLng(37.56683, 126.97222),
+        },
+        {
+          content: '<div style="width:150px;text-align:center;padding:6px 0;">카카오3</div>',
+          latlng: new kakao.maps.LatLng(37.56683, 126.87222),
+        },
+      ];
+
+      var markers = [];
+      for (var i = 0; i < positions.length; i++) {
+        //지도에 마커를 생성하고 표시
+        var marker = new kakao.maps.Marker({
+          map: map, // 마커를 표시할 지도 객체
+          position: positions[i].latlng, // 마커의 좌표
+        });
+        //인포윈도우를 생성합니다
+        var infowindow = new kakao.maps.InfoWindow({
+          content: positions[i].content,
+        });
+
+        kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+        kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+
+        markers.push(marker);
+      }
+      clusterer.addMarkers(markers);
+
+      // 마커에 클릭 이벤트를 등록한다 (우클릭 : rightclick)
+      kakao.maps.event.addListener(marker, 'click', function () {
+        alert('마커를 클릭했습니다!');
+      });
+
+      // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+      kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+        // 클릭한 위도, 경도 정보를 가져옵니다
+        var latlng = mouseEvent.latLng;
+
+        // // 마커 위치를 클릭한 위치로 옮깁니다
+        // marker.setPosition(latlng);
+
+        var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
+        message += '경도는 ' + latlng.getLng() + ' 입니다';
+
+        var resultDiv = document.getElementById('clickLatlng');
+        resultDiv.innerHTML = message;
+      });
+
+      // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
+      function makeOverListener(map, marker, infowindow) {
+        return function () {
+          infowindow.open(map, marker);
+        };
+      }
+
+      // 인포윈도우를 닫는 클로저를 만드는 함수입니다
+      function makeOutListener(infowindow) {
+        return function () {
+          infowindow.close();
+        };
+      }
+    </script>
+  </body>
+</html>

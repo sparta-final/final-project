@@ -18,7 +18,7 @@ export class Busienssusers {
   @ApiProperty({ example: '1234', description: '사업자 비밀번호' })
   @IsNotEmpty()
   @IsString()
-  @Column('varchar', { name: 'password', length: 100 })
+  @Column('varchar', { name: 'password', length: 255 })
   password: string;
 
   @ApiProperty({ example: '010-1234-5678', description: '사업자 전화번호' })
@@ -32,6 +32,12 @@ export class Busienssusers {
   @IsString()
   @Column('varchar', { name: 'name', length: 30 })
   name: string;
+
+  // 프로필 사진 컬럼 추가했습니다.
+  @ApiProperty({ example: '', description: '프로필 사진', required: true })
+  @IsString()
+  @Column('varchar', { name: 'profileImage', length: 255, default: null })
+  profileImage: string;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

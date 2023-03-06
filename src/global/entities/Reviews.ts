@@ -4,28 +4,19 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Gym } from './Gym';
-import { Users } from './Users';
+import { UserGym } from './UserGym';
 
 @Entity('reviews', { schema: 'sixpack' })
 export class Reviews {
   @ApiProperty({ example: 1, description: '리뷰 아이디' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
-
-  @ApiProperty({ example: 1, description: '헬스장 아이디' })
-  @Column('int', { primary: true, name: 'gym_id' })
-  gymId: number;
-
-  @ApiProperty({ example: 1, description: '일반유저 아이디' })
-  @Column('int', { primary: true, name: 'user_id' })
-  userId: number;
 
   @ApiProperty({ example: '좋아요~', description: '리뷰 내용' })
   @Column('varchar', { name: 'review', length: 255 })
@@ -35,9 +26,9 @@ export class Reviews {
   @Column('int', { name: 'star' })
   star: number;
 
-  @ApiProperty({ example: '파일이름.jpg', description: '리뷰 이미지' })
-  @Column('varchar', { name: 'img', nullable: true, length: 255 })
-  img: string | null;
+  @ApiProperty({ type: 'string', format: 'binary', description: '리뷰 이미지' })
+  @Column('varchar', { name: 'reviewImg', nullable: true, length: 255 })
+  reviewImg: string | null;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
@@ -48,17 +39,10 @@ export class Reviews {
   @DeleteDateColumn({ type: 'timestamp', name: 'deleted_at' })
   deletedAt: Date | null;
 
-  @ManyToOne(() => Gym, (gym) => gym.reviews, {
+  @ManyToOne(() => UserGym, (userGym) => userGym.reviews, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinColumn([{ name: 'gym_id', referencedColumnName: 'id' }])
-  gym: Gym;
-
-  @ManyToOne(() => Users, (users) => users.reviews, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
-  user: Users;
+  @JoinColumn([{ name: 'user_gym_id', referencedColumnName: 'id' }])
+  userGym: UserGym;
 }

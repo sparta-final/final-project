@@ -15,6 +15,16 @@ const config = new DocumentBuilder()
     },
     'accessToken',
   )
+  .addBearerAuth(
+    {
+      type: 'http',
+      scheme: 'bearer',
+      name: 'Authorization',
+      in: 'header',
+      bearerFormat: 'JWT',
+    },
+    'refresh-token'
+  )
   .build();
 
 export const swaggerDocumentBuilder = (app: INestApplication): void => {

@@ -1,5 +1,5 @@
 import { KakaoLoginUserDto } from './dto/kakaologinUser.dto';
-import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { CurrentUserRt } from 'src/global/common/decorator/current-user-at.decorator';
@@ -9,6 +9,7 @@ import {
   BusinessUserRefreshToken,
   BusinessUserSignup,
   KakaoLogin,
+  Logout,
   UserLogin,
   UserRefreshToken,
   UserSignup,
@@ -19,6 +20,7 @@ import { PostBusinessUserDto } from './dto/postBusinessUser.dto';
 import { PostUserDto } from './dto/postUser.dto';
 import { JwtPayload } from './types/jwtPayload.type';
 import { Public } from 'src/global/common/decorator/public.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('AUTH')
 @Controller('api/auth')
@@ -46,8 +48,7 @@ export class AuthController {
   @Post('user/login')
   async userlogin(@Body() loginUserDto: LoginUserDto) {
     const tokens = await this.authservice.userlogin(loginUserDto);
-    // TODO: AccessToken만 클라이언트에게 전달 -> 클라이언트에서 RefreshToken을 헤더(authorization)에 저장
-    return tokens.AccessToken;
+    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
   }
 
   @Public()
@@ -55,32 +56,42 @@ export class AuthController {
   @Post('user/business/login')
   async businessUserlogin(@Body() loginUserDto: LoginUserDto) {
     const tokens = await this.authservice.businessUserlogin(loginUserDto);
-    // TODO: AccessToken만 클라이언트에게 전달 -> 클라이언트에서 RefreshToken을 헤더(authorization)에 저장
-    return tokens.AccessToken;
+    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
   }
 
   @Public()
+  @UseGuards(AuthGuard('kakao'))
   @KakaoLogin()
   @Get('login/kakao')
   async KakaoLogin(@CurrentUser() user: KakaoLoginUserDto, @Res() res: Response) {
     const tokens = await this.authservice.KakaoLogin(user, res);
-    return tokens.AccessToken;
+    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
   }
 
-  // TODO: rt guard,strategy는 필요없을까?
+  @Public()
+  @UseGuards(AuthGuard('refresh'))
   @UserRefreshToken()
   @Post('user/refresh')
   async restoreRefreshTokenForUser(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
     const tokens = await this.authservice.restoreRefreshTokenForUser(user, rt);
-    // TODO: AccessToken만 클라이언트에게 전달 -> 클라이언트에서 RefreshToken을 헤더(authorization)에 저장
-    return tokens.AccessToken;
+    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
   }
 
+  @Public()
+  @UseGuards(AuthGuard('refresh'))
   @BusinessUserRefreshToken()
   @Post('user/business/refresh')
   async restoreRefreshTokenForBusinessUser(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
     const tokens = await this.authservice.restoreRefreshTokenForBusinessUser(user, rt);
-    // TODO: AccessToken만 클라이언트에게 전달 -> 클라이언트에서 RefreshToken을 헤더(authorization)에 저장
-    return tokens.AccessToken;
+    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
+  }
+
+  @Public()
+  @UseGuards(AuthGuard('refresh'))
+  @Logout()
+  @Post('logout')
+  async logout(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
+    // TODO : 클라이언트에서 로그아웃 요청시, 로컬스토리지에 저장된 토큰 삭제
+    return await this.authservice.logout(user, rt);
   }
 }
