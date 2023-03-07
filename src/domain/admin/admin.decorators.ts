@@ -48,3 +48,11 @@ export const gymRank = () => {
     ApiResponse({ status: 400, description: '실패' })
   );
 };
+
+export const calculate = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '정산하기' }),
+    ApiResponse({ status: 200, description: '성공' }),
+    ApiResponse({ status: 400, description: '실패' })
+  );
+};

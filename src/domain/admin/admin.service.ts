@@ -1,3 +1,4 @@
+import { Calculate } from './../../global/entities/Calculate';
 import { Payments } from './../../global/entities/Payments';
 import { userMembership } from './../../global/entities/common/user.membership';
 import { Gym } from './../../global/entities/Gym';
@@ -6,13 +7,17 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
 import { GymType } from 'src/global/entities/common/enums';
+import { UserGym } from 'src/global/entities/UserGym';
+import * as _ from 'lodash';
 
 @Injectable()
 export class AdminService {
   constructor(
     @InjectRepository(Users) private userRepo: Repository<Users>,
     @InjectRepository(Gym) private gymRepo: Repository<Gym>,
-    @InjectRepository(Payments) private paymentRepo: Repository<Payments>
+    @InjectRepository(Payments) private paymentRepo: Repository<Payments>,
+    @InjectRepository(UserGym) private userGymRepo: Repository<UserGym>,
+    @InjectRepository(Calculate) private calculateRepo: Repository<Calculate>
   ) {}
 
   /**
@@ -49,6 +54,57 @@ export class AdminService {
     return [fitness, pilates, crossfit];
   }
 
+  // ******************** 정산하기 ********************
+
+  /**
+   * @description 정산하기
+   * @author 한정훈
+   * @argument gymId
+   * @argument year
+   * @argument month
+   */
+  async calculatePaid(id, date) {
+    const getVisitUser = await this.getVisitUser(id, date);
+    // 방문 리스트 중 중복된 userId 제거 (lodash 함수 이용)
+    const visitUser = _.uniqBy(getVisitUser, 'userId');
+
+    let totalPaid = 0;
+    const visitInfos = await this.getVisitInfos(id, visitUser, date);
+
+    visitInfos.forEach((a) => {
+      let paid = 0;
+      if (a.membership[0].membership === 'Basic') {
+        paid = 80000 / a.visitGym;
+      }
+      if (a.membership[0].membership === 'Standard') {
+        paid = 160000 / a.visitGym;
+      }
+      if (a.membership[0].membership === 'Premium') {
+        paid = 240000 / a.visitGym;
+      }
+      let userPaid = Math.ceil((a.visitUserCount * paid) / 10) * 10;
+      totalPaid += userPaid;
+    });
+
+    const calculateSave = this.calculateRepo.save({
+      gymId: id,
+      paid: totalPaid,
+    });
+  }
+  getVisitInfos = async (id, visitUser, date) => {
+    return await Promise.all(
+      visitUser.map(async (user) => ({
+        user: user,
+        // 방문유저 이번달 전체 헬스장 이용 횟수 조회
+        visitGym: await this.getVisitGym(user.userId, date),
+        // 방문유저 멤버십 조회
+        membership: await this.getMembership(user.userId),
+        // 조회한 유저 조회한 헬스장 방문 횟수
+        visitUserCount: await this.getVisitUserCount(id, user.userId, date),
+      }))
+    );
+  };
+
   /**
    * @description 승인 요청된 제휴업체 승인하기
    * @author 한정훈
@@ -73,7 +129,7 @@ export class AdminService {
    * @description 식스팩 월 별 매출
    * @author 한정훈
    * @param year
-   * @param date
+   * @param month
    */
   async getSalesMonth(date) {
     const salesMonth = await this.paymentRepo.sum('amount', {
@@ -81,5 +137,71 @@ export class AdminService {
       deletedAt: null,
     });
     return salesMonth;
+  }
+
+  /**
+   * @description 헬스장 월 별 방문자 조회
+   * @author 한정훈
+   * @param gymId
+   * @param year
+   * @param month
+   */
+  async getVisitUser(id, date) {
+    const getVisitUser = await this.userGymRepo.find({
+      where: {
+        gymId: id,
+        createdAt: Between(new Date(Number(date.year), Number(date.month) - 1), new Date(Number(date.year), Number(date.month))),
+      },
+    });
+    return getVisitUser;
+  }
+
+  /**
+   * @description 유저 월 별 방문 헬스장 조회
+   * @author 한정훈
+   * @param userId
+   * @param year
+   * @param month
+   */
+  async getVisitGym(id, date) {
+    const getVisitGym = await this.userGymRepo.count({
+      where: {
+        userId: id,
+        createdAt: Between(new Date(Number(date.year), Number(date.month) - 1), new Date(Number(date.year), Number(date.month))),
+      },
+    });
+    return getVisitGym;
+  }
+
+  /**
+   * @description 유저 멤버십 조회
+   * @author 한정훈
+   * @param id
+   */
+  async getMembership(id) {
+    const getMembership = await this.userRepo.find({
+      where: { id },
+      select: ['membership'],
+    });
+    return getMembership;
+  }
+
+  /**
+   * @description 헬스장 유저별 방문횟수 조회
+   * @author 한정훈
+   * @param gymId
+   * @param userId
+   * @param year
+   * @param month
+   */
+  async getVisitUserCount(gymId, userId, date) {
+    const getVisitUserCount = await this.userGymRepo.count({
+      where: {
+        gymId: gymId,
+        userId: userId,
+        createdAt: Between(new Date(Number(date.year), Number(date.month) - 1), new Date(Number(date.year), Number(date.month))),
+      },
+    });
+    return getVisitUserCount;
   }
 }

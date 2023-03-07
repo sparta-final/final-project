@@ -5,9 +5,9 @@ import { IsString } from 'class-validator';
 export class MonthDto {
   @ApiProperty({ example: '2023', description: '년도', required: false })
   @IsString()
-  year: number;
+  year: string;
 
   @ApiProperty({ example: '03', description: '월', required: false })
   @IsString()
-  month: number;
+  month: string;
 }
