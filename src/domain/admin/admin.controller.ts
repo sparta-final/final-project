@@ -3,7 +3,7 @@ import { Body, Controller, Get, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/global/common/decorator/public.decorator';
 import { ApproveDto } from './dto/approveGym.dto';
-import { approveGym, getApproveGyms, getMembers } from './admin.decorators';
+import { approveGym, getApproveGyms, getMembers, salesAll } from './admin.decorators';
 
 // 전체 admin만 접근 권한
 @ApiTags('Admin')
@@ -30,5 +30,12 @@ export class AdminController {
   @Public()
   async approveGym(@Body() id: ApproveDto) {
     return await this.adminService.approveGym(id);
+  }
+
+  @Get('/sales')
+  @salesAll()
+  @Public()
+  async getSalesAll() {
+    return await this.adminService.getSalesAll();
   }
 }

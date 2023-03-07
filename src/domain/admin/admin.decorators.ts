@@ -24,3 +24,19 @@ export const approveGym = () => {
     ApiResponse({ status: 400, description: '실패' })
   );
 };
+
+export const salesMonth = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '식스팩 월 별 매출' }),
+    ApiResponse({ status: 200, description: '성공' }),
+    ApiResponse({ status: 400, description: '실패' })
+  );
+};
+
+export const salesAll = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '식스팩 누적 매출' }),
+    ApiResponse({ status: 200, description: '성공' }),
+    ApiResponse({ status: 400, description: '실패' })
+  );
+};

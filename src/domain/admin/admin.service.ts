@@ -1,3 +1,4 @@
+import { Payments } from './../../global/entities/Payments';
 import { userMembership } from './../../global/entities/common/user.membership';
 import { Gym } from './../../global/entities/Gym';
 import { Users } from './../../global/entities/Users';
@@ -10,7 +11,8 @@ import { GymType } from 'src/global/entities/common/enums';
 export class AdminService {
   constructor(
     @InjectRepository(Users) private userRepo: Repository<Users>,
-    @InjectRepository(Gym) private gymRepo: Repository<Gym>
+    @InjectRepository(Gym) private gymRepo: Repository<Gym>,
+    @InjectRepository(Payments) private paymentRepo: Repository<Payments>
   ) {}
 
   /**
@@ -56,5 +58,14 @@ export class AdminService {
     return await this.gymRepo.update(id, {
       isApprove: 1,
     });
+  }
+
+  /**
+   * @description 식스팩 누적 매출
+   * @author 한정훈
+   */
+  async getSalesAll() {
+    const salesAll = await this.paymentRepo.sum('amount', { deletedAt: null });
+    return salesAll;
   }
 }
