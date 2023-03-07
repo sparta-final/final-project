@@ -40,3 +40,11 @@ export const salesMonth = () => {
     ApiResponse({ status: 400, description: '실패' })
   );
 };
+
+export const gymRank = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '카테고리별 업체 순위' }),
+    ApiResponse({ status: 200, description: '성공' }),
+    ApiResponse({ status: 400, description: '실패' })
+  );
+};

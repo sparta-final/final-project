@@ -3,8 +3,9 @@ import { Body, Controller, Get, Param, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/global/common/decorator/public.decorator';
 import { ApproveDto } from './dto/approveGym.dto';
-import { approveGym, getApproveGyms, getMembers, salesAll, salesMonth } from './admin.decorators';
-import { MonthDto } from './dto/approveGym.dto copy';
+import { approveGym, getApproveGyms, getMembers, gymRank, salesAll, salesMonth } from './admin.decorators';
+import { MonthDto } from './dto/monthData.dto';
+import { RankDto } from './dto/gymRank.dto';
 
 // 전체 admin만 접근 권한
 @ApiTags('Admin')
@@ -45,5 +46,12 @@ export class AdminController {
   @Public()
   async getSalesMonth(@Param() date: MonthDto) {
     return await this.adminService.getSalesMonth(date);
+  }
+
+  @Get('rank/:category')
+  @gymRank()
+  @Public()
+  async getRank(@Param() category: RankDto) {
+    return category;
   }
 }
