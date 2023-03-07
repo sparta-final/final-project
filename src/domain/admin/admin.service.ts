@@ -4,7 +4,7 @@ import { Gym } from './../../global/entities/Gym';
 import { Users } from './../../global/entities/Users';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { GymType } from 'src/global/entities/common/enums';
 
 @Injectable()
@@ -67,5 +67,19 @@ export class AdminService {
   async getSalesAll() {
     const salesAll = await this.paymentRepo.sum('amount', { deletedAt: null });
     return salesAll;
+  }
+
+  /**
+   * @description 식스팩 월 별 매출
+   * @author 한정훈
+   * @param year
+   * @param date
+   */
+  async getSalesMonth(date) {
+    const salesMonth = await this.paymentRepo.sum('amount', {
+      createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+      deletedAt: null,
+    });
+    return salesMonth;
   }
 }
