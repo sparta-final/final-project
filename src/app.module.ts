@@ -15,8 +15,9 @@ import { FeedModule } from './domain/feed/feed.module';
 import { UserModule } from './domain/user/user.module';
 import { BusinessUserModule } from './domain/business-user/business-user.module';
 import { PaymentModule } from './domain/payment/payment.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 // import { HttpModule } from '@nestjs/axios';
-
+import { AdminModule } from './domain/admin/admin.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -25,6 +26,10 @@ import { PaymentModule } from './domain/payment/payment.module';
       isGlobal: true,
       url: process.env.REDIS_URL,
       store: redisStore,
+    }),
+    ThrottlerModule.forRoot({
+      ttl: 30,
+      limit: 10,
     }),
     AuthModule,
     GymModule,
@@ -35,12 +40,17 @@ import { PaymentModule } from './domain/payment/payment.module';
     BusinessUserModule,
     PaymentModule,
     // HttpModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [
     {
       provide: APP_GUARD,
       useClass: JwtAccessGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
   ],
 })
