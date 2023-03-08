@@ -46,4 +46,18 @@ export class AppController {
   async enrollGym() {
     return { KEY: process.env.KAKAO_JAVASCRIPT_KEY };
   }
+
+  @Get('enrollfeed')
+  @Public()
+  @Render('enrollfeed')
+  async enrollfeed() {
+    return;
+  }
+
+  @Get('allGym')
+  @Public()
+  @Render('allGym')
+  async allGym() {
+    return;
+  }
 }
