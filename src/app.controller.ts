@@ -27,7 +27,7 @@ export class AppController {
   }
   @Get('payment')
   @Public()
-  @Render('payment')
+  @Render('index')
   async payment() {
     return { pageName: 'payment' };
   }

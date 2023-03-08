@@ -3,7 +3,7 @@
 .header-wrap {
   position: fixed;
   top: 0;
-  width: 100%;
+  width: 420px;
   height: 70px;
   z-index: 9999;
   background-color: var(--main-color);
@@ -19,16 +19,16 @@
   color: var(--point-color);
 }
 
-.header-wrap > ul {
+.header-wrap ul {
   position: absolute;
-  top: 20px;
+  top: 23px;
   right: 0;
 }
 
-.header-wrap > ul > li {
+.header-wrap li {
   width: 24px;
   height: 24px;
-  margin-right: 15px;
+  margin-right: 20px;
   background-size: cover;
   float: left;
   text-indent: -9999px;
@@ -60,16 +60,31 @@
   justify-content: space-between;
   align-items: center;
   width: 80%;
-  margin: 20px auto;
+  margin: 26px auto;
 }
 
 .footer {
+  position: relative;
   width: 40px;
   height: 40px;
-  background-color: var(--point-color);
-  text-indent: -9999px;
+}
+
+li.small-svg {
+  width: 46px;
 }
 
 .footer-height {
   height: 100px;
+}
+
+.footer-container svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  fill: var(--sub-color-8);
+}
+
+.footer-container svg.svg-select {
+  fill: var(--point-color);
 }
