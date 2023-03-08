@@ -9,7 +9,7 @@
   background: white;
   border: 1px solid black;
   border-radius: 0.25rem;
-  padding: 0.5rem;
+  padding: 10rem;
   transform: translateX(100px);
   opacity: 0;
   transition: 150ms;
