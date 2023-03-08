@@ -1,5 +1,5 @@
 export enum GymType {
-  헬스장 = '헬스장',
-  필라테스 = '필라테스',
-  요가 = '요가',
+  fitness = '헬스장',
+  pilates = '필라테스',
+  crossfit = '크로스핏',
 }
