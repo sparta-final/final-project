@@ -65,13 +65,11 @@ export class AdminService {
    */
   async getRank(date) {
     let rank = [];
-    const getAllGym = await this.gymRepo.find({
+    const getAllGym = await this.calculateRepo.find({
       where: {
-        isApprove: 1,
         createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
-        deletedAt: null,
       },
-      select: ['id'],
+      select: ['gymId', 'paid'],
     });
 
     for (let i = 0; i < getAllGym.length; i++) {
@@ -94,24 +92,24 @@ export class AdminService {
       // ]);
 
       // 평균 20ms
-      const getPaid = await this.calculateRepo.find({
-        where: { gymId: getAllGym[i].id },
-        select: ['paid'],
-      });
+      // const getPaid = await this.calculateRepo.find({
+      //   where: { gymId: getAllGym[i].gymId },
+      //   select: ['paid'],
+      // });
 
       const getUseCount = await this.userGymRepo.count({
-        where: { gymId: getAllGym[i].id },
+        where: { gymId: getAllGym[i].gymId },
         select: ['gymId'],
       });
 
       const getRating = await this.reviewRepo.find({
-        where: { userGym: { id: getAllGym[i].id } },
+        where: { userGym: { id: getAllGym[i].gymId } },
         select: ['star'],
       });
 
       rank.push({
-        gymId: getAllGym[i].id,
-        paid: getPaid[0]?.paid ? getPaid[0].paid : 0,
+        gymId: getAllGym[i].gymId,
+        paid: getAllGym[i].paid,
         count: getUseCount,
         rating: getRating[0]?.star ? getRating[0].star : 0,
         // Promise.all 방식

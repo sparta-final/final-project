@@ -25,11 +25,19 @@ export class AppController {
   async test() {
     return;
   }
+
   @Get('payment')
   @Public()
   @Render('index')
   async payment() {
     return { pageName: 'payment' };
+  }
+
+  @Get('admin')
+  @Public()
+  @Render('index')
+  async admin() {
+    return { pageName: 'admin' };
   }
 
   @Get('complete')
