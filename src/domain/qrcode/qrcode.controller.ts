@@ -13,7 +13,6 @@ export class QRcodeController {
   @CreateQRCode()
   @Post()
   async createQRcode(@CurrentUser() user: JwtPayload) {
-    console.log('user', user);
     return await this.qrcodeService.createQRcode(user);
   }
 
