@@ -15,8 +15,14 @@ export class AppController {
   @Get('user/login')
   @Public()
   @Render('index')
-  async login() {
+  async userLogin() {
     return { pageName: 'userLogin' };
+  }
+  @Get('user/signup')
+  @Public()
+  @Render('index')
+  async userSignup() {
+    return { pageName: 'userSignup' };
   }
 
   @Get('qr')
