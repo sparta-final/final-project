@@ -28,20 +28,34 @@ export class GymService {
     if (existGym) throw new ConflictException('이미 등록된 체육관입니다.');
     if (!file.certification && !file.img) throw new BadRequestException('파일을 등록해야 합니다.');
 
-    const createGym = await this.gymsrepository.save({
-      businessId: user.sub,
-      name: postgymDto.name,
-      phone: postgymDto.phone,
-      lat: postgymDto.lat,
-      lng: postgymDto.lng,
-      gymType: postgymDto.gymType,
-      description: postgymDto.description,
-      certification: file.certification[0].location,
-    });
-    await this.gymImgrepository.save({
-      gymId: createGym.id,
-      img: file.img[0].location,
-    });
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const createGym = await this.gymsrepository.save({
+        businessId: user.sub,
+        name: postgymDto.name,
+        phone: postgymDto.phone,
+        lat: postgymDto.lat,
+        lng: postgymDto.lng,
+        gymType: postgymDto.gymType,
+        description: postgymDto.description,
+        certification: file.certification[0].location,
+      });
+      await this.gymImgrepository.save({
+        gymId: createGym.id,
+        img: file.img[0].location,
+      });
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw err;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   /**
@@ -51,6 +65,7 @@ export class GymService {
   async getGyms(user: JwtPayload) {
     return await this.gymsrepository.find({
       where: { businessId: user.sub, deletedAt: null },
+      relations: ['gymImgs'],
     });
   }
 
@@ -59,6 +74,12 @@ export class GymService {
    * @author 정호준
    */
   async getGymsById(gymId: number) {
+    // return await this.gymsrepository
+    //   .createQueryBuilder('gym')
+    //   .leftJoinAndSelect('gym.gymImgs', 'gymImg')
+    //   .select(['gym', 'gymImg.img'])
+    //   .where('gym.id = :id', { id: gymId })
+    //   .getOne();
     return await this.gymsrepository.findOne({
       where: { id: gymId, deletedAt: null },
     });
@@ -110,18 +131,40 @@ export class GymService {
   async deleteGym({ gymId, password, user }) {
     await this.checkUser(gymId, user);
     await this.checkPassword(password.password, user);
-    const deletegym = await this.gymsrepository.softDelete(gymId);
-    return deletegym;
+
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await this.gymsrepository.softDelete(gymId);
+      await this.gymImgrepository.softDelete({ gymId: gymId });
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw err;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   /**
    * 전체 체육관 조회
    * @author 정호준
    */
+
   async getAllGym() {
-    return await this.gymsrepository.find({
-      where: { deletedAt: null },
-    });
+    return await this.gymsrepository
+      .createQueryBuilder('gym')
+      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
+      .select(['gym', 'gymImg.img'])
+      .getMany();
+
+    // return await this.gymsrepository.find({
+    //   where: { deletedAt: null },
+    //   relations: ['gymImgs'],
+    // });
   }
 
   /**
