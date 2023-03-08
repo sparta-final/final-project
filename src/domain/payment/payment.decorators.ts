@@ -1,7 +1,5 @@
-import { applyDecorators, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation, ApiResponse, ApiHeader, ApiBearerAuth, ApiOAuth2 } from '@nestjs/swagger';
-import { Public } from 'src/global/common/decorator/public.decorator';
+import { applyDecorators } from '@nestjs/common';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 export const CompletePayment = () => {
   return applyDecorators(

@@ -18,6 +18,7 @@ import { Reviews } from './Reviews';
 import { UserGym } from './UserGym';
 import { isApprove } from './common/gym.isApprove';
 import { GymType } from './common/enums';
+import { Calculate } from './Calculate';
 
 @Entity('gym', { schema: 'sixpack' })
 export class Gym {
@@ -113,4 +114,7 @@ export class Gym {
 
   @OneToMany(() => UserGym, (userGym) => userGym.gym)
   userGyms: UserGym[];
+
+  @OneToMany(() => Calculate, (calculate) => calculate.gym)
+  calculate: Calculate[];
 }

@@ -16,7 +16,7 @@ import { UserModule } from './domain/user/user.module';
 import { BusinessUserModule } from './domain/business-user/business-user.module';
 import { PaymentModule } from './domain/payment/payment.module';
 // import { HttpModule } from '@nestjs/axios';
-
+import { AdminModule } from './domain/admin/admin.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -35,6 +35,7 @@ import { PaymentModule } from './domain/payment/payment.module';
     BusinessUserModule,
     PaymentModule,
     // HttpModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [

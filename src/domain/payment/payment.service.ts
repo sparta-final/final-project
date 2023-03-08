@@ -122,6 +122,11 @@ export class PaymentService {
     }
   }
 
+  /**
+   * @description 구독 취소 (다음달 부터)
+   * @author 한정훈
+   * @argument customer_uid
+   */
   async unsubscribe(customer_uid) {
     try {
       axios({
