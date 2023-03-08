@@ -3,7 +3,7 @@
 .header-wrap {
   position: fixed;
   top: 0;
-  width: 100%;
+  width: 420px;
   height: 70px;
   z-index: 9999;
   background-color: var(--main-color);

@@ -12,6 +12,13 @@ export class AppController {
     return { pageName: '' };
   }
 
+  @Get('user/login')
+  @Public()
+  @Render('index')
+  async login() {
+    return { pageName: 'userLogin' };
+  }
+
   @Get('qr')
   @Public()
   @Render('qr')
