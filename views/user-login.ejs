@@ -1,9 +1,10 @@
 <div class="main-subscribe">
   <form class="user-login-form">
-    <input class="email" type="email" placeholder="이메일을 입력해 주세요." />
-    <input class="password" type="password" placeholder="비밀번호를 입력해 주세요." />
-    <button class="login-btn">로그인 하기</button>
-    <button class="register-btn">회원가입 하기</button>
-    <button class="kakao-login-btn">카카오로 로그인하기</button>
+    <input class="email" id="userEmail" type="email" placeholder="이메일을 입력해 주세요." />
+    <input class="password" id="userpw" type="password" placeholder="비밀번호를 입력해 주세요." />
+    <button class="login-btn" type="button" onclick="userLogin()">로그인 하기</button>
+    <button class="register-btn" type="button">회원가입 하기</button>
+    <button class="kakao-login-btn" type="button">카카오로 로그인하기</button>
   </form>
 </div>
+<script src="/js/auth.js"></script>

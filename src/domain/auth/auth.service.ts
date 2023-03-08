@@ -77,6 +77,8 @@ export class AuthService {
    * @argument loginUserDto
    */
   async userlogin(loginUserDto: LoginUserDto) {
+    console.log('loginUserDto', loginUserDto);
+    if (!loginUserDto.email || !loginUserDto.password) throw new BadRequestException('이메일과 비밀번호를 입력해주세요.');
     const existUser = await this.userRepo.findOne({ where: { email: loginUserDto.email } });
     if (!existUser) throw new NotFoundException('이메일이 존재하지 않습니다.');
     const isMatch = await bcrypt.compare(loginUserDto.password, existUser.password);
