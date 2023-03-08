@@ -1,3 +1,4 @@
+import { Reviews } from './../../global/entities/Reviews';
 import { Calculate } from './../../global/entities/Calculate';
 import { Payments } from './../../global/entities/Payments';
 import { userMembership } from './../../global/entities/common/user.membership';
@@ -17,7 +18,8 @@ export class AdminService {
     @InjectRepository(Gym) private gymRepo: Repository<Gym>,
     @InjectRepository(Payments) private paymentRepo: Repository<Payments>,
     @InjectRepository(UserGym) private userGymRepo: Repository<UserGym>,
-    @InjectRepository(Calculate) private calculateRepo: Repository<Calculate>
+    @InjectRepository(Calculate) private calculateRepo: Repository<Calculate>,
+    @InjectRepository(Reviews) private reviewRepo: Repository<Reviews>
   ) {}
 
   /**
@@ -52,6 +54,76 @@ export class AdminService {
       where: { gymType: GymType.crossfit, isApprove: 1, deletedAt: null },
     });
     return [fitness, pilates, crossfit];
+  }
+
+  /**
+   * @description 업체 순위에 들어갈 테이터
+   * @author 한정훈
+   * @argument category (미구현)
+   * @argument year
+   * @argument month
+   */
+  async getRank(date) {
+    let rank = [];
+    const getAllGym = await this.gymRepo.find({
+      where: {
+        isApprove: 1,
+        createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+        deletedAt: null,
+      },
+      select: ['id'],
+    });
+
+    for (let i = 0; i < getAllGym.length; i++) {
+      // Promise.all 방식 (평균 30ms)
+      // const rankData = await Promise.all([
+      //   {
+      //     paid: await this.calculateRepo.find({
+      //       where: { gymId: getAllGym[i].id },
+      //       select: ['paid'],
+      //     }),
+      //     useCount: await this.userGymRepo.count({
+      //       where: { gymId: getAllGym[i].id },
+      //       select: ['gymId'],
+      //     }),
+      //     rating: await this.reviewRepo.find({
+      //       where: { userGym: { id: getAllGym[i].id } },
+      //       select: ['star'],
+      //     }),
+      //   },
+      // ]);
+
+      // 평균 20ms
+      const getPaid = await this.calculateRepo.find({
+        where: { gymId: getAllGym[i].id },
+        select: ['paid'],
+      });
+
+      const getUseCount = await this.userGymRepo.count({
+        where: { gymId: getAllGym[i].id },
+        select: ['gymId'],
+      });
+
+      const getRating = await this.reviewRepo.find({
+        where: { userGym: { id: getAllGym[i].id } },
+        select: ['star'],
+      });
+
+      rank.push({
+        gymId: getAllGym[i].id,
+        paid: getPaid[0]?.paid ? getPaid[0].paid : 0,
+        count: getUseCount,
+        rating: getRating[0]?.star ? getRating[0].star : 0,
+        // Promise.all 방식
+        // rank.push({
+        //   gymId: getAllGym[i].id,
+        //   paid: rankData[0]?.paid[0]?.paid ? rankData[0].paid[0].paid : 0,
+        //   count: rankData[0].useCount,
+        //   rating: rankData[0]?.rating[0]?.star ? rankData[0].rating[0].star : 0,
+        // });
+      });
+    }
+    return rank;
   }
 
   // ******************** 정산하기 ********************

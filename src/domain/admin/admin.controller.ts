@@ -50,44 +50,17 @@ export class AdminController {
     return await this.adminService.getSalesMonth(date);
   }
 
-  @Get('rank/:category')
+  @Get('rank/:category/:year/:month')
   @gymRank()
   @Public()
-  async getRank(@Param() category: RankDto) {
-    return category;
+  async getRank(@Param() date: MonthDto) {
+    return await this.adminService.getRank(date);
   }
 
   @Post('/calculate/:id')
   @calculate()
   @Public()
   async calculate(@Param('id') id: CalculateDto, @Body() date: MonthDto) {
-    // const getVisitUser = await this.adminService.getVisitUser(id, date);
-    // // 방문 리스트 중 중복된 userId 제거 (lodash 함수 이용)
-    // const visitUser = _.uniqBy(getVisitUser, 'userId');
-    // let totalPaid = 0;
-    // visitUser.forEach(async (a) => {
-    //   // 방문유저 이번달 전체 헬스장 이용 횟수 조회
-    //   const getVisitGym = await this.adminService.getVisitGym(a.userId, date);
-
-    //   // 방문유저 멤버십 조회
-    //   const getMembership = await this.adminService.getMembership(a.userId);
-
-    //   let paid = 0;
-    //   if (getMembership[0].membership === 'Basic') {
-    //     paid = 80000 / getVisitGym;
-    //   }
-    //   if (getMembership[0].membership === 'Standard') {
-    //     paid = 160000 / getVisitGym;
-    //   }
-    //   if (getMembership[0].membership === 'Premium') {
-    //     paid = 240000 / getVisitGym;
-    //   }
-
-    //   const getVisitUserCount = await this.adminService.getVisitUserCount(id, a.userId, date);
-    //   let userPaid = Math.ceil((getVisitUserCount * paid) / 10) * 10;
-    //   totalPaid += userPaid;
-    //   console.log('✨✨✨', totalPaid, '✨✨✨');
-    // });
     const calculatePaid = await this.adminService.calculatePaid(id, date);
     return calculatePaid;
   }
