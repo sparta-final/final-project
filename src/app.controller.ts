@@ -5,6 +5,13 @@ import { Public } from './global/common/decorator/public.decorator';
 @ApiTags('RENDER')
 @Controller()
 export class AppController {
+  @Get('/')
+  @Public()
+  @Render('index')
+  async index() {
+    return { pageName: '' };
+  }
+
   @Get('qr')
   @Public()
   @Render('qr')
@@ -22,7 +29,7 @@ export class AppController {
   @Public()
   @Render('payment')
   async payment() {
-    return;
+    return { pageName: 'payment' };
   }
 
   @Get('complete')
