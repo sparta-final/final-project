@@ -120,12 +120,16 @@ export class AuthService {
         // phone: 'test',
       });
       // 3. 로그인 완료 후 토큰 발급
-      const tokens = this.getTokens(newUser.id, newUser.email);
+      const tokens = await this.getTokens(newUser.id, newUser.email);
       return tokens;
     }
-    const tokens = this.getTokens(existUser.id, existUser.email);
+    const tokens = await this.getTokens(existUser.id, existUser.email);
     // TODO : 나중에 수정 필요할듯?
-    // res.redirect('http://127.0.0.1:5500/src/kakao.html');
+    // 쿠키에 저장
+    // res.cookie('access_token', tokens.AccessToken, {
+    //   httpOnly: true,
+    // });
+
     return tokens;
   }
 

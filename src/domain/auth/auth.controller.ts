@@ -1,5 +1,5 @@
 import { KakaoLoginUserDto } from './dto/kakaologinUser.dto';
-import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Redirect, Res, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { CurrentUserRt } from 'src/global/common/decorator/current-user-at.decorator';
@@ -63,8 +63,17 @@ export class AuthController {
   @UseGuards(AuthGuard('kakao'))
   @KakaoLogin()
   @Get('login/kakao')
-  async KakaoLogin(@CurrentUser() user: KakaoLoginUserDto, @Res() res: Response) {
+  async KakaoLogin() {
+    return HttpStatus.OK;
+  }
+
+  @Public()
+  // @Redirect('/')
+  @UseGuards(AuthGuard('kakao'))
+  @Get('login/kakao/callback')
+  async KakaoLoginCallback(@CurrentUser() user: KakaoLoginUserDto, @Res() res: Response) {
     const tokens = await this.authservice.KakaoLogin(user, res);
+    // axios.post('kakao/complete',tokens)
     return { at: tokens.AccessToken, rt: tokens.RefreshToken };
   }
 

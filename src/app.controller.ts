@@ -1,5 +1,5 @@
 import { ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Render } from '@nestjs/common';
+import { Body, Controller, Get, Post, Render } from '@nestjs/common';
 import { Public } from './global/common/decorator/public.decorator';
 
 @ApiTags('RENDER')
@@ -23,6 +23,12 @@ export class AppController {
   @Render('index')
   async userSignup() {
     return { pageName: 'userSignup' };
+  }
+
+  @Post('kakao/complete')
+  @Render('ejs')
+  kakao(@Body() tokens) {
+    return tokens;
   }
 
   @Get('qr')

@@ -62,10 +62,36 @@ function userSignup() {
  * @author: 김승일
  */
 function kakaoLogin() {
-  axios.get("/api/auth/login/kakao")
+  axios.get("/api/auth/login/kakao", {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      withCredentials: true,
+    }
+  })
     .then((res) => {
       console.log(res)
     }).catch((err) => {
       console.log(err)
     })
+}
+
+// button id=asd 인것을 클릭하면 location.href='/api/auth/login/kakao 로 이동해서 return 값 받아오기
+document.getElementById("asd").addEventListener("click", function () {
+  location.href = "/api/auth/login/kakao"
+})
+
+
+
+
+
+
+function b() {
+  axios.get('/api/feed/my').then((res) => {
+    console.log(res)
+  }
+  ).catch((err) => {
+    console.log(err)
+  }
+  )
 }
