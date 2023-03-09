@@ -25,17 +25,11 @@ export class AppController {
     return { pageName: 'userSignup' };
   }
 
-  @Post('kakao/complete')
-  @Render('ejs')
-  kakao(@Body() tokens) {
-    return tokens;
-  }
-
-  @Get('qr')
+  @Get('user/qrcode')
   @Public()
-  @Render('qr')
-  async view() {
-    return { qrCodeUrl: 1 };
+  @Render('index')
+  async userQRCode() {
+    return { pageName: 'userQRCode' };
   }
 
   @Get('useGym')
