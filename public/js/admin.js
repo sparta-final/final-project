@@ -1,6 +1,5 @@
 $(document).ready(function () {
   const now = new Date();
-  console.log('✨✨✨', now, '✨✨✨');
   let year = now.getFullYear();
   let month = now.getMonth(); // 기본으로 이전 달 데이터 가져오기
   getMembers();
@@ -21,11 +20,11 @@ function getMembers() {
       });
 
       let temp = `
-        <p class="admin-membership">구독 회원 <span>${memberAll}</span></p>
-        <ul class="">
-          <li class="admin-basic">Basic <span></span>${data[0]}</li>
-          <li class="admin-standard">Standard <span></span>${data[1]}</li>
-          <li class="admin-premium">Premium <span></span>${data[2]}</li>
+        <p class='admin-membership'>구독 회원 <span>${memberAll.toLocaleString()}</span> 명</p>
+        <ul class='admin-member-type'>
+          <li class='admin-basic'>Basic <span>${data[0].toLocaleString()}</span> 명</li>
+          <li class='admin-standard'>Standard <span>${data[1].toLocaleString()}</span> 명</li>
+          <li class='admin-premium'>Premium <span>${data[2].toLocaleString()}</span> 명</li>
         </ul>`;
       $('.admin-members').append(temp);
     })
@@ -46,11 +45,11 @@ function getGym() {
       });
 
       let temp = `
-        <p class="admin-gym-all">제휴 업체 <span>${gymAll}</span></p>
-        <ul class="">
-          <li class="admin-gym">헬스장 <span>${data[0]}</span></li>
-          <li class="admin-crossfit">크로스핏 <span>${data[1]}</span></li>
-          <li class="admin-filates">필라테스 <span>${data[2]}</span></li>
+        <p class='admin-gym-all'>제휴 업체 <span>${gymAll.toLocaleString()}</span> 개</p>
+        <ul class='admin-gym-type'>
+          <li class='admin-health'>헬스장 <span>${data[0].toLocaleString()}</span> 개</li>
+          <li class='admin-crossfit'>크로스핏 <span>${data[1].toLocaleString()}</span> 개</li>
+          <li class='admin-filates'>필라테스 <span>${data[2].toLocaleString()}</span> 개</li>
         </ul>`;
       $('.admin-gym').append(temp);
     })
@@ -60,25 +59,35 @@ function getGym() {
 }
 
 function getRank(year, month) {
-  console.log('✨✨✨', year, month, '✨✨✨');
   axios({
     method: 'get',
     url: `api/admin/rank/a/${year}/${month}`,
   })
     .then((response) => {
       const data = response.data;
-      console.log('✨✨✨', 'response', data[0], '✨✨✨');
-
+      // 찾는 데이터가 0일때 부터는 다른조건을 안보기 떄문에 0인뒤로 순서가 엉킴.
+      const countRank = data.sort((a, b) => b.count - a.count);
+      // const paidRank = data.sort((a, b) => b.paid - a.paid);
+      // console.log('✨✨✨', paidRank, '✨✨✨');
+      // const ratingRank = data.sort((a, b) => b.rating - a.rating);
+      // console.log('✨✨✨', ratingRank, '✨✨✨');
       for (let i in data) {
-        let temp = `
-          <li>${Number(i) + 1}위 Data</li>
-          <li>${data[i].gymId}</li>
-          <li>${data[i].paid}</li>
-          <li>${data[i].count}</li>
-          <li>${data[i].rating}</li>
-          `;
-        $('.admin-rank').append(temp);
+        if (data[i].count !== 0 || data[i].paid !== 0 || data[i].rating !== 0) {
+          let temp = `
+          <tr class='ta-center'>
+            <td>${Number(i) + 1}</td>
+            <td>${data[i].name}</td>
+            <td class='fs-14'>${data[i].count.toLocaleString()}</td>
+            <td>${data[i].paid.toLocaleString()}</td>
+            <td>${data[i].rating}</td>
+          </tr>
+            `;
+          $('.text-gray-dark').append(temp);
+        }
       }
+      let now = `
+      <li class="cur-month">${year}.${month}</li>`;
+      $('.prev-month').after(now);
     })
     .catch((err) => {
       console.log(err);
@@ -86,17 +95,15 @@ function getRank(year, month) {
 }
 
 function salesMonth(year, month) {
-  console.log('✨✨✨', year, month, '✨✨✨');
   axios({
     method: 'get',
     url: `api/admin/sales/${year}/${month}`,
   })
     .then((response) => {
-      const data = response.data;
-      console.log('✨✨✨', 'response', data, '✨✨✨');
+      const data = response.data.toLocaleString();
 
       let temp = `
-          <p>${data}</p>
+      <p class='admin-month-title'>${month}월 매출 <span>${data}</span> 원</p>
           `;
       $('.sales-month').append(temp);
     })

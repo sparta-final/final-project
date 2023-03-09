@@ -40,6 +40,13 @@ export class AppController {
     return { pageName: 'admin' };
   }
 
+  @Get('admin/approve')
+  @Public()
+  @Render('index')
+  async adminApprove() {
+    return { pageName: 'adminApprove' };
+  }
+
   @Get('complete')
   @Public()
   @Render('paymentComplete')

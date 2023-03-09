@@ -10,6 +10,8 @@ import { Between, Repository } from 'typeorm';
 import { GymType } from 'src/global/entities/common/enums';
 import { UserGym } from 'src/global/entities/UserGym';
 import * as _ from 'lodash';
+import { isApprove } from 'src/global/entities/common/gym.isApprove';
+import { arrayBuffer } from 'stream/consumers';
 
 @Injectable()
 export class AdminService {
@@ -57,6 +59,17 @@ export class AdminService {
   }
 
   /**
+   * @description 승인대기중인 업체 리스트 조회
+   * @author 한정훈
+   */
+  async beforeApproveGym() {
+    const beforeApprove = await this.gymRepo.find({
+      where: { isApprove: 2, deletedAt: null },
+    });
+    return beforeApprove;
+  }
+
+  /**
    * @description 업체 순위에 들어갈 테이터
    * @author 한정훈
    * @argument category (미구현)
@@ -65,12 +78,20 @@ export class AdminService {
    */
   async getRank(date) {
     let rank = [];
-    const getAllGym = await this.calculateRepo.find({
+    const getAllGym = await this.gymRepo.find({
       where: {
-        createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+        isApprove: 1,
+        // createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+        deletedAt: null,
       },
-      select: ['gymId', 'paid'],
+      select: ['id', 'name'],
     });
+    // const getAllGym = await this.calculateRepo.find({
+    //   where: {
+    //     createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+    //   },
+    //   select: ['gymId', 'paid'],
+    // });
 
     for (let i = 0; i < getAllGym.length; i++) {
       // Promise.all 방식 (평균 30ms)
@@ -92,24 +113,33 @@ export class AdminService {
       // ]);
 
       // 평균 20ms
-      // const getPaid = await this.calculateRepo.find({
-      //   where: { gymId: getAllGym[i].gymId },
-      //   select: ['paid'],
-      // });
+      const getPaid = await this.calculateRepo.find({
+        where: {
+          gymId: getAllGym[i].id,
+          createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+        },
+        select: ['paid'],
+      });
 
       const getUseCount = await this.userGymRepo.count({
-        where: { gymId: getAllGym[i].gymId },
+        where: {
+          gymId: getAllGym[i].id,
+          createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+        },
         select: ['gymId'],
       });
 
       const getRating = await this.reviewRepo.find({
-        where: { userGym: { id: getAllGym[i].gymId } },
+        where: {
+          userGym: { id: getAllGym[i].id },
+          createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+        },
         select: ['star'],
       });
 
       rank.push({
-        gymId: getAllGym[i].gymId,
-        paid: getAllGym[i].paid,
+        name: getAllGym[i].name,
+        paid: getPaid[0]?.paid ? getPaid[0].paid : 0,
         count: getUseCount,
         rating: getRating[0]?.star ? getRating[0].star : 0,
         // Promise.all 방식
