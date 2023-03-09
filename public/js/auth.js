@@ -1,4 +1,18 @@
 /**
+ * @description: 카카오 로그인 성공시 토큰 저장 및 메인페이지로 이동
+ * @author: 김승일
+ */
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const at = urlParams.get('at');
+const rt = urlParams.get('rt');
+if (at && rt) {
+  localStorage.setItem("at", at);
+  localStorage.setItem("rt", rt);
+  location.href = "/";
+}
+
+/**
  * @description: 일반유저 로그인
  * @author: 김승일
  */
@@ -74,24 +88,4 @@ function kakaoLogin() {
     }).catch((err) => {
       console.log(err)
     })
-}
-
-// button id=asd 인것을 클릭하면 location.href='/api/auth/login/kakao 로 이동해서 return 값 받아오기
-document.getElementById("asd").addEventListener("click", function () {
-  location.href = "/api/auth/login/kakao"
-})
-
-
-
-
-
-
-function b() {
-  axios.get('/api/feed/my').then((res) => {
-    console.log(res)
-  }
-  ).catch((err) => {
-    console.log(err)
-  }
-  )
 }

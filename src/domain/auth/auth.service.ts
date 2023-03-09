@@ -124,12 +124,6 @@ export class AuthService {
       return tokens;
     }
     const tokens = await this.getTokens(existUser.id, existUser.email);
-    // TODO : 나중에 수정 필요할듯?
-    // 쿠키에 저장
-    // res.cookie('access_token', tokens.AccessToken, {
-    //   httpOnly: true,
-    // });
-
     return tokens;
   }
 

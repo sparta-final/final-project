@@ -73,8 +73,8 @@ export class AuthController {
   @Get('login/kakao/callback')
   async KakaoLoginCallback(@CurrentUser() user: KakaoLoginUserDto, @Res() res: Response) {
     const tokens = await this.authservice.KakaoLogin(user, res);
-    // axios.post('kakao/complete',tokens)
-    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
+    // 토큰 쿼리스트링으로 보내기
+    return res.redirect(`http://localhost:3000?at=${tokens.AccessToken}&rt=${tokens.RefreshToken}`);
   }
 
   @Public()
