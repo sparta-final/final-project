@@ -13,7 +13,8 @@ function getQRCode() {
       {},
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('at')}`,
+          accesstoken: `${localStorage.getItem('at')}`,
+          refreshtoken: `${localStorage.getItem('rt')}`,
         },
       }
     )
@@ -21,6 +22,10 @@ function getQRCode() {
       document.getElementById('qr').innerHTML = `<img class="qr-img" src="${res.data}" />`;
     })
     .catch((err) => {
-      console.log(err);
-    });
+      if (err.response.status === 403) {
+        alert('로그인이 필요합니다.');
+        location.href = '/';
+        console.log(err);
+      }
+    })
 }

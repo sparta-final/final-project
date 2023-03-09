@@ -20,6 +20,7 @@ import { JwtPayload } from './types/jwtPayload.type';
 import { JwtService } from '@nestjs/jwt';
 import { Cache } from 'cache-manager';
 import { Response } from 'express';
+import { TokenExpiredError } from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -83,7 +84,7 @@ export class AuthService {
     if (!existUser) throw new NotFoundException('이메일이 존재하지 않습니다.');
     const isMatch = await bcrypt.compare(loginUserDto.password, existUser.password);
     if (!isMatch) throw new BadRequestException('비밀번호가 일치하지 않습니다.');
-    const tokens = await this.getTokens(existUser.id, existUser.email);
+    const tokens = await this.getTokens(existUser.id, existUser.email, 'user');
     return tokens;
   }
 
@@ -97,7 +98,7 @@ export class AuthService {
     if (!existUser) throw new NotFoundException('이메일이 존재하지 않습니다.');
     const isMatch = await bcrypt.compare(loginUserDto.password, existUser.password);
     if (!isMatch) throw new BadRequestException('비밀번호가 일치하지 않습니다.');
-    const tokens = await this.getTokens(existUser.id, existUser.email);
+    const tokens = await this.getTokens(existUser.id, existUser.email, 'business');
     return tokens;
   }
 
@@ -120,10 +121,10 @@ export class AuthService {
         // phone: 'test',
       });
       // 3. 로그인 완료 후 토큰 발급
-      const tokens = await this.getTokens(newUser.id, newUser.email);
+      const tokens = await this.getTokens(newUser.id, newUser.email, 'user');
       return tokens;
     }
-    const tokens = await this.getTokens(existUser.id, existUser.email);
+    const tokens = await this.getTokens(existUser.id, existUser.email, 'user');
     return tokens;
   }
 
@@ -133,10 +134,11 @@ export class AuthService {
    * @argument userId
    * @argument email
    */
-  async getTokens(userId: number, email: string) {
+  async getTokens(userId: number, email: string, type: string) {
     const jwtPayload: JwtPayload = {
       sub: userId,
       email,
+      type,
     };
 
     const [AccessToken, RefreshToken] = await Promise.all([
@@ -151,7 +153,7 @@ export class AuthService {
     ]);
     // RefreshToken 암호화 후 캐시에 저장
     const hashRefreshToken = bcrypt.hashSync(RefreshToken, 10);
-    await this.cacheManager.set(`refresh:${email}`, hashRefreshToken, {
+    await this.cacheManager.set(`refresh:${type}/${email}`, hashRefreshToken, {
       ttl: 60 * 60 * 24 * 7, // 7일
     });
     return { AccessToken, RefreshToken };
@@ -163,41 +165,32 @@ export class AuthService {
    * @argument user
    * @argument rt
    */
-  async restoreRefreshTokenForUser(user: JwtPayload, rt: string) {
-    const existUser = await this.userRepo.findOne({
-      where: { id: user.sub },
-    });
+  async restoreRefreshToken(user: JwtPayload, rt: string) {
+    if (user.type === 'user') {
+      const existUser = await this.userRepo.findOne({
+        where: { id: user.sub },
+      });
+      if (!existUser) throw new NotFoundException('유저가 존재하지 않습니다.');
+      const hashedRt: string = await this.cacheManager.get(`refresh:${user.type}/${user.email}`);
 
-    if (!existUser) throw new NotFoundException('유저가 존재하지 않습니다.');
-    const hashedRt: string = await this.cacheManager.get(`refresh:${user.email}`);
-    const refreshToken = rt.split(' ')[1]; // Bearer 토큰 형식에서 토큰만 추출
+      const rtMatch = await bcrypt.compare(rt, hashedRt);
+      if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
 
-    const rtMatch = await bcrypt.compare(refreshToken, hashedRt);
-    if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
+      const tokens = await this.getTokens(existUser.id, existUser.email, user.type);
+      return tokens;
+    } else {
+      const existBusinessUser = await this.businessUserRepo.findOne({
+        where: { id: user.sub },
+      });
+      if (!existBusinessUser) throw new NotFoundException('유저가 존재하지 않습니다.');
+      const hashedRt: string = await this.cacheManager.get(`refresh:${user.type}/${user.email}`);
 
-    const tokens = await this.getTokens(existUser.id, existUser.email);
-    return tokens;
-  }
+      const rtMatch = await bcrypt.compare(rt, hashedRt);
+      if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
 
-  /**
-   * @description 토큰 재발급(사업자)
-   * @author 김승일
-   * @argument user
-   * @argument rt
-   */
-  async restoreRefreshTokenForBusinessUser(user: JwtPayload, rt: string) {
-    const existBusinessUser = await this.businessUserRepo.findOne({
-      where: { id: user.sub },
-    });
-    if (!existBusinessUser) throw new NotFoundException('유저가 존재하지 않습니다.');
-    const hashedRt: string = await this.cacheManager.get(`refresh:${user.email}`);
-    const refreshToken = rt.split(' ')[1]; // Bearer 토큰 형식에서 토큰만 추출
-
-    const rtMatch = await bcrypt.compare(refreshToken, hashedRt);
-    if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
-
-    const tokens = await this.getTokens(existBusinessUser.id, existBusinessUser.email);
-    return tokens;
+      const tokens = await this.getTokens(existBusinessUser.id, existBusinessUser.email, user.type);
+      return tokens;
+    }
   }
 
   /**
@@ -206,13 +199,50 @@ export class AuthService {
    * @argument user @argument rt
    */
   async logout(user: JwtPayload, rt: string) {
-    const hashedRt: string = await this.cacheManager.get(`refresh:${user.email}`);
-    const refreshToken = rt.split(' ')[1]; // Bearer 토큰 형식에서 토큰만 추출
+    const hashedRt: string = await this.cacheManager.get(`refresh:${user.type}/${user.email}`);
 
-    const rtMatch = await bcrypt.compare(refreshToken, hashedRt);
+    const rtMatch = await bcrypt.compare(rt, hashedRt);
     if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
 
-    await this.cacheManager.del(`refresh:${user.email}`);
+    await this.cacheManager.del(`refresh:${user.type}/${user.email}`);
     return { success: true };
+  }
+
+  /**
+   * @description 엑세스 토큰 만료 확인
+   * @author 김승일
+   */
+  async checkAcessTokenExpired(token: string) {
+    try {
+      return await this.jwtService.verifyAsync(token, {
+        secret: process.env.ACCESS_TOKEN_SECRET,
+      });
+    } catch (err) {
+      if (err instanceof TokenExpiredError) {
+        // throw new UnauthorizedException('토큰이 만료되었습니다.');
+        return false;
+      } else {
+        throw err;
+      }
+    }
+  }
+
+  /**
+   * @description 리프레쉬 토큰 만료 확인
+   * @author 김승일
+   */
+  async checkRefreshTokenExpired(token: string) {
+    try {
+      return await this.jwtService.verifyAsync(token, {
+        secret: process.env.REFRESH_TOKEN_SECRET,
+      });
+    } catch (err) {
+      if (err instanceof TokenExpiredError) {
+        // throw new UnauthorizedException('토큰이 만료되었습니다.');
+        return false;
+      } else {
+        throw err;
+      }
+    }
   }
 }

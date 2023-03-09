@@ -7,8 +7,7 @@ import { JwtPayload } from '../types/jwtPayload.type';
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
   constructor() {
     super({
-      // jwtFromRequest: ExtractJwt.fromHeader('Authorization'),
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromHeader('refreshtoken'),
       secretOrKey: process.env.REFRESH_TOKEN_SECRET,
       ignoreExpiration: false,
     });
