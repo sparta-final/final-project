@@ -116,3 +116,34 @@ function businessLogin() {
     })
 }
 
+/**
+ * @description: 사업자 회원가입
+ * @author: 김승일
+ */
+function businessSignup() {
+  const email = document.getElementById("businessEmail").value;
+  const name = document.getElementById("businessNickname").value;
+  const password = document.getElementById("businesspw").value;
+  const passwordCheck = document.getElementById("businesspwCheck").value;
+  const phone = document.getElementById("businessPhone").value;
+  if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
+    return alert("이메일 형식이 올바르지 않습니다.");
+  }
+
+  const signupData = {
+    email: email,
+    name: name,
+    password: password,
+    passwordCheck: passwordCheck,
+    phone: phone,
+  };
+
+  axios.post("/api/auth/user/business/signup", signupData)
+    .then((res) => {
+      alert("회원가입 성공");
+      location.href = "/business/login";
+    }).catch((err) => {
+      alert(err.response.data.data)
+    })
+}
+
