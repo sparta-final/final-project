@@ -1,9 +1,11 @@
-import { applyDecorators, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { applyDecorators } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 
 export const findReviewByGymId = () => {
   return applyDecorators(
+    // UseInterceptors(CacheInterceptor),
+    // CacheTTL(30),
+    // CacheKey('gym-reviews'),
     ApiOperation({ summary: '리뷰 조회' }),
     ApiResponse({ status: 200, description: '리뷰조회 성공' }),
     ApiResponse({ status: 400, description: '리뷰조회 실패' })
@@ -12,7 +14,6 @@ export const findReviewByGymId = () => {
 
 export const postReview = () => {
   return applyDecorators(
-    UseInterceptors(FileInterceptor('reviewImg')),
     ApiOperation({ summary: '리뷰 작성' }),
     ApiBearerAuth('access-token'),
     ApiConsumes('multipart/form-data'),
@@ -23,7 +24,6 @@ export const postReview = () => {
 
 export const updateReview = () => {
   return applyDecorators(
-    UseInterceptors(FileInterceptor('reviewImg')),
     ApiOperation({ summary: '리뷰 수정' }),
     ApiBearerAuth('access-token'),
     ApiConsumes('multipart/form-data'),

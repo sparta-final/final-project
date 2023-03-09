@@ -18,15 +18,15 @@ export class Reviews {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @ApiProperty({ example: '좋아요~', description: '리뷰 내용' })
+  @ApiProperty({ example: '좋아요~', description: '리뷰 내용', nullable: true })
   @Column('varchar', { name: 'review', length: 255 })
   review: string;
 
-  @ApiProperty({ example: 5, description: '별점' })
+  @ApiProperty({ example: 5, description: '별점', nullable: true })
   @Column('int', { name: 'star' })
   star: number;
 
-  @ApiProperty({ type: 'string', format: 'binary', description: '리뷰 이미지' })
+  @ApiProperty({ type: 'string', format: 'binary', description: '리뷰 이미지', nullable: true })
   @Column('varchar', { name: 'reviewImg', nullable: true, length: 255 })
   reviewImg: string | null;
 
