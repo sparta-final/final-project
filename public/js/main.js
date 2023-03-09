@@ -1,3 +1,18 @@
+$(document).ready(function () {
+  let url = window.location.pathname.split('/')[1];
+  // console.log('✨✨✨', url, '✨✨✨');
+
+  footerSelect(url);
+});
+
+function footerSelect(url) {
+  let $footerWrap = $('footer-wrap');
+  // console.log('✨✨✨', url === '', '✨✨✨');
+  // if (url === '') {
+  //   $footerWrap.classList.add;
+  // }
+}
+
 // bxSlider 사용 참고 : https://github.com/stevenwanderski/bxslider-4
 $(function () {
   $('.bxslider').bxSlider({
