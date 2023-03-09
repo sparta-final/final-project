@@ -13,7 +13,7 @@ const config = new DocumentBuilder()
       name: 'Authorization',
       in: 'header',
     },
-    'accessToken',
+    'access-token'
   )
   .addBearerAuth(
     {

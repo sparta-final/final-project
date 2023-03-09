@@ -1,17 +1,16 @@
 import { KakaoLoginUserDto } from './dto/kakaologinUser.dto';
-import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Redirect, Res, UseGuards, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { CurrentUserRt } from 'src/global/common/decorator/current-user-at.decorator';
+import { CurrentUserRt } from 'src/global/common/decorator/current-user-rt.decorator';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import {
   BusinessUserLogin,
-  BusinessUserRefreshToken,
   BusinessUserSignup,
   KakaoLogin,
   Logout,
+  restoreRefreshToken,
   UserLogin,
-  UserRefreshToken,
   UserSignup,
 } from './auth.decorators';
 import { AuthService } from './auth.service';
@@ -63,26 +62,25 @@ export class AuthController {
   @UseGuards(AuthGuard('kakao'))
   @KakaoLogin()
   @Get('login/kakao')
-  async KakaoLogin(@CurrentUser() user: KakaoLoginUserDto, @Res() res: Response) {
+  async KakaoLogin() {
+    return HttpStatus.OK;
+  }
+
+  @Public()
+  @UseGuards(AuthGuard('kakao'))
+  @Get('login/kakao/callback')
+  async KakaoLoginCallback(@CurrentUser() user: KakaoLoginUserDto, @Res() res: Response) {
     const tokens = await this.authservice.KakaoLogin(user, res);
-    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
+    // 토큰 쿼리스트링으로 보내기
+    return res.redirect(`http://localhost:3000?at=${tokens.AccessToken}&rt=${tokens.RefreshToken}`);
   }
 
   @Public()
   @UseGuards(AuthGuard('refresh'))
-  @UserRefreshToken()
+  @restoreRefreshToken()
   @Post('user/refresh')
   async restoreRefreshTokenForUser(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
-    const tokens = await this.authservice.restoreRefreshTokenForUser(user, rt);
-    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
-  }
-
-  @Public()
-  @UseGuards(AuthGuard('refresh'))
-  @BusinessUserRefreshToken()
-  @Post('user/business/refresh')
-  async restoreRefreshTokenForBusinessUser(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
-    const tokens = await this.authservice.restoreRefreshTokenForBusinessUser(user, rt);
+    const tokens = await this.authservice.restoreRefreshToken(user, rt);
     return { at: tokens.AccessToken, rt: tokens.RefreshToken };
   }
 

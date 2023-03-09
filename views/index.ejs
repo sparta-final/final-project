@@ -9,6 +9,16 @@
       <% if (pageName==="" ) { %> <%- include("main") %> <% } %>
       <!---->
       <% if (pageName==="payment" ) { %> <%- include("payment") %> <% } %>
+      <!---->
+      <% if (pageName==="userLogin" ) { %> <%- include("auth/user-login") %> <% } %>
+      <!---->
+      <% if (pageName==="userSignup" ) { %> <%- include("auth/user-signup") %> <% } %>
+      <!---->
+      <% if (pageName==="userQRCode" ) { %> <%- include("auth/user-qrcode") %> <% } %>
+      <!---->
+      <% if (pageName==="businessLogin" ) { %> <%- include("auth/business-login") %> <% } %>
+      <!---->
+      <% if (pageName==="businessSignup" ) { %> <%- include("auth/business-signup") %> <% } %>
 
       <!---->
       <%- include("footer") %>
