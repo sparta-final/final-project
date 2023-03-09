@@ -45,6 +45,13 @@ export class AppController {
     return { pageName: 'payment' };
   }
 
+  @Get('/kakao/auth')
+  @Public()
+  @Render('kakao-auth')
+  async kakaoAuth(@Query("code") code: string) {
+    return { code: code };
+  }
+
   @Get('complete')
   @Public()
   @Render('paymentComplete')
