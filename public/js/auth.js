@@ -72,25 +72,6 @@ function userSignup() {
 }
 
 /**
- * @description: 카카오 로그인
- * @author: 김승일
- */
-function kakaoLogin() {
-  axios.get("/api/auth/login/kakao", {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      withCredentials: true,
-    }
-  })
-    .then((res) => {
-      console.log(res)
-    }).catch((err) => {
-      console.log(err)
-    })
-}
-
-/**
  * @description: 사업자 로그인
  * @author : 김승일
  */

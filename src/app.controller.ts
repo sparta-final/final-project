@@ -52,11 +52,26 @@ export class AppController {
   async test() {
     return;
   }
+
   @Get('payment')
   @Public()
-  @Render('payment')
+  @Render('index')
   async payment() {
     return { pageName: 'payment' };
+  }
+
+  @Get('admin')
+  @Public()
+  @Render('index')
+  async admin() {
+    return { pageName: 'admin' };
+  }
+
+  @Get('admin/approve')
+  @Public()
+  @Render('index')
+  async adminApprove() {
+    return { pageName: 'adminApprove' };
   }
 
   @Get('complete')

@@ -84,6 +84,12 @@ export class Gym {
   @Column('varchar', { name: 'description', length: 255 })
   description: string;
 
+  @ApiProperty({ example: '서울시 강남구 역삼동', description: '헬스장 주소' })
+  @IsString()
+  @IsNotEmpty()
+  @Column('varchar', { name: 'address', length: 255 })
+  address: string;
+
   @ApiProperty({ type: 'string', format: 'binary', description: '사업자등록증 파일 이름' })
   @Column('varchar', { name: 'certification', length: 255 })
   @IsNotEmpty()

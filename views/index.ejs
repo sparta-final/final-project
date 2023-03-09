@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include("head") %>
+  <%- include("components/head") %>
 
   <body>
     <div id="mobile-container">
-      <%- include("header") %>
+      <%- include("components/header") %>
       <!---->
-      <% if (pageName==="" ) { %> <%- include("main") %> <% } %>
+      <% if (pageName==="" ) { %> <%- include("main/main") %> <% } %>
       <!---->
-      <% if (pageName==="payment" ) { %> <%- include("payment") %> <% } %>
+      <% if (pageName==="payment" ) { %> <%- include("main/paymentComplete") %> <% } %>
+      <!---->
+      <% if (pageName==="admin" ) { %> <%- include("admin/admin") %> <% } %>
+      <!---->
+      <% if (pageName==="adminApprove" ) { %> <%- include("admin/adminApprove") %> <% } %>
       <!---->
       <% if (pageName==="userLogin" ) { %> <%- include("auth/user-login") %> <% } %>
       <!---->
@@ -21,7 +25,7 @@
       <% if (pageName==="businessSignup" ) { %> <%- include("auth/business-signup") %> <% } %>
 
       <!---->
-      <%- include("footer") %>
+      <%- include("components/footer") %>
     </div>
   </body>
 </html>
