@@ -1,12 +1,6 @@
-.main-login-form {
-  width: 100%;
-  height: 240px;
-  background: var(--point-color);
-}
-
 .user-login-form {
   width: 100%;
-  height: 480px;
+  height: 100vh;
 }
 
 .email {

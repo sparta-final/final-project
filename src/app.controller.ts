@@ -32,6 +32,20 @@ export class AppController {
     return { pageName: 'userQRCode' };
   }
 
+  @Get('business/login')
+  @Public()
+  @Render('index')
+  async businessLogin() {
+    return { pageName: 'businessLogin' };
+  }
+
+  @Get('business/signup')
+  @Public()
+  @Render('index')
+  async businessSignup() {
+    return { pageName: 'businessSignup' };
+  }
+
   @Get('useGym')
   @Public()
   @Render('useGym')

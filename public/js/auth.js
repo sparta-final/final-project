@@ -89,3 +89,30 @@ function kakaoLogin() {
       console.log(err)
     })
 }
+
+/**
+ * @description: 사업자 로그인
+ * @author : 김승일
+ */
+function businessLogin() {
+  const email = document.getElementById("businessEmail").value;
+  const password = document.getElementById("businesspw").value;
+  if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
+    return alert("이메일 형식이 올바르지 않습니다.");
+  }
+  const loginData = {
+    email: email,
+    password: password,
+  };
+
+  axios.post("/api/auth/user/business/login", loginData)
+    .then((res) => {
+      localStorage.setItem("at", res.data.at);
+      localStorage.setItem("rt", res.data.rt);
+      alert("로그인 성공");
+      location.href = "/";
+    }).catch((err) => {
+      alert(err.response.data.data)
+    })
+}
+
