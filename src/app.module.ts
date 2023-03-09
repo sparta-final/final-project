@@ -13,11 +13,14 @@ import { AppController } from './app.controller';
 import { QrcodeModule } from './domain/qrcode/qrcode.module';
 import { UserModule } from './domain/user/user.module';
 import { BusinessUserModule } from './domain/business-user/business-user.module';
+import { Users } from './global/entities/Users';
+import { UserService } from './domain/user/user.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
+    TypeOrmModule.forFeature([Users]),
     CacheModule.register<RedisClientOptions>({
       isGlobal: true,
       url: process.env.REDIS_URL,
@@ -36,6 +39,7 @@ import { BusinessUserModule } from './domain/business-user/business-user.module'
       provide: APP_GUARD,
       useClass: JwtAccessGuard,
     },
+    UserService,
   ],
 })
 export class AppModule {}

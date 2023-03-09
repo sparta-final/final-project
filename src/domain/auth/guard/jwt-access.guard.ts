@@ -17,3 +17,5 @@ export class JwtAccessGuard extends AuthGuard('access') {
     return super.canActivate(context);
   }
 }
+export { AuthGuard };
+

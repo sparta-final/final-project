@@ -20,7 +20,7 @@ export class QRcodeService {
    */
   async createQRcode(user: JwtPayload) {
     const date = Date.now();
-    const url = `https://53d7-211-230-207-27.jp.ngrok.io/usegym?date=${date}&id=${user.sub}`;
+    const url = `http://localhost:3000/usegym?date=${date}&id=${user.sub}`;
     const qr = await qrcode.toDataURL(url);
     return qr;
   }

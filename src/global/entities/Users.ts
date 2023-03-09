@@ -63,4 +63,5 @@ export class Users {
 
   @OneToMany(() => UserGym, (userGym) => userGym.user)
   userGyms: UserGym[];
+  data: any;
 }
