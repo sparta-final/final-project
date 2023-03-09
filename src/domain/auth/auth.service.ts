@@ -105,8 +105,7 @@ export class AuthService {
   /**
    * @description 카카오 로그인
    * @author 김승일
-   * @argument user
-   * @argument res
+   * @argument user @argument res
    */
   async KakaoLogin(user: KakaoLoginUserDto, _res: Response) {
     // 1. 가입 확인
@@ -131,8 +130,7 @@ export class AuthService {
   /**
    * @description access token, refresh token 발급
    * @author 김승일
-   * @argument userId
-   * @argument email
+   * @argument userId @argument email
    */
   async getTokens(userId: number, email: string, type: string) {
     const jwtPayload: JwtPayload = {
@@ -162,8 +160,7 @@ export class AuthService {
   /**
    * @description 토큰 재발급(일반유저)
    * @author 김승일
-   * @argument user
-   * @argument rt
+   * @argument user @argument rt
    */
   async restoreRefreshToken(user: JwtPayload, rt: string) {
     if (user.type === 'user') {
@@ -211,6 +208,7 @@ export class AuthService {
   /**
    * @description 엑세스 토큰 만료 확인
    * @author 김승일
+   * @argument token
    */
   async checkAcessTokenExpired(token: string) {
     try {
@@ -230,6 +228,7 @@ export class AuthService {
   /**
    * @description 리프레쉬 토큰 만료 확인
    * @author 김승일
+   * @argument token
    */
   async checkRefreshTokenExpired(token: string) {
     try {
