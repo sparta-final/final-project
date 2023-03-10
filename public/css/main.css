@@ -7,6 +7,11 @@
 
 /* img slider */
 
+div.img-slider > div.bx-wrapper {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
 .img-slider {
   width: 420px;
   height: 240px;

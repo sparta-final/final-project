@@ -27,4 +27,10 @@ export class UpdateUserInfoDto {
   @ApiProperty({ example: 'img', description: '프로필 이미지', required: true })
   @IsString()
   profileImage: string = 'img';
+
+  constructor(partial: Partial<UpdateUserInfoDto>) {
+    Object.assign(this, partial);
+    this.password = this.password || 'N/A';
+    this.passwordCheck = this.passwordCheck || 'N/A';
+  }
 }

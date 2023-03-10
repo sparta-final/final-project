@@ -1,5 +1,5 @@
 import { ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Get, Post, Render } from '@nestjs/common';
+import { Controller, Get, Render } from '@nestjs/common';
 import { Public } from './global/common/decorator/public.decorator';
 
 @ApiTags('RENDER')
@@ -46,13 +46,6 @@ export class AppController {
     return { pageName: 'businessSignup' };
   }
 
-  @Get('useGym')
-  @Public()
-  @Render('useGym')
-  async test() {
-    return;
-  }
-
   @Get('payment')
   @Public()
   @Render('index')
@@ -73,19 +66,17 @@ export class AppController {
   async adminApprove() {
     return { pageName: 'adminApprove' };
   }
-
-  @Get('complete')
+  @Get('admin/approveDetail')
   @Public()
-  @Render('paymentComplete')
-  async complete() {
-    return;
+  @Render('index')
+  async adminApproveDetail() {
+    return { pageName: 'adminApproveDetail' };
   }
 
   @Get('map')
   @Public()
   @Render('map')
   async map() {
-    return;
     return { KEY: process.env.KAKAO_JAVASCRIPT_KEY };
   }
 
@@ -116,17 +107,44 @@ export class AppController {
   async postGym() {
     return { pageName: 'postGym' };
   }
+  @Get('mypage')
+  @Public()
+  @Render('index')
+  async mypage() {
+    return { pageName: 'mypage' };
+  }
 
-  @Get('businessMyInfo')
+  @Get('mypage/myinfo')
+  @Public()
+  @Render('index')
+  async myinfo() {
+    return { pageName: 'myinfo' };
+  }
+
+  @Get('business/businessMyInfo') // 호준님 사업자 기본 페이지
   @Public()
   @Render('index')
   async businessMyInfo() {
     return { pageName: 'businessMyInfo' };
   }
-  @Get('userList')
+  @Get('updateGym')
   @Public()
   @Render('index')
-  async userList() {
-    return { pageName: 'userList' };
+  async updateGym() {
+    return { pageName: 'updateGym' };
+  }
+
+  @Get('business/mypageBusiness') // 사업자 회원 정보관련
+  @Public()
+  @Render('index')
+  async mypageBusiness() {
+    return { pageName: 'mypageBusiness' };
+  }
+
+  @Get('business/myinfoBusiness') // 사업자 회원 수정페이지
+  @Public()
+  @Render('index')
+  async myinfoBusiness() {
+    return { pageName: 'myinfoBusiness' };
   }
 }

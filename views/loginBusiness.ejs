@@ -4,16 +4,16 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>로그인 페이지</title>
+    <title>사업자 로그인 페이지</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
   </head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
-    function login() {
+    function loginBusiness() {
       axios
         .post(
-          '/api/auth/user/login',
+          '/api/auth/user/business/login',
           {
             email: document.getElementById('email').value,
             password: document.getElementById('pw').value,
@@ -37,7 +37,7 @@
   <body>
     <div class="nav justify-content-center">
       <div class="card border-primary mb-3" style="max-width: 18rem; margin-top: 20px">
-        <div class="card-header">일반 회원</div>
+        <div class="card-header">사업자 회원</div>
         <div class="card-body text-primary">
           <input
             type="text"
@@ -45,10 +45,10 @@
             placeholder="이메일을 입력해주세요"
             class="form-control"
             required
-            value="sixpack@google.com"
+            value="sixpac_b@google.com"
           /><br />
           <input type="password" id="pw" placeholder="비밀번호를 입력해주세요" class="form-control" required value="1234" /><br />
-          <button onclick="login()">로그인</button>
+          <button onclick="loginBusiness()">로그인</button>
         </div>
       </div>
     </div>

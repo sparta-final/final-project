@@ -10,6 +10,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Busienssusers } from '../entities/Busienssusers';
 import { Comments } from '../entities/Comments';
 import { Payments } from '../entities/Payments';
+import { truncate } from 'fs';
 
 // TODO: TypeOrmModuleOptions의 속성들을 찾아서 채워넣기
 function ormConfig(): TypeOrmModuleOptions {
@@ -24,8 +25,8 @@ function ormConfig(): TypeOrmModuleOptions {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     entities: commonConf.ENTITIES,
-    synchronize: false,
-    logging: true,
+    synchronize: true,
+    logging: false,
     charset: 'utf8mb4',
     keepConnectionAlive: true,
   };

@@ -24,3 +24,11 @@ export const DeleteBusinessUserInfo = () => {
     ApiResponse({ status: 400, description: '사업자 유저 유저 탈퇴 실패' })
   );
 }
+
+export const GetUserByGymId = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '업체별 사용자 데이터 불러오기' }),
+    ApiResponse({ status: 200, description: '업체별 사용자 데이터 불러오기 성공' }),
+    ApiResponse({ status: 400, description: '업체별 사용자 데이터 불러오기 실패' })
+  );
+}

@@ -17,6 +17,7 @@
   font-size: 24px;
   font-weight: 600;
   color: var(--point-color);
+  cursor: pointer;
 }
 
 .header-wrap ul {
@@ -33,6 +34,7 @@
   background-size: cover;
   float: left;
   text-indent: -9999px;
+  cursor: pointer;
 }
 
 .qr-code {
@@ -68,6 +70,7 @@
   position: relative;
   width: 40px;
   height: 40px;
+  cursor: pointer;
 }
 
 li.small-svg {

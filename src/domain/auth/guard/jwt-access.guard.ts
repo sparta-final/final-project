@@ -35,3 +35,5 @@ export class JwtAccessGuard extends AuthGuard('access') {
     return super.canActivate(context) as Promise<boolean>;
   }
 }
+export { AuthGuard };
+

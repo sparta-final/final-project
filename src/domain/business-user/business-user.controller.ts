@@ -1,43 +1,48 @@
 import { Body, Controller, Get, NestInterceptor, Param, Put, Type, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateBusinessUserInfoDto } from './dto/updateBusinessUserInfo.dto';
-import { DeleteBusinessUserInfo, GetBusinessUserInfo, UpdateBusinessUserInfo } from './business-user.decorators';
+import { DeleteBusinessUserInfo, GetBusinessUserInfo, GetUserByGymId, UpdateBusinessUserInfo } from './business-user.decorators';
 import { BusinessUserService } from './business-user.service';
+import { ApiTags } from '@nestjs/swagger';
+import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
+import { JwtPayload } from '../auth/types/jwtPayload.type';
 
+@ApiTags('BUSINESS_USER_INFO')
 @Controller('api')
 export class BusinessUserController {
   constructor(private businessUserService: BusinessUserService) {}
 
   // 사업자 회원정보 불러오기
-  @Get('auth/business/:businessUserId')
+  @Get('business')
   @GetBusinessUserInfo()
-  async getBusinessUserInfo(@Param('businessUserId') businessUserId: number) {
-    const businessUser = await this.businessUserService.getBusinessUserInfo(businessUserId);
+  async getBusinessUserInfo(@CurrentUser() user: JwtPayload) {
+    const businessUser = await this.businessUserService.getBusinessUserInfo(user);
     return businessUser;
   }
 
   // 사업자 회원정보 수정하기
-  @Put('auth/business/:businessUserId')
+  @Put('business')
   @UpdateBusinessUserInfo()
   @UseInterceptors(FileInterceptor('profileImage'))
   async updateBusinessUserInfo(
-    @Param('businessUserId') businessUserId: number,
+    @CurrentUser() user: JwtPayload,
     @UploadedFile() file: Express.MulterS3.File,
     @Body() updateBusinessUserInfo: UpdateBusinessUserInfoDto
   ) {
-    return await this.businessUserService.updateBusinessUserInfo(businessUserId, updateBusinessUserInfo, file);
+    return await this.businessUserService.updateBusinessUserInfo(user, updateBusinessUserInfo, file);
   }
 
   // 사업자 회원 탈퇴하기
-  @Put('auth/business/delete/:businessUserId')
+  @Put('business/delete')
   @DeleteBusinessUserInfo()
-  async deleteBusinessUser(@Param('businessUserId') businessUserId: number) {
-    return await this.businessUserService.deleteBusinessUser(businessUserId);
+  async deleteBusinessUser(@CurrentUser() user: JwtPayload) {
+    return await this.businessUserService.deleteBusinessUser(user);
   }
 
   // 업체별 사용자 데이터 불러오기
-  //   @Get('user/:month/:gymId')
-  //   async getBusinessUserByGymId(@Param('month') month: num, @Param('gymId') gymId: number) {
-  //     return await this.businessUserService.getBusinessUserByGymId(month, gymId);
-  //   }
+  @Get('gym/user/:gymId')
+  @GetUserByGymId()
+  async getUserByGymId(@Param('gymId') gymId: number) {
+    return await this.businessUserService.getUserByGymId(gymId);
+  }
 }

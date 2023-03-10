@@ -5,7 +5,8 @@ const body = document.querySelector('body');
 body.addEventListener('click', function (e) {
   if (e.target.id !== 'subscribe-btn') return;
   const membership = e.target.parentElement.firstElementChild.textContent;
-  const amount = Number(e.target.parentElement.children[1].textContent);
+  const amountText = e.target.parentElement.children[1].textContent;
+  const amount = Number(amountText.replace(',', '').substring(0, 6));
   console.log('✨✨✨', membership, amount, '✨✨✨');
   requestPay(membership, amount);
 });
@@ -43,7 +44,7 @@ function requestPay(membership, amount) {
           // 서버 결제 API 성공시 로직
           console.log('✨✨✨', data, '✨✨✨');
           // alert(`${name} 멤버십 구독 신청이 완료되었습니다.`);
-          window.location.replace(`/complete`);
+          window.location.replace(`/payment`);
         });
       } else {
         // 빌링키 발급 실패

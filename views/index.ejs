@@ -14,11 +14,12 @@
       <!---->
       <% if (pageName==="businessMyInfo" ) { %> <%- include("businessMyInfo") %> <% } %>
       <!---->
-      <% if (pageName==="userList" ) { %> <%- include("userList") %> <% } %>
-
-      <% if (pageName==="admin" ) { %> <%- include("admin/admin") %> <% } %>
+      <% if (pageName==="userList" ) { %> <%- include("userList") %> <% } %> <% if (pageName==="admin" ) { %> <%-
+      include("admin/admin") %> <% } %>
       <!---->
       <% if (pageName==="adminApprove" ) { %> <%- include("admin/adminApprove") %> <% } %>
+      <!---->
+      <% if (pageName==="adminApproveDetail" ) { %> <%- include("admin/adminApproveDetail") %> <% } %>
       <!---->
       <% if (pageName==="userLogin" ) { %> <%- include("auth/user-login") %> <% } %>
       <!---->
@@ -29,8 +30,19 @@
       <% if (pageName==="businessLogin" ) { %> <%- include("auth/business-login") %> <% } %>
       <!---->
       <% if (pageName==="businessSignup" ) { %> <%- include("auth/business-signup") %> <% } %>
+      <!---->
+      <% if (pageName==="updateGym" ) { %> <%- include("updateGym") %> <% } %>
 
       <!---->
+      <% if (pageName==="mypage" ) { %> <%- include("mypage/mypage") %> <% } %>
+      <!---->
+      <% if (pageName==="myinfo" ) { %> <%- include("mypage/myinfo")%> <% } %>
+      <!---->
+      <% if (pageName==="mypageBusiness" ) { %> <%- include("mypage/mypageBusiness")%> <% } %>
+      <!---->
+      <% if (pageName==="myinfoBusiness" ) { %> <%- include("mypage/myinfoBusiness")%> <% } %>
+      <!---->
+
       <%- include("components/footer") %>
     </div>
   </body>
