@@ -1,7 +1,7 @@
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
   mapOption = {
     center: new daum.maps.LatLng(37.537187, 127.005476), // 지도의 중심좌표
-    level: 5 // 지도의 확대 레벨
+    level: 5, // 지도의 확대 레벨
   };
 
 //지도를 미리 생성
@@ -11,9 +11,8 @@ var geocoder = new daum.maps.services.Geocoder();
 //마커를 미리 생성
 var marker = new daum.maps.Marker({
   position: new daum.maps.LatLng(37.537187, 127.005476),
-  map: map
+  map: map,
 });
-
 
 function execDaumPostcode() {
   new daum.Postcode({
@@ -21,29 +20,28 @@ function execDaumPostcode() {
       var addr = data.address; // 최종 주소 변수
 
       // 주소 정보를 해당 필드에 넣는다.
-      document.getElementById("address").value = addr;
+      document.getElementById('address').value = addr;
       // 주소로 상세 정보를 검색
       geocoder.addressSearch(data.address, function (results, status) {
-        console.log('result', results)
+        console.log('result', results);
         // 정상적으로 검색이 완료됐으면
         if (status === daum.maps.services.Status.OK) {
-
           var result = results[0]; //첫번째 결과의 값을 활용
           // result.y , result.x 를 저장
-          document.getElementById("lat").value = result.y; // 위도
-          document.getElementById("lng").value = result.x; // 경도
+          document.getElementById('lat').value = result.y; // 위도
+          document.getElementById('lng').value = result.x; // 경도
           // 해당 주소에 대한 좌표를 받아서
           var coords = new daum.maps.LatLng(result.y, result.x);
           // 지도를 보여준다.
-          mapContainer.style.display = "block";
+          mapContainer.style.display = 'block';
           map.relayout();
           // 지도 중심을 변경한다.
           map.setCenter(coords);
           // 마커를 결과값으로 받은 위치로 옮긴다.
-          marker.setPosition(coords)
+          marker.setPosition(coords);
         }
       });
-    }
+    },
   }).open();
 }
 
@@ -52,7 +50,7 @@ function businesslogin() {
     .post('/api/auth/user/business/login', {
       email: document.getElementById('loginId').value,
       password: document.getElementById('loginPw').value,
-    },)
+    })
     .then((res) => {
       console.log(res);
       localStorage.setItem('token', res.data.at);
@@ -70,6 +68,9 @@ function enrollGym() {
   const gymType = document.getElementById('gymType').value;
   const lat = document.getElementById('lat').value;
   const lng = document.getElementById('lng').value;
+  const img = document.getElementById('gymImgs');
+
+  console.log(certification, img);
 
   const formData = new FormData();
   formData.append('name', name);
@@ -79,16 +80,19 @@ function enrollGym() {
   formData.append('gymType', gymType);
   formData.append('lat', lat);
   formData.append('lng', lng);
+  formData.append('img', img.files[0]);
 
-
-  axios.post('/api/gym', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-  }).then((res) => {
-    console.log(res);
-  }).catch((err) => {
-    console.log(err);
-  })
+  axios
+    .post('/api/gym', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
