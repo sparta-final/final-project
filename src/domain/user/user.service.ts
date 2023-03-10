@@ -48,7 +48,7 @@ export class UserService {
       existUser.nickname = updateUserInfo.nickname;
       existUser.phone = updateUserInfo.phone;
       existUser.password = hashedPassword;
-      file ? (existUser.profileImage = file.location) : (existUser.profileImage = null);
+      file ? (existUser.profileImage = file.location) : (existUser.profileImage = existUser.profileImage);
       await this.userRepo.save(existUser);
       return existUser;
     }

@@ -16,7 +16,7 @@ function footerSelect(url) {
   if (url === 'feed') {
     svg[2].classList.add('svg-select');
   }
-  if (url === 'user' || url === 'business') {
+  if (url === 'user' || url === 'business' || url === 'mypage') {
     svg[3].classList.add('svg-select');
   }
 }
