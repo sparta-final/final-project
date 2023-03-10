@@ -3,7 +3,8 @@
 .header-wrap {
   position: fixed;
   top: 0;
-  width: 100%;
+  /* width: 100% 에서 임의로 좀 바꿨습니다. */
+  width: 420px;
   height: 70px;
   z-index: 9999;
   background-color: var(--main-color);

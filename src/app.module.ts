@@ -17,14 +17,11 @@ import { BusinessUserModule } from './domain/business-user/business-user.module'
 import { PaymentModule } from './domain/payment/payment.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 // import { HttpModule } from '@nestjs/axios';
-import { AdminModule } from './domain/admin/admin.module';import { Users } from './global/entities/Users';
-import { UserService } from './domain/user/user.service';
-
+import { AdminModule } from './domain/admin/admin.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
-    TypeOrmModule.forFeature([Users]),
     CacheModule.register<RedisClientOptions>({
       isGlobal: true,
       url: process.env.REDIS_URL,
@@ -42,6 +39,7 @@ import { UserService } from './domain/user/user.service';
     UserModule,
     BusinessUserModule,
     PaymentModule,
+    // HttpModule,
     AdminModule,
   ],
   controllers: [AppController],
@@ -49,6 +47,10 @@ import { UserService } from './domain/user/user.service';
     {
       provide: APP_GUARD,
       useClass: JwtAccessGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
   ],
 })

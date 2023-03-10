@@ -1,9 +1,6 @@
 import { ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Param, Query, Render, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Render } from '@nestjs/common';
 import { Public } from './global/common/decorator/public.decorator';
-import { AuthGuard } from '@nestjs/passport';
-import { CurrentUser } from './global/common/decorator/current-user.decorator';
-import { JwtPayload } from './domain/auth/types/jwtPayload.type';
 
 @ApiTags('RENDER')
 @Controller()
@@ -78,25 +75,38 @@ export class AppController {
     return;
   }
 
-  @Get()
+  @Get('/loginBusiness')
   @Public()
-  @Render('index')
-  async home() {
+  @Render('loginBusiness')
+  async loginBusiness() {
     return;
   }
 
-  // 마이페이지 백업
   @Get('mypage')
   @Public()
-  @Render('mypage')
+  @Render('index')
   async mypage() {
-    return;
+    return { pageName: 'mypage' };
+  }
+
+  @Get('mypageBusiness')
+  @Public()
+  @Render('index')
+  async mypageBusiness() {
+    return { pageName: 'mypageBusiness' };
   }
 
   @Get('myinfo')
   @Public()
-  @Render('myinfo')
+  @Render('index')
   async myinfo() {
-    return;
+    return { pageName: 'myinfo' };
+  }
+
+  @Get('myinfoBusiness')
+  @Public()
+  @Render('index')
+  async myinfoBusiness() {
+    return { pageName: 'myinfoBusiness' };
   }
 }
