@@ -34,6 +34,6 @@ export class PostGymDto {
   @ApiProperty({ type: 'string', format: 'binary', description: '사업자등록증 파일 이름', required: true })
   certification: string;
 
-  @ApiProperty({ type: 'string', format: 'binary', description: '이미지 파일 이름', required: true })
+  @ApiProperty({ type: 'string[]', format: 'binary', description: '이미지 파일 이름', required: true })
   img: string;
 }

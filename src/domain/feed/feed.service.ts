@@ -21,14 +21,28 @@ export class FeedService {
    * @author 정호준
    */
   async postFeeds({ file, user, createFeedDto }) {
-    const createFeed = await this.feedsRepository.save({
-      content: createFeedDto.content,
-      userId: user.sub,
-    });
-    await this.feedsImgRepository.save({
-      feedId: createFeed.id,
-      image: file.location,
-    });
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const createFeed = await this.feedsRepository.save({
+        content: createFeedDto.content,
+        userId: user.sub,
+      });
+      await this.feedsImgRepository.save({
+        feedId: createFeed.id,
+        image: file.location,
+      });
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw err;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   /**
@@ -36,7 +50,9 @@ export class FeedService {
    * @author 정호준
    */
   async getAllFeed() {
-    const allFeed = await this.feedsRepository.find({});
+    const allFeed = await this.feedsRepository.find({
+      relations: ['feedsImgs'],
+    });
     return allFeed;
   }
 
@@ -48,6 +64,7 @@ export class FeedService {
   async getMyFeed(user: JwtPayload) {
     const myFeed = await this.feedsRepository.find({
       where: { userId: user.sub },
+      relations: ['feedsImgs'],
     });
     return myFeed;
   }

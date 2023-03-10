@@ -89,7 +89,7 @@ export class AppController {
     return { KEY: process.env.KAKAO_JAVASCRIPT_KEY };
   }
 
-  @Get('enrollgym')
+  @Get('enrollGym')
   @Public()
   @Render('enrollGym')
   async enrollGym() {
@@ -108,5 +108,25 @@ export class AppController {
   @Render('allGym')
   async allGym() {
     return;
+  }
+
+  @Get('postGym')
+  @Public()
+  @Render('index')
+  async postGym() {
+    return { pageName: 'postGym' };
+  }
+
+  @Get('businessMyInfo')
+  @Public()
+  @Render('index')
+  async businessMyInfo() {
+    return { pageName: 'businessMyInfo' };
+  }
+  @Get('userList')
+  @Public()
+  @Render('index')
+  async userList() {
+    return { pageName: 'userList' };
   }
 }
