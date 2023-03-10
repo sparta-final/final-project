@@ -73,7 +73,7 @@
   color: #888888;
 }
 
-.approve-btn {
+.approve-page-btn {
   width: 80%;
   height: 40px;
   margin: 25px 10%;
@@ -86,7 +86,7 @@
   text-align: center;
 }
 
-.approve-btn:hover {
+.approve-page-btn:hover {
   background-color: var(--sub-color-5);
   transition: 0.2s ease;
 }
@@ -212,7 +212,7 @@ tr:hover {
   position: relative;
   width: 50%;
   height: 125px;
-  padding: 10px 0 0 10px;
+  padding: 10px 0 0 15px;
   float: left;
 }
 
@@ -239,10 +239,69 @@ tr:hover {
   border-radius: 15px;
   color: var(--main-color);
   text-align: center;
+  cursor: pointer;
 }
 
 .gym-detial-btn:hover {
   background-color: var(--sub-color-5);
   transition: 0.2s ease;
+}
+
+/* 승인 상세 페이지 */
+
+.gym-detail-wrap {
+  width: 95%;
+  margin: 15px auto;
+  border: 1px solid var(--sub-color-4);
+  border-radius: 20px;
+  color: var(--sub-color-4);
+  font-weight: 500;
+  padding: 10px 0;
+}
+
+.gym-detail-name {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--point-color);
+  padding: 10px 20px;
+}
+
+.gym-detail-address {
+  font-size: 18px;
+  padding: 0 20px;
+}
+
+.gym-detail-desc {
+  width: 100%;
+  min-height: 200px;
+  overflow: visible;
+  margin-top: 20px;
+}
+
+.certification-wrap {
+  width: 95%;
+  margin: auto;
+}
+
+.certification-wrap p {
+  padding-left: 20px;
+  font-size: 20px;
+}
+
+.approve-btn {
+  width: 80%;
+  height: 26px;
+  margin-left: 10%;
+  font-size: 16px;
+  background-color: var(--point-color);
+  border: none;
+  border-radius: 15px;
+  color: var(--main-color);
+  text-align: center;
   cursor: pointer;
+}
+
+.approve-btn:hover {
+  background-color: var(--sub-color-5);
+  transition: 0.2s ease;
 }

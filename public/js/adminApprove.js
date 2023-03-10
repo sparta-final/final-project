@@ -1,4 +1,10 @@
 $(document).ready(function () {
+  $('textarea.gym-detail-desc').on('keydown keyup', function () {
+    $(this)
+      .height(1)
+      .height($(this).prop('scrollHeight') + 12);
+  });
+
   getBeforeApproveGym();
 });
 
@@ -17,7 +23,7 @@ function getBeforeApproveGym() {
             <ul class="gym-info-box">
               <li class="gym-name">${data[i].name}</li>
               <li class="gym-location">${data[i].address}</li>
-              <button onclick="location.href='/" class="gym-detial-btn">업체 상세 정보</button>
+              <button onclick="location.href='/admin/approveDetail' class="gym-detial-btn">업체 상세 정보</button>
             </ul>
           </div>`;
         $('.approve-wait').append(temp);
@@ -27,26 +33,12 @@ function getBeforeApproveGym() {
       console.log(err);
     });
 }
+
 // function getBeforeApproveGym() {
 //   axios
-//     .put('api/blackList', {
-//       email: blacklist_email,
-//       blacklist: blacklist_checked,
-//     })
+//     .put('api/admin/approve', {})
 //     .then((response) => {
-//       const data = response.data;
-//       let memberAll = data.reduce(function add(sum, cur) {
-//         return sum + cur;
-//       });
-
-//       let temp = `
-//         <p class='admin-membership'>구독 회원 <span>${memberAll.toLocaleString()}</span> 명</p>
-//         <ul class='admin-member-type'>
-//           <li class='admin-basic'>Basic <span>${data[0].toLocaleString()}</span> 명</li>
-//           <li class='admin-standard'>Standard <span>${data[1].toLocaleString()}</span> 명</li>
-//           <li class='admin-premium'>Premium <span>${data[2].toLocaleString()}</span> 명</li>
-//         </ul>`;
-//       $('.admin-members').append(temp);
+//       console.log('✨✨✨', response, '✨✨✨');
 //     })
 //     .catch((err) => {
 //       console.log(err);
