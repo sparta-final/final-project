@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reviews } from 'src/global/entities/Reviews';
 import { UserGym } from 'src/global/entities/UserGym';
@@ -6,12 +6,14 @@ import { DataSource, Repository } from 'typeorm';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class ReviewService {
   constructor(
     @InjectRepository(Reviews) private reviewRepo: Repository<Reviews>,
     @InjectRepository(UserGym) private userGymRepo: Repository<UserGym>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private dataSource: DataSource
   ) {}
 
@@ -21,12 +23,18 @@ export class ReviewService {
    * @param gymId
    */
   async findReviewByGymId(gymId: number) {
+    const cachedReviews = await this.cacheManager.get(`reviews:GymID: ${gymId}`);
+    if (cachedReviews) return cachedReviews;
+
     const reviews = await this.userGymRepo
       .createQueryBuilder('userGym')
-      .leftJoinAndSelect('userGym.reviews', 'reviews')
+      .leftJoinAndSelect('userGym.reviews', 'reviews', 'reviews.userGym.id = userGym.id')
       .where('userGym.gymId = :gymId', { gymId })
       .getMany();
-    if (reviews.length === 0) {
+
+    await this.cacheManager.set(`reviews:GymID: ${gymId}`, reviews, { ttl: 30 });
+
+    if (reviews[0].reviews.length === 0) {
       throw new NotFoundException('리뷰가 존재하지 않습니다');
     }
     return reviews;
@@ -34,13 +42,13 @@ export class ReviewService {
 
   /**
    * @description 리뷰 작성
-   * @param gymId @param user @param file @param createReviewDto
+   * @param gymId @argument user @argument file @argument createReviewDto
    * @author 김승일
    */
   async postReview(gymId: number, user: JwtPayload, file: Express.MulterS3.File, createReviewDto: CreateReviewDto) {
     // NOTE : 최근에 간 헬스장인지 확인하여 그 건에 대해 리뷰를 작성할 수 있도록 함
     const userGym = await this.userGymRepo.findOne({
-      where: { gymId, userId: user.sub },
+      where: { gymId, userId: user.sub, reviewId: null },
       order: { id: 'DESC' },
     });
     if (!userGym) {
@@ -69,7 +77,7 @@ export class ReviewService {
 
   /**
    * @description 리뷰 수정
-   * @param gymId @param reviewId @param file @param user @param updateReviewDto
+   * @param gymId @param reviewId @argument file @argument user @argument updateReviewDto
    * @author 김승일
    */
   async updateReview(
@@ -83,9 +91,17 @@ export class ReviewService {
       where: { gymId, userId: user.sub, reviewId },
     });
     if (!userGym) throw new UnauthorizedException('리뷰를 수정할 수 없습니다');
+
+    const existReview = await this.reviewRepo.findOne({
+      where: { id: reviewId, userGym: { id: userGym.id } },
+    });
     const updateReview = await this.reviewRepo.update(
       { id: reviewId, userGym: { id: userGym.id } },
-      { ...updateReviewDto, reviewImg: file.location }
+      {
+        review: updateReviewDto.review ? updateReviewDto.review : existReview.review,
+        star: updateReviewDto.star ? updateReviewDto.star : existReview.star,
+        reviewImg: file ? file.location : existReview.reviewImg,
+      }
     );
 
     return updateReview;

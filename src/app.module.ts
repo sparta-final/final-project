@@ -11,9 +11,13 @@ import { GymModule } from './domain/gym/gym.module';
 import { ReviewModule } from './domain/review/review.module';
 import { AppController } from './app.controller';
 import { QrcodeModule } from './domain/qrcode/qrcode.module';
+import { FeedModule } from './domain/feed/feed.module';
 import { UserModule } from './domain/user/user.module';
 import { BusinessUserModule } from './domain/business-user/business-user.module';
-import { Users } from './global/entities/Users';
+import { PaymentModule } from './domain/payment/payment.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+// import { HttpModule } from '@nestjs/axios';
+import { AdminModule } from './domain/admin/admin.module';import { Users } from './global/entities/Users';
 import { UserService } from './domain/user/user.service';
 
 @Module({
@@ -26,12 +30,19 @@ import { UserService } from './domain/user/user.service';
       url: process.env.REDIS_URL,
       store: redisStore,
     }),
+    ThrottlerModule.forRoot({
+      ttl: 30,
+      limit: 10,
+    }),
     AuthModule,
     GymModule,
     ReviewModule,
     QrcodeModule,
+    FeedModule,
     UserModule,
     BusinessUserModule,
+    PaymentModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [
@@ -39,7 +50,6 @@ import { UserService } from './domain/user/user.service';
       provide: APP_GUARD,
       useClass: JwtAccessGuard,
     },
-    UserService,
   ],
 })
 export class AppModule {}

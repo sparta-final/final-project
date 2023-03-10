@@ -12,7 +12,7 @@ export class Busienssusers {
   @ApiProperty({ example: 'sixpack@gmail.com', description: '사업자 이메일' })
   @IsEmail()
   @IsNotEmpty()
-  @Column('varchar', { name: 'email', length: 100, unique: true })
+  @Column('varchar', { name: 'email', length: 100 })
   email: string;
 
   @ApiProperty({ example: '1234', description: '사업자 비밀번호' })

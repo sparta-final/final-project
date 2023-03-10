@@ -1,3 +1,4 @@
+import { Calculate } from './../entities/Calculate';
 import { Users } from './../entities/Users';
 import { UserGym } from './../entities/UserGym';
 import { Reviews } from './../entities/Reviews';
@@ -13,7 +14,7 @@ import { Payments } from '../entities/Payments';
 // TODO: TypeOrmModuleOptions의 속성들을 찾아서 채워넣기
 function ormConfig(): TypeOrmModuleOptions {
   const commonConf = {
-    ENTITIES: [Busienssusers, Comments, Feeds, FeedsImg, Gym, GymImg, Payments, Reviews, UserGym, Users],
+    ENTITIES: [Busienssusers, Comments, Feeds, FeedsImg, Gym, GymImg, Payments, Reviews, UserGym, Users, Calculate],
   };
   const ormconfig: TypeOrmModuleOptions = {
     type: 'mysql',
