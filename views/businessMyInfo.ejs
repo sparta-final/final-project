@@ -1,6 +1,3 @@
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
 <div class="main-subscribe">
   <h2 class="h2-subscribe">스파르타 헬스장</h2>
 </div>
@@ -9,74 +6,9 @@
   <h3>내 업체 리스트</h3>
 </div>
 
-<div class="image-text-box">
-  <img src="이미지 경로" alt="이미지 설명" />
-  <div class="text-box">
-    <h2>헬스장 이름</h2>
-    <p>주소</p>
-    <div class="review-box">
-      <p>별점</p>
-      <button>리뷰 보기</button>
-    </div>
-    <div class="mybtn">
-      <button onclick="location.href='/userList'">사용자</button> <button>수정</button> <button>삭제</button>
-    </div>
-  </div>
-</div>
+<div id="imageTextBox"></div>
 
 <div>
-  <button class="enrollMyGym" id="enrollBtn" onclick="location.href='/postGym'">업체 등록하기</button>
+  <button class="enrollMyGymBtn" id="enrollBtn" onclick="location.href='/postGym'">업체 등록하기</button>
 </div>
-
 <script src="/js/businessMyInfo.js"></script>
-
-<!-- <!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <body>
-    <div class="main-subscribe">
-      <h2 class="h2-subscribe">스파르타 헬스장</h2>
-    </div>
-
-    <div class="mygymList">
-      <h3>내 업체 리스트</h3>
-    </div>
-
-    <div class="image-text-box">
-      <img src="이미지 경로" alt="이미지 설명" />
-      <div class="text-box">
-        <h2>헬스장 이름</h2>
-        <p>주소</p>
-        <div class="review-box">
-          <p>별점</p>
-          <button>리뷰 보기</button>
-        </div>
-        <div class="mybtn"><button>사용자</button> <button>수정</button> <button>삭제</button></div>
-      </div>
-    </div>
-    <div class="image-text-box">
-      <img src="이미지 경로" alt="이미지 설명" />
-      <div class="text-box">
-        <h2>제목</h2>
-        <p>본문 내용</p>
-        <div class="review-box">
-          <p>별점</p>
-          <button>리뷰 보기</button>
-        </div>
-        <div class="mybtn"><button>사용자</button> <button>수정</button> <button>삭제</button></div>
-      </div>
-    </div>
-
-    <div>
-      <button class="enrollMyGym" id="enrollBtn">업체 등록하기</button>
-    </div>
-  </body>
-  <script src="/js/enrollGym.js"></script>
-</html> -->

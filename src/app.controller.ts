@@ -123,6 +123,12 @@ export class AppController {
   async businessMyInfo() {
     return { pageName: 'businessMyInfo' };
   }
+  @Get('updateGym')
+  @Public()
+  @Render('index')
+  async updateGym() {
+    return { pageName: 'updateGym' };
+  }
   @Get('userList')
   @Public()
   @Render('index')

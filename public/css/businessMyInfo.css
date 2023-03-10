@@ -5,14 +5,17 @@
 }
 
 .image-text-box {
-  display: flex;
-  align-items: center;
+  /* align-items: center;
   height: 150px;
   margin: 0px 25px 0px 25px;
   display: flex;
   align-items: center;
   border: 1px solid black;
-  padding: 10px;
+  padding: 10px; */
+  width: 95%;
+  margin: auto;
+  border: 1px solid black;
+  margin-bottom: 10px;
 }
 
 .image-text-box img {
@@ -49,7 +52,7 @@
   display: flex;
 }
 
-.enrollMyGym {
+.enrollMyGymBtn {
   position: relative;
   width: 90%;
   height: 40px;
@@ -57,4 +60,6 @@
   border-radius: 20px;
   margin: 50px 20px 15px 20px;
   font-size: medium;
+  background-color: #ff710d;
+  color: aliceblue;
 }

@@ -45,21 +45,6 @@ function execDaumPostcode() {
   }).open();
 }
 
-function businesslogin() {
-  axios
-    .post('/api/auth/user/business/login', {
-      email: document.getElementById('loginId').value,
-      password: document.getElementById('loginPw').value,
-    })
-    .then((res) => {
-      console.log(res);
-      localStorage.setItem('token', res.data.at);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
-
 function enrollGym() {
   const name = document.getElementById('gymName').value;
   const phone = document.getElementById('gymPhone').value;
@@ -69,8 +54,7 @@ function enrollGym() {
   const lat = document.getElementById('lat').value;
   const lng = document.getElementById('lng').value;
   const img = document.getElementById('gymImgs');
-
-  console.log(certification, img);
+  const address = document.getElementById('address').value;
 
   const formData = new FormData();
   formData.append('name', name);
@@ -81,16 +65,23 @@ function enrollGym() {
   formData.append('lat', lat);
   formData.append('lng', lng);
   formData.append('img', img.files[0]);
+  formData.append('address', address);
+
+  // for (let value of formData.values()) {
+  //   console.log(value);
+  // }
 
   axios
     .post('/api/gym', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        accesstoken: `${localStorage.getItem('at')}`,
+        refreshtoken: `${localStorage.getItem('rt')}`,
       },
     })
     .then((res) => {
       console.log(res);
+      window.location.href = '/businessMyInfo';
     })
     .catch((err) => {
       console.log(err);
