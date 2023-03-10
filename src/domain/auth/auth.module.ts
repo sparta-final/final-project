@@ -11,6 +11,7 @@ import { JwtRefreshStrategy } from './strategy/jwt-refresh.strategy';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Users, Busienssusers]), JwtModule.register({})],
+  exports: [AuthService],
   controllers: [AuthController],
   providers: [AuthService, JwtAccessStrategy, JwtRefreshStrategy, JwtKakaoStrategy],
 })

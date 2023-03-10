@@ -1,0 +1,60 @@
+.mygymList {
+  color: #ff710d;
+  font-size: 25px;
+  margin: 80px 20px 10px 20px;
+}
+
+.image-text-box {
+  display: flex;
+  align-items: center;
+  height: 150px;
+  margin: 0px 25px 0px 25px;
+  display: flex;
+  align-items: center;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.image-text-box img {
+  max-width: 100%;
+  max-height: 100%;
+  margin-right: 10px;
+  width: 190px;
+}
+
+.text-box {
+  flex: 1;
+}
+
+.text-box h2 {
+  margin-top: 0;
+}
+
+.text-box p {
+  margin-bottom: 0;
+}
+
+.review-box {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.review-box p {
+  margin-right: 10px;
+}
+
+.mybtn {
+  text-align: center;
+  display: flex;
+}
+
+.enrollMyGym {
+  position: relative;
+  width: 90%;
+  height: 40px;
+  border: 1px solid var(--sub-color-4);
+  border-radius: 20px;
+  margin: 50px 20px 15px 20px;
+  font-size: medium;
+}

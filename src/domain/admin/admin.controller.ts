@@ -4,7 +4,16 @@ import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/global/common/decorator/public.decorator';
 import { ApproveDto } from './dto/approveGym.dto';
-import { approveGym, calculate, getApproveGyms, getMembers, gymRank, salesAll, salesMonth } from './admin.decorators';
+import {
+  approveGym,
+  calculate,
+  getApproveGyms,
+  getBeforeApproveGyms,
+  getMembers,
+  gymRank,
+  salesAll,
+  salesMonth,
+} from './admin.decorators';
 import { MonthDto } from './dto/monthData.dto';
 import { RankDto } from './dto/gymRank.dto';
 import * as _ from 'lodash';
@@ -27,6 +36,13 @@ export class AdminController {
   @Public()
   async getGym() {
     return await this.adminService.getGym();
+  }
+
+  @Get('/beforeApprove')
+  @getBeforeApproveGyms()
+  @Public()
+  async beforeApproveGym() {
+    return await this.adminService.beforeApproveGym();
   }
 
   @Put('/approve')
