@@ -127,6 +127,12 @@ export class AppController {
   async businessMyInfo() {
     return { pageName: 'businessMyInfo' };
   }
+  @Get('updateGym')
+  @Public()
+  @Render('index')
+  async updateGym() {
+    return { pageName: 'updateGym' };
+  }
 
   @Get('business/mypageBusiness') // 사업자 회원 정보관련
   @Public()

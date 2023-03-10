@@ -47,6 +47,7 @@ export class GymService {
         phone: postgymDto.phone,
         lat: postgymDto.lat,
         lng: postgymDto.lng,
+        address: postgymDto.address,
         gymType: postgymDto.gymType,
         description: postgymDto.description,
         certification: file.certification[0].location,
@@ -99,7 +100,7 @@ export class GymService {
    */
   async updateGym({ file, gymId, updateDto, user }) {
     await this.checkUser(gymId, user);
-    await this.checkPassword(updateDto.password, user);
+    // await this.checkPassword(updateDto.password, user);
     const findGymsImage = await this.gymImgrepository.findOne({
       where: { gymId: gymId },
     });
@@ -135,9 +136,9 @@ export class GymService {
    * 체육관 정보 삭제
    * @author 정호준
    */
-  async deleteGym({ gymId, password, user }) {
+  async deleteGym({ gymId, user }) {
     await this.checkUser(gymId, user);
-    await this.checkPassword(password.password, user);
+    // await this.checkPassword(password.password, user);
 
     const queryRunner = this.dataSource.createQueryRunner();
 
