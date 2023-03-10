@@ -204,6 +204,7 @@ tr:hover {
 
 .gym-approve-wait img {
   width: 50%;
+  height: 130px;
   border-radius: 25px;
   float: left;
 }
