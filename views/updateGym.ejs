@@ -3,36 +3,25 @@
   src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9aeee9ff016fed561bbb3a8f799b3034&libraries=clusterer,services"
 ></script>
 
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = +urlParams.get('id');
+</script>
+
+<script>
+  $(document).ready(function () {
+    getThisGym(id);
+  });
+</script>
+
 <div class="main-subscribe">
   <h2 class="h2-subscribe">정보 수정하기</h2>
   <form enctype="multipart/form-data">
     <div id="thisGym">
-      <input type="text" class="postGymInput" placeholder="매장 이름" id="gymName" />
-
-      <input type="text" class="postGymInput" placeholder="매장 전화번호" id="gymPhone" />
-
-      <input type="text" id="address" class="postGymInput" placeholder="주소" />
-      <input type="button" onclick="execDaumPostcode()" value="주소 검색" /><br />
-
-      <div id="lat" style="display: none"></div>
-      <div id="lng" style="display: none"></div>
-      <div id="map" style="width: 300px; height: 300px; margin-top: 10px; display: none"></div>
-
-      <select id="gymType">
-        <option value="1">헬스장</option>
-        <option value="2">필라테스</option>
-        <option value="3">요가</option>
-      </select>
-
-      <input type="text" class="postGymInput descript" placeholder="매장 설명" id="gymDescription" />
-
-      <input type="file" class="postGymInput" id="gymCertification" />
-
-      <input type="file" class="postGymInput" id="gymImgs" />
-
-      <input type="button" class="postGymInput btn" onclick="updateGym()" value="수정" /><br />
+      <!-- temp_html2 -->
     </div>
   </form>
 </div>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="/js/businessMyInfo.js"></script>
+<script src="/js/enrollGym.js"></script>

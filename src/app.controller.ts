@@ -127,7 +127,7 @@ export class AppController {
   async businessMyInfo() {
     return { pageName: 'businessMyInfo' };
   }
-  @Get('updateGym')
+  @Get('business/updateGym')
   @Public()
   @Render('index')
   async updateGym() {
