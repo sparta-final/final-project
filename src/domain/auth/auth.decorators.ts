@@ -45,32 +45,9 @@ export const KakaoLogin = () => {
   );
 };
 
-export const UserRefreshToken = () => {
+export const restoreRefreshToken = () => {
   return applyDecorators(
-    ApiOperation({ summary: '토큰 재발급(일반유저)' }),
-    ApiHeader({
-      name: 'Authorization',
-      schema: {
-        type: 'string',
-        example: 'bearer {accessToken}',
-      },
-    }),
-    ApiBearerAuth('access-token'),
-    ApiResponse({ status: 201, description: '토큰 재발급 성공' }),
-    ApiResponse({ status: 400, description: '토큰 재발급 실패' })
-  );
-};
-
-export const BusinessUserRefreshToken = () => {
-  return applyDecorators(
-    ApiOperation({ summary: '토큰 재발급(사업자)' }),
-    ApiHeader({
-      name: 'Authorization',
-      schema: {
-        type: 'string',
-        example: 'bearer {accessToken}',
-      },
-    }),
+    ApiOperation({ summary: '토큰 재발급' }),
     ApiBearerAuth('access-token'),
     ApiResponse({ status: 201, description: '토큰 재발급 성공' }),
     ApiResponse({ status: 400, description: '토큰 재발급 실패' })

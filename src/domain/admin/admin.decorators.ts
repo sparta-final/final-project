@@ -17,6 +17,14 @@ export const getApproveGyms = () => {
   );
 };
 
+export const getBeforeApproveGyms = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '승인대기중인 업체 조회' }),
+    ApiResponse({ status: 200, description: '성공' }),
+    ApiResponse({ status: 400, description: '실패' })
+  );
+};
+
 export const approveGym = () => {
   return applyDecorators(
     ApiOperation({ summary: '승인 요청된 제휴업체 승인하기' }),
