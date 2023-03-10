@@ -1,6 +1,9 @@
 import { ApiTags } from '@nestjs/swagger';
 import { Body, Controller, Get, Post, Render } from '@nestjs/common';
 import { Public } from './global/common/decorator/public.decorator';
+import { AuthGuard } from '@nestjs/passport';
+import { CurrentUser } from './global/common/decorator/current-user.decorator';
+import { JwtPayload } from './domain/auth/types/jwtPayload.type';
 
 @ApiTags('RENDER')
 @Controller()
