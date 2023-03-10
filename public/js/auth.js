@@ -122,8 +122,10 @@ function businessSignup() {
 
   axios.post("/api/auth/user/business/signup", signupData)
     .then((res) => {
+      localStorage.setItem("at", res.data.at);
+      localStorage.setItem("rt", res.data.rt);
       alert("회원가입 성공");
-      location.href = "/business/login";
+      location.href = "/";
     }).catch((err) => {
       alert(err.response.data.data)
     })

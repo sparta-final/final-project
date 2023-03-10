@@ -38,8 +38,8 @@ export class AuthController {
   @BusinessUserSignup()
   @Post('user/business/signup')
   async postBusinessUsers(@Body() postBusinessUserDto: PostBusinessUserDto) {
-    const businessUser = await this.authservice.postBusinessUsers(postBusinessUserDto);
-    return businessUser;
+    const tokens = await this.authservice.postBusinessUsers(postBusinessUserDto);
+    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
   }
 
   @Public()

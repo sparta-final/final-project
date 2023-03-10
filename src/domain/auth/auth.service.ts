@@ -50,7 +50,6 @@ export class AuthService {
       phone: postuserDto.phone,
     });
     const tokens = await this.getTokens(postUser.id, postUser.email, 'user');
-    console.log('tokens', tokens);
     return tokens;
   }
 
@@ -67,12 +66,14 @@ export class AuthService {
     if (postBusinessUserDto.password !== postBusinessUserDto.passwordCheck)
       throw new ConflictException('비밀번호가 일치하지 않습니다.');
     const hashedPassword = await bcrypt.hash(postBusinessUserDto.password, 10);
-    return await this.businessUserRepo.save({
+    const postUser = await this.businessUserRepo.save({
       email: postBusinessUserDto.email,
       password: hashedPassword,
       name: postBusinessUserDto.name,
       phone: postBusinessUserDto.phone,
     });
+    const tokens = await this.getTokens(postUser.id, postUser.email, 'business');
+    return tokens;
   }
 
   /**
