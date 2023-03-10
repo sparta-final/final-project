@@ -17,6 +17,7 @@
   font-size: 24px;
   font-weight: 600;
   color: var(--point-color);
+  cursor: pointer;
 }
 
 .header-wrap ul {

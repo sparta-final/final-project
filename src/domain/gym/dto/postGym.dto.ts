@@ -21,6 +21,10 @@ export class PostGymDto {
   @IsNotEmpty()
   lng: number;
 
+  @ApiProperty({ example: '서울시 강남구', description: '주소', required: true })
+  @IsNotEmpty()
+  address: string;
+
   @ApiProperty({ example: '헬스장, 필라테스, 요가', description: '체육관 유형' })
   @IsString()
   @IsNotEmpty()

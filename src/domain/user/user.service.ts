@@ -4,6 +4,7 @@ import { Users } from 'src/global/entities/Users';
 import { Repository } from 'typeorm';
 import { UpdateUserInfoDto } from './dto/updateUserInfo.dto';
 import * as bcrypt from 'bcrypt';
+import { JwtPayload } from '../auth/types/jwtPayload.type';
 
 @Injectable()
 export class UserService {
@@ -14,12 +15,13 @@ export class UserService {
    * @author 주현진
    */
 
-  async getUserInfo(id: number) {
-    const user = await this.userRepo.findOne({
-      where: { id, deletedAt: null },
+  async getUserInfo(user: JwtPayload) {
+    const existUser = await this.userRepo.findOne({
+      where: { id: user.sub, deletedAt: null },
     });
-    console.log('user :', user);
-    return user;
+    const { password, ...rest } = existUser;
+
+    return rest;
   }
 
   /**
@@ -28,28 +30,27 @@ export class UserService {
    * @param UpdateUserInfoDto
    */
 
-  async updateUserInfo(id: number, updateUserInfo: UpdateUserInfoDto, file: Express.MulterS3.File) {
-    const hashedPassword = await bcrypt.hash(updateUserInfo.password, 10);
-    const user = await this.userRepo.findOne({
-      where: { id },
+  async updateUserInfo(user: JwtPayload, updateUserInfo: UpdateUserInfoDto, file: Express.MulterS3.File) {
+    const hashedPassword = await bcrypt.hash(
+      updateUserInfo.password === '' ? updateUserInfo.currentPassword : updateUserInfo.password,
+      10
+    );
+    const existUser = await this.userRepo.findOne({
+      where: { id: user.sub },
     });
 
-    const isMatch = await bcrypt.compare(updateUserInfo.currentPassword, user.password);
+    const isMatch = await bcrypt.compare(updateUserInfo.currentPassword, existUser.password);
 
     if (!isMatch) throw new ConflictException('현재 비밀번호가 일치하지 않습니다.');
 
-    console.log('user', user);
-
-    console.log('file.location', file);
-
     if (updateUserInfo.password !== updateUserInfo.passwordCheck) throw new ConflictException('비밀번호가 일치하지 않습니다.');
-    if (user) {
-      user.nickname = updateUserInfo.nickname;
-      user.phone = updateUserInfo.phone;
-      user.password = hashedPassword;
-      file ? (user.profileImage = file.location) : (user.profileImage = null);
-      await this.userRepo.save(user);
-      return user;
+    if (existUser) {
+      existUser.nickname = updateUserInfo.nickname;
+      existUser.phone = updateUserInfo.phone;
+      existUser.password = hashedPassword;
+      file ? (existUser.profileImage = file.location) : (existUser.profileImage = existUser.profileImage);
+      await this.userRepo.save(existUser);
+      return existUser;
     }
   }
 
@@ -58,14 +59,14 @@ export class UserService {
    * @author 주현진
    */
 
-  async deleteUser(id: number) {
-    const user = await this.userRepo.findOne({
-      where: { id },
+  async deleteUser(user: JwtPayload) {
+    const existUser = await this.userRepo.findOne({
+      where: { id: user.sub },
     });
-    if (user) {
-      user.deletedAt = new Date();
-      await this.userRepo.save(user);
-      return user;
+    if (existUser) {
+      existUser.deletedAt = new Date();
+      await this.userRepo.save(existUser);
+      return existUser;
     }
   }
 }

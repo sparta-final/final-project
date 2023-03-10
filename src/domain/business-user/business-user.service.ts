@@ -4,22 +4,28 @@ import { Busienssusers } from 'src/global/entities/Busienssusers';
 import { Repository } from 'typeorm';
 import { UpdateBusinessUserInfoDto } from './dto/updateBusinessUserInfo.dto';
 import * as bcrypt from 'bcrypt';
+import { UserGym } from 'src/global/entities/UserGym';
+import { JwtPayload } from '../auth/types/jwtPayload.type';
 
 @Injectable()
 export class BusinessUserService {
-  constructor(@InjectRepository(Busienssusers) private readonly busniessUserRepo: Repository<Busienssusers>) {}
+  constructor(
+    @InjectRepository(Busienssusers) private readonly busniessUserRepo: Repository<Busienssusers>,
+    @InjectRepository(UserGym) private readonly userGymRepo: Repository<UserGym>
+  ) {}
 
   /**
    * 사업자회원 회원정보 불러오기
    * @author 주현진
    */
 
-  async getBusinessUserInfo(id: number) {
+  async getBusinessUserInfo(user: JwtPayload) {
     const businessUser = await this.busniessUserRepo.findOne({
-      where: { id, deletedAt: null },
+      where: { id: user.sub, deletedAt: null },
     });
-    console.log('businessUser :', businessUser);
-    return businessUser;
+    const { password, ...rest } = businessUser;
+
+    return rest;
   }
 
   /**
@@ -28,10 +34,10 @@ export class BusinessUserService {
    * @param UpdateBusinessUserInfoDto
    */
 
-  async updateBusinessUserInfo(id: number, updateBusinessUserInfo: UpdateBusinessUserInfoDto, file: Express.MulterS3.File) {
+  async updateBusinessUserInfo(user: JwtPayload, updateBusinessUserInfo: UpdateBusinessUserInfoDto, file: Express.MulterS3.File) {
     const hashedPassword = await bcrypt.hash(updateBusinessUserInfo.password, 10);
     const businessUser = await this.busniessUserRepo.findOne({
-      where: { id },
+      where: { id: user.sub },
     });
 
     const isMatch = await bcrypt.compare(updateBusinessUserInfo.currentPassword, businessUser.password);
@@ -57,14 +63,27 @@ export class BusinessUserService {
    * @author 주현진
    */
 
-  async deleteBusinessUser(id: number) {
+  async deleteBusinessUser(user: JwtPayload) {
     const businessUser = await this.busniessUserRepo.findOne({
-      where: { id },
+      where: { id: user.sub },
     });
     if (businessUser) {
       businessUser.deletedAt = new Date();
       await this.busniessUserRepo.save(businessUser);
       return businessUser;
     }
+  }
+
+  /**
+   * 업체별 사용자 데이터 불러오기
+   * @author 주현진
+   */
+
+  async getUserByGymId(gymId: number) {
+    return await this.userGymRepo
+      .createQueryBuilder('userGym')
+      .leftJoinAndSelect('userGym.user', 'user')
+      .where('userGym.gymId = :gymId', { gymId })
+      .getMany();
   }
 }
