@@ -66,7 +66,7 @@ export class AppController {
   async adminApprove() {
     return { pageName: 'adminApprove' };
   }
-  @Get('admin/approveDetail')
+  @Get('admin/approveDetail/:id')
   @Public()
   @Render('index')
   async adminApproveDetail() {
@@ -87,11 +87,18 @@ export class AppController {
     return { KEY: process.env.KAKAO_JAVASCRIPT_KEY };
   }
 
-  @Get('enrollfeed')
+  @Get('feed')
   @Public()
-  @Render('enrollfeed')
-  async enrollfeed() {
-    return;
+  @Render('index')
+  async feed() {
+    return { pageName: 'feed' };
+  }
+
+  @Get('feed/create')
+  @Public()
+  @Render('index')
+  async feedCreate() {
+    return { pageName: 'feedCreate' };
   }
 
   @Get('allGym')

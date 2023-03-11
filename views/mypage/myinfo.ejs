@@ -1,31 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-  <link rel="stylesheet" href="/css/mypage.css" />
-  <body>
-    <div id="mobile-container">
-      <div class="info-container">
-        <h1>일반 회원정보 수정</h1>
-      </div>
-      <hr />
-      <form enctype="multipart/form-data" style="text-align: center" class="infoForm">
-        <input type="text" id="nickname" />
-        <br />
-        <div class="input-wrapper">
-          <input type="password" id="currentPassword" placeholder="현재 비밀번호를 입력해주세요" />
-          <span onclick="addInputs()" class="modifyText">수정하기</span>
-        </div>
-
-        <br />
-        <div id="inputContainer"></div>
-        <input type="text" id="phone" style="margin-bottom: 10px" />
-        <br />
-        <input type="file" id="profileImage" />
-        <br />
-        <img id="image" src="" alt="" style="margin-top: 10px" width="340px" height="250px" />
-        <br />
-        <button type="button" onclick="putInfo()" class="custom-btn btn-1">수정하기</button>
-      </form>
+<section>
+  <div id="mobile-container">
+    <div class="info-container">
+      <h1>일반 회원정보 수정</h1>
     </div>
-  </body>
-  <script src="/js/myInfo.js"></script>
-</html>
+    <hr />
+    <form enctype="multipart/form-data" style="text-align: center" class="infoForm">
+      <input type="text" id="nickname" />
+      <br />
+      <div class="input-wrapper">
+        <input type="password" id="currentPassword" placeholder="현재 비밀번호를 입력해주세요" />
+        <span onclick="addInputs()" class="modifyText">수정하기</span>
+      </div>
+
+      <br />
+      <div id="inputContainer"></div>
+      <input type="text" id="phone" style="margin-bottom: 10px" />
+      <br />
+      <input type="file" id="profileImage" />
+      <br />
+      <img id="image" src="" alt="" style="margin-top: 10px" width="340px" height="250px" />
+      <br />
+      <button type="button" onclick="putInfo()" class="custom-btn btn-1">수정하기</button>
+    </form>
+  </div>
+</section>
+<script src="/js/myInfo.js"></script>

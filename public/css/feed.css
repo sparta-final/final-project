@@ -1,0 +1,72 @@
+.feed-container {
+  margin-top: 4px;
+}
+
+.feed-user-wrap {
+  position: relative;
+  height: 60px;
+  padding: 10px;
+}
+
+.feed-profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  border: 1px solid #b6b6b6;
+  float: left;
+}
+
+.feed-user-name {
+  height: 100%;
+  padding: 6px 10px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--point-color);
+  float: left;
+}
+
+.feed-user-control {
+  position: absolute;
+  right: 20px;
+  width: 30px;
+  height: 40px;
+  padding-top: 18px;
+}
+
+.feed-user-control > span {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 3px;
+  background-color: var(--point-color);
+  margin-left: 5px;
+  float: left;
+}
+
+.feed-user-control > li {
+  display: none;
+}
+
+.feed-content-wrap {
+  position: relative;
+  height: 60px;
+  padding: 10px 20px;
+  margin-bottom: 30px;
+}
+
+.feed-content {
+  color: var(--sub-color-4);
+  font-weight: 500;
+}
+
+.feed-content span {
+  color: var(--point-color);
+  margin-right: 14px;
+}
+
+.feed-comments {
+  color: var(--sub-color-8);
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 5px;
+}

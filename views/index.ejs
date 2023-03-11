@@ -12,7 +12,7 @@
       <!---->
       <% if (pageName==="postGym" ) { %> <%- include("postGym") %> <% } %>
       <!---->
-      <% if (pageName==="businessMyInfo" ) { %> <%- include("businessMyInfo") %> <% } %>
+      <% if (pageName==="businessMyInfo" ) { %> <%- include("mypage/businessMyInfo") %> <% } %>
       <!---->
       <% if (pageName==="userList" ) { %> <%- include("userList") %> <% } %> <% if (pageName==="admin" ) { %> <%-
       include("admin/admin") %> <% } %>
@@ -41,6 +41,11 @@
       <% if (pageName==="mypageBusiness" ) { %> <%- include("mypage/mypageBusiness")%> <% } %>
       <!---->
       <% if (pageName==="myinfoBusiness" ) { %> <%- include("mypage/myinfoBusiness")%> <% } %>
+      <!---->
+
+      <% if (pageName==="feed" ) { %> <%- include("feeds/feed")%> <% } %>
+      <!---->
+      <% if (pageName==="feedCreate" ) { %> <%- include("feeds/createFeed")%> <% } %>
       <!---->
 
       <%- include("components/footer") %>

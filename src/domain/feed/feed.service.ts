@@ -47,12 +47,21 @@ export class FeedService {
 
   /**
    * @description 모든 피드 조회
-   * @author 정호준
+   * @author 정호준, 한정훈
    */
   async getAllFeed() {
-    const allFeed = await this.feedsRepository.find({
-      relations: ['feedsImgs'],
-    });
+    const allFeed = await this.feedsRepository
+      .createQueryBuilder('feeds')
+      .leftJoinAndSelect('feeds.user', 'user')
+      .leftJoinAndSelect('feeds.feedsImgs', 'feedsImgs')
+      .select(['feeds', 'feedsImgs.image', 'user.nickname', 'user.profileImage'])
+      .orderBy({ 'feeds.id': 'DESC' })
+      .getMany();
+    // const allFeed = await this.feedsRepository.find({
+    //   relations: ['feedsImgs', 'user'],
+    //   order: { id: 'DESC' },
+    // });
+    console.log('✨✨✨', allFeed, '✨✨✨');
     return allFeed;
   }
 

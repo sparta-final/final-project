@@ -256,7 +256,7 @@ tr:hover {
   border-radius: 20px;
   color: var(--sub-color-4);
   font-weight: 500;
-  padding: 10px 0;
+  padding: 10px 0 0;
 }
 
 .gym-detail-name {
@@ -266,9 +266,10 @@ tr:hover {
   padding: 10px 20px;
 }
 
-.gym-detail-address {
-  font-size: 18px;
-  padding: 0 20px;
+.gym-detail-address,
+.gym-detail-phone {
+  font-size: 16px;
+  padding: 5px 20px;
 }
 
 .gym-detail-desc {
@@ -290,12 +291,12 @@ tr:hover {
 
 .approve-btn {
   width: 80%;
-  height: 26px;
+  height: 36px;
   margin-left: 10%;
   font-size: 16px;
   background-color: var(--point-color);
   border: none;
-  border-radius: 15px;
+  border-radius: 20px;
   color: var(--main-color);
   text-align: center;
   cursor: pointer;
