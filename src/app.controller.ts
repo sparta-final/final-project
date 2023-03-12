@@ -101,7 +101,7 @@ export class AppController {
     return;
   }
 
-  @Get('postGym')
+  @Get('business/postGym')
   @Public()
   @Render('index')
   async postGym() {
@@ -127,7 +127,7 @@ export class AppController {
   async businessMyInfo() {
     return { pageName: 'businessMyInfo' };
   }
-  @Get('updateGym')
+  @Get('business/updateGym')
   @Public()
   @Render('index')
   async updateGym() {
@@ -146,5 +146,12 @@ export class AppController {
   @Render('index')
   async myinfoBusiness() {
     return { pageName: 'myinfoBusiness' };
+  }
+
+  @Get('business/userList')
+  @Public()
+  @Render('index')
+  async userList() {
+    return { pageName: 'userList' };
   }
 }
