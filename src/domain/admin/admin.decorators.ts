@@ -64,3 +64,11 @@ export const calculate = () => {
     ApiResponse({ status: 400, description: '실패' })
   );
 };
+
+export const GetVisitUsers = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '헬스장 월 별 방문자 조회' }),
+    ApiResponse({ status: 200, description: '성공' }),
+    ApiResponse({ status: 400, description: '실패' })
+  );
+};

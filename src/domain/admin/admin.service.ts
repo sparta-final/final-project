@@ -252,6 +252,7 @@ export class AdminService {
         gymId: id,
         createdAt: Between(new Date(Number(date.year), Number(date.month) - 1), new Date(Number(date.year), Number(date.month))),
       },
+      relations: ['user'],
     });
     return getVisitUser;
   }

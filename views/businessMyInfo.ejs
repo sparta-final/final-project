@@ -1,10 +1,15 @@
-<script
-  type="text/javascript"
-  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9aeee9ff016fed561bbb3a8f799b3034&libraries=clusterer,services"
-></script>
+<link rel="stylesheet" href="/css/mypage.css" />
 
-<div class="main-subscribe">
-  <h2 class="h2-subscribe">스파르타 헬스장</h2>
+<div id="mobile-container" class="mobile-container">
+  <div class="info-container">
+    <img src="" alt="" id="profileImage" />
+    <button class="custom-btn btn-1" id="logout" onclick="logout()">로그아웃</button>
+    <span id="name"></span>
+    <a href="/business/myinfoBusiness"><img src="/images/right-arrow.png" alt="" height="10px" /></a>
+    <br />
+    <span id="email"></span>
+  </div>
+  <hr />
 </div>
 
 <div class="mygymList">
@@ -14,8 +19,7 @@
 <div id="imageTextBox"></div>
 
 <div>
-  <button class="enrollMyGymBtn" id="enrollBtn" onclick="location.href='/postGym'">업체 등록하기</button>
+  <button class="enrollMyGymBtn" id="enrollBtn" onclick="location.href='/business/postGym'">업체 등록하기</button>
 </div>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script src="/js/enrollGym.js"></script>
 <script src="/js/businessMyInfo.js"></script>
+<script src="/js/mypageBusiness.js"></script>

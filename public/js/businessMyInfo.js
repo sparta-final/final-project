@@ -26,14 +26,14 @@ function getMyGym() {
                         <div class="image-text-box">
                           <img src="${img}"/>
                           <div class="text-box">
-                            <h2>${name}</h2>
+                            <h2 class="mygymName">${name}</h2>
                             <p>${address}</p>
                             <div class="review-box">
                               <p>별점</p>
                               <button>리뷰 보기</button>
                             </div>
                             <div class="mybtn">
-                              <button onclick="location.href='/userList'">사용자</button> 
+                              <button onclick="location.href='/business/userList?id=${id}'">사용자</button> 
                               <button onclick="location.href='/business/updateGym?id=${id}'">수정</button>
                               <button onclick="deleteGym(${id})">삭제</button>
                             </div>
