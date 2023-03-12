@@ -207,10 +207,11 @@ tr:hover {
   height: 130px;
   border-radius: 25px;
   float: left;
+  object-fit: cover;
 }
 
 .gym-info-box {
-  position: relative;
+  /* position: relative; */
   width: 50%;
   height: 125px;
   padding: 10px 0 0 15px;

@@ -16,6 +16,7 @@ function getLocation() {
   }
 }
 
+var map;
 function showPosition(position) {
   // 위도,경도를 주소로 변환
   const geocoder = new kakao.maps.services.Geocoder();
@@ -24,8 +25,84 @@ function showPosition(position) {
     if (status === kakao.maps.services.Status.OK) {
       x.innerHTML = result[0].address.address_name;
     }
+    // div id="kakao-map"에 현재 위치 기반 지도를 표시
+    const container = document.getElementById('kakao-map');
+    container.style.width = '100%';
+    container.style.height = '550px';
+    const options = {
+      center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
+      level: 2,
+    };
+    map = new kakao.maps.Map(container, options);
+    // 지도에 마커와 이름 표시
+    axios.get('/api/gym')
+      .then((res) => {
+        const gyms = res.data;
+        for (const gym of gyms) {
+          const markerPosition = new kakao.maps.LatLng(gym.lat, gym.lng);
+          const marker = new kakao.maps.Marker({
+            position: markerPosition,
+          });
+          marker.setMap(map);
+          // 커스텀 오버레이
+          let content = `
+          <div class="customoverlay">
+            <a href="/gym?gym=${gym.id}">
+              <span class="title">${gym.name}</span>
+            </a>
+          </div>
+          `
+          new kakao.maps.CustomOverlay({
+            map: map,
+            position: markerPosition,
+            content: content,
+          });
+          // 마커에 클릭이벤트를 등록합니다
+          kakao.maps.event.addListener(marker, 'click', function () {
+            location.href = `/gym?gym=${gym.id}`;
+          });
+        }
+      }
+      );
   });
 }
+
+
+/**
+ * @description 지도 모달창
+ * @author 김승일
+ */
+const body = document.querySelector('body');
+const modal = document.getElementById('modal');
+const btnOpenModal = document.querySelector('.map-icon');
+const closeBtn = document.querySelector('.close-area');
+// 클릭시 이벤트 발생
+btnOpenModal.addEventListener('click', () => {
+  modal.classList.toggle('show')
+  if (modal.classList.contains('show')) {
+    body.style.overflow = 'hidden';
+  }
+  map.relayout()
+});
+btnOpenModal.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    modal.classList.remove('show');
+    if (!modal.classList.contains('show')) {
+      body.style.overflow = 'auto';
+    }
+  }
+});
+closeBtn.addEventListener('click', (e) => {
+  if (e.target === closeBtn) {
+    modal.classList.remove('show');
+    if (!modal.classList.contains('show')) {
+      body.style.overflow = 'auto';
+    }
+  }
+});
+
+
+
 /**
  * @description 헬스장 리스트를 가져오기
  * @author 김승일
