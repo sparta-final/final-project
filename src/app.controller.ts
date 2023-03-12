@@ -73,20 +73,6 @@ export class AppController {
     return { pageName: 'adminApproveDetail' };
   }
 
-  @Get('map')
-  @Public()
-  @Render('map')
-  async map() {
-    return { KEY: process.env.KAKAO_JAVASCRIPT_KEY };
-  }
-
-  @Get('enrollGym')
-  @Public()
-  @Render('enrollGym')
-  async enrollGym() {
-    return { KEY: process.env.KAKAO_JAVASCRIPT_KEY };
-  }
-
   @Get('enrollfeed')
   @Public()
   @Render('enrollfeed')
@@ -94,11 +80,20 @@ export class AppController {
     return;
   }
 
-  @Get('allGym')
+  // 헬스장 리스트 페이지
+  @Get('gym')
   @Public()
-  @Render('allGym')
-  async allGym() {
-    return;
+  @Render('index')
+  async gymList() {
+    return { pageName: 'gymList' };
+  }
+
+  // 헬스장 상세 페이지
+  @Get('gym/:id')
+  @Public()
+  @Render('index')
+  async gymDetail() {
+    return { pageName: 'gymDetail' };
   }
 
   @Get('business/postGym')

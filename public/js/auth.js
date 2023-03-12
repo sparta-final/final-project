@@ -9,7 +9,7 @@ const rt = urlParams.get('rt');
 if (at && rt) {
   localStorage.setItem("at", at);
   localStorage.setItem("rt", rt);
-  location.href = "/";
+  location.replace("/");
 }
 
 /**
@@ -32,7 +32,7 @@ function userLogin() {
       localStorage.setItem("at", res.data.at);
       localStorage.setItem("rt", res.data.rt);
       alert("로그인 성공");
-      location.href = "/";
+      location.replace("/");
     }).catch((err) => {
       alert(err.response.data.data)
     })
@@ -66,7 +66,7 @@ function userSignup() {
       localStorage.setItem("at", res.data.at);
       localStorage.setItem("rt", res.data.rt);
       alert("회원가입 성공");
-      location.href = "/";
+      location.replace("/");
     }).catch((err) => {
       alert(err.response.data.data)
     })
@@ -92,7 +92,7 @@ function businessLogin() {
       localStorage.setItem("at", res.data.at);
       localStorage.setItem("rt", res.data.rt);
       alert("로그인 성공");
-      location.href = "/";
+      location.replace("/");
     }).catch((err) => {
       alert(err.response.data.data)
     })
@@ -125,7 +125,7 @@ function businessSignup() {
       localStorage.setItem("at", res.data.at);
       localStorage.setItem("rt", res.data.rt);
       alert("회원가입 성공");
-      location.href = "/";
+      location.replace("/");
     }).catch((err) => {
       alert(err.response.data.data)
     })

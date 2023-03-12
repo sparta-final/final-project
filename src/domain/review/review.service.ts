@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reviews } from 'src/global/entities/Reviews';
 import { UserGym } from 'src/global/entities/UserGym';
@@ -29,15 +29,20 @@ export class ReviewService {
     const reviews = await this.userGymRepo
       .createQueryBuilder('userGym')
       .leftJoinAndSelect('userGym.reviews', 'reviews', 'reviews.userGym.id = userGym.id')
+      .leftJoinAndSelect('userGym.user', 'user', 'user.id = userGym.userId')
       .where('userGym.gymId = :gymId', { gymId })
       .getMany();
 
-    await this.cacheManager.set(`reviews:GymID: ${gymId}`, reviews, { ttl: 30 });
+    // reviews 평균 평점 계산
+    let sum = 0;
+    let avgStar = 0;
+    reviews.forEach((review) => {
+      sum += review.reviews[0].star;
+      avgStar = Math.round((sum / reviews.length) * 10) / 10;
+    });
 
-    if (reviews[0].reviews.length === 0) {
-      throw new NotFoundException('리뷰가 존재하지 않습니다');
-    }
-    return reviews;
+    await this.cacheManager.set(`reviews:GymID: ${gymId}`, { reviews, avgStar }, { ttl: 30 });
+    return { reviews, avgStar };
   }
 
   /**
