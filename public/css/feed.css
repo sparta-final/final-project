@@ -192,3 +192,46 @@
   font-weight: 600;
   cursor: pointer;
 }
+
+/* 피드 수정 */
+
+.update-feed-wrap {
+  position: relative;
+  width: 420px;
+  font-weight: 300;
+}
+
+.update-title {
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 2.4em;
+}
+
+.update-cancel {
+  position: absolute;
+  top: 7px;
+  left: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.feed-update-btn {
+  position: absolute;
+  top: 7px;
+  right: 10px;
+  font-size: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+#update-content {
+  width: 90%;
+  min-height: 100px;
+  margin: 15px 5%;
+  font-size: 15px;
+  font-weight: 400;
+}

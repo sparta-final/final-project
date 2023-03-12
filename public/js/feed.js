@@ -44,8 +44,8 @@ function getGym() {
               <p class="feed-user-name">${nickname}</p>
               <div id="control-show">
                 <ul class="feed-user-control">
-                  <li class="feed-update" onclick="${id}" >수정하기</li>
-                  <li class="feed-delete" onclick="${id}" >삭제하기</li>
+                  <li class="feed-update" onclick="location.href='/feed/update?id=${id}'" >수정하기</li>
+                  <li class="feed-delete" onclick="feedDelete(${id})" >삭제하기</li>
                 </ul>
               </div>
             </div>
@@ -73,15 +73,15 @@ function getGym() {
             <p class="feed-user-name">${nickname}</p>
             <div id="control-show">
                 <ul class="feed-user-control">
-                  <li class="feed-update" onclick="${id}" >수정하기</li>
-                  <li class="feed-delete" onclick="location.href='/feed/${id}/comments'" >삭제하기</li>
+                  <li class="feed-update" onclick="location.href='/feed/update?id=${id}'" >수정하기</li>
+                  <li class="feed-delete" onclick="feedDelete(${id})" >삭제하기</li>
                 </ul>
             </div>
             </div>
             <img src="${feedsImg}" alt="" class="feed-image" />
             <div class="feed-content-wrap">
               <p class="feed-content"><span>${nickname}</span>${content}</p>
-              <p class="feed-comments" onclick="${id}" >댓글보기</p>
+              <p class="feed-comments" onclick="location.href='/feed/${id}/comments'" >댓글보기</p>
               </div>  
               `;
           $('.feed-container').append(temp);
@@ -118,3 +118,21 @@ body.addEventListener('click', function (e) {
     $(e.target.children).hide();
   }
 });
+
+function feedDelete(id) {
+  axios
+    .delete(`/api/feed/${id}`, {
+      headers: {
+        accesstoken: `${localStorage.getItem('at')}`,
+        refreshtoken: `${localStorage.getItem('rt')}`,
+      },
+    })
+    .then((res) => {
+      console.log(res);
+      alert('삭제가 완료되었습니다.');
+      window.location.reload();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}

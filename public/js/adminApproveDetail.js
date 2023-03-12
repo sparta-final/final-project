@@ -3,7 +3,6 @@ $(document).ready(function () {
   const id = url[url.length - 1];
 
   getApproveGymDetail(id);
-  // $('.gym-detail-desc')
   const targetTextarea = document.querySelector(`.gym-detail-desc`);
   const rowCount = targetTextarea.value.split(/\r\n|\r|\n/).length;
   targetTextarea.style.height = rowCount * 24 + 'px'; //줄 수에 따라서 높이를 조절

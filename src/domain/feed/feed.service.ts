@@ -78,38 +78,56 @@ export class FeedService {
     });
     return myFeed;
   }
+
+  /**
+   * @description 내 피드 데이터 가져오기
+   * @argument id
+   * @author 한정훈
+   */
+  async updateGetFeed(id) {
+    return await this.feedsRepository.findOne({
+      where: { id: id },
+      relations: ['feedsImgs'],
+    });
+  }
+
   /**
    * @description 내 피드 수정
-   * @param feedId @param file @param updatefeedDto @param user
+   * @param feedId
+   * @param updatefeedDto
    * @author 정호준
    */
-  async updateFeed({ feedId, file, updatefeedDto, user }) {
-    await this.checkUser(feedId, user);
-    const existFeed = await this.feedsRepository.findOne({
-      where: { id: feedId },
+  async updateFeed({ id, updatefeedDto, user }) {
+    await this.checkUser(id, user);
+    await this.feedsRepository.update(id, {
+      content: updatefeedDto.content,
     });
-    const findFeedImg = await this.feedsImgRepository.findOne({
-      where: { feedId: feedId },
-    });
-    const queryRunner = this.dataSource.createQueryRunner();
+    // 이미지 함께 수정 가능하게 하려면 위에 코드 대신 아래코드 작성
+    // const existFeed = await this.feedsRepository.findOne({
+    //   where: { id: feedId },
+    // });
+    // const findFeedImg = await this.feedsImgRepository.findOne({
+    //   where: { feedId: feedId },
+    // });
+    // const queryRunner = this.dataSource.createQueryRunner();
 
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
+    // await queryRunner.connect();
+    // await queryRunner.startTransaction();
 
-    try {
-      await this.feedsRepository.update(feedId, {
-        content: updatefeedDto.content ? updatefeedDto.content : existFeed.content,
-      });
-      await this.feedsImgRepository.update(findFeedImg.id, {
-        image: file ? file.location : findFeedImg.image,
-      });
-      await queryRunner.commitTransaction();
-    } catch (err) {
-      await queryRunner.rollbackTransaction();
-      throw err;
-    } finally {
-      await queryRunner.release();
-    }
+    // try {
+    //   await this.feedsRepository.update(feedId, {
+    //     content: updatefeedDto.content ? updatefeedDto.content : existFeed.content,
+    //   });
+    //   await this.feedsImgRepository.update(findFeedImg.id, {
+    //     image: file ? file.location : findFeedImg.image,
+    //   });
+    //   await queryRunner.commitTransaction();
+    // } catch (err) {
+    //   await queryRunner.rollbackTransaction();
+    //   throw err;
+    // } finally {
+    //   await queryRunner.release();
+    // }
   }
 
   /**
@@ -117,14 +135,16 @@ export class FeedService {
    * @param feedId @param user
    * @author 정호준
    */
-  async deleteFeed({ feedId, user }) {
-    await this.checkUser(feedId, user);
+  async deleteFeed({ id, user }) {
+    await this.checkUser(id, user);
     const findFeedImg = await this.feedsImgRepository.findOne({
-      where: { feedId: feedId },
+      where: { feedId: id },
     });
+    console.log('✨✨✨', 'findFeedImg', findFeedImg, '✨✨✨');
     const findComment = await this.commentsRepository.findOne({
-      where: { feedId: feedId },
+      where: { feedId: id },
     });
+    console.log('✨✨✨', 'findComment', findComment, '✨✨✨');
 
     const queryRunner = this.dataSource.createQueryRunner();
 
@@ -134,8 +154,10 @@ export class FeedService {
     //TODO: 댓글삭제 시 한개만 삭제가 아닌 feedId를 가진 전체 삭제 구현해야 함
     try {
       await this.feedsImgRepository.delete(findFeedImg.id);
-      await this.commentsRepository.delete(findComment.id);
-      await this.feedsRepository.delete(feedId);
+      if (findComment) {
+        await this.commentsRepository.delete(findComment.id);
+      }
+      await this.feedsRepository.delete(id);
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();

@@ -94,6 +94,13 @@ export class AppController {
     return { pageName: 'feed' };
   }
 
+  @Get('feed/update')
+  @Public()
+  @Render('index')
+  async feedupdate() {
+    return { pageName: 'feedUpdate' };
+  }
+
   @Get('feed/create')
   @Public()
   @Render('index')
