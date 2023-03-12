@@ -47,7 +47,7 @@ function showPosition(position) {
           // 커스텀 오버레이
           let content = `
           <div class="customoverlay">
-            <a href="/gym?gym=${gym.id}">
+            <a href="/gym/gymDetail?gym=${gym.id}">
               <span class="title">${gym.name}</span>
             </a>
           </div>
@@ -59,7 +59,7 @@ function showPosition(position) {
           });
           // 마커에 클릭이벤트를 등록합니다
           kakao.maps.event.addListener(marker, 'click', function () {
-            location.href = `/gym?gym=${gym.id}`;
+            location.href = `/gym/gymDetail?gym=${gym.id}`;
           });
         }
       }
@@ -123,7 +123,7 @@ async function getGymList() {
               <li class="gym-name">${gym.name}</li>
               <li class="gym-location">${gym.address}</li>
               <li class="gym-review-${gymId}"></li>
-              <button onclick="location.href='/admin/approveDetail' class="gym-detial-btn">업체 상세 정보</button>
+              <button onclick="location.href='/gym/gymDetail?gym=${gymId}'" >업체 상세 정보</button>
             </ul>
           </div>
           `;
@@ -134,7 +134,7 @@ async function getGymList() {
     });
     const reivewsLength = res.data.reviews.length;
     let avgStar = `
-          <span class="gym-review-star">⭐${res.data.avgStar}(${reivewsLength})</span>
+          <span class="gym-star">⭐${res.data.avgStar}(${reivewsLength})</span>
           `;
     $(`.gym-review-${gymId}`).append(avgStar);
   }

@@ -88,6 +88,14 @@ export class AppController {
     return { pageName: 'gymList' };
   }
 
+  // 헬스장 상세 페이지
+  @Get('gym/:id')
+  @Public()
+  @Render('index')
+  async gymDetail() {
+    return { pageName: 'gymDetail' };
+  }
+
   @Get('postGym')
   @Public()
   @Render('index')

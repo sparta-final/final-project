@@ -1,0 +1,50 @@
+.gym-detail-star {
+  position: relative;
+  left: 200px;
+  top: 10px;
+  color: var(--sub-color-4);
+}
+
+.review-p {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--sub-color-4);
+  margin-left: 10px;
+}
+
+.review-wrap {
+  width: 95%;
+  margin: 15px auto;
+  border: 1px solid var(--sub-color-4);
+  border-radius: 20px;
+  background: lightgrey;
+  font-weight: 500;
+  padding: 10px 0;
+}
+
+.review-wrap > .review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.review-wrap > .review-header > #user-name {
+  margin-left: 10px;
+  color: var(--sub-color-4);
+  font-size: 12px;
+}
+
+.review-wrap > .review-header > #review-star {
+  position: relative;
+  left: 71px;
+  color: var(--sub-color-4);
+  font-size: 12px;
+}
+
+.review-wrap > .review-header > #review-date {
+  position: relative;
+  left: -5px;
+  font-size: 12px;
+  color: var(--sub-color-4);
+}
