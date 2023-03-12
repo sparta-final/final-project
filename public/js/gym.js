@@ -16,7 +16,7 @@ function getLocation() {
   }
 }
 
-var map;
+let map;
 function showPosition(position) {
   // 위도,경도를 주소로 변환
   const geocoder = new kakao.maps.services.Geocoder();
