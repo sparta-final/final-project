@@ -59,12 +59,23 @@ function getGym() {
 }
 
 function getRank(year, month) {
+  const prevMonth = month === 1 ? 12 : month - 1;
+  const prevYear = month === 1 ? year - 1 : year;
+  const nextMonth = month === 12 ? 1 : month + 1;
+  const nextYear = month === 12 ? year + 1 : year;
+
+  if (prevYear > new Date().getFullYear() || (prevYear === new Date().getFullYear() && prevMonth > new Date().getMonth())) {
+    alert('다음달 데이터는 가져올 수 없습니다.');
+    location.reload();
+    return;
+  }
   axios({
     method: 'get',
     url: `api/admin/rank/a/${year}/${month}`,
   })
     .then((response) => {
       const data = response.data;
+      $('.text-gray-dark').empty();
       // 찾는 데이터가 0일때 부터는 다른조건을 안보기 떄문에 0인뒤로 순서가 엉킴.
       const countRank = data.sort((a, b) => b.count - a.count);
       // const paidRank = data.sort((a, b) => b.paid - a.paid);
@@ -85,9 +96,28 @@ function getRank(year, month) {
           $('.text-gray-dark').append(temp);
         }
       }
+
+      const curMonth = $('.cur-month');
+      const calculateMonth = $('.admin-month-title');
+      if (curMonth.length > 0) {
+        curMonth.remove();
+        calculateMonth.remove();
+      }
+
       let now = `
       <li class="cur-month">${year}.${month}</li>`;
       $('.prev-month').after(now);
+
+      $('#prevMonthBtn').off('click');
+      $('#prevMonthBtn').on('click', function () {
+        getRank(prevYear, prevMonth);
+        salesMonth(prevYear, prevMonth);
+      });
+      $('#nextMonthBtn').off('click');
+      $('#nextMonthBtn').on('click', function () {
+        getRank(nextYear, nextMonth);
+        salesMonth(nextYear, nextMonth);
+      });
     })
     .catch((err) => {
       console.log(err);
