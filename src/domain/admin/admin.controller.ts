@@ -7,6 +7,7 @@ import { ApproveDto } from './dto/approveGym.dto';
 import {
   approveGym,
   calculate,
+  CalculateGym,
   getApproveGyms,
   getBeforeApproveGyms,
   getMembers,
@@ -87,5 +88,12 @@ export class AdminController {
   @Public()
   async getVisitUser(@Param('id') gymId: number, @Param() date: MonthDto) {
     return await this.adminService.getVisitUser(gymId, date);
+  }
+
+  @Get('/calculate/:id/:year/:month')
+  @CalculateGym()
+  @Public()
+  async getPaidGym(@Param('id') gymId: number, @Param() date: MonthDto) {
+    return await this.adminService.getPaidGym(gymId, date);
   }
 }

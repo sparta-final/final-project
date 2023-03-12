@@ -305,4 +305,20 @@ export class AdminService {
     });
     return getVisitUserCount;
   }
+
+  /**
+   * @description 헬스장 월별 매출 가져오기
+   * @author 정호준
+   * @param gymId
+   * @param year
+   * @param month
+   */
+  async getPaidGym(gymId, date) {
+    return await this.calculateRepo.find({
+      where: {
+        gymId: gymId,
+        createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+      },
+    });
+  }
 }

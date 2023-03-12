@@ -4,6 +4,7 @@ $(document).ready(function () {
   let month = now.getMonth() + 1;
   getThisGym(id);
   getVisitUser(id, year, month);
+  caculateGym(id, year, month);
 });
 
 // 헬스장 정보 가져오기
@@ -35,6 +36,13 @@ function getVisitUser(id, year, month) {
   const prevYear = month === 1 ? year - 1 : year;
   const nextMonth = month === 12 ? 1 : month + 1;
   const nextYear = month === 12 ? year + 1 : year;
+
+  if (prevYear > new Date().getFullYear() || (prevYear === new Date().getFullYear() && prevMonth > new Date().getMonth())) {
+    alert('다음달 데이터는 가져올 수 없습니다.');
+    location.reload();
+    return;
+  }
+
   axios
     .get(`/api/admin/visituser/${id}/${year}/${month}`, {
       headers: {
@@ -57,8 +65,10 @@ function getVisitUser(id, year, month) {
         $('.text-gray-dark').append(temp);
       }
       const curMonth = $('.cur-month');
+      const calculateMonth = $('.admin-month-title');
       if (curMonth) {
         curMonth.remove();
+        calculateMonth.remove();
       }
 
       let now = `
@@ -68,10 +78,12 @@ function getVisitUser(id, year, month) {
       $('#prevMonthBtn').off('click');
       $('#prevMonthBtn').on('click', function () {
         getVisitUser(id, prevYear, prevMonth);
+        caculateGym(id, prevYear, prevMonth);
       });
       $('#nextMonthBtn').off('click');
       $('#nextMonthBtn').on('click', function () {
         getVisitUser(id, nextYear, nextMonth);
+        caculateGym(id, nextYear, nextMonth);
       });
     })
     .catch((err) => {
@@ -79,12 +91,25 @@ function getVisitUser(id, year, month) {
     });
 }
 
-// 전 월  버튼 클릭
-$('#prevMonthBtn').on('click', function () {
-  getVisitUser(id, year, month);
-});
+// 정산 예정 금액
+function caculateGym(id, year, month) {
+  axios
+    .get(`/api/admin/calculate/${id}/${year}/${month}`, {
+      headers: {
+        accesstoken: `${localStorage.getItem('at')}`,
+        refreshtoken: `${localStorage.getItem('rt')}`,
+      },
+    })
+    .then((res) => {
+      const data = res.data;
+      const paid = data[0].paid.toLocaleString();
 
-// 다음달 버튼 클릭
-$('#nextMonthBtn').on('click', function () {
-  getVisitUser(id, year, month);
-});
+      let temp = `
+      <p class='admin-month-title'>${month}월 매출 <span>${paid}</span> 원</p>
+          `;
+      $('.sales-month').append(temp);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
