@@ -43,12 +43,14 @@ export class AuthService {
     if (existUser) throw new ConflictException('이미 존재하는 이메일입니다.');
     if (postuserDto.password !== postuserDto.passwordCheck) throw new ConflictException('비밀번호가 일치하지 않습니다.');
     const hashedPassword = await bcrypt.hash(postuserDto.password, 10);
-    return await this.userRepo.save({
+    const postUser = await this.userRepo.save({
       email: postuserDto.email,
       password: hashedPassword,
       nickname: postuserDto.nickname,
       phone: postuserDto.phone,
     });
+    const tokens = await this.getTokens(postUser.id, postUser.email, 'user');
+    return tokens;
   }
 
   /**
@@ -64,12 +66,14 @@ export class AuthService {
     if (postBusinessUserDto.password !== postBusinessUserDto.passwordCheck)
       throw new ConflictException('비밀번호가 일치하지 않습니다.');
     const hashedPassword = await bcrypt.hash(postBusinessUserDto.password, 10);
-    return await this.businessUserRepo.save({
+    const postUser = await this.businessUserRepo.save({
       email: postBusinessUserDto.email,
       password: hashedPassword,
       name: postBusinessUserDto.name,
       phone: postBusinessUserDto.phone,
     });
+    const tokens = await this.getTokens(postUser.id, postUser.email, 'business');
+    return tokens;
   }
 
   /**

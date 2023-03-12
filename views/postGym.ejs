@@ -2,35 +2,36 @@
   type="text/javascript"
   src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9aeee9ff016fed561bbb3a8f799b3034&libraries=clusterer,services"
 ></script>
+<section>
+  <div class="main-subscribe">
+    <h2 class="h2-subscribe">업체 등록하기</h2>
+    <form enctype="multipart/form-data">
+      <input type="text" class="postGymInput" placeholder="매장 이름" id="gymName" />
 
-<div class="main-subscribe">
-  <h2 class="h2-subscribe">업체 등록하기</h2>
-  <form enctype="multipart/form-data">
-    <input type="text" class="postGymInput" placeholder="매장 이름" id="gymName" />
+      <input type="text" class="postGymInput" placeholder="매장 전화번호" id="gymPhone" />
 
-    <input type="text" class="postGymInput" placeholder="매장 전화번호" id="gymPhone" />
+      <input type="text" id="address" class="postGymInput" placeholder="주소" />
+      <input type="button" onclick="execDaumPostcode()" value="주소 검색" /><br />
 
-    <input type="text" id="address" class="postGymInput" placeholder="주소" />
-    <input type="button" onclick="execDaumPostcode()" value="주소 검색" /><br />
+      <div id="lat" style="display: none"></div>
+      <div id="lng" style="display: none"></div>
+      <div id="map" style="width: 300px; height: 300px; margin-top: 10px; display: none"></div>
 
-    <div id="lat" style="display: none"></div>
-    <div id="lng" style="display: none"></div>
-    <div id="map" style="width: 300px; height: 300px; margin-top: 10px; display: none"></div>
+      <select id="gymType">
+        <option value="1">헬스장</option>
+        <option value="2">필라테스</option>
+        <option value="3">요가</option>
+      </select>
 
-    <select id="gymType">
-      <option value="1">헬스장</option>
-      <option value="2">필라테스</option>
-      <option value="3">요가</option>
-    </select>
+      <input type="text" class="postGymInput descript" placeholder="매장 설명" id="gymDescription" />
 
-    <input type="text" class="postGymInput descript" placeholder="매장 설명" id="gymDescription" />
+      <input type="file" class="postGymInput" id="gymCertification" />
 
-    <input type="file" class="postGymInput" id="gymCertification" />
+      <input type="file" class="postGymInput" id="gymImgs" />
 
-    <input type="file" class="postGymInput" id="gymImgs" />
-
-    <input type="button" class="postGymInput btn" onclick="enrollGym()" value="등록" /><br />
-  </form>
-</div>
+      <input type="button" class="postGymInput btn" onclick="enrollGym()" value="등록" /><br />
+    </form>
+  </div>
+</section>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="/js/enrollGym.js"></script>

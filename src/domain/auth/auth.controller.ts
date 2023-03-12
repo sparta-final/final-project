@@ -30,16 +30,16 @@ export class AuthController {
   @UserSignup()
   @Post('user/signup')
   async postUsers(@Body() postuserDto: PostUserDto) {
-    const user = await this.authservice.postUsers(postuserDto);
-    return user;
+    const tokens = await this.authservice.postUsers(postuserDto);
+    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
   }
 
   @Public()
   @BusinessUserSignup()
   @Post('user/business/signup')
   async postBusinessUsers(@Body() postBusinessUserDto: PostBusinessUserDto) {
-    const businessUser = await this.authservice.postBusinessUsers(postBusinessUserDto);
-    return businessUser;
+    const tokens = await this.authservice.postBusinessUsers(postBusinessUserDto);
+    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
   }
 
   @Public()
