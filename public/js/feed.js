@@ -1,43 +1,120 @@
 $(document).ready(function () {
-  getFeeds();
+  $('.create-feed-btn').css('display', 'block');
 });
 
-function getFeeds() {
-  axios({
-    method: 'get',
-    url: 'api/feed',
-  })
-    .then((response) => {
-      const data = response.data;
-      console.log('✨✨✨', data, '✨✨✨');
+// 무한스크롤
 
-      for (let i in data) {
-        let feedsImg = data[i].feedsImgs[0].image;
-        let id = data[i].id;
-        let nickname = data[i].user.nickname;
-        let profileImg = data[i].user.profileImage;
-        let content = data[i].content;
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    entry.target.classList.toggle('show', entry.isIntersecting);
+    if (entry.isIntersecting) observer.unobserve(entry.target);
+  });
+});
 
-        let temp = `
-        <div class="feed-user-wrap">
-        <img src="${profileImg}" alt="" class="feed-profile" />
-        <p class="feed-user-name">${nickname}</p>
-        <ul class="feed-user-control">
-        <span></span><span></span><span></span>
-            <li class="feed-update" onclick="${id}" >수정하기</li>
-            <li class="feed-delete" onclick="${id}" >삭제하기</li>
-          </ul>
-        </div>
-        <img src="${feedsImg}" alt="" class="feed-image" />
-        <div class="feed-content-wrap">
-          <p class="feed-content"><span>${nickname}</span>${content}</p>
-          <p class="feed-comments" onclick="${id}" >댓글보기</p>
-        </div>  
-        `;
-        $('.feed-container').append(temp);
+const feedContainer = document.querySelector('.feed-container');
+let postCount = 0;
+let loading = false;
+const limit = 5;
+let data = [];
+
+function getGym() {
+  if (loading) return;
+  loading = true;
+  axios
+    .get('/api/feed', {
+      params: {
+        offset: postCount,
+        limit,
+      },
+    })
+    .then((res) => {
+      data = res.data;
+      if (postCount === 0) {
+        feedContainer.innerHTML = '';
+        for (let i = 0; i < limit && i < data.length; i++) {
+          let feedsImg = data[i].feedsImgs[0].image;
+          let id = data[i].id;
+          let nickname = data[i].user.nickname;
+          let profileImg = data[i].user.profileImage;
+          let content = data[i].content;
+          let temp = `
+          <div>
+            <div class="feed-user-wrap">
+              <img src="${profileImg}" alt="" class="feed-profile" />
+              <p class="feed-user-name">${nickname}</p>
+              <div id="control-show">
+                <ul class="feed-user-control">
+                  <li class="feed-update" onclick="${id}" >수정하기</li>
+                  <li class="feed-delete" onclick="${id}" >삭제하기</li>
+                </ul>
+              </div>
+            </div>
+            <img src="${feedsImg}" alt="" class="feed-image" />
+            <div class="feed-content-wrap">
+              <p class="feed-content"><span>${nickname}</span>${content}</p>
+              <p class="feed-comments" onclick="location.href='/feed/${id}/comments'" >댓글보기</p>
+              </div>  
+              `;
+          $('.feed-container').append(temp);
+        }
+        postCount += limit;
+      } else {
+        const remainingFeeds = data.slice(postCount);
+        const maxFeedsToLoad = Math.min(limit, remainingFeeds.length);
+        for (let i = 0; i < maxFeedsToLoad; i++) {
+          let feedsImg = remainingFeeds[i].feedsImgs[0].image;
+          let id = remainingFeeds[i].id;
+          let nickname = remainingFeeds[i].user.nickname;
+          let profileImg = remainingFeeds[i].user.profileImage;
+          let content = remainingFeeds[i].content;
+          let temp = `
+            <div class="feed-user-wrap">
+            <img src="${profileImg}" alt="" class="feed-profile" />
+            <p class="feed-user-name">${nickname}</p>
+            <div id="control-show">
+                <ul class="feed-user-control">
+                  <li class="feed-update" onclick="${id}" >수정하기</li>
+                  <li class="feed-delete" onclick="location.href='/feed/${id}/comments'" >삭제하기</li>
+                </ul>
+            </div>
+            </div>
+            <img src="${feedsImg}" alt="" class="feed-image" />
+            <div class="feed-content-wrap">
+              <p class="feed-content"><span>${nickname}</span>${content}</p>
+              <p class="feed-comments" onclick="${id}" >댓글보기</p>
+              </div>  
+              `;
+          $('.feed-container').append(temp);
+          const feed = document.createElement('div.feed-user-wrap');
+          observer.observe(feed);
+        }
+        postCount += maxFeedsToLoad;
       }
+      loading = false;
     })
     .catch((err) => {
       console.log(err);
     });
 }
+
+getGym();
+
+window.addEventListener('scroll', () => {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+  if (scrollTop + clientHeight >= scrollHeight - 5 && !loading && postCount > 0 && postCount < data.length) {
+    getGym();
+  }
+});
+
+// 피드 수정/삭제 show & hide
+const body = document.querySelector('body');
+body.addEventListener('click', function (e) {
+  if (e.target.id !== 'control-show' && e.target.id !== 'control-icon') return;
+  if (e.target.classList.value === '') {
+    e.target.classList = 'show-control';
+    $(e.target.children).show();
+  } else {
+    e.target.classList.remove('show-control');
+    $(e.target.children).hide();
+  }
+});

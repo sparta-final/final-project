@@ -54,14 +54,15 @@ export class FeedService {
       .createQueryBuilder('feeds')
       .leftJoinAndSelect('feeds.user', 'user')
       .leftJoinAndSelect('feeds.feedsImgs', 'feedsImgs')
+      // .select(['user.nickname'])
       .select(['feeds', 'feedsImgs.image', 'user.nickname', 'user.profileImage'])
       .orderBy({ 'feeds.id': 'DESC' })
       .getMany();
+    // .getRawMany();
     // const allFeed = await this.feedsRepository.find({
     //   relations: ['feedsImgs', 'user'],
     //   order: { id: 'DESC' },
     // });
-    console.log('✨✨✨', allFeed, '✨✨✨');
     return allFeed;
   }
 
@@ -172,15 +173,35 @@ export class FeedService {
     });
     return createComment;
   }
+
   /**
-   * @description 피드 댓글 조회
+   * @description 피드 작성자 조회
    * @param feedId
    * @author 정호준
    */
+  async getCommentUser(feedId) {
+    return await this.feedsRepository
+      .createQueryBuilder('feeds')
+      .leftJoinAndSelect('feeds.user', 'user')
+      .where('feeds.id = :feedId', { feedId })
+      .select(['feeds', 'user.nickname', 'user.profileImage'])
+      .getRawMany();
+    console.log(feedId);
+  }
+
+  /**
+   * @description 피드 댓글 조회
+   * @param feedId
+   * @author  한정훈
+   */
   async getAllComment(feedId) {
-    return await this.commentsRepository.find({
-      where: { feedId: feedId },
-    });
+    return await this.commentsRepository
+      .createQueryBuilder('comments')
+      .leftJoinAndSelect('comments.user', 'user')
+      .leftJoinAndSelect('comments.feed', 'feed')
+      .where('comments.feedId = :feedId', { feedId })
+      .select(['comments', 'user.nickname', 'user.profileImage', 'feed.content', 'feed.userId'])
+      .getRawMany();
   }
   /**
    * @description 피드 댓글 수정

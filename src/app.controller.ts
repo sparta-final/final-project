@@ -101,6 +101,13 @@ export class AppController {
     return { pageName: 'feedCreate' };
   }
 
+  @Get('feed/:id/comments')
+  @Public()
+  @Render('index')
+  async comments() {
+    return { pageName: 'comments' };
+  }
+
   @Get('allGym')
   @Public()
   @Render('allGym')

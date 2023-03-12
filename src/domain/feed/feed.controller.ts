@@ -12,6 +12,7 @@ import {
   AllCommentGet,
   AllFeedGet,
   CommentPost,
+  CommentUserGet,
   DeleteComment,
   FeedDelete,
   FeedPost,
@@ -76,8 +77,16 @@ export class FeedController {
     @Body() createcommentDto: CreateCommentDto,
     @CurrentUser() user: JwtPayload
   ) {
+    console.log('✨✨✨', feedId, createcommentDto, user, '✨✨✨');
     const comment = await this.feedService.postComment({ feedId, createcommentDto, user });
     return comment;
+  }
+
+  @CommentUserGet()
+  @Public()
+  @Get('/:feedId')
+  async getCommentUser(@Param('feedId') feedId: string) {
+    return await this.feedService.getCommentUser(feedId);
   }
 
   @AllCommentGet()

@@ -6,6 +6,7 @@ import { Payments } from './Payments';
 import { Reviews } from './Reviews';
 import { UserGym } from './UserGym';
 import { userMembership } from './common/user.membership';
+import { Comments } from './Comments';
 
 @Entity('users', { schema: 'sixpack' })
 export class Users {
@@ -57,6 +58,9 @@ export class Users {
 
   @OneToMany(() => Feeds, (feeds) => feeds.user)
   feeds: Feeds[];
+
+  @OneToMany(() => Comments, (comments) => comments.user)
+  comments: Comments[];
 
   @OneToMany(() => Payments, (payments) => payments.user)
   payments: Payments[];

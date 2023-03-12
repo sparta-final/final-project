@@ -1,4 +1,5 @@
 .feed-container {
+  position: relative;
   margin-top: 4px;
 }
 
@@ -25,26 +26,47 @@
   float: left;
 }
 
-.feed-user-control {
+#control-show {
   position: absolute;
-  right: 20px;
-  width: 30px;
+  right: 5px;
+  width: 60px;
   height: 40px;
-  padding-top: 18px;
+  padding: 18px 15px;
+  cursor: pointer;
+  background-image: url(/images/feed-control.png);
+  background-size: cover;
 }
 
-.feed-user-control > span {
-  display: block;
-  width: 5px;
-  height: 5px;
-  border-radius: 3px;
-  background-color: var(--point-color);
-  margin-left: 5px;
-  float: left;
+.feed-user-control {
+  position: relative;
+  display: none;
 }
 
 .feed-user-control > li {
-  display: none;
+  position: absolute;
+  right: -20px;
+  width: 80px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--sub-color-4);
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: -1px 3px 2px #e6e6e6;
+  padding: 5px 0 5px 10px;
+  cursor: pointer;
+}
+
+.feed-update {
+  top: 20px;
+  border-bottom: 1px solid var(--sub-color-4);
+}
+
+.feed-delete {
+  top: 50px;
+}
+
+.feed-image {
+  width: 100%;
+  height: 420px;
 }
 
 .feed-content-wrap {
@@ -65,8 +87,108 @@
 }
 
 .feed-comments {
+  width: 80px;
   color: var(--sub-color-8);
   font-size: 14px;
   font-weight: 500;
   margin-left: 5px;
+  cursor: pointer;
+}
+
+.create-feed-btn {
+  display: none;
+  position: absolute;
+  right: 20px;
+  bottom: 120px;
+  width: 70px;
+  height: 70px;
+  border: 2px solid #b6b6b6;
+  border-radius: 35px;
+  background-color: var(--point-color);
+}
+
+.feed-btn-vertical {
+  position: absolute;
+  top: 18px;
+  left: 32px;
+  display: block;
+  width: 2px;
+  height: 30px;
+  background-color: var(--main-color);
+}
+
+.feed-btn-horizon {
+  position: absolute;
+  top: 32px;
+  left: 18px;
+  display: block;
+  width: 30px;
+  height: 2px;
+  background-color: var(--main-color);
+}
+
+/* 댓글 */
+
+.comment-container {
+  font-size: 15px;
+}
+
+.content-user-wrap {
+  position: relative;
+  min-height: 60px;
+  padding: 10px;
+}
+
+.content-user-name {
+  position: absolute;
+  top: 9px;
+  left: 60px;
+  font-weight: 500;
+  color: var(--point-color);
+}
+
+.comment-content {
+  padding: 19px 0 0 52px;
+  font-weight: 500;
+  color: var(--sub-color-1);
+}
+
+.comment-user-wrap {
+  position: relative;
+  padding: 10px;
+  min-height: 60px;
+}
+
+.comment-user-name {
+  position: absolute;
+  top: 9px;
+  left: 60px;
+  font-weight: 500;
+  color: var(--sub-color-4);
+}
+
+.comment-box {
+  position: fixed;
+  bottom: 100px;
+  width: 420px;
+  background-color: var(--main-color);
+}
+#create-comment {
+  width: 94%;
+  height: 40px;
+  border: 1px solid var(--sub-color-8);
+  border-radius: 20px;
+  padding: 5px 15px;
+  margin-left: 3%;
+}
+
+.comment-btn {
+  position: absolute;
+  bottom: 16px;
+  right: 25px;
+  background: none;
+  border: none;
+  color: var(--point-color);
+  font-weight: 600;
+  cursor: pointer;
 }

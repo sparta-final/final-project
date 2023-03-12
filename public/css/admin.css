@@ -277,6 +277,7 @@ tr:hover {
   min-height: 200px;
   overflow: visible;
   margin-top: 20px;
+  word-break: break-all;
 }
 
 .certification-wrap {

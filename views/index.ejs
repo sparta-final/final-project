@@ -14,8 +14,9 @@
       <!---->
       <% if (pageName==="businessMyInfo" ) { %> <%- include("mypage/businessMyInfo") %> <% } %>
       <!---->
-      <% if (pageName==="userList" ) { %> <%- include("userList") %> <% } %> <% if (pageName==="admin" ) { %> <%-
-      include("admin/admin") %> <% } %>
+      <% if (pageName==="userList" ) { %> <%- include("userList") %> <% } %>
+      <!---->
+      <% if (pageName==="admin" ) { %> <%- include("admin/admin") %> <% } %>
       <!---->
       <% if (pageName==="adminApprove" ) { %> <%- include("admin/adminApprove") %> <% } %>
       <!---->
@@ -46,6 +47,8 @@
       <% if (pageName==="feed" ) { %> <%- include("feeds/feed")%> <% } %>
       <!---->
       <% if (pageName==="feedCreate" ) { %> <%- include("feeds/createFeed")%> <% } %>
+      <!---->
+      <% if (pageName==="comments" ) { %> <%- include("feeds/comment")%> <% } %>
       <!---->
 
       <%- include("components/footer") %>
