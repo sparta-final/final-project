@@ -29,6 +29,7 @@ export class ReviewService {
     const reviews = await this.userGymRepo
       .createQueryBuilder('userGym')
       .leftJoinAndSelect('userGym.reviews', 'reviews', 'reviews.userGym.id = userGym.id')
+      .leftJoinAndSelect('userGym.user', 'user', 'user.id = userGym.userId')
       .where('userGym.gymId = :gymId', { gymId })
       .getMany();
 
@@ -37,7 +38,7 @@ export class ReviewService {
     let avgStar = 0;
     reviews.forEach((review) => {
       sum += review.reviews[0].star;
-      avgStar = sum / reviews.length;
+      avgStar = Math.round((sum / reviews.length) * 10) / 10;
     });
 
     await this.cacheManager.set(`reviews:GymID: ${gymId}`, { reviews, avgStar }, { ttl: 30 });

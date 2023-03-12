@@ -12,7 +12,7 @@
   margin-left: 10px;
 }
 
-.review-wrap {
+.review-card {
   width: 95%;
   margin: 15px auto;
   border: 1px solid var(--sub-color-4);
@@ -22,29 +22,55 @@
   padding: 10px 0;
 }
 
-.review-wrap > .review-header {
+.review-card > .review-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 10px;
 }
 
-.review-wrap > .review-header > #user-name {
+.review-text {
+  width: 100%;
+  min-height: 30px;
+  height: auto;
+  overflow: visible;
+  margin-top: 20px;
+  word-break: break-all;
+}
+
+.review-card > .review-header > .user-name {
+  width: 100px;
   margin-left: 10px;
+  color: var(--point-color);
+  font-size: 12px;
+}
+
+.review-card > .review-header > .review-star {
+  position: relative;
+  width: auto;
+  left: 52px;
   color: var(--sub-color-4);
   font-size: 12px;
 }
 
-.review-wrap > .review-header > #review-star {
+.review-card > .review-header > .review-date {
   position: relative;
-  left: 71px;
-  color: var(--sub-color-4);
   font-size: 12px;
+  color: var(--sub-color-4);
 }
 
-.review-wrap > .review-header > #review-date {
-  position: relative;
-  left: -5px;
-  font-size: 12px;
+.review-card > .review-content {
+  padding: 0 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
   color: var(--sub-color-4);
+}
+
+.review-content > img {
+  width: 100%;
+  /* height: 200px; */
+  object-fit: cover;
+  border: 1px solid var(--sub-color-4);
+  border-radius: 20px;
 }
