@@ -34,7 +34,7 @@ export class PaymentController {
 
       const getPaymentData = await this.paymentService.getPaymentData(data.imp_uid, access_token);
       const paymentData = getPaymentData.data.response; // 조회한 결제 정보
-      console.log('✨✨✨', 'paymentData: ', paymentData, '✨✨✨');
+      // console.log('✨✨✨', 'paymentData: ', paymentData, '✨✨✨');
       const user_id = Number(paymentData.customer_uid.split('_')[0]);
       if (data.status === paymentData.status && paymentData.status === 'paid') {
         // 결제 성공적으로 완료
@@ -61,11 +61,12 @@ export class PaymentController {
   @UnsubscribePayment()
   @Public()
   async unsubscribe(@Body() customer_uid: string) {
-    console.log('✨✨✨', customer_uid, '✨✨✨');
+    console.log('✨✨✨', 'customer_uid', customer_uid, '✨✨✨');
     const getToken = await this.paymentService.getToken();
-    console.log('✨✨✨', getToken, '✨✨✨');
+    console.log('✨✨✨', 'getToken', getToken, '✨✨✨');
     const { access_token } = getToken.data.response;
-    return await this.paymentService.unsubscribe(customer_uid, access_token);
+    await this.paymentService.unsubscribe(customer_uid, access_token);
+    return 'ok';
   }
 
   @Get('/:id')
