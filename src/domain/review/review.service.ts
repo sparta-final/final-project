@@ -18,7 +18,27 @@ export class ReviewService {
   ) {}
 
   /**
-   * @description 리뷰 조회
+   * @description 리뷰 조회(유저별)
+   * @argument userId
+   * @author 김승일
+   */
+  async findReviewByUserId(user: JwtPayload) {
+    const cachedReviews = await this.cacheManager.get(`reviews:UserID: ${user.sub}`);
+    if (cachedReviews) return cachedReviews;
+
+    const reviews = await this.userGymRepo
+      .createQueryBuilder('userGym')
+      .leftJoinAndSelect('userGym.reviews', 'reviews', 'reviews.userGym.id = userGym.id')
+      .leftJoinAndSelect('userGym.gym', 'gym', 'gym.id = userGym.gymId')
+      .where('userGym.userId = :userId', { userId: user.sub })
+      .getMany();
+
+    await this.cacheManager.set(`reviews:UserID: ${user.sub}`, reviews, { ttl: 30 });
+    return reviews;
+  }
+
+  /**
+   * @description 리뷰 조회(업체별)
    * @author 김승일
    * @param gymId
    */
