@@ -14,6 +14,8 @@ function getMyGym() {
     .then((res) => {
       console.log(res);
 
+      $('gymName').val(res.data.name);
+
       const data = res.data;
 
       for (let i = 0; i < res.data.length; i++) {
@@ -34,7 +36,7 @@ function getMyGym() {
                             </div>
                             <div class="mybtn">
                               <button onclick="location.href='/userList'">사용자</button> 
-                              <button onclick="getThisGym(${id})">수정</button> 
+                              <button onclick="location.href='/business/updateGym', getThisGym(${id})">수정</button> 
                               <button onclick="deleteGym(${id})">삭제</button>
                             </div>
                           </div>
@@ -78,39 +80,43 @@ function getThisGym(id) {
     .then((res) => {
       console.log(res);
 
-      const data = res.data;
-      const id = data.id;
-      const name = data.name;
-      const phone = data.phone;
-      const address = data.address;
-      const description = data.description;
-      const temp_html2 = `<input type="text" class="postGymInput" placeholder="${name}" id="gymName" />
+      alert('id');
 
-                          <input type="text" class="postGymInput" placeholder="${phone}" id="gymPhone" />
-                      
-                          <input type="text" id="address" class="postGymInput" placeholder="${address}" />
-                          <input type="button" onclick="execDaumPostcode()" value="주소 검색" /><br />
-                      
-                          <div id="lat" style="display: none"></div>
-                          <div id="lng" style="display: none"></div>
-                          <div id="map" style="width: 300px; height: 300px; margin-top: 10px; display: none"></div>
-                      
-                          <select id="gymType">
-                            <option value="1">헬스장</option>
-                            <option value="2">필라테스</option>
-                            <option value="3">요가</option>
-                          </select>
-                      
-                          <input type="text" class="postGymInput descript" placeholder="${description}" id="gymDescription" />
-                      
-                          <input type="file" class="postGymInput" id="gymCertification" />
-                      
-                          <input type="file" class="postGymInput" id="gymImgs" />
-                      
-                          <input type="button" class="postGymInput btn" onclick="updateGym(${id})" value="수정" /><br />`;
-      $('#thisGym').append(temp_html2);
+      $('#gymName').val(res.data.name);
 
-      window.location.href = 'updateGym';
+      // const data = res.data;
+      // const id = data.id;
+      // const name = data.name;
+      // const phone = data.phone;
+      // const address = data.address;
+      // const description = data.description;
+      // const temp_html2 = `<input type="text" class="postGymInput" placeholder="${name}" id="gymName" />
+
+      //                     <input type="text" class="postGymInput" placeholder="${phone}" id="gymPhone" />
+
+      //                     <input type="text" id="address" class="postGymInput" placeholder="${address}" />
+      //                     <input type="button" onclick="execDaumPostcode()" value="주소 검색" /><br />
+
+      //                     <div id="lat" style="display: none"></div>
+      //                     <div id="lng" style="display: none"></div>
+      //                     <div id="map" style="width: 300px; height: 300px; margin-top: 10px; display: none"></div>
+
+      //                     <select id="gymType">
+      //                       <option value="1">헬스장</option>
+      //                       <option value="2">필라테스</option>
+      //                       <option value="3">요가</option>
+      //                     </select>
+
+      //                     <input type="text" class="postGymInput descript" placeholder="${description}" id="gymDescription" />
+
+      //                     <input type="file" class="postGymInput" id="gymCertification" />
+
+      //                     <input type="file" class="postGymInput" id="gymImgs" />
+
+      //                     <input type="button" class="postGymInput btn" onclick="updateGym(${id})" value="수정" /><br />`;
+      // $('#thisGym').append(temp_html2);
+
+      // window.location.href = 'updateGym';
     })
     .catch((err) => {
       console.log(err);
