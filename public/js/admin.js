@@ -12,6 +12,10 @@ function getMembers() {
   axios({
     method: 'get',
     url: 'api/admin/member',
+    headers: {
+      accesstoken: `${localStorage.getItem('at')}`,
+      refreshtoken: `${localStorage.getItem('rt')}`,
+    }
   })
     .then((response) => {
       const data = response.data;
@@ -37,6 +41,11 @@ function getGym() {
   axios({
     method: 'get',
     url: 'api/admin/gym',
+    headers: {
+      accesstoken: `${localStorage.getItem('at')}`,
+      refreshtoken: `${localStorage.getItem('rt')}`,
+    }
+
   })
     .then((response) => {
       const data = response.data;
@@ -72,6 +81,10 @@ function getRank(year, month) {
   axios({
     method: 'get',
     url: `api/admin/rank/a/${year}/${month}`,
+    headers: {
+      accesstoken: `${localStorage.getItem('at')}`,
+      refreshtoken: `${localStorage.getItem('rt')}`,
+    }
   })
     .then((response) => {
       const data = response.data;
@@ -128,6 +141,10 @@ function salesMonth(year, month) {
   axios({
     method: 'get',
     url: `api/admin/sales/${year}/${month}`,
+    headers: {
+      accesstoken: `${localStorage.getItem('at')}`,
+      refreshtoken: `${localStorage.getItem('rt')}`,
+    }
   })
     .then((response) => {
       const data = response.data.toLocaleString();

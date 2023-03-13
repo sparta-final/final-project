@@ -12,6 +12,10 @@ function getApproveGymDetail(id) {
   axios({
     method: 'get',
     url: `/api/admin/beforeApprove/${id}`,
+    headers: {
+      accesstoken: `${localStorage.getItem('at')}`,
+      refreshtoken: `${localStorage.getItem('rt')}`,
+    }
   })
     .then((response) => {
       const data = response.data;
@@ -54,6 +58,11 @@ function approveGym(id) {
   axios
     .put('/api/admin/approve', {
       id: id,
+    }, {
+      headers: {
+        accesstoken: `${localStorage.getItem('at')}`,
+        refreshtoken: `${localStorage.getItem('rt')}`,
+      }
     })
     .then((response) => {
       alert('협력업체로 등록되었습니다.');

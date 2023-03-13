@@ -10,6 +10,8 @@
       <!---->
       <% if (pageName==="payment" ) { %> <%- include("main/paymentComplete") %> <% } %>
       <!---->
+      <% if (pageName==="adminLogin" ) { %> <%- include("auth/admin-login") %> <% } %>
+      <!---->
       <% if (pageName==="admin" ) { %> <%- include("admin/admin") %> <% } %>
       <!---->
       <% if (pageName==="adminApprove" ) { %> <%- include("admin/adminApprove") %> <% } %>
@@ -51,6 +53,8 @@
       <% if (pageName==="feedUpdate" ) { %> <%- include("feeds/feedUpdate")%> <% } %>
       <!---->
       <% if (pageName==="comments" ) { %> <%- include("feeds/comment")%> <% } %>
+      <!---->
+      <% if (pageName==="searchGym" ) { %> <%- include("gym/searchGym")%> <% } %>
       <!---->
 
       <%- include("components/footer") %>

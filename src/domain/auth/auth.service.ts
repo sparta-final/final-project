@@ -21,11 +21,13 @@ import { JwtService } from '@nestjs/jwt';
 import { Cache } from 'cache-manager';
 import { Response } from 'express';
 import { TokenExpiredError } from 'jsonwebtoken';
+import { Adminusers } from 'src/global/entities/adminusers';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(Users) private userRepo: Repository<Users>,
+    @InjectRepository(Adminusers) private adminUserRepo: Repository<Adminusers>,
     @InjectRepository(Busienssusers) private businessUserRepo: Repository<Busienssusers>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private jwtService: JwtService
@@ -82,7 +84,6 @@ export class AuthService {
    * @argument loginUserDto
    */
   async userlogin(loginUserDto: LoginUserDto) {
-    console.log('loginUserDto', loginUserDto);
     if (!loginUserDto.email || !loginUserDto.password) throw new BadRequestException('이메일과 비밀번호를 입력해주세요.');
     const existUser = await this.userRepo.findOne({ where: { email: loginUserDto.email } });
     if (!existUser) throw new NotFoundException('이메일이 존재하지 않습니다.');
@@ -132,6 +133,19 @@ export class AuthService {
   }
 
   /**
+   * @description 어드민 로그인
+   * @author 김승일
+   */
+  async adminLogin(admin: LoginUserDto) {
+    const existAdmin = await this.adminUserRepo.findOne({ where: { email: admin.email } });
+    if (!existAdmin) throw new NotFoundException('관리자가 존재하지 않습니다.');
+    if (admin.email !== process.env.ADMIN_EMAIL) throw new UnauthorizedException('이메일이 일치하지 않습니다.');
+    if (admin.password !== process.env.ADMIN_PASSWORD) throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
+    const tokens = await this.getTokens(existAdmin.id, existAdmin.email, 'admin');
+    return tokens;
+  }
+
+  /**
    * @description access token, refresh token 발급
    * @author 김승일
    * @argument userId @argument email
@@ -162,7 +176,7 @@ export class AuthService {
   }
 
   /**
-   * @description 토큰 재발급(일반유저)
+   * @description 토큰 재발급
    * @author 김승일
    * @argument user @argument rt
    */
@@ -179,11 +193,11 @@ export class AuthService {
 
       const tokens = await this.getTokens(existUser.id, existUser.email, user.type);
       return tokens;
-    } else {
+    } else if (user.type === 'business') {
       const existBusinessUser = await this.businessUserRepo.findOne({
         where: { id: user.sub },
       });
-      if (!existBusinessUser) throw new NotFoundException('유저가 존재하지 않습니다.');
+      if (!existBusinessUser) throw new NotFoundException('사업자가 존재하지 않습니다.');
       const hashedRt: string = await this.cacheManager.get(`refresh:${user.type}/${user.email}`);
 
       const rtMatch = await bcrypt.compare(rt, hashedRt);
@@ -191,6 +205,20 @@ export class AuthService {
 
       const tokens = await this.getTokens(existBusinessUser.id, existBusinessUser.email, user.type);
       return tokens;
+    } else if (user.type === 'admin') {
+      const existAdminUser = await this.adminUserRepo.findOne({
+        where: { id: user.sub },
+      });
+      if (!existAdminUser) throw new NotFoundException('어드민이 존재하지 않습니다.');
+      const hashedRt: string = await this.cacheManager.get(`refresh:${user.type}/${user.email}`);
+
+      const rtMatch = await bcrypt.compare(rt, hashedRt);
+      if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
+
+      const tokens = await this.getTokens(existAdminUser.id, existAdminUser.email, user.type);
+      return tokens;
+    } else {
+      throw new BadRequestException('잘못된 요청입니다.');
     }
   }
 

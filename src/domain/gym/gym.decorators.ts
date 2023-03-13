@@ -54,3 +54,11 @@ export const GetById = () => {
     ApiResponse({ status: 400, description: '조회 실패' })
   );
 };
+
+export const SearchGymByText = () => {
+  return applyDecorators(
+    ApiOperation({ summary: ' 체육관 앞글자로 조회' }),
+    ApiResponse({ status: 200, description: '조회 성공' }),
+    ApiResponse({ status: 400, description: '조회 실패' })
+  );
+};

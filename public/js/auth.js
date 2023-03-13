@@ -9,6 +9,7 @@ const rt = urlParams.get('rt');
 if (at && rt) {
   localStorage.setItem("at", at);
   localStorage.setItem("rt", rt);
+  localStorage.setItem("type", 'user');
   location.replace("/");
 }
 
@@ -31,6 +32,7 @@ function userLogin() {
     .then((res) => {
       localStorage.setItem("at", res.data.at);
       localStorage.setItem("rt", res.data.rt);
+      localStorage.setItem("type", res.data.type);
       alert("로그인 성공");
       location.replace("/");
     }).catch((err) => {
@@ -65,6 +67,7 @@ function userSignup() {
     .then((res) => {
       localStorage.setItem("at", res.data.at);
       localStorage.setItem("rt", res.data.rt);
+      localStorage.setItem("type", res.data.type);
       alert("회원가입 성공");
       location.replace("/");
     }).catch((err) => {
@@ -91,6 +94,7 @@ function businessLogin() {
     .then((res) => {
       localStorage.setItem("at", res.data.at);
       localStorage.setItem("rt", res.data.rt);
+      localStorage.setItem("type", res.data.type);
       alert("로그인 성공");
       location.replace("/");
     }).catch((err) => {
@@ -124,10 +128,37 @@ function businessSignup() {
     .then((res) => {
       localStorage.setItem("at", res.data.at);
       localStorage.setItem("rt", res.data.rt);
+      localStorage.setItem("type", res.data.type);
       alert("회원가입 성공");
       location.replace("/");
     }).catch((err) => {
       alert(err.response.data.data)
     })
 }
+
+/**
+ * @description: 어드민 로그인
+ * @author: 김승일
+ */
+function adminLogin() {
+  const email = document.getElementById("adminEmail").value;
+  const password = document.getElementById("adminpw").value;
+
+  const loginData = {
+    email: email,
+    password: password,
+  };
+
+  axios.post("/api/auth/admin/login", loginData)
+    .then((res) => {
+      localStorage.setItem("at", res.data.at);
+      localStorage.setItem("rt", res.data.rt);
+      localStorage.setItem("type", res.data.type);
+      alert("로그인 성공");
+      location.replace("/admin");
+    }).catch((err) => {
+      alert(err.response.data.data)
+    })
+}
+
 
