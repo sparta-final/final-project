@@ -28,6 +28,7 @@ async function getMyReview() {
   }
 
   for (const review of reviews) {
+    console.log('review', review)
     if (review.reviews.length === 0) continue;
     let gymName = review.gym.name;
     let reviewStar = review.reviews[0].star;
@@ -49,7 +50,7 @@ async function getMyReview() {
         <div class="review-star-date-wrap">
         <span class="reviews-star">${starString}</span><br>
         <span class="reviews-date">${reviewCreatedAt}</span>
-        <button class="review-delete-btn" onclick="deleteReview(${review.id})">삭제</button>
+        <button class="review-delete-btn" onclick="deleteReview(${review.reviewId})">삭제</button>
       </div>
       <div class="review-content">
         <img class="review-img" src="${reviewImgSrc}" alt="" />
@@ -64,5 +65,23 @@ async function getMyReview() {
     const targetTextarea = reviewTextareas[i];
     const textLength = targetTextarea.value.length;
     targetTextarea.style.height = textLength / 35 * 24 + 'px';
+  }
+}
+
+/**
+ * @description: 리뷰삭제
+ * @param {number} reviewId
+ * @author: 김승일
+ */
+async function deleteReview(reviewId) {
+  const res = await axios.delete(`/api/review/${reviewId}`, {
+    headers: {
+      accesstoken: `${localStorage.getItem('at')}`,
+      refreshtoken: `${localStorage.getItem('rt')}`,
+    },
+  });
+  if (res.status === 200) {
+    alert('리뷰가 삭제되었습니다.');
+    location.reload();
   }
 }

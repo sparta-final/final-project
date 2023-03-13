@@ -93,6 +93,9 @@ export class ReviewService {
       });
       await queryRunner.manager.getRepository(UserGym).update({ id: userGym.id }, { reviewId: review.id });
       await queryRunner.commitTransaction();
+      // 캐시 업데이트
+      await this.cacheManager.del(`reviews:UserID: ${user.sub}`);
+      await this.cacheManager.del(`reviews:GymID: ${gymId}`);
       return review;
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -137,11 +140,11 @@ export class ReviewService {
   /**
    * @description 리뷰 삭제
    * @author 김승일
-   * @param gymId @param reviewId @param user
+   * @param reviewId @argument user
    */
-  async removeReview(gymId: number, reviewId: number, user: JwtPayload) {
+  async removeReview(reviewId: number, user: JwtPayload) {
     const userGym = await this.userGymRepo.findOne({
-      where: { gymId, userId: user.sub, reviewId },
+      where: { userId: user.sub, reviewId },
     });
     if (!userGym) throw new UnauthorizedException('리뷰를 삭제할 수 없습니다');
     // 리뷰삭제는 hard-delete
@@ -159,6 +162,8 @@ export class ReviewService {
         .execute();
       await queryRunner.manager.getRepository(UserGym).update({ id: userGym.id }, { reviewId: null });
       await queryRunner.commitTransaction();
+      await this.cacheManager.del(`reviews:UserID: ${user.sub}`);
+      await this.cacheManager.del(`reviews:GymID: ${userGym.gymId}`);
       return { message: '리뷰가 삭제되었습니다' };
     } catch (error) {
       await queryRunner.rollbackTransaction();

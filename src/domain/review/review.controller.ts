@@ -55,8 +55,8 @@ export class ReviewController {
   }
 
   @deleteReview()
-  @Delete('/gym/:gymId/review/:reviewId')
-  removeReview(@Param('gymId') gymId: number, @Param('reviewId') reviewId: number, @CurrentUser() user: JwtPayload) {
-    return this.reviewService.removeReview(gymId, reviewId, user);
+  @Delete('/review/:reviewId')
+  removeReview(@Param('reviewId') reviewId: number, @CurrentUser() user: JwtPayload) {
+    return this.reviewService.removeReview(reviewId, user);
   }
 }
