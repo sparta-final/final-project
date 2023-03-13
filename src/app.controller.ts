@@ -177,4 +177,11 @@ export class AppController {
   async userList() {
     return { pageName: 'userList' };
   }
+
+  @Get('searchGym')
+  @Public()
+  @Render('index')
+  async searchGym() {
+    return { pageName: 'searchGym' };
+  }
 }
