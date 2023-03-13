@@ -19,16 +19,19 @@ async function getMyReview() {
   function getStarString(reviewStarRating) {
     const starMap = {
       1: '⭐',
+      1.5: '⭐',
       2: '⭐⭐',
+      2.5: '⭐⭐',
       3: '⭐⭐⭐',
+      3.5: '⭐⭐⭐',
       4: '⭐⭐⭐⭐',
+      4.5: '⭐⭐⭐⭐',
       5: '⭐⭐⭐⭐⭐',
     };
     return starMap[reviewStarRating] || '';
   }
 
   for (const review of reviews) {
-    console.log('review', review)
     if (review.reviews.length === 0) continue;
     let gymName = review.gym.name;
     let reviewStar = review.reviews[0].star;

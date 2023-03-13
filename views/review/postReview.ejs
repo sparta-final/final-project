@@ -1,15 +1,17 @@
+<script>
+  const query = new URLSearchParams(window.location.search);
+  const gymId = query.get('gymId');
+</script>
 <section>
   <div class="box_center">
     <div class="add_wrap">
-      <form enctype="multipart/form-data">
+      <form class="review-form" enctype="multipart/form-data">
         <fieldset>
           <div class="form-group">
-            <input class="review_photo_add" type="file" name="file" id="reviewImg" />
-            <label for="">리뷰 사진 업로드하기</label>
+            <img class="img-thumbnail" id="thumbnail" />
+            <input class="review_img" type="file" name="reviewImg" id="reviewImg" />
           </div>
-          <div class="form-group">
-            <input type="text" id="content" name="content" placeholder="리뷰를 입력하세요." />
-          </div>
+          <textarea class="review-textarea" cols="42" maxlength="255" wrap="hard" placeholder="리뷰를 입력하세요."></textarea>
         </fieldset>
         <fieldset class="rating">
           <input type="radio" id="star5" name="star_rating" value="5" /><label
@@ -64,7 +66,7 @@
           ></label>
         </fieldset>
       </form>
-      <button class="review_write_btn" type="button">리뷰 작성하기</button>
+      <button class="review_write_btn" type="button" onclick="postReview(`${gymId}`)">리뷰 작성하기</button>
     </div>
   </div>
 </section>

@@ -107,7 +107,8 @@ export class ReviewService {
     await queryRunner.startTransaction();
     try {
       const review = await queryRunner.manager.getRepository(Reviews).save({
-        ...createReviewDto,
+        star: createReviewDto.star,
+        review: createReviewDto.review,
         reviewImg: file.location,
         userGym: { id: userGym.id },
       });
