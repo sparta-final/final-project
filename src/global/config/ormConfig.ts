@@ -26,7 +26,7 @@ function ormConfig(): TypeOrmModuleOptions {
     database: process.env.DB_DATABASE,
     entities: commonConf.ENTITIES,
     synchronize: false,
-    logging: true,
+    logging: false,
     charset: 'utf8mb4',
     keepConnectionAlive: true,
   };

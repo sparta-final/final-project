@@ -1,6 +1,8 @@
+import { JwtPayload } from './domain/auth/types/jwtPayload.type';
 import { ApiTags } from '@nestjs/swagger';
 import { Controller, Get, Render } from '@nestjs/common';
 import { Public } from './global/common/decorator/public.decorator';
+import { CurrentUser } from './global/common/decorator/current-user.decorator';
 
 @ApiTags('RENDER')
 @Controller()
@@ -179,13 +181,6 @@ export class AppController {
     return { pageName: 'businessMyInfo' };
   }
 
-  @Get('business/postGym')
-  @Public()
-  @Render('index')
-  async postGym() {
-    return { pageName: 'postGym' };
-  }
-
   @Get('business/updateGym')
   @Public()
   @Render('index')
@@ -205,5 +200,12 @@ export class AppController {
   @Render('index')
   async userList() {
     return { pageName: 'userList' };
+  }
+
+  @Get('searchGym')
+  @Public()
+  @Render('index')
+  async searchGym() {
+    return { pageName: 'searchGym' };
   }
 }

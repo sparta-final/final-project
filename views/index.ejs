@@ -32,7 +32,7 @@
       <!---->
       <% if (pageName==="userList" ) { %> <%- include("gym/userList") %> <% } %>
       <!---->
-      <% if (pageName==="mypage" ) { %> <%- include("mypage/mypage") %> <% } %>
+      <% if (pageName==="mypage" ) { %> <%- include("mypage/mypage") %> <%- include("mypage/myMembership") %> <% } %>
       <!---->
       <% if (pageName==="myinfo" ) { %> <%- include("mypage/myinfo")%> <% } %>
       <!---->
@@ -55,6 +55,8 @@
       <% if (pageName==="feedUpdate" ) { %> <%- include("feeds/feedUpdate")%> <% } %>
       <!---->
       <% if (pageName==="comments" ) { %> <%- include("feeds/comment")%> <% } %>
+      <!---->
+      <% if (pageName==="searchGym" ) { %> <%- include("gym/searchGym")%> <% } %>
       <!---->
       <% if (pageName==="reviewList" ) { %> <%- include("review/reviewList")%> <% } %>
       <!---->

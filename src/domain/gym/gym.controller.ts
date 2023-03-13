@@ -6,7 +6,7 @@ import { Public } from 'src/global/common/decorator/public.decorator';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
 import { PostGymDto } from './dto/postGym.dto';
 import { UpdateGymDto } from './dto/updateGym.dto';
-import { GetAllGym, GetById, GymDelete, GymSignup, GymUpdate, MyGymGet } from './gym.decorators';
+import { GetAllGym, GetById, GymDelete, GymSignup, GymUpdate, MyGymGet, SearchGymByText } from './gym.decorators';
 import { GymService } from './gym.service';
 
 @ApiTags('GYM')
@@ -27,7 +27,6 @@ export class GymController {
     @Body() postgymDto: PostGymDto,
     @CurrentUser() user: JwtPayload
   ) {
-    console.log('gd', postgymDto);
     const gym = await this.gymservice.postGyms({ file, postgymDto, user });
     return gym;
   }
@@ -74,5 +73,12 @@ export class GymController {
   @Get('/:id')
   async getGymById(@Param('id') gymId: number) {
     return this.gymservice.getGymsById(gymId);
+  }
+
+  @SearchGymByText()
+  @Public()
+  @Get('/search/:text')
+  async searchGymByText(@Param('text') text: string) {
+    return this.gymservice.searchGymByText(text);
   }
 }

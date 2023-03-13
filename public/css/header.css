@@ -45,6 +45,17 @@
   background-image: url(../images/search.svg);
 }
 
+.search-box {
+  position: absolute;
+  top: 100%;
+  right: 3%;
+  display: none;
+}
+
+.search-box.show {
+  display: block;
+}
+
 .header-height {
   height: 70px;
 }
@@ -54,7 +65,7 @@
   bottom: 0;
   width: 420px;
   height: 100px;
-  background-color: #cdcdcd;
+  background-color: var(--sub-color-9);
 }
 
 .footer-wrap {

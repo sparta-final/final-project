@@ -24,3 +24,11 @@ export const UnsubscribePayment = () => {
     ApiResponse({ status: 400, description: '실패' })
   );
 };
+
+export const PaidData = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '결제정보 & 내역 조회' }),
+    ApiResponse({ status: 201, description: '성공' }),
+    ApiResponse({ status: 400, description: '실패' })
+  );
+};
