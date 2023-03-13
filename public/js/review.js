@@ -42,6 +42,7 @@ async function getMyReview() {
       reviewImgSrc = reviewImg;
     }
     let reviewContent = review.reviews[0].review;
+
     let temp = `
     <div class="review-card">
       <div class="review-header">
@@ -83,5 +84,7 @@ async function deleteReview(reviewId) {
   if (res.status === 200) {
     alert('리뷰가 삭제되었습니다.');
     location.reload();
+  } else {
+    alert('리뷰 삭제에 실패했습니다.');
   }
 }

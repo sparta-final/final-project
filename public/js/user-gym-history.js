@@ -33,7 +33,7 @@ const getUseGymHistory = async (year, month) => {
   for (let i in histories) {
     // 리뷰가 존재한다면 리뷰보기 버튼, 없다면 리뷰작성 버튼
     if (histories[i].reviewId) {
-      histories[i].reviews = `<button class="review-btn" onclick="location.href='/user/review/${histories[i].gym.id}'">리뷰보기</button>`;
+      histories[i].reviews = `<button class="review-btn" onclick="location.href='/review-detail?reviewId=${histories[i].reviewId}'">리뷰보기</button>`;
     } else {
       histories[i].reviews = `<button class="review-btn" onclick="location.href='/user/review/${histories[i].gym.id}'">리뷰작성</button>`;
     }

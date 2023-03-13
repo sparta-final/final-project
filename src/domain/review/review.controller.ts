@@ -15,6 +15,11 @@ import { SkipThrottle } from '@nestjs/throttler';
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
+  @Get('/review/:reviewId')
+  findReviewById(@Param('reviewId') reviewId: number) {
+    return this.reviewService.findReviewById(reviewId);
+  }
+
   @findMyReview()
   @Get('/review')
   findMyReview(@CurrentUser() user: JwtPayload) {

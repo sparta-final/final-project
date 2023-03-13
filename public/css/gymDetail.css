@@ -9,7 +9,8 @@
   font-size: 1.2rem;
   font-weight: 500;
   color: var(--sub-color-4);
-  margin-left: 10px;
+  margin-left: 15px;
+  margin-top: 10px;
 }
 
 .review-card {
