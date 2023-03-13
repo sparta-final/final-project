@@ -12,6 +12,10 @@ function getBeforeApproveGym() {
   axios({
     method: 'get',
     url: '/api/admin/beforeApprove',
+    headers: {
+      accesstoken: `${localStorage.getItem('at')}`,
+      refreshtoken: `${localStorage.getItem('rt')}`,
+    }
   })
     .then((response) => {
       const data = response.data;

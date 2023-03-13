@@ -5,6 +5,7 @@ import { Response } from 'express';
 import { CurrentUserRt } from 'src/global/common/decorator/current-user-rt.decorator';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import {
+  AdminLogin,
   BusinessUserLogin,
   BusinessUserSignup,
   KakaoLogin,
@@ -31,7 +32,7 @@ export class AuthController {
   @Post('user/signup')
   async postUsers(@Body() postuserDto: PostUserDto) {
     const tokens = await this.authservice.postUsers(postuserDto);
-    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
+    return { at: tokens.AccessToken, rt: tokens.RefreshToken, type: 'user' };
   }
 
   @Public()
@@ -39,7 +40,7 @@ export class AuthController {
   @Post('user/business/signup')
   async postBusinessUsers(@Body() postBusinessUserDto: PostBusinessUserDto) {
     const tokens = await this.authservice.postBusinessUsers(postBusinessUserDto);
-    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
+    return { at: tokens.AccessToken, rt: tokens.RefreshToken, type: 'business' };
   }
 
   @Public()
@@ -47,7 +48,7 @@ export class AuthController {
   @Post('user/login')
   async userlogin(@Body() loginUserDto: LoginUserDto) {
     const tokens = await this.authservice.userlogin(loginUserDto);
-    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
+    return { at: tokens.AccessToken, rt: tokens.RefreshToken, type: 'user' };
   }
 
   @Public()
@@ -55,7 +56,7 @@ export class AuthController {
   @Post('user/business/login')
   async businessUserlogin(@Body() loginUserDto: LoginUserDto) {
     const tokens = await this.authservice.businessUserlogin(loginUserDto);
-    return { at: tokens.AccessToken, rt: tokens.RefreshToken };
+    return { at: tokens.AccessToken, rt: tokens.RefreshToken, type: 'business' };
   }
 
   @Public()
@@ -91,5 +92,13 @@ export class AuthController {
   async logout(@CurrentUser() user: JwtPayload, @CurrentUserRt() rt: string) {
     // TODO : 클라이언트에서 로그아웃 요청시, 로컬스토리지에 저장된 토큰 삭제
     return await this.authservice.logout(user, rt);
+  }
+
+  @Public()
+  @AdminLogin()
+  @Post('admin/login')
+  async adminlogin(@Body() loginUserDto: LoginUserDto) {
+    const tokens = await this.authservice.adminLogin(loginUserDto);
+    return { at: tokens.AccessToken, rt: tokens.RefreshToken, type: 'admin' };
   }
 }
