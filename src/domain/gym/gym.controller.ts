@@ -27,7 +27,6 @@ export class GymController {
     @Body() postgymDto: PostGymDto,
     @CurrentUser() user: JwtPayload
   ) {
-    console.log('gd', postgymDto);
     const gym = await this.gymservice.postGyms({ file, postgymDto, user });
     return gym;
   }
