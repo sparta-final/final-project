@@ -8,9 +8,10 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAccessStrategy } from './strategy/jwt-access.strategy';
 import { JwtRefreshStrategy } from './strategy/jwt-refresh.strategy';
+import { Adminusers } from 'src/global/entities/adminusers';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Users, Busienssusers]), JwtModule.register({})],
+  imports: [TypeOrmModule.forFeature([Users, Busienssusers, Adminusers]), JwtModule.register({})],
   exports: [AuthService],
   controllers: [AuthController],
   providers: [AuthService, JwtAccessStrategy, JwtRefreshStrategy, JwtKakaoStrategy],

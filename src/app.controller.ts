@@ -23,6 +23,13 @@ export class AppController {
   }
 
   // 어드민 페이지
+  @Get('admin/login')
+  @Public()
+  @Render('index')
+  async adminLogin() {
+    return { pageName: 'adminLogin' };
+  }
+
   @Get('admin')
   @Public()
   @Render('index')
@@ -145,13 +152,6 @@ export class AppController {
     return { pageName: 'businessMyInfo' };
   }
 
-  @Get('business/postGym')
-  @Public()
-  @Render('index')
-  async postGym() {
-    return { pageName: 'postGym' };
-  }
-
   @Get('business/updateGym')
   @Public()
   @Render('index')
@@ -171,5 +171,12 @@ export class AppController {
   @Render('index')
   async userList() {
     return { pageName: 'userList' };
+  }
+
+  @Get('searchGym')
+  @Public()
+  @Render('index')
+  async searchGym() {
+    return { pageName: 'searchGym' };
   }
 }
