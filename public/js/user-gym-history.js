@@ -6,7 +6,7 @@ $(document).ready(function () {
 });
 /**
  * @description: 일반회원 년,월별 usergym 이용내역 불러오기
- * @param: year, month
+ * @argument: year, month
  * @author: 김승일
  */
 const getUseGymHistory = async (year, month) => {
