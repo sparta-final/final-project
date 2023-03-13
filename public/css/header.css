@@ -47,9 +47,31 @@
 
 .search-box {
   position: absolute;
-  top: 100%;
-  right: 3%;
+  width: 150px;
+  right: 165%;
   display: none;
+}
+
+.search-input {
+  border-top: transparent;
+  border-left: transparent;
+  border-right: transparent;
+  font-size: 14.5px;
+  height: 35px;
+  padding-left: 20px;
+}
+
+.search-input:focus {
+  outline: none; /* 선택된 input 요소의 outline을 제거합니다. */
+}
+
+.search-submit {
+  position: absolute;
+  width: 18px;
+  height: 16px;
+  top: 22%;
+  cursor: pointer;
+  border: none;
 }
 
 .search-box.show {

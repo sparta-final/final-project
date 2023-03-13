@@ -58,10 +58,17 @@ function putInfo() {
       window.location.replace(`/mypage`);
     })
     .catch((err) => {
-      console.log(err);
-      console.log(err.response.data);
-      if (err.response.data[0] === 'currentPassword should not be empty') {
-        alert('현재 비밀번호를 확인해주세요.');
+      console.log('err.response.data :', err.response.data.data);
+
+      if (err.response.data.data === '현재 비밀번호가 일치하지 않습니다.') {
+        alert('현재 비밀번호가 일치하지않습니다.');
+      }
+      if (err.response.data.data[0] === 'currentPassword should not be empty') {
+        alert('현재 비밀번호를 입력해주세요.');
+      }
+
+      if (err.response.data.data === '비밀번호가 일치하지 않습니다.') {
+        alert('수정할 비밀번호가 일치하지 않습니다.');
       }
     });
 }
