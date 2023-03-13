@@ -70,6 +70,18 @@ export class AdminService {
   }
 
   /**
+   * @description 승인대기중인 업체 리스트 조회
+   * @author 한정훈
+   * @argument id
+   */
+  async beforeApproveGymId(id) {
+    const beforeApprove = await this.gymRepo.find({
+      where: { id, deletedAt: null },
+    });
+    return beforeApprove;
+  }
+
+  /**
    * @description 업체 순위에 들어갈 테이터
    * @author 한정훈
    * @argument category (미구현)
@@ -252,6 +264,7 @@ export class AdminService {
         gymId: id,
         createdAt: Between(new Date(Number(date.year), Number(date.month) - 1), new Date(Number(date.year), Number(date.month))),
       },
+      relations: ['user'],
     });
     return getVisitUser;
   }
@@ -303,5 +316,21 @@ export class AdminService {
       },
     });
     return getVisitUserCount;
+  }
+
+  /**
+   * @description 헬스장 월별 매출 가져오기
+   * @author 정호준
+   * @param gymId
+   * @param year
+   * @param month
+   */
+  async getPaidGym(gymId, date) {
+    return await this.calculateRepo.find({
+      where: {
+        gymId: gymId,
+        createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+      },
+    });
   }
 }

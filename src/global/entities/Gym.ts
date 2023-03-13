@@ -37,7 +37,6 @@ export class Gym {
   name: string;
 
   @ApiProperty({ example: '010-1234-5678', description: '헬스장 전화번호' })
-  @IsPhoneNumber('KR')
   @IsNotEmpty()
   @Column('varchar', { name: 'phone', length: 100 })
   phone: string;

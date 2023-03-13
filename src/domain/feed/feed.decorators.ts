@@ -58,6 +58,14 @@ export const CommentPost = () => {
   );
 };
 
+export const CommentUserGet = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '피드 작성자 조회' }),
+    ApiResponse({ status: 200, description: '조회 완료.' }),
+    ApiResponse({ status: 400, description: '조회 실패' })
+  );
+};
+
 export const AllCommentGet = () => {
   return applyDecorators(
     ApiOperation({ summary: '피드 댓글 조회' }),

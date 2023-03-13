@@ -8,6 +8,7 @@ import { deleteReview, findReviewByGymId, postReview, updateReview } from './rev
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import { JwtPayload } from 'src/domain/auth/types/jwtPayload.type';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { SkipThrottle } from '@nestjs/throttler';
 
 @ApiTags('Review')
 @Controller('api/gym')
@@ -15,6 +16,7 @@ export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
   @Public()
+  @SkipThrottle()
   @findReviewByGymId()
   @Get('/:gymId/review')
   findReviewByGymId(@Param('gymId') gymId: number) {
@@ -30,7 +32,6 @@ export class ReviewController {
     @CurrentUser() user: JwtPayload,
     @Body() createReviewDto: CreateReviewDto
   ) {
-    console.log('file', file);
     return this.reviewService.postReview(gymId, user, file, createReviewDto);
   }
 
@@ -44,7 +45,6 @@ export class ReviewController {
     @CurrentUser() user: JwtPayload,
     @Body() updateReviewDto: UpdateReviewDto
   ) {
-    console.log('file', file);
     return this.reviewService.updateReview(gymId, reviewId, file, user, updateReviewDto);
   }
 

@@ -50,7 +50,9 @@ function enrollGym() {
   const phone = document.getElementById('gymPhone').value;
   const description = document.getElementById('gymDescription').value;
   const certification = document.getElementById('gymCertification');
-  const gymType = document.getElementById('gymType').value;
+  const gymType = $('input#type-health[name=gymType]:checked').val();
+  console.log('✨✨✨', gymType, '✨✨✨');
+  // const gymType = document.getElementById('gymType').value;
   const lat = document.getElementById('lat').value;
   const lng = document.getElementById('lng').value;
   const img = document.getElementById('gymImgs');

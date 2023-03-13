@@ -1,17 +1,11 @@
 .mygymList {
   color: #ff710d;
   font-size: 25px;
-  margin: 80px 20px 10px 20px;
+  margin: 0px 20px 10px 20px;
 }
 
 .image-text-box {
-  /* align-items: center;
-  height: 150px;
-  margin: 0px 25px 0px 25px;
   display: flex;
-  align-items: center;
-  border: 1px solid black;
-  padding: 10px; */
   width: 95%;
   margin: auto;
   border: 1px solid black;
@@ -27,10 +21,6 @@
 
 .text-box {
   flex: 1;
-}
-
-.text-box h2 {
-  margin-top: 0;
 }
 
 .text-box p {
@@ -63,4 +53,10 @@
   background-color: #ff710d;
   color: aliceblue;
   cursor: pointer;
+}
+
+.mygymName {
+  margin: 20px;
+  color: #ff710d;
+  font-size: 20px;
 }

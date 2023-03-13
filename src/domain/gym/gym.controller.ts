@@ -70,6 +70,7 @@ export class GymController {
   }
 
   @GetById()
+  @Public()
   @Get('/:id')
   async getGymById(@Param('id') gymId: number) {
     return this.gymservice.getGymsById(gymId);

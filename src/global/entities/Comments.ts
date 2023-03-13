@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Feeds } from './Feeds';
+import { Users } from './Users';
 
 @Entity('comments', { schema: 'sixpack' })
 export class Comments {
@@ -48,10 +49,10 @@ export class Comments {
   @JoinColumn([{ name: 'feed_id', referencedColumnName: 'id' }])
   feed: Feeds;
 
-  @ManyToOne(() => Feeds, (feeds) => feeds.comments2, {
+  @ManyToOne(() => Users, (users) => users.id, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinColumn([{ name: 'user_id', referencedColumnName: 'userId' }])
+  @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: Feeds;
 }

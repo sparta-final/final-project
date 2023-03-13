@@ -8,7 +8,7 @@
   <form enctype="multipart/form-data">
     <input type="text" class="postGymInput" placeholder="매장 이름" id="gymName" />
 
-    <input type="text" class="postGymInput" placeholder="매장 전화번호" id="gymPhone" />
+    <input type="text" class="postGymInput" placeholder="매장 전화번호 (번호만 입력해 주세요)" id="gymPhone" />
 
     <input type="text" id="address" class="postGymInput" placeholder="주소" />
     <input type="button" onclick="execDaumPostcode()" value="주소 검색" /><br />
@@ -17,13 +17,21 @@
     <div id="lng" style="display: none"></div>
     <div id="map" style="width: 300px; height: 300px; margin-top: 10px; display: none"></div>
 
-    <select id="gymType">
+    <input type="radio" id="type-health" name="gymType" value="헬스장" />헬스장
+    <input type="radio" id="type-health" name="gymType" value="필라테스" />필라테스
+    <input type="radio" id="type-health" name="gymType" value="요가" />요가
+    <!-- <select id="gymType">
       <option value="1">헬스장</option>
       <option value="2">필라테스</option>
       <option value="3">요가</option>
-    </select>
-
-    <input type="text" class="postGymInput descript" placeholder="매장 설명" id="gymDescription" />
+    </select> -->
+    <textarea
+      name="gymDescription"
+      placeholder="매장 소개 및 영업시간"
+      id="gymDescription"
+      class="postGymInput descript"
+    ></textarea>
+    <!-- <input type="text" class="postGymInput descript" placeholder="매장 소개 및 영업시간" id="gymDescription" /> -->
 
     <input type="file" class="postGymInput" id="gymCertification" />
 
