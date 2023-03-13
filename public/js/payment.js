@@ -4,7 +4,6 @@ IMP.init('imp52616317');
 const body = document.querySelector('body');
 body.addEventListener('click', function (e) {
   if (e.target.id !== 'subscribe-btn') return;
-  console.log('✨✨✨', localStorage.getItem('type'), '✨✨✨');
   if (localStorage.getItem('type') === 'user') {
     const membership = e.target.parentElement.firstElementChild.textContent;
     const amountText = e.target.parentElement.children[1].textContent;

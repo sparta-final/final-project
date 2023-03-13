@@ -64,7 +64,7 @@ export class AppController {
     return { pageName: 'userSignup' };
   }
 
-  @Get('user/qrcode')
+  @Get('qrcode')
   @Public()
   @Render('index')
   async userQRCode() {
