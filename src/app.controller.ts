@@ -21,6 +21,13 @@ export class AppController {
   }
 
   // 어드민 페이지
+  @Get('admin/login')
+  @Public()
+  @Render('index')
+  async adminLogin() {
+    return { pageName: 'adminLogin' };
+  }
+
   @Get('admin')
   @Public()
   @Render('index')

@@ -62,3 +62,11 @@ export const Logout = () => {
     ApiResponse({ status: 400, description: '로그아웃 실패' })
   );
 };
+
+export const AdminLogin = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '어드민 로그인' }),
+    ApiResponse({ status: 201, description: '로그인 성공' }),
+    ApiResponse({ status: 400, description: '로그인 실패' })
+  );
+};

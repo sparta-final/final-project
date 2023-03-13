@@ -28,63 +28,54 @@ export class AdminController {
 
   @Get('/member')
   @getMembers()
-  @Public()
   async getMember() {
     return await this.adminService.getMember();
   }
 
   @Get('/gym')
   @getApproveGyms()
-  @Public()
   async getGym() {
     return await this.adminService.getGym();
   }
 
   @Get('/beforeApprove')
   @getBeforeApproveGyms()
-  @Public()
   async beforeApproveGym() {
     return await this.adminService.beforeApproveGym();
   }
 
   @Get('/beforeApprove/:id')
   @getBeforeApproveGyms()
-  @Public()
   async beforeApproveGymId(@Param('id') id: ApproveDto) {
     return await this.adminService.beforeApproveGymId(id);
   }
 
   @Put('/approve')
   @approveGym()
-  @Public()
   async approveGym(@Body() id: ApproveDto) {
     return await this.adminService.approveGym(id);
   }
 
   @Get('/sales')
   @salesAll()
-  @Public()
   async getSalesAll() {
     return await this.adminService.getSalesAll();
   }
 
   @Get('/sales/:year/:month')
   @salesMonth()
-  @Public()
   async getSalesMonth(@Param() date: MonthDto) {
     return await this.adminService.getSalesMonth(date);
   }
 
   @Get('rank/:category/:year/:month')
   @gymRank()
-  @Public()
   async getRank(@Param() date: MonthDto) {
     return await this.adminService.getRank(date);
   }
 
   @Post('/calculate/:id')
   @calculate()
-  @Public()
   async calculate(@Param('id') id: CalculateDto, @Body() date: MonthDto) {
     const calculatePaid = await this.adminService.calculatePaid(id, date);
     return calculatePaid;
@@ -92,14 +83,12 @@ export class AdminController {
 
   @Get('/visituser/:id/:year/:month')
   @GetVisitUsers()
-  @Public()
   async getVisitUser(@Param('id') gymId: number, @Param() date: MonthDto) {
     return await this.adminService.getVisitUser(gymId, date);
   }
 
   @Get('/calculate/:id/:year/:month')
   @CalculateGym()
-  @Public()
   async getPaidGym(@Param('id') gymId: number, @Param() date: MonthDto) {
     return await this.adminService.getPaidGym(gymId, date);
   }
