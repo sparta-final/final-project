@@ -150,13 +150,6 @@ export class AppController {
     return { pageName: 'businessMyInfo' };
   }
 
-  @Get('business/postGym')
-  @Public()
-  @Render('index')
-  async postGym() {
-    return { pageName: 'postGym' };
-  }
-
   @Get('business/updateGym')
   @Public()
   @Render('index')
