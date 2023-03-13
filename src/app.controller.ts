@@ -149,6 +149,14 @@ export class AppController {
     return { pageName: 'usegymhistory' };
   }
 
+  // 리뷰페이지
+  @Get('review')
+  @Public()
+  @Render('index')
+  async reviewList() {
+    return { pageName: 'reviewList' };
+  }
+
   // 마이페이지 사업자
   @Get('business/businessMyInfo') // 호준님 사업자 기본 페이지
   @Public()
