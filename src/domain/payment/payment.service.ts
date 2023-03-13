@@ -141,17 +141,19 @@ export class PaymentService {
    * @argument customer_uid
    */
   async unsubscribe(customer_uid, access_token) {
+    console.log('✨✨✨', '2', customer_uid.customer_uid, '✨✨✨');
     try {
-      axios({
+      const subCancel = await axios({
         url: `https://api.iamport.kr/subscribe/payments/unschedule`,
         method: 'post',
         headers: { 'Content-Type': 'application/json', Authorization: access_token },
         data: {
-          customer_uid: customer_uid,
+          customer_uid: customer_uid.customer_uid,
         },
       });
+      console.log('✨✨✨', 'subCancel', subCancel, '✨✨✨');
     } catch (e) {
-      throw new NotFoundException(`스케줄 예약에 실패하였습니다. ${e}`);
+      throw new NotFoundException(`구독취소에 실패하였습니다. ${e}`);
     }
   }
 

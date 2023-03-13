@@ -1,7 +1,3 @@
-$(document).ready(function () {
-  user();
-});
-
 function user() {
   axios
     .get(`/api/user`, {
@@ -41,7 +37,8 @@ function getPaidData(data) {
       let m = date.getMonth() + 1;
       var nextPay = new Date(y, m, 1).toLocaleString().substring(0, 10);
       const response = res.data;
-      console.log('✨✨✨', data, '✨✨✨');
+      console.log('✨✨✨', 'data', data, '✨✨✨');
+      console.log('✨✨✨', 'response', response, '✨✨✨');
       let custimerUid = response[0].customerUid;
       let createAt = response[0].createdAt.substring(0, 7);
       let cardName = response[0].card_name;
