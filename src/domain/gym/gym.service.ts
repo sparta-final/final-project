@@ -34,11 +34,6 @@ export class GymService {
     await queryRunner.startTransaction();
 
     try {
-      const gymImgs = [];
-      for (let i = 0; i < file.img.length; i++) {
-        gymImgs.push(file.img[i].location);
-      }
-
       const createGym = await this.gymsrepository.save({
         businessId: user.sub,
         name: postgymDto.name,
@@ -50,12 +45,12 @@ export class GymService {
         description: postgymDto.description,
         certification: file.certification[0].location,
       });
+      const gymImgs = [];
+      for (let i = 0; i < file.img.length; i++) {
+        gymImgs.push({ gymId: createGym.id, img: file.img[i].location });
+      }
 
-      const createImg = await this.gymImgrepository.save(gymImgs.map((img) => ({ gymId: createGym.id, img })));
-      // const createImg = await this.gymImgrepository.save({
-      //   gymId: createGym.id,
-      //   img: gymImgs,
-      // });
+      const createImg = await this.gymImgrepository.save(gymImgs);
 
       await queryRunner.commitTransaction();
     } catch (err) {
