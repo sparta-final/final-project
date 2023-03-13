@@ -7,7 +7,7 @@ $(document).ready(function () {
 
 function footerSelect(url) {
   let svg = document.querySelectorAll('#Layer_1');
-  if (url === '' || url === 'admin') {
+  if (url === '') {
     svg[0].classList.add('svg-select');
   }
   if (url === 'gym') {
@@ -16,7 +16,7 @@ function footerSelect(url) {
   if (url === 'feed') {
     svg[2].classList.add('svg-select');
   }
-  if (url === 'user' || url === 'business' || url === 'mypage') {
+  if (url === 'user' || url === 'business' || url === 'mypage' || url === 'admin') {
     svg[3].classList.add('svg-select');
   }
 }

@@ -55,14 +55,16 @@ export class PaymentService {
    * @argument merchant_uid
    * @argument amount
    */
-  createPaymentData(data: WebhookDto, customer_uid: string, amount: number) {
+  createPaymentData(data: WebhookDto, customer_uid: string, amount: number, card_name: string, card_number: string) {
     this.paymentRepo.insert({
       userId: 1,
-      impUid: data.impUid,
-      merchantUid: data.merchantUid,
+      impUid: data.imp_uid,
+      merchantUid: data.merchant_uid,
       status: data.status,
       customerUid: customer_uid,
       amount: amount,
+      card_name: card_name,
+      card_number: card_number.substring(0, 8),
     });
   }
 
@@ -88,7 +90,10 @@ export class PaymentService {
   async paymentReserve(access_token, paymentData) {
     try {
       const now = Math.floor(new Date().getTime() / 1000);
-      const schedule_at_time = Math.floor(new Date().getTime() / 1000) + 60;
+      const date = new Date();
+      const y = date.getFullYear();
+      const m = date.getMonth() + 1;
+      const schedule_at_time = Math.floor(new Date(y, m, 2).getTime() / 1000); // 다음달 1일
       console.log('✨✨✨', '결제시간', new Date(now * 1000), '✨✨✨');
       console.log('✨✨✨', '다음 결제시간', new Date(schedule_at_time * 1000), '✨✨✨');
       console.log('✨✨✨', 'schedule_at_time', schedule_at_time, '✨✨✨');
@@ -111,7 +116,7 @@ export class PaymentService {
               buyer_name: paymentData.buyer_name,
               buyer_tel: paymentData.buyer_tel,
               buyer_email: paymentData.buyer_email,
-              notice_url: `https://063b-61-78-119-93.jp.ngrok.io/api/payment/webhook`,
+              notice_url: `${process.env.NGROK_URL}/api/payment/webhook`,
             },
           ],
         },

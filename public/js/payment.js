@@ -4,10 +4,10 @@ IMP.init('imp52616317');
 const body = document.querySelector('body');
 body.addEventListener('click', function (e) {
   if (e.target.id !== 'subscribe-btn') return;
+  console.log('✨✨✨', localStorage.getItem('rt'), '✨✨✨');
   const membership = e.target.parentElement.firstElementChild.textContent;
   const amountText = e.target.parentElement.children[1].textContent;
   const amount = Number(amountText.replace(',', '').substring(0, 6));
-  console.log('✨✨✨', membership, amount, '✨✨✨');
   requestPay(membership, amount);
 });
 // pg결제창 이용 빌링키 발급 요청
@@ -34,7 +34,7 @@ function requestPay(membership, amount) {
         // 빌링키 발급 성공
         // complete 에서 결제완료 알림
         axios({
-          url: 'https://063b-61-78-119-93.jp.ngrok.io/api/payment/complete',
+          url: `/api/payment/complete`,
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
           data: {

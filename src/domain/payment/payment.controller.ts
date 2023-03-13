@@ -32,14 +32,21 @@ export class PaymentController {
       const getToken = await this.paymentService.getToken();
       const { access_token } = getToken.data.response;
 
-      const getPaymentData = await this.paymentService.getPaymentData(data.impUid, access_token);
+      const getPaymentData = await this.paymentService.getPaymentData(data.imp_uid, access_token);
       const paymentData = getPaymentData.data.response; // 조회한 결제 정보
+      console.log('✨✨✨', 'paymentData: ', paymentData, '✨✨✨');
 
       if (data.status === paymentData.status && paymentData.status === 'paid') {
         // 결제 성공적으로 완료
-        const createPaymentData = this.paymentService.createPaymentData(data, paymentData.customer_uid, paymentData.amount);
+        const createPaymentData = this.paymentService.createPaymentData(
+          data,
+          paymentData.customer_uid,
+          paymentData.amount,
+          paymentData.card_name,
+          paymentData.card_number
+        );
         const paymentReserve = await this.paymentService.paymentReserve(access_token, paymentData);
-        console.log('✨✨✨', 'paymentReserve: ', paymentReserve, '✨✨✨');
+        // console.log('✨✨✨', 'paymentReserve: ', paymentReserve, '✨✨✨');
       } else {
         // 결제금액 불일치. 위/변조 된 결제
         throw new BadRequestException('결제가 승인되지 않았습니다. 다시 시도해 주세요.');
