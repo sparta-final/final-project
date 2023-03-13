@@ -39,7 +39,6 @@ async function getReviewDetail(reviewId) {
   } else {
     reviewImgSrc = reviewImg;
   }
-  console.log('reviewImgSrc', reviewImgSrc);
   let reviewContent = review.reviews[0].review;
 
   let temp_img = `

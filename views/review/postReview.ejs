@@ -1,0 +1,71 @@
+<section>
+  <div class="box_center">
+    <div class="add_wrap">
+      <form enctype="multipart/form-data">
+        <fieldset>
+          <div class="form-group">
+            <input class="review_photo_add" type="file" name="file" id="reviewImg" />
+            <label for="">리뷰 사진 업로드하기</label>
+          </div>
+          <div class="form-group">
+            <input type="text" id="content" name="content" placeholder="리뷰를 입력하세요." />
+          </div>
+        </fieldset>
+        <fieldset class="rating">
+          <input type="radio" id="star5" name="star_rating" value="5" /><label
+            class="full"
+            for="star5"
+            title="Awesome - 5 stars"
+          ></label>
+          <input type="radio" id="star4half" name="star_rating" value="4.5" /><label
+            class="half"
+            for="star4half"
+            title="Pretty good - 4.5 stars"
+          ></label>
+          <input type="radio" id="star4" name="star_rating" value="4" /><label
+            class="full"
+            for="star4"
+            title="Pretty good - 4 stars"
+          ></label>
+          <input type="radio" id="star3half" name="star_rating" value="3.5" /><label
+            class="half"
+            for="star3half"
+            title="Meh - 3.5 stars"
+          ></label>
+          <input type="radio" id="star3" name="star_rating" value="3" /><label
+            class="full"
+            for="star3"
+            title="Meh - 3 stars"
+          ></label>
+          <input type="radio" id="star2half" name="star_rating" value="2.5" /><label
+            class="half"
+            for="star2half"
+            title="Kinda bad - 2.5 stars"
+          ></label>
+          <input type="radio" id="star2" name="star_rating" value="2" /><label
+            class="full"
+            for="star2"
+            title="Kinda bad - 2 stars"
+          ></label>
+          <input type="radio" id="star1half" name="star_rating" value="1.5" /><label
+            class="half"
+            for="star1half"
+            title="Meh - 1.5 stars"
+          ></label>
+          <input type="radio" id="star1" name="star_rating" value="1" /><label
+            class="full"
+            for="star1"
+            title="Sucks big time - 1 star"
+          ></label>
+          <input type="radio" id="starhalf" name="star_rating" value="0.5" /><label
+            class="half"
+            for="starhalf"
+            title="Sucks big time - 0.5 stars"
+          ></label>
+        </fieldset>
+      </form>
+      <button class="review_write_btn" type="button">리뷰 작성하기</button>
+    </div>
+  </div>
+</section>
+<script src="/js/postReview.js"></script>
