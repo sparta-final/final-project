@@ -87,7 +87,7 @@
   bottom: 0;
   width: 420px;
   height: 100px;
-  background-color: #cdcdcd;
+  background-color: var(--sub-color-9);
 }
 
 .footer-wrap {

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Busienssusers } from 'src/global/entities/Busienssusers';
 import { Gym } from 'src/global/entities/Gym';
 import { GymImg } from 'src/global/entities/GymImg';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
 import * as bcrypt from 'bcrypt';
 
@@ -28,13 +28,6 @@ export class GymService {
     if (existGym) throw new ConflictException('이미 등록된 체육관입니다.');
     if (!file.certification && !file.img) throw new BadRequestException('파일을 등록해야 합니다.');
 
-    //TODO: 이렇게 하면 allimgs에 받아온 파일들이 담기게 된다. 허나 img 컬럼이 string으로 되있어서 적용시킬 수 없다. 수정요망
-    // const allimgs = [];
-    // for (let i = 0; i < file.img.length; i++) {
-    //   const allimg = file.img[i].location;
-    //   allimgs.push(allimg);
-    // }
-
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -52,10 +45,12 @@ export class GymService {
         description: postgymDto.description,
         certification: file.certification[0].location,
       });
-      await this.gymImgrepository.save({
-        gymId: createGym.id,
-        img: file.img[0].location,
-      });
+      const gymImgs = [];
+      for (let i = 0; i < file.img.length; i++) {
+        gymImgs.push({ gymId: createGym.id, img: file.img[i].location });
+      }
+
+      const createImg = await this.gymImgrepository.save(gymImgs);
 
       await queryRunner.commitTransaction();
     } catch (err) {

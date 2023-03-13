@@ -51,6 +51,14 @@ export class Payments {
   @Column('int', { name: 'amount' })
   amount: number;
 
+  @ApiProperty({ example: '1234567890123412', description: '카드번호' })
+  @Column('varchar', { name: 'card_number', length: 100, nullable: true })
+  card_number: string;
+
+  @ApiProperty({ example: '현대카드', description: '카드사' })
+  @Column('varchar', { name: 'card_name', length: 100, nullable: true })
+  card_name: string;
+
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
 
