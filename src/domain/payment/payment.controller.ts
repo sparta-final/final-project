@@ -1,12 +1,12 @@
 import { JwtPayload } from './../auth/types/jwtPayload.type';
 import { WebhookDto } from './dto/webhook.dto';
 import { CompleteDto } from './dto/complete.dto';
-import { BadRequestException, Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { Public } from 'src/global/common/decorator/public.decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
-import { CompletePayment, UnsubscribePayment, WebhookPayment } from './payment.decorators';
+import { CompletePayment, PaidData, UnsubscribePayment, WebhookPayment } from './payment.decorators';
 import { Unsubscribable } from 'rxjs';
 import { UnsubscribeDto } from './dto/unsubscribe.dto';
 
@@ -35,11 +35,12 @@ export class PaymentController {
       const getPaymentData = await this.paymentService.getPaymentData(data.imp_uid, access_token);
       const paymentData = getPaymentData.data.response; // 조회한 결제 정보
       console.log('✨✨✨', 'paymentData: ', paymentData, '✨✨✨');
-
+      const user_id = Number(paymentData.customer_uid.split('_')[0]);
       if (data.status === paymentData.status && paymentData.status === 'paid') {
         // 결제 성공적으로 완료
         const createPaymentData = this.paymentService.createPaymentData(
           data,
+          user_id,
           paymentData.customer_uid,
           paymentData.amount,
           paymentData.card_name,
@@ -59,7 +60,17 @@ export class PaymentController {
   @Post('/unsubscribe')
   @UnsubscribePayment()
   @Public()
-  async unsubscribe(@Body() customer_uid: UnsubscribeDto) {
-    return await this.paymentService.unsubscribe(customer_uid);
+  async unsubscribe(@Body() customer_uid: string) {
+    console.log('✨✨✨', customer_uid, '✨✨✨');
+    const getToken = await this.paymentService.getToken();
+    console.log('✨✨✨', getToken, '✨✨✨');
+    const { access_token } = getToken.data.response;
+    return await this.paymentService.unsubscribe(customer_uid, access_token);
+  }
+
+  @Get('/:id')
+  @PaidData()
+  async getPaidData(@Param('id') id: string) {
+    return await this.paymentService.getPaidData(id);
   }
 }
