@@ -57,6 +57,8 @@ export class ReviewService {
     let sum = 0;
     let avgStar = 0;
     reviews.forEach((review) => {
+      console.log('review', review);
+      if (review.reviews.length === 0) return;
       sum += review.reviews[0].star;
       avgStar = Math.round((sum / reviews.length) * 10) / 10;
     });
