@@ -167,6 +167,18 @@
   color: var(--sub-color-4);
 }
 
+.comment-delete-btn {
+  position: absolute;
+  top: 10;
+  right: 0;
+  margin-right: 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background-color: var(--point-color);
+  color: var(--main-color);
+  height: 30px;
+  cursor: pointer;
+}
 .comment-box {
   position: fixed;
   bottom: 100px;
