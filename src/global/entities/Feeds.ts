@@ -30,7 +30,7 @@ export class Feeds {
   @ApiProperty({ example: '피드 내용', description: '피드 내용' })
   @IsNotEmpty()
   @IsString()
-  @Column('varchar', { name: 'content', length: 100 })
+  @Column('varchar', { name: 'content', length: 1000 })
   content: string;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
@@ -44,9 +44,6 @@ export class Feeds {
 
   @OneToMany(() => Comments, (comments) => comments.feed)
   comments: Comments[];
-
-  @OneToMany(() => Comments, (comments) => comments.user)
-  comments2: Comments[];
 
   @ManyToOne(() => Users, (users) => users.feeds, {
     onDelete: 'CASCADE',

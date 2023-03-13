@@ -12,6 +12,7 @@ import {
   AllCommentGet,
   AllFeedGet,
   CommentPost,
+  CommentUserGet,
   DeleteComment,
   FeedDelete,
   FeedPost,
@@ -51,22 +52,30 @@ export class FeedController {
     return this.feedService.getMyFeed(user);
   }
 
+  // @FeedGetUpdate()
+  @Get('/:id')
+  @Public()
+  async updateGetFeed(@Param('id') id: number) {
+    return await this.feedService.updateGetFeed(id);
+  }
+
   @FeedUpdate()
   @Put('/:id')
   @UseInterceptors(FileInterceptor('feedImg'))
   async updateFeed(
-    @Param('id') feedId: number,
-    @UploadedFile() file: Express.MulterS3.File,
+    @Param('id') id: number,
+    // @UploadedFile() file: Express.MulterS3.File,
     @Body() updatefeedDto: UpdateFeedDto,
     @CurrentUser() user: JwtPayload
   ) {
-    return await this.feedService.updateFeed({ feedId, file, updatefeedDto, user });
+    return await this.feedService.updateFeed({ id, updatefeedDto, user });
   }
 
   @FeedDelete()
   @Delete('/:id')
-  async deleteFeed(@Param('id') feedId: number, @CurrentUser() user: JwtPayload) {
-    return await this.feedService.deleteFeed({ feedId, user });
+  async deleteFeed(@Param('id') id: number, @CurrentUser() user: JwtPayload) {
+    console.log('✨✨✨', '1', id, user, '✨✨✨');
+    return await this.feedService.deleteFeed({ id, user });
   }
 
   @CommentPost()
@@ -76,8 +85,16 @@ export class FeedController {
     @Body() createcommentDto: CreateCommentDto,
     @CurrentUser() user: JwtPayload
   ) {
+    console.log('✨✨✨', feedId, createcommentDto, user, '✨✨✨');
     const comment = await this.feedService.postComment({ feedId, createcommentDto, user });
     return comment;
+  }
+
+  @CommentUserGet()
+  @Public()
+  @Get('/:feedId/user')
+  async getCommentUser(@Param('feedId') feedId: string) {
+    return await this.feedService.getCommentUser(feedId);
   }
 
   @AllCommentGet()

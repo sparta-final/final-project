@@ -1,45 +1,31 @@
-<!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>결제완료 페이지</title>
-    <!-- jQuery -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <!-- iamport.payment.js -->
-    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  </head>
-  <body>
-    <div>
-      <h2>결제가 완료되었습니다.</h2>
-      <button onclick="cancelPay()">환불하기</button>
-    </div>
-    <script
-      src="https://code.jquery.com/jquery-3.3.1.min.js"
-      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-      crossorigin="anonymous"
-    ></script>
-    <script>
-      function cancelPay() {
-        try {
-          axios({
-            url: 'https://063b-61-78-119-93.jp.ngrok.io/api/payment/unsubscribe',
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            data: {
-              // 빌링키 생성시 customer_uid 가져오거나 저장해두는 로직 필요
-              customer_uid: 'sixpack_id_1235',
-            },
-          }).then((data) => {
-            // 서버 결제 API 성공시 로직
-            alert(`구독이 해지되었습니다.`);
-          });
-        } catch (e) {
-          alert(`에러 내용: ${e}`);
-        }
-      }
-    </script>
-  </body>
-</html>
+<section>
+  <div>
+    <h2>결제가 완료되었습니다.</h2>
+    <button onclick="cancelPay()">환불하기</button>
+  </div>
+</section>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"
+></script>
+<script>
+  function cancelPay() {
+    try {
+      axios({
+        url: 'https://063b-61-78-119-93.jp.ngrok.io/api/payment/unsubscribe',
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+          // 빌링키 생성시 customer_uid 가져오거나 저장해두는 로직 필요
+          customer_uid: 'sixpack_id_1235',
+        },
+      }).then((data) => {
+        // 서버 결제 API 성공시 로직
+        alert(`구독이 해지되었습니다.`);
+      });
+    } catch (e) {
+      alert(`에러 내용: ${e}`);
+    }
+  }
+</script>

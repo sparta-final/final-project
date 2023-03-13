@@ -47,6 +47,13 @@ export class AdminController {
     return await this.adminService.beforeApproveGym();
   }
 
+  @Get('/beforeApprove/:id')
+  @getBeforeApproveGyms()
+  @Public()
+  async beforeApproveGymId(@Param('id') id: ApproveDto) {
+    return await this.adminService.beforeApproveGymId(id);
+  }
+
   @Put('/approve')
   @approveGym()
   @Public()
