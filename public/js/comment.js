@@ -6,10 +6,11 @@ $(document).ready(function () {
 function getFeedUser(id) {
   axios({
     method: 'get',
-    url: `/api/feed/${id}`,
+    url: `/api/feed/${id}/user`,
   })
     .then((response) => {
       const data = response.data;
+      console.log('✨✨✨', data, '✨✨✨');
       let feedNickname = data[0].user_nickname;
       let feedUserImg = data[0].user_profileImage;
       let content = data[0].feeds_content;

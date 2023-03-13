@@ -6,6 +6,7 @@ import { BusinessUserService } from './business-user.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
+import { Public } from 'src/global/common/decorator/public.decorator';
 
 @ApiTags('BUSINESS_USER_INFO')
 @Controller('api')
@@ -41,6 +42,7 @@ export class BusinessUserController {
 
   // 업체별 사용자 데이터 불러오기
   @Get('gym/user/:gymId')
+  @Public()
   @GetUserByGymId()
   async getUserByGymId(@Param('gymId') gymId: number) {
     return await this.businessUserService.getUserByGymId(gymId);
