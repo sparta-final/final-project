@@ -28,7 +28,26 @@ const getUseGymHistory = async (year, month) => {
     },
   })
   const histories = res.data;
-  console.log(histories);
+  $('.text-gray-dark').empty();
+
+  for (let i in histories) {
+    // 리뷰가 존재한다면 리뷰보기 버튼, 없다면 리뷰작성 버튼
+    if (histories[i].reviewId) {
+      histories[i].reviews = `<button class="review-btn" onclick="location.href='/user/review/${histories[i].gym.id}'">리뷰보기</button>`;
+    } else {
+      histories[i].reviews = `<button class="review-btn" onclick="location.href='/user/review/${histories[i].gym.id}'">리뷰작성</button>`;
+    }
+
+    let temp = `
+      <tr class='ta-center'>
+        <td>${histories[i].gym.name}</td>
+        <td>${histories[i].createdAt.substring(0, 10)}</td>
+        <td>${histories[i].reviews}</td>
+      </tr>
+    `;
+    $('.text-gray-dark').append(temp);
+  }
+
 
   const curMonth = $('.cur-month');
   const calculateMonth = $('.admin-month-title');
