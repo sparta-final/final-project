@@ -70,6 +70,18 @@ export class AdminService {
   }
 
   /**
+   * @description 승인대기중인 업체 리스트 조회
+   * @author 한정훈
+   * @argument id
+   */
+  async beforeApproveGymId(id) {
+    const beforeApprove = await this.gymRepo.find({
+      where: { id, deletedAt: null },
+    });
+    return beforeApprove;
+  }
+
+  /**
    * @description 업체 순위에 들어갈 테이터
    * @author 한정훈
    * @argument category (미구현)

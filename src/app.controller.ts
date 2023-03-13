@@ -4,6 +4,7 @@ import { Public } from './global/common/decorator/public.decorator';
 
 @ApiTags('RENDER')
 @Controller()
+// 홈 버튼
 export class AppController {
   @Get('/')
   @Public()
@@ -12,6 +13,35 @@ export class AppController {
     return { pageName: '' };
   }
 
+  @Get('payment')
+  @Public()
+  @Render('index')
+  async payment() {
+    return { pageName: 'payment' };
+  }
+
+  // 어드민 페이지
+  @Get('admin')
+  @Public()
+  @Render('index')
+  async admin() {
+    return { pageName: 'admin' };
+  }
+
+  @Get('admin/approve')
+  @Public()
+  @Render('index')
+  async adminApprove() {
+    return { pageName: 'adminApprove' };
+  }
+  @Get('admin/approveDetail/:id')
+  @Public()
+  @Render('index')
+  async adminApproveDetail() {
+    return { pageName: 'adminApproveDetail' };
+  }
+
+  // 로그인 관련
   @Get('user/login')
   @Public()
   @Render('index')
@@ -46,67 +76,51 @@ export class AppController {
     return { pageName: 'businessSignup' };
   }
 
-  @Get('payment')
+  // 피드페이지
+  @Get('feed')
   @Public()
   @Render('index')
-  async payment() {
-    return { pageName: 'payment' };
+  async feed() {
+    return { pageName: 'feed' };
   }
 
-  @Get('admin')
+  @Get('feed/update')
   @Public()
   @Render('index')
-  async admin() {
-    return { pageName: 'admin' };
+  async feedupdate() {
+    return { pageName: 'feedUpdate' };
   }
 
-  @Get('admin/approve')
+  @Get('feed/create')
   @Public()
   @Render('index')
-  async adminApprove() {
-    return { pageName: 'adminApprove' };
+  async feedCreate() {
+    return { pageName: 'feedCreate' };
   }
-  @Get('admin/approveDetail')
+
+  @Get('feed/:id/comments')
   @Public()
   @Render('index')
-  async adminApproveDetail() {
-    return { pageName: 'adminApproveDetail' };
+  async comments() {
+    return { pageName: 'comments' };
   }
 
-  @Get('map')
-  @Public()
-  @Render('map')
-  async map() {
-    return { KEY: process.env.KAKAO_JAVASCRIPT_KEY };
-  }
-
-  @Get('enrollGym')
-  @Public()
-  @Render('enrollGym')
-  async enrollGym() {
-    return { KEY: process.env.KAKAO_JAVASCRIPT_KEY };
-  }
-
-  @Get('enrollfeed')
-  @Public()
-  @Render('enrollfeed')
-  async enrollfeed() {
-    return;
-  }
-
-  @Get('allGym')
-  @Public()
-  @Render('allGym')
-  async allGym() {
-    return;
-  }
-
-  @Get('business/postGym')
+  // 헬스장 페이지
+  @Get('gym')
   @Public()
   @Render('index')
-  async postGym() {
-    return { pageName: 'postGym' };
+  async gymList() {
+    return { pageName: 'gymList' };
   }
+
+  @Get('gym/:id')
+  @Public()
+  @Render('index')
+  async gymDetail() {
+    return { pageName: 'gymDetail' };
+  }
+
+  // 마이페이지 유저
   @Get('mypage')
   @Public()
   @Render('index')
@@ -121,24 +135,26 @@ export class AppController {
     return { pageName: 'myinfo' };
   }
 
+  // 마이페이지 사업자
   @Get('business/businessMyInfo') // 호준님 사업자 기본 페이지
   @Public()
   @Render('index')
   async businessMyInfo() {
     return { pageName: 'businessMyInfo' };
   }
+
+  @Get('business/postGym')
+  @Public()
+  @Render('index')
+  async postGym() {
+    return { pageName: 'postGym' };
+  }
+
   @Get('business/updateGym')
   @Public()
   @Render('index')
   async updateGym() {
     return { pageName: 'updateGym' };
-  }
-
-  @Get('business/mypageBusiness') // 사업자 회원 정보관련
-  @Public()
-  @Render('index')
-  async mypageBusiness() {
-    return { pageName: 'mypageBusiness' };
   }
 
   @Get('business/myinfoBusiness') // 사업자 회원 수정페이지

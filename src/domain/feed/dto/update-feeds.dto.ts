@@ -6,6 +6,6 @@ export class UpdateFeedDto {
   @IsString()
   content: string;
 
-  @ApiProperty({ type: 'string', format: 'binary', description: '피드 이미지', required: false })
-  image: string;
+  // @ApiProperty({ type: 'string', format: 'binary', description: '피드 이미지', required: false })
+  // image: string;
 }
