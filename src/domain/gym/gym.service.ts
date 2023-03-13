@@ -176,6 +176,19 @@ export class GymService {
   }
 
   /**
+   * 앞글자로 체육관 찾기
+   * @author 정호준
+   */
+  async searchGymByText(text) {
+    return await this.gymsrepository
+      .createQueryBuilder('gym')
+      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
+      .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
+      .where('gym.name LIKE :name', { name: `${text}%` })
+      .getMany();
+  }
+
+  /**
    * 유저 확인
    * @author 정호준
    */
