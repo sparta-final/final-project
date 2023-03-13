@@ -7,49 +7,11 @@ input[type='file']::-webkit-file-upload-button {
   cursor: pointer;
 }
 
-h1 {
-  font-size: 30px;
-}
-
-hr {
-  border: 0.01px solid var(--sub-color-1);
-  margin: 20px;
-}
-
-#logout {
-  float: right;
-  height: 50px;
-}
-
 .info-container {
-  margin: 20px;
-  height: 50px;
-}
-
-.custom-btn {
-  width: 110px;
-  height: 40px;
-  color: #fff;
-  border-radius: 5px;
-  padding: 10px 25px;
-  font-family: 'Lato', sans-serif;
-  font-weight: 500;
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  display: inline-block;
-  box-shadow: inset 2px 2px 2px 0px;
-}
-
-.btn-1 {
-  background: var(--point-color);
-  background: linear-gradient(0deg, var(--point-color), var(--point-color));
-  border: none;
-}
-.btn-1:hover {
-  background: var(--sub-color-2);
-  background: linear-gradient(0deg, var(--sub-color-2) 0%, var(--sub-color-2));
+  width: 90%;
+  margin-left: 5%;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--sub-color-9);
 }
 
 .info-container > img {
@@ -57,6 +19,33 @@ hr {
   height: 50px;
   float: left;
   margin-right: 10px;
+  border-radius: 25px;
+}
+
+#logout {
+  float: right;
+  font-weight: 600;
+  color: var(--point-color);
+  background: none;
+  border: none;
+  padding: 16px 16px 16px 0;
+}
+
+#nickname {
+  font-size: 19px;
+  color: var(--point-color);
+  font-weight: 500;
+  margin-right: 5px;
+}
+
+#email {
+  font-size: 14px;
+  color: var(--sub-color-4);
+}
+
+img.my-info-btn {
+  height: 12px;
+  margin-bottom: 1px;
 }
 
 .infoForm > input {
@@ -66,12 +55,6 @@ hr {
   border-radius: 10px;
   border: 3px solid var(--sub-color-1);
 }
-
-/* .modifyText {
-  position: absolute;
-  left: 54.5%;
-  top: 23.5%;
-} */
 
 .input-wrapper {
   position: relative;
@@ -92,4 +75,54 @@ hr {
   margin-bottom: -50px;
   border-radius: 10px;
   border: 3px solid var(--sub-color-1);
+}
+
+/* 내 멤버십 정보 */
+
+.membership-wrap {
+  width: 90%;
+  margin-left: 5%;
+}
+
+.member-start {
+  padding: 10px 0;
+  color: var(--point-color);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.membership-data-wrap {
+  border: 1px solid var(--sub-color-8);
+  padding: 15px;
+  color: var(--sub-color-4);
+}
+
+.membership-data-wrap span,
+.membership-data-wrap > div {
+  display: block;
+  border-bottom: 1px solid var(--sub-color-9);
+  padding: 15px 5px;
+}
+
+.membership-data-wrap > div {
+  position: relative;
+  cursor: pointer;
+}
+
+.member-info-btn {
+  position: absolute;
+  top: 21px;
+  right: 15px;
+  height: 12px;
+}
+
+.member-close {
+  width: 90%;
+  height: 50px;
+  margin: 20px 5% 10px;
+  color: var(--point-color);
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  background: var(--sub-color-9);
 }
