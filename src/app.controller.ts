@@ -151,6 +151,13 @@ export class AppController {
     return { pageName: 'usegymhistory' };
   }
 
+  @Get('mypage/paymentDetails')
+  @Public()
+  @Render('index')
+  async paymentDetails() {
+    return { pageName: 'paymentDetails' };
+  }
+
   // 리뷰페이지
   @Get('review')
   @Public()
@@ -209,18 +216,18 @@ export class AppController {
     return { pageName: 'gymReview' };
   }
 
+  @Get('business/postGym')
+  @Public()
+  @Render('index')
+  async postGym() {
+    return { pageName: 'postGym' };
+  }
+
   @Get('searchGym')
   @Public()
   @Render('index')
   async searchGym() {
     return { pageName: 'searchGym' };
-  }
-
-  @Get('mypage/paymentDetails')
-  @Public()
-  @Render('index')
-  async paymentDetails() {
-    return { pageName: 'paymentDetails' };
   }
   @Get('business/postGym')
   @Public()

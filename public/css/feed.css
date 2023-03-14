@@ -53,6 +53,7 @@
   box-shadow: -1px 3px 2px #e6e6e6;
   padding: 5px 0 5px 10px;
   cursor: pointer;
+  z-index: 99;
 }
 
 /* 피드 페이지 이미지 슬라이드 */
