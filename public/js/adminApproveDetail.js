@@ -1,3 +1,9 @@
+const userType = localStorage.getItem('type');
+if (userType !== 'admin') {
+  alert('접근 권한이 필요합니다.');
+  window.location.href = '/';
+}
+
 $(document).ready(function () {
   const url = window.location.pathname.split('/');
   const id = url[url.length - 1];
@@ -15,7 +21,7 @@ function getApproveGymDetail(id) {
     headers: {
       accesstoken: `${localStorage.getItem('at')}`,
       refreshtoken: `${localStorage.getItem('rt')}`,
-    }
+    },
   })
     .then((response) => {
       const data = response.data;
@@ -56,14 +62,18 @@ function getApproveGymDetail(id) {
 
 function approveGym(id) {
   axios
-    .put('/api/admin/approve', {
-      id: id,
-    }, {
-      headers: {
-        accesstoken: `${localStorage.getItem('at')}`,
-        refreshtoken: `${localStorage.getItem('rt')}`,
+    .put(
+      '/api/admin/approve',
+      {
+        id: id,
+      },
+      {
+        headers: {
+          accesstoken: `${localStorage.getItem('at')}`,
+          refreshtoken: `${localStorage.getItem('rt')}`,
+        },
       }
-    })
+    )
     .then((response) => {
       alert('협력업체로 등록되었습니다.');
       window.location.replace(`/admin/approve`);

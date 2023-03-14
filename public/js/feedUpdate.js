@@ -1,4 +1,12 @@
-$(document).ready(function () {
+const userType = localStorage.getItem('type');
+if (userType !== 'user') {
+  alert('일반 로그인이 필요한 서비스입니다.');
+  window.location.href = '/user/login';
+}
+
+//localhost:3000/feed/update?id=2
+
+http: $(document).ready(function () {
   const urlParams = new URLSearchParams(window.location.search);
   const id = +urlParams.get('id');
   feedUpdateGet(id);
