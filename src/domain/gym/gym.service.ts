@@ -83,9 +83,16 @@ export class GymService {
     //   .select(['gym', 'gymImg.img'])
     //   .where('gym.id = :id', { id: gymId })
     //   .getOne();
-    return await this.gymsrepository.findOne({
-      where: { id: gymId, deletedAt: null },
-    });
+    // return await this.gymsrepository.findOne({
+    //   where: { id: gymId, deletedAt: null },
+    // });
+    const gym = await this.gymsrepository
+      .createQueryBuilder('gym')
+      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
+      .select(['gym', 'gymImg.img'])
+      .where('gym.id = :id', { id: gymId })
+      .getOne();
+    return gym;
   }
 
   /**

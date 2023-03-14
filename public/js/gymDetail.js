@@ -2,9 +2,9 @@
 const url = new URL(window.location.href);
 const gymId = url.searchParams.get("gym");
 
+
 $(document).ready(function () {
   getGymDetail();
-
 });
 
 /**
@@ -16,8 +16,29 @@ async function getGymDetail() {
     method: 'get',
     url: `/api/gym/${gymId}`,
   });
+  const imgs = gymDetail.data.gymImgs;
+  for (i in imgs) {
+    const img = imgs[i];
+    const imgSrc = img.img;
+    const imgTemp = `
+      <li><img src="${imgSrc}" id="gym-img" /></li>
+    `
+    $('.gym-bxslider').append(imgTemp)
+  }
+  $(function () {
+    $('.gym-bxslider').bxSlider({
+      stopAutoOnClick: true,
+      pager: false,
+      controls: false,
+      slideWidth: 600,
+      autoControlsCombine: true,
+      keyboardEnabled: true,
+      autoHover: true,
+    });
+  });
 
   const gymData = gymDetail.data;
+
   const reviews = await axios({
     method: 'get',
     url: `/api/gym/${gymId}/review`,
