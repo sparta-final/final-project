@@ -89,3 +89,14 @@ function enrollGym() {
       console.log(err);
     });
 }
+
+$('#gymCertification').on('change', function () {
+  var fileName = $('#gymCertification').val();
+  $('.certifi-upload-name').val(fileName);
+});
+
+$('#gymImgs').on('change', function () {
+  var fileName = $('#gymImgs').val();
+  console.log('✨✨✨', fileName, '✨✨✨');
+  $('.gym-upload-name').val(fileName);
+});
