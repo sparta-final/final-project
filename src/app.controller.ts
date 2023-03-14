@@ -216,13 +216,6 @@ export class AppController {
     return { pageName: 'gymReview' };
   }
 
-  @Get('business/postGym')
-  @Public()
-  @Render('index')
-  async postGym() {
-    return { pageName: 'postGym' };
-  }
-
   @Get('searchGym')
   @Public()
   @Render('index')

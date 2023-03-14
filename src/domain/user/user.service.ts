@@ -23,6 +23,7 @@ export class UserService {
 
   async getUserInfo(user: JwtPayload) {
     const cachedUser = await this.cacheManager.get(`user:ID: ${user.sub}`);
+    if (cachedUser) return cachedUser;
 
     const existUser = await this.userRepo.findOne({
       where: { id: user.sub, deletedAt: null },
