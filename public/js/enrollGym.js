@@ -56,7 +56,6 @@ function enrollGym() {
   const lng = document.getElementById('lng').value;
   const img = document.getElementById('gymImgs').files;
   const address = document.getElementById('address').value;
-  console.log('✨✨✨', img, '✨✨✨');
   const formData = new FormData();
   formData.append('name', name);
   formData.append('phone', phone);
