@@ -1,3 +1,4 @@
+import { ApproveDto } from './dto/approveGym.dto';
 import { Cache } from 'cache-manager';
 import { Reviews } from './../../global/entities/Reviews';
 import { Calculate } from './../../global/entities/Calculate';
@@ -34,7 +35,7 @@ export class AdminService {
     const cachedBasic = await this.cacheManager.get('admin:basic-member');
     const cachedStandard = await this.cacheManager.get('admin:standard-member');
     const cachedPremium = await this.cacheManager.get('admin:premium-member');
-    if (cachedBasic && cachedStandard && cachedPremium) {
+    if (cachedBasic || cachedStandard || cachedPremium) {
       return [cachedBasic, cachedStandard, cachedPremium];
     }
 
@@ -64,7 +65,7 @@ export class AdminService {
     const cachedFitness = await this.cacheManager.get('admin:fitness-gym');
     const cachedPilates = await this.cacheManager.get('admin:pilates-gym');
     const cachedCrossfit = await this.cacheManager.get('admin:crossfit-gym');
-    if (cachedFitness && cachedPilates && cachedCrossfit) {
+    if (cachedFitness || cachedPilates || cachedCrossfit) {
       return [cachedFitness, cachedPilates, cachedCrossfit];
     }
 
@@ -266,10 +267,14 @@ export class AdminService {
    * @author 한정훈
    * @argument id
    */
-  async approveGym(id) {
-    return await this.gymRepo.update(id, {
+  async approveGym(gymId: number) {
+    const updateGym = await this.gymRepo.update(gymId, {
       isApprove: 1,
     });
+    await this.cacheManager.del('admin:before-approve');
+    await this.cacheManager.del(`admin:before-approve-${gymId}`);
+
+    return updateGym;
   }
 
   /**
@@ -295,11 +300,13 @@ export class AdminService {
   async getSalesMonth(date) {
     const cachedSalesMonth = await this.cacheManager.get(`admin:salesMonth-${date.year}-${date.month}`);
     if (cachedSalesMonth) return cachedSalesMonth;
+    if (cachedSalesMonth === null) return 0;
 
     const salesMonth = await this.paymentRepo.sum('amount', {
       createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
       deletedAt: null,
     });
+    if (!salesMonth) return 0;
     await this.cacheManager.set(`admin:salesMonth-${date.year}-${date.month}`, salesMonth, { ttl: 60 });
 
     return salesMonth;

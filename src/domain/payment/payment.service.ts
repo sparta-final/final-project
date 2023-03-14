@@ -73,6 +73,7 @@ export class PaymentService {
       card_name: card_name,
       card_number: card_number.substring(0, 8),
     });
+    // TODO : 결제정보 저장 후, 유저 멤버쉽 업데이트 해야함 + 캐시도 삭제해야함
   }
 
   /**
