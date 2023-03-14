@@ -227,4 +227,11 @@ export class AppController {
   async searchGym() {
     return { pageName: 'searchGym' };
   }
+
+  @Get('test')
+  @Public()
+  @Render('index')
+  async test() {
+    return { pageName: 'test' };
+  }
 }

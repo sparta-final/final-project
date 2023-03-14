@@ -105,7 +105,7 @@ closeBtn.addEventListener('click', (e) => {
 async function getGymList() {
   const response = await axios({
     method: 'get',
-    url: '/api/gym',
+    url: '/api/gym/approve',
   });
   const data = response.data;
   // for...of 문으로 순차적으로 처리

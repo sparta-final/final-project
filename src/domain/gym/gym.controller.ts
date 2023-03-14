@@ -6,7 +6,7 @@ import { Public } from 'src/global/common/decorator/public.decorator';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
 import { PostGymDto } from './dto/postGym.dto';
 import { UpdateGymDto } from './dto/updateGym.dto';
-import { GetAllGym, GetById, GymDelete, GymSignup, GymUpdate, MyGymGet, SearchGymByText } from './gym.decorators';
+import { approveGymGet, GetAllGym, GetById, GymDelete, GymSignup, GymUpdate, MyGymGet, SearchGymByText } from './gym.decorators';
 import { GymService } from './gym.service';
 
 @ApiTags('GYM')
@@ -80,5 +80,12 @@ export class GymController {
   @Get('/search/:text')
   async searchGymByText(@Param('text') text: string) {
     return this.gymservice.searchGymByText(text);
+  }
+
+  @approveGymGet()
+  @Public()
+  @Get('/approve')
+  async approveGymGeto() {
+    return this.gymservice.approveGymGeto();
   }
 }

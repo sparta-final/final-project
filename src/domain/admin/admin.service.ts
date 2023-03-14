@@ -97,6 +97,7 @@ export class AdminService {
 
     const beforeApprove = await this.gymRepo.find({
       where: { isApprove: 2, deletedAt: null },
+      relations: ['gymImgs'],
     });
     await this.cacheManager.set('admin:before-approve', beforeApprove, { ttl: 60 });
 
@@ -114,6 +115,7 @@ export class AdminService {
 
     const beforeApprove = await this.gymRepo.find({
       where: { id, deletedAt: null },
+      relations: ['gymImgs'],
     });
     await this.cacheManager.set(`admin:before-approve-${id}`, beforeApprove, { ttl: 60 });
 
