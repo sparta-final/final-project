@@ -1,6 +1,6 @@
 import { applyDecorators, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation, ApiResponse, ApiHeader, ApiBearerAuth, ApiOAuth2 } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiHeader, ApiBearerAuth, ApiOAuth2, ApiSecurity } from '@nestjs/swagger';
 import { Public } from 'src/global/common/decorator/public.decorator';
 
 export const UserSignup = () => {
@@ -48,7 +48,7 @@ export const KakaoLogin = () => {
 export const restoreRefreshToken = () => {
   return applyDecorators(
     ApiOperation({ summary: '토큰 재발급' }),
-    ApiBearerAuth('access-token'),
+    ApiSecurity('refreshtoken'),
     ApiResponse({ status: 201, description: '토큰 재발급 성공' }),
     ApiResponse({ status: 400, description: '토큰 재발급 실패' })
   );
@@ -57,7 +57,7 @@ export const restoreRefreshToken = () => {
 export const Logout = () => {
   return applyDecorators(
     ApiOperation({ summary: '로그아웃' }),
-    ApiBearerAuth('refresh-token'),
+    ApiSecurity('refreshtoken'),
     ApiResponse({ status: 201, description: '로그아웃 성공' }),
     ApiResponse({ status: 400, description: '로그아웃 실패' })
   );
