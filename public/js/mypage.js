@@ -1,3 +1,9 @@
+const userType = localStorage.getItem('type');
+if (!userType) {
+  alert('로그인이 필요한 서비스입니다.');
+  window.location.href = '/user/login';
+}
+
 function user() {
   axios
     .get(`/api/user`, {
@@ -30,14 +36,16 @@ function logout() {
       accesstoken: `${localStorage.getItem('at')}`,
       refreshtoken: `${localStorage.getItem('rt')}`,
     },
-  }).then((res) => {
-    localStorage.removeItem('at');
-    localStorage.removeItem('rt');
-    localStorage.removeItem('type');
-    location.href = '/';
-  }).catch((err) => {
-    console.log(err);
-  });
+  })
+    .then((res) => {
+      localStorage.removeItem('at');
+      localStorage.removeItem('rt');
+      localStorage.removeItem('type');
+      location.href = '/';
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 function getPaidData(data) {
