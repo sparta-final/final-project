@@ -12,8 +12,6 @@ async function getMyGym() {
       },
     })
     .then(async (res) => {
-      console.log(res);
-
       const data = res.data;
 
       for (let i = 0; i < res.data.length; i++) {
@@ -30,7 +28,7 @@ async function getMyGym() {
                             <p>${address}</p>
                             <div class="review-box">
                             <div class="gym-review-${id}"></div>
-                              <button class='review-go-btn'>리뷰 보기</button>
+                              <button class='review-go-btn' onclick="location.href='/business/gymReview?id=${id}'">리뷰 보기</button>
                             </div>
                             <div class="mybtn">
                               <button onclick="location.href='/business/userList?id=${id}'">사용자</button> 
@@ -43,7 +41,6 @@ async function getMyGym() {
         await axios
           .get(`/api/gym/${id}/review`)
           .then((res) => {
-            console.log(res);
             const reivewsLength = res.data.reviews.length;
             let avgStar = `
                 <div class="gym-star">⭐<span>${res.data.avgStar}</span>(${reivewsLength})</div>

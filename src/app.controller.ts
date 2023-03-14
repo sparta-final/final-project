@@ -202,6 +202,13 @@ export class AppController {
     return { pageName: 'userList' };
   }
 
+  @Get('business/gymReview')
+  @Public()
+  @Render('index')
+  async gymReview() {
+    return { pageName: 'gymReview' };
+  }
+
   @Get('searchGym')
   @Public()
   @Render('index')
