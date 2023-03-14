@@ -140,11 +140,9 @@ export class FeedService {
     const findFeedImg = await this.feedsImgRepository.findOne({
       where: { feedId: id },
     });
-    console.log('✨✨✨', 'findFeedImg', findFeedImg, '✨✨✨');
     const findComment = await this.commentsRepository.findOne({
       where: { feedId: id },
     });
-    console.log('✨✨✨', 'findComment', findComment, '✨✨✨');
 
     const queryRunner = this.dataSource.createQueryRunner();
 
@@ -208,7 +206,6 @@ export class FeedService {
       .where('feeds.id = :feedId', { feedId })
       .select(['feeds', 'user.nickname', 'user.profileImage'])
       .getRawMany();
-    console.log(feedId);
   }
 
   /**
