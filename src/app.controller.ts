@@ -144,6 +144,35 @@ export class AppController {
     return { pageName: 'myinfo' };
   }
 
+  @Get('mypage/history')
+  @Public()
+  @Render('index')
+  async usegymhistory() {
+    return { pageName: 'usegymhistory' };
+  }
+
+  // 리뷰페이지
+  @Get('review')
+  @Public()
+  @Render('index')
+  async reviewList() {
+    return { pageName: 'reviewList' };
+  }
+
+  @Get('review-detail')
+  @Public()
+  @Render('index')
+  async reviewDetail() {
+    return { pageName: 'reviewDetail' };
+  }
+
+  @Get('review/postReview')
+  @Public()
+  @Render('index')
+  async postReview() {
+    return { pageName: 'postReview' };
+  }
+
   // 마이페이지 사업자
   @Get('business/businessMyInfo') // 호준님 사업자 기본 페이지
   @Public()

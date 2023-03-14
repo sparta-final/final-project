@@ -18,7 +18,47 @@ export class ReviewService {
   ) {}
 
   /**
-   * @description 리뷰 조회
+   * @description 리뷰 상세 조회
+   * @Param reviewId
+   * @author 김승일
+   */
+  async findReviewById(reviewId: number) {
+    const cachedReview = await this.cacheManager.get(`review:ID: ${reviewId}`);
+    if (cachedReview) return cachedReview;
+
+    const review = await this.userGymRepo
+      .createQueryBuilder('userGym')
+      .leftJoinAndSelect('userGym.reviews', 'reviews', 'reviews.userGym.id = userGym.id')
+      .leftJoinAndSelect('userGym.gym', 'gym', 'gym.id = userGym.gymId')
+      .where('reviews.id = :reviewId', { reviewId })
+      .getOne();
+    await this.cacheManager.set(`review:ID: ${reviewId}`, review, { ttl: 30 });
+    return review;
+  }
+
+  /**
+   * @description 리뷰 조회(유저별)
+   * @argument userId
+   * @author 김승일
+   */
+  async findReviewByUserId(user: JwtPayload) {
+    const cachedReviews = await this.cacheManager.get(`reviews:UserID: ${user.sub}`);
+    if (cachedReviews) return cachedReviews;
+
+    const reviews = await this.userGymRepo
+      .createQueryBuilder('userGym')
+      .leftJoinAndSelect('userGym.reviews', 'reviews', 'reviews.userGym.id = userGym.id')
+      .leftJoinAndSelect('userGym.gym', 'gym', 'gym.id = userGym.gymId')
+      .where('userGym.userId = :userId', { userId: user.sub })
+      .andWhere('userGym.reviewId IS NOT NULL')
+      .getMany();
+
+    await this.cacheManager.set(`reviews:UserID: ${user.sub}`, reviews, { ttl: 30 });
+    return reviews;
+  }
+
+  /**
+   * @description 리뷰 조회(업체별)
    * @author 김승일
    * @param gymId
    */
@@ -31,12 +71,14 @@ export class ReviewService {
       .leftJoinAndSelect('userGym.reviews', 'reviews', 'reviews.userGym.id = userGym.id')
       .leftJoinAndSelect('userGym.user', 'user', 'user.id = userGym.userId')
       .where('userGym.gymId = :gymId', { gymId })
+      .andWhere('userGym.reviewId IS NOT NULL')
       .getMany();
 
     // reviews 평균 평점 계산
     let sum = 0;
     let avgStar = 0;
     reviews.forEach((review) => {
+      if (review.reviews.length === 0) return;
       sum += review.reviews[0].star;
       avgStar = Math.round((sum / reviews.length) * 10) / 10;
     });
@@ -65,12 +107,16 @@ export class ReviewService {
     await queryRunner.startTransaction();
     try {
       const review = await queryRunner.manager.getRepository(Reviews).save({
-        ...createReviewDto,
+        star: createReviewDto.star,
+        review: createReviewDto.review,
         reviewImg: file.location,
         userGym: { id: userGym.id },
       });
       await queryRunner.manager.getRepository(UserGym).update({ id: userGym.id }, { reviewId: review.id });
       await queryRunner.commitTransaction();
+      // 캐시 업데이트
+      await this.cacheManager.del(`reviews:UserID: ${user.sub}`);
+      await this.cacheManager.del(`reviews:GymID: ${gymId}`);
       return review;
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -115,11 +161,11 @@ export class ReviewService {
   /**
    * @description 리뷰 삭제
    * @author 김승일
-   * @param gymId @param reviewId @param user
+   * @param reviewId @argument user
    */
-  async removeReview(gymId: number, reviewId: number, user: JwtPayload) {
+  async removeReview(reviewId: number, user: JwtPayload) {
     const userGym = await this.userGymRepo.findOne({
-      where: { gymId, userId: user.sub, reviewId },
+      where: { userId: user.sub, reviewId },
     });
     if (!userGym) throw new UnauthorizedException('리뷰를 삭제할 수 없습니다');
     // 리뷰삭제는 hard-delete
@@ -137,6 +183,8 @@ export class ReviewService {
         .execute();
       await queryRunner.manager.getRepository(UserGym).update({ id: userGym.id }, { reviewId: null });
       await queryRunner.commitTransaction();
+      await this.cacheManager.del(`reviews:UserID: ${user.sub}`);
+      await this.cacheManager.del(`reviews:GymID: ${userGym.gymId}`);
       return { message: '리뷰가 삭제되었습니다' };
     } catch (error) {
       await queryRunner.rollbackTransaction();

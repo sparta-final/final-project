@@ -23,7 +23,7 @@ export class Reviews {
   review: string;
 
   @ApiProperty({ example: 5, description: '별점', nullable: true })
-  @Column('int', { name: 'star' })
+  @Column('float', { name: 'star' })
   star: number;
 
   @ApiProperty({ type: 'string', format: 'binary', description: '리뷰 이미지', nullable: true })

@@ -18,7 +18,9 @@ function user() {
 }
 
 function logout() {
-  localStorage.removeItem('token');
+  localStorage.removeItem('at');
+  localStorage.removeItem('rt');
+  localStorage.removeItem('type');
   location.href = '/';
 }
 

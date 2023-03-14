@@ -29,9 +29,13 @@ async function getGymDetail() {
   function getStarString(reviewStarRating) {
     const starMap = {
       1: '⭐',
+      1.5: '⭐',
       2: '⭐⭐',
+      2.5: '⭐⭐',
       3: '⭐⭐⭐',
+      3.5: '⭐⭐⭐',
       4: '⭐⭐⭐⭐',
+      4.5: '⭐⭐⭐⭐',
       5: '⭐⭐⭐⭐⭐',
     };
     return starMap[reviewStarRating] || '';
@@ -61,6 +65,7 @@ async function getGymDetail() {
 
   const reveiewsdetail = reviewData.reviews;
   for (const review of reveiewsdetail) {
+    if (review.reviews.length === 0) continue;
     let reviewUserNickName = review.user.nickname;
     let reviewContent = review.reviews[0].review;
     let reviewStar = review.reviews[0].star;

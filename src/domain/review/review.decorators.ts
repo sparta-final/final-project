@@ -1,12 +1,17 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 
+export const findMyReview = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '리뷰 조회(회원별)' }),
+    ApiResponse({ status: 200, description: '리뷰조회 성공' }),
+    ApiResponse({ status: 400, description: '리뷰조회 실패' })
+  );
+};
+
 export const findReviewByGymId = () => {
   return applyDecorators(
-    // UseInterceptors(CacheInterceptor),
-    // CacheTTL(30),
-    // CacheKey('gym-reviews'),
-    ApiOperation({ summary: '리뷰 조회' }),
+    ApiOperation({ summary: '리뷰 조회(업체별)' }),
     ApiResponse({ status: 200, description: '리뷰조회 성공' }),
     ApiResponse({ status: 400, description: '리뷰조회 실패' })
   );

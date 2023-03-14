@@ -9,7 +9,8 @@
   font-size: 1.2rem;
   font-weight: 500;
   color: var(--sub-color-4);
-  margin-left: 10px;
+  margin-left: 15px;
+  margin-top: 10px;
 }
 
 .review-card {
@@ -56,6 +57,26 @@
 .review-card > .review-header > .review-date {
   position: relative;
   font-size: 12px;
+  color: var(--sub-color-4);
+}
+
+.review-card > .review-star-date-wrap {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+.review-card > .review-star-date-wrap > .reviews-star {
+  margin-left: 5px;
+}
+
+.review-card > .review-star-date-wrap > .reviews-date {
+  margin-left: 15px;
+  font-size: 12px;
+  color: var(--sub-color-4);
+}
+.review-card > .review-star-date-wrap > .review-delete-btn {
+  position: absolute;
+  right: 190px;
   color: var(--sub-color-4);
 }
 
