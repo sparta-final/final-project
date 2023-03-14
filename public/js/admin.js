@@ -15,7 +15,7 @@ function getMembers() {
     headers: {
       accesstoken: `${localStorage.getItem('at')}`,
       refreshtoken: `${localStorage.getItem('rt')}`,
-    }
+    },
   })
     .then((response) => {
       const data = response.data;
@@ -44,8 +44,7 @@ function getGym() {
     headers: {
       accesstoken: `${localStorage.getItem('at')}`,
       refreshtoken: `${localStorage.getItem('rt')}`,
-    }
-
+    },
   })
     .then((response) => {
       const data = response.data;
@@ -84,14 +83,14 @@ function getRank(year, month) {
     headers: {
       accesstoken: `${localStorage.getItem('at')}`,
       refreshtoken: `${localStorage.getItem('rt')}`,
-    }
+    },
   })
     .then((response) => {
       const data = response.data;
       $('.text-gray-dark').empty();
       // 찾는 데이터가 0일때 부터는 다른조건을 안보기 떄문에 0인뒤로 순서가 엉킴.
-      const countRank = data.sort((a, b) => b.count - a.count);
-      // const paidRank = data.sort((a, b) => b.paid - a.paid);
+      // const countRank = data.sort((a, b) => b.count - a.count);
+      const paidRank = data.sort((a, b) => b.paid - a.paid);
       // console.log('✨✨✨', paidRank, '✨✨✨');
       // const ratingRank = data.sort((a, b) => b.rating - a.rating);
       // console.log('✨✨✨', ratingRank, '✨✨✨');
@@ -144,9 +143,10 @@ function salesMonth(year, month) {
     headers: {
       accesstoken: `${localStorage.getItem('at')}`,
       refreshtoken: `${localStorage.getItem('rt')}`,
-    }
+    },
   })
     .then((response) => {
+      console.log('✨✨✨', response, '✨✨✨');
       const data = response.data.toLocaleString();
 
       let temp = `

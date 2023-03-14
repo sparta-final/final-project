@@ -33,6 +33,7 @@ function getComments(id) {
   })
     .then((response) => {
       const data = response.data;
+      console.log('✨✨✨', data, '✨✨✨');
       for (let i in data) {
         let commentNickname = data[i].user_nickname;
         let commentUserImg = data[i].user_profileImage;

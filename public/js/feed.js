@@ -37,6 +37,7 @@ function getGym() {
           let nickname = data[i].user.nickname;
           let profileImg = data[i].user.profileImage;
           let content = data[i].content;
+          console.log('✨✨✨', content, '✨✨✨');
           let temp = `
           <div>
             <div class="feed-user-wrap">

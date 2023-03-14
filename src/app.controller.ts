@@ -1,6 +1,8 @@
+import { JwtPayload } from './domain/auth/types/jwtPayload.type';
 import { ApiTags } from '@nestjs/swagger';
 import { Controller, Get, Render } from '@nestjs/common';
 import { Public } from './global/common/decorator/public.decorator';
+import { CurrentUser } from './global/common/decorator/current-user.decorator';
 
 @ApiTags('RENDER')
 @Controller()
@@ -62,7 +64,7 @@ export class AppController {
     return { pageName: 'userSignup' };
   }
 
-  @Get('user/qrcode')
+  @Get('qrcode')
   @Public()
   @Render('index')
   async userQRCode() {
@@ -140,6 +142,35 @@ export class AppController {
   @Render('index')
   async myinfo() {
     return { pageName: 'myinfo' };
+  }
+
+  @Get('mypage/history')
+  @Public()
+  @Render('index')
+  async usegymhistory() {
+    return { pageName: 'usegymhistory' };
+  }
+
+  // 리뷰페이지
+  @Get('review')
+  @Public()
+  @Render('index')
+  async reviewList() {
+    return { pageName: 'reviewList' };
+  }
+
+  @Get('review-detail')
+  @Public()
+  @Render('index')
+  async reviewDetail() {
+    return { pageName: 'reviewDetail' };
+  }
+
+  @Get('review/postReview')
+  @Public()
+  @Render('index')
+  async postReview() {
+    return { pageName: 'postReview' };
   }
 
   // 마이페이지 사업자

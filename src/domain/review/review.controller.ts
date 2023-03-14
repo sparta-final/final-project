@@ -4,28 +4,39 @@ import { Controller, Get, Post, Body, Param, Delete, Put, UploadedFile, UseInter
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
-import { deleteReview, findReviewByGymId, postReview, updateReview } from './review.decorators';
+import { deleteReview, findMyReview, findReviewByGymId, postReview, updateReview } from './review.decorators';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import { JwtPayload } from 'src/domain/auth/types/jwtPayload.type';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SkipThrottle } from '@nestjs/throttler';
 
 @ApiTags('Review')
-@Controller('api/gym')
+@Controller('api')
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
+
+  @Get('/review/:reviewId')
+  findReviewById(@Param('reviewId') reviewId: number) {
+    return this.reviewService.findReviewById(reviewId);
+  }
+
+  @findMyReview()
+  @Get('/review')
+  findMyReview(@CurrentUser() user: JwtPayload) {
+    return this.reviewService.findReviewByUserId(user);
+  }
 
   @Public()
   @SkipThrottle()
   @findReviewByGymId()
-  @Get('/:gymId/review')
+  @Get('/gym/:gymId/review')
   findReviewByGymId(@Param('gymId') gymId: number) {
     return this.reviewService.findReviewByGymId(gymId);
   }
 
   @postReview()
   @UseInterceptors(FileInterceptor('reviewImg'))
-  @Post('/:gymId/review')
+  @Post('/gym/:gymId/review')
   postReview(
     @Param('gymId') gymId: number,
     @UploadedFile() file: Express.MulterS3.File,
@@ -37,7 +48,7 @@ export class ReviewController {
 
   @updateReview()
   @UseInterceptors(FileInterceptor('reviewImg'))
-  @Put('/:gymId/review/:reviewId')
+  @Put('/gym/:gymId/review/:reviewId')
   updateReview(
     @Param('gymId') gymId: number,
     @Param('reviewId') reviewId: number,
@@ -49,8 +60,8 @@ export class ReviewController {
   }
 
   @deleteReview()
-  @Delete('/:gymId/review/:reviewId')
-  removeReview(@Param('gymId') gymId: number, @Param('reviewId') reviewId: number, @CurrentUser() user: JwtPayload) {
-    return this.reviewService.removeReview(gymId, reviewId, user);
+  @Delete('/review/:reviewId')
+  removeReview(@Param('reviewId') reviewId: number, @CurrentUser() user: JwtPayload) {
+    return this.reviewService.removeReview(reviewId, user);
   }
 }

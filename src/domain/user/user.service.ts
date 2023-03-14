@@ -5,10 +5,14 @@ import { Repository } from 'typeorm';
 import { UpdateUserInfoDto } from './dto/updateUserInfo.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
+import { UserGym } from 'src/global/entities/UserGym';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(Users) private readonly userRepo: Repository<Users>) {}
+  constructor(
+    @InjectRepository(Users) private readonly userRepo: Repository<Users>,
+    @InjectRepository(UserGym) private readonly userGymRepo: Repository<UserGym>
+  ) {}
 
   /**
    * 일반회원 회원정보 불러오기
@@ -68,5 +72,31 @@ export class UserService {
       await this.userRepo.save(existUser);
       return existUser;
     }
+  }
+
+  /**
+   *  @description: 일반회원 년,월별 usergym 이용내역 불러오기
+   *  @author: 김승일
+   */
+  async getUseGymHistory(user: JwtPayload, year: number, month: number) {
+    const existUser = await this.userRepo.findOne({
+      where: { id: user.sub },
+    });
+
+    // gym, review 조인 후 userGym 조회 (내림차순)
+    const existUserGym = await this.userGymRepo
+      .createQueryBuilder('userGym')
+      .leftJoinAndSelect('userGym.gym', 'gym')
+      .leftJoinAndSelect('userGym.reviews', 'reviews')
+      .where('userGym.userId = :userId', { userId: existUser.id })
+      .orderBy('userGym.createdAt', 'DESC')
+      .getMany();
+
+    const useGymHistory = existUserGym.filter((userGym) => {
+      const userGymDate = new Date(userGym.createdAt);
+      return userGymDate.getFullYear() === year && userGymDate.getMonth() + 1 === month;
+    });
+
+    return useGymHistory;
   }
 }

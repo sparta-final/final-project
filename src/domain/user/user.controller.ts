@@ -50,4 +50,11 @@ export class UserController {
   async deleteUser(@CurrentUser() user: JwtPayload) {
     return await this.userservice.deleteUser(user);
   }
+
+  // 일반유저 년,월별 usergym 이용내역 불러오기
+  @Get('user/visit/:year/:month')
+  // @GetUseGymHistory()
+  async getUseGymHistory(@CurrentUser() user: JwtPayload, @Param('year') year: number, @Param('month') month: number) {
+    return await this.userservice.getUseGymHistory(user, year, month);
+  }
 }
