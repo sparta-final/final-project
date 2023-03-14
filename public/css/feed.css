@@ -55,6 +55,33 @@
   cursor: pointer;
 }
 
+/* 피드 페이지 이미지 슬라이드 */
+div.feed-container > div > div.bx-wrapper {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  margin: 0;
+  border: none;
+}
+
+div.feed-container > div {
+  width: 420px;
+  /* height: 420px;
+  z-index: 99; */
+  /* background-color: var(--sub-color-9);
+  color: var(--sub-color-4);
+  text-align: center;
+  padding: 47% 0; */
+}
+
+/* #feed-preview-img > div.bx-wrapper {
+  border: none;
+} */
+
+img.feed-image {
+  width: 100%;
+  height: 420px;
+}
+
 .feed-update {
   top: 20px;
   border-bottom: 1px solid var(--sub-color-4);
@@ -245,4 +272,74 @@
   margin: 15px 5%;
   font-size: 15px;
   font-weight: 400;
+}
+
+/* 피드작성 */
+.feed-upload-wrap {
+  position: relative;
+}
+.feed-img-upload {
+  position: absolute;
+  top: 0;
+  display: inline-block;
+  width: 100%;
+  height: 420px;
+  font-size: 40px;
+  text-align: center;
+  color: var(--point-color);
+  background-color: var(--sub-color-9);
+  padding: 42% 0;
+  cursor: pointer;
+}
+#feedImg {
+  display: none;
+}
+
+div#feed-preview-img > div.bx-wrapper {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+#feed-preview-img {
+  width: 420px;
+  height: 420px;
+  z-index: 99;
+  /* background-color: var(--sub-color-9);
+  color: var(--sub-color-4);
+  text-align: center;
+  padding: 47% 0; */
+}
+
+#feed-preview-img > div.bx-wrapper {
+  border: none;
+}
+
+img.preview-img {
+  width: 100%;
+  height: 420px;
+  padding-top: 40px;
+}
+
+.feed-textarea {
+  min-height: 200px;
+  /* border: 1px solid var(--point-color); */
+  /* border-radius: 5px; */
+  margin-left: 6px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.feed-upload-btn {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 16%;
+  height: 40px;
+  background: none;
+  color: var(--point-color);
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
 }

@@ -1,11 +1,17 @@
 function enrollFeed() {
-  const content = document.getElementById('content').value;
-  const feedImg = document.getElementById('feedImg');
+  const content = document.getElementsByClassName('feed-textarea')[0].value;
+  console.log('✨✨✨', content, '✨✨✨');
+  const feedImg = document.getElementById('feedImg').files;
 
+  console.log(feedImg.files);
   const formData = new FormData();
   formData.append('content', content);
-  formData.append('feedImg', feedImg.files[0]);
-
+  for (let i in feedImg) {
+    formData.append('feedImg', feedImg[i]);
+  }
+  for (let value of formData.values()) {
+    console.log(value);
+  }
   axios
     .post('/api/feed', formData, {
       headers: {
@@ -16,9 +22,71 @@ function enrollFeed() {
     })
     .then((res) => {
       console.log(res);
+      window.location.replace('/feed');
     })
     .catch((err) => {
       console.log('이미지', feedImg.files[0]);
       console.log(err);
     });
 }
+
+//  미리보기
+function readMultipleImage(input) {
+  // console.log(input.files[3]);
+  const feedPreviewImg = document.getElementById('feed-preview-img');
+  feedPreviewImg.innerHTML = '';
+  if (input.files) {
+    const $label = document.getElementsByClassName('feed-img-upload')[0];
+    const $uploadBtn = document.getElementsByClassName('feed-upload-btn')[0];
+    $label.style.height = '40px';
+    $label.style.width = '60%';
+    $label.style.marginLeft = '20%';
+    $label.style.fontSize = '26px';
+    $label.style.padding = '0px';
+    $label.style.background = 'none';
+    $uploadBtn.style.display = 'block';
+    const fileArr = Array.from(input.files);
+    const $colDiv1 = document.createElement('ul');
+    $colDiv1.classList.add('feed-bxslider');
+    fileArr.forEach((file, index) => {
+      const reader = new FileReader();
+      const $imgDiv = document.createElement('li');
+      const $img = document.createElement('img');
+      $img.classList.add('preview-img');
+      $imgDiv.appendChild($img);
+      reader.onload = (e) => {
+        $img.src = e.target.result;
+      };
+      $colDiv1.appendChild($imgDiv);
+      reader.readAsDataURL(file);
+    });
+    feedPreviewImg.appendChild($colDiv1);
+    if (input.files.length > 1) {
+      $(function () {
+        $('.feed-bxslider').bxSlider({
+          auto: false,
+          stopAutoOnClick: false,
+          pager: false,
+          controls: false,
+          slideWidth: 420,
+          autoControlsCombine: true,
+          keyboardEnabled: true,
+          autoHover: true,
+          // pause: 4000,
+        });
+      });
+    }
+  }
+}
+// 이벤트 리스너
+document.getElementById('feedImg').addEventListener('change', (e) => {
+  readMultipleImage(e.target);
+});
+
+// textarea 자동 줄바꿈
+const textarea = document.getElementsByClassName('feed-textarea')[0];
+textarea.addEventListener('input', (e) => {
+  const target = e.target;
+  target.style.height = 'auto';
+  target.style.height = target.scrollHeight + 'px';
+});

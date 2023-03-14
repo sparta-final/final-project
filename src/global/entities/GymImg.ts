@@ -24,7 +24,7 @@ export class GymImg {
   gymId: number;
 
   @ApiProperty({ type: 'string', format: 'binary', description: '헬스장 이미지' })
-  @Column('varchar', { name: 'img', length: 255 })
+  @Column('varchar', { name: 'img', length: 10000 })
   img: string;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })

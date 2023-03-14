@@ -1,8 +1,11 @@
 <section>
-  <form enctype="multipart/form-data">
-    <input type="file" id="feedImg" /><br />
-    <input type="text" id="content" placeholder="내용" /><br />
-    <input type="button" onclick="enrollFeed()" value="등록" /><br />
+  <form enctype="multipart/form-data" class="feed-upload-wrap">
+    <div id="feed-preview-img"></div>
+    <label for="feedImg" class="feed-img-upload">+</label>
+    <input type="file" id="feedImg" multiple />
+    <!-- <input type="text" id="content" placeholder="내용" /> -->
+    <textarea class="feed-textarea" cols="46" wrap="hard" placeholder="내용을 입력하세요"></textarea>
+    <input type="button" onclick="enrollFeed()" value="등록" class="feed-upload-btn" />
   </form>
 </section>
 <script src="/js/enrollFeed.js"></script>

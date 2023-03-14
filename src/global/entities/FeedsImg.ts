@@ -23,7 +23,7 @@ export class FeedsImg {
   feedId: number;
 
   @ApiProperty({ example: '파일이름.jpg', description: '피드 이미지' })
-  @Column('varchar', { name: 'image', nullable: true, length: 255 })
+  @Column('varchar', { name: 'image', nullable: true, length: 10000 })
   image: string | null;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })

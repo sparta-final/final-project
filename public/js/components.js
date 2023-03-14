@@ -1,17 +1,5 @@
 $(document).ready(function () {
   footerSelect();
-  //   if (userType === 'admin') {
-  //     document.getElementById('.footer-home').onclick = location.href = '/admin';
-  //     document.getElementById('.footer-info').onclick = location.href = '/admin/approve';
-  //   }
-  //   if (userType === 'user') {
-  //     document.getElementsByClassName('footer-home').href = '/admin';
-  //     document.getElementsByClassName('footer-info').onclick = location.href = '/mypage';
-  //   }
-  //   if (userType === 'business') {
-  //     document.getElementById('.footer-home').onclick = location.href = '/business/businessMyInfo';
-  //     document.getElementById('.footer-info').onclick = location.href = '/business/userList';
-  //   }
 });
 
 function footerInfo() {
