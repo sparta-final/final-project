@@ -31,7 +31,8 @@ input[type='file']::-webkit-file-upload-button {
   padding: 16px 16px 16px 0;
 }
 
-#nickname {
+#nickname,
+#business-name {
   font-size: 19px;
   color: var(--point-color);
   font-weight: 500;

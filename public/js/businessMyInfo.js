@@ -43,7 +43,7 @@ async function getMyGym() {
           .then((res) => {
             const reivewsLength = res.data.reviews.length;
             let avgStar = `
-                <div class="gym-star">⭐<span>${res.data.avgStar}</span>(${reivewsLength})</div>
+                <div class="my-gym-star">⭐<span>${res.data.avgStar}</span>(${reivewsLength})</div>
                 `;
             $(`.gym-review-${id}`).append(avgStar);
           })
