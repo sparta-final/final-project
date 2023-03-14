@@ -1,10 +1,12 @@
+import { ApproveDto } from './dto/approveGym.dto';
+import { Cache } from 'cache-manager';
 import { Reviews } from './../../global/entities/Reviews';
 import { Calculate } from './../../global/entities/Calculate';
 import { Payments } from './../../global/entities/Payments';
 import { userMembership } from './../../global/entities/common/user.membership';
 import { Gym } from './../../global/entities/Gym';
 import { Users } from './../../global/entities/Users';
-import { Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
 import { GymType } from 'src/global/entities/common/enums';
@@ -21,7 +23,8 @@ export class AdminService {
     @InjectRepository(Payments) private paymentRepo: Repository<Payments>,
     @InjectRepository(UserGym) private userGymRepo: Repository<UserGym>,
     @InjectRepository(Calculate) private calculateRepo: Repository<Calculate>,
-    @InjectRepository(Reviews) private reviewRepo: Repository<Reviews>
+    @InjectRepository(Reviews) private reviewRepo: Repository<Reviews>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
   /**
@@ -29,15 +32,28 @@ export class AdminService {
    * @author 한정훈
    */
   async getMember() {
+    const cachedBasic = await this.cacheManager.get('admin:basic-member');
+    const cachedStandard = await this.cacheManager.get('admin:standard-member');
+    const cachedPremium = await this.cacheManager.get('admin:premium-member');
+    if (cachedBasic || cachedStandard || cachedPremium) {
+      return [cachedBasic, cachedStandard, cachedPremium];
+    }
+
     const basic = await this.userRepo.count({
       where: { membership: userMembership.Basic, deletedAt: null },
     });
+    await this.cacheManager.set('admin:basic-member', basic, { ttl: 60 });
+
     const standard = await this.userRepo.count({
       where: { membership: userMembership.Standard, deletedAt: null },
     });
+    await this.cacheManager.set('admin:standard-member', standard, { ttl: 60 });
+
     const premium = await this.userRepo.count({
       where: { membership: userMembership.Premium, deletedAt: null },
     });
+    await this.cacheManager.set('admin:premium-member', premium, { ttl: 60 });
+
     return [basic, standard, premium];
   }
 
@@ -46,15 +62,28 @@ export class AdminService {
    * @author 한정훈
    */
   async getGym() {
+    const cachedFitness = await this.cacheManager.get('admin:fitness-gym');
+    const cachedPilates = await this.cacheManager.get('admin:pilates-gym');
+    const cachedCrossfit = await this.cacheManager.get('admin:crossfit-gym');
+    if (cachedFitness || cachedPilates || cachedCrossfit) {
+      return [cachedFitness, cachedPilates, cachedCrossfit];
+    }
+
     const fitness = await this.gymRepo.count({
       where: { gymType: GymType.fitness, isApprove: 1, deletedAt: null },
     });
+    await this.cacheManager.set('admin:fitness-gym', fitness, { ttl: 60 });
+
     const pilates = await this.gymRepo.count({
       where: { gymType: GymType.pilates, isApprove: 1, deletedAt: null },
     });
+    await this.cacheManager.set('admin:pilates-gym', pilates, { ttl: 60 });
+
     const crossfit = await this.gymRepo.count({
       where: { gymType: GymType.crossfit, isApprove: 1, deletedAt: null },
     });
+    await this.cacheManager.set('admin:crossfit-gym', crossfit, { ttl: 60 });
+
     return [fitness, pilates, crossfit];
   }
 
@@ -63,9 +92,15 @@ export class AdminService {
    * @author 한정훈
    */
   async beforeApproveGym() {
+    const cachedBeforeApprove = await this.cacheManager.get('admin:before-approve');
+    if (cachedBeforeApprove) return cachedBeforeApprove;
+
     const beforeApprove = await this.gymRepo.find({
       where: { isApprove: 2, deletedAt: null },
+      relations: ['gymImgs'],
     });
+    await this.cacheManager.set('admin:before-approve', beforeApprove, { ttl: 60 });
+
     return beforeApprove;
   }
 
@@ -75,9 +110,15 @@ export class AdminService {
    * @argument id
    */
   async beforeApproveGymId(id) {
+    const cachedBeforeApproveById = await this.cacheManager.get(`admin:before-approve-${id}`);
+    if (cachedBeforeApproveById) return cachedBeforeApproveById;
+
     const beforeApprove = await this.gymRepo.find({
       where: { id, deletedAt: null },
+      relations: ['gymImgs'],
     });
+    await this.cacheManager.set(`admin:before-approve-${id}`, beforeApprove, { ttl: 60 });
+
     return beforeApprove;
   }
 
@@ -89,6 +130,9 @@ export class AdminService {
    * @argument month
    */
   async getRank(date) {
+    const cachedRank = await this.cacheManager.get(`admin:rank-${date.year}-${date.month}`);
+    if (cachedRank) return cachedRank;
+
     let rank = [];
     const getAllGym = await this.gymRepo.find({
       where: {
@@ -98,6 +142,7 @@ export class AdminService {
       },
       select: ['id', 'name'],
     });
+
     // const getAllGym = await this.calculateRepo.find({
     //   where: {
     //     createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
@@ -163,6 +208,8 @@ export class AdminService {
         // });
       });
     }
+    await this.cacheManager.set(`admin:rank-${date.year}-${date.month}`, rank, { ttl: 60 });
+
     return rank;
   }
 
@@ -222,10 +269,14 @@ export class AdminService {
    * @author 한정훈
    * @argument id
    */
-  async approveGym(id) {
-    return await this.gymRepo.update(id, {
+  async approveGym(gymId: number) {
+    const updateGym = await this.gymRepo.update(gymId, {
       isApprove: 1,
     });
+    await this.cacheManager.del('admin:before-approve');
+    await this.cacheManager.del(`admin:before-approve-${gymId}`);
+
+    return updateGym;
   }
 
   /**
@@ -233,7 +284,12 @@ export class AdminService {
    * @author 한정훈
    */
   async getSalesAll() {
+    const cachedSalesAll = await this.cacheManager.get('admin:salesAll');
+    if (cachedSalesAll) return cachedSalesAll;
+
     const salesAll = await this.paymentRepo.sum('amount', { deletedAt: null });
+    await this.cacheManager.set('admin:salesAll', salesAll, { ttl: 60 });
+
     return salesAll;
   }
 
@@ -244,10 +300,17 @@ export class AdminService {
    * @param month
    */
   async getSalesMonth(date) {
+    const cachedSalesMonth = await this.cacheManager.get(`admin:salesMonth-${date.year}-${date.month}`);
+    if (cachedSalesMonth) return cachedSalesMonth;
+    if (cachedSalesMonth === null) return 0;
+
     const salesMonth = await this.paymentRepo.sum('amount', {
       createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
       deletedAt: null,
     });
+    if (!salesMonth) return 0;
+    await this.cacheManager.set(`admin:salesMonth-${date.year}-${date.month}`, salesMonth, { ttl: 60 });
+
     return salesMonth;
   }
 
@@ -259,6 +322,9 @@ export class AdminService {
    * @param month
    */
   async getVisitUser(id, date) {
+    const cachedVisitUser = await this.cacheManager.get(`admin:visitUser-${id}-${date.year}-${date.month}`);
+    if (cachedVisitUser) return cachedVisitUser;
+
     const getVisitUser = await this.userGymRepo.find({
       where: {
         gymId: id,
@@ -266,6 +332,8 @@ export class AdminService {
       },
       relations: ['user'],
     });
+    await this.cacheManager.set(`admin:visitUser-${id}-${date.year}-${date.month}`, getVisitUser, { ttl: 60 });
+
     return getVisitUser;
   }
 
@@ -277,12 +345,17 @@ export class AdminService {
    * @param month
    */
   async getVisitGym(id, date) {
+    const cachedVisitGym = await this.cacheManager.get(`admin:visitGym-${id}-${date.year}-${date.month}`);
+    if (cachedVisitGym) return cachedVisitGym;
+
     const getVisitGym = await this.userGymRepo.count({
       where: {
         userId: id,
         createdAt: Between(new Date(Number(date.year), Number(date.month) - 1), new Date(Number(date.year), Number(date.month))),
       },
     });
+    await this.cacheManager.set(`admin:visitGym-${id}-${date.year}-${date.month}`, getVisitGym, { ttl: 60 });
+
     return getVisitGym;
   }
 
@@ -292,10 +365,15 @@ export class AdminService {
    * @param id
    */
   async getMembership(id) {
+    const cachedMembership = await this.cacheManager.get(`admin:membership-${id}`);
+    if (cachedMembership) return cachedMembership;
+
     const getMembership = await this.userRepo.find({
       where: { id },
       select: ['membership'],
     });
+    await this.cacheManager.set(`admin:membership-${id}`, getMembership, { ttl: 60 });
+
     return getMembership;
   }
 
@@ -308,6 +386,11 @@ export class AdminService {
    * @param month
    */
   async getVisitUserCount(gymId, userId, date) {
+    const cachedVisitUserCount = await this.cacheManager.get(
+      `admin:visitUserCount-${gymId}-${userId}-${date.year}-${date.month}`
+    );
+    if (cachedVisitUserCount) return cachedVisitUserCount;
+
     const getVisitUserCount = await this.userGymRepo.count({
       where: {
         gymId: gymId,
@@ -315,6 +398,10 @@ export class AdminService {
         createdAt: Between(new Date(Number(date.year), Number(date.month) - 1), new Date(Number(date.year), Number(date.month))),
       },
     });
+    await this.cacheManager.set(`admin:visitUserCount-${gymId}-${userId}-${date.year}-${date.month}`, getVisitUserCount, {
+      ttl: 60,
+    });
+
     return getVisitUserCount;
   }
 
@@ -326,11 +413,17 @@ export class AdminService {
    * @param month
    */
   async getPaidGym(gymId, date) {
-    return await this.calculateRepo.find({
+    const cachedMonthlySales = await this.cacheManager.get(`admin:monthlySales-${gymId}-${date.year}-${date.month}`);
+    if (cachedMonthlySales) return cachedMonthlySales;
+
+    const monthlySales = await this.calculateRepo.find({
       where: {
         gymId: gymId,
         createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
       },
     });
+    await this.cacheManager.set(`admin:monthlySales-${gymId}-${date.year}-${date.month}`, monthlySales, { ttl: 60 });
+
+    return monthlySales;
   }
 }

@@ -1,8 +1,6 @@
-import { JwtPayload } from './domain/auth/types/jwtPayload.type';
 import { ApiTags } from '@nestjs/swagger';
 import { Controller, Get, Render } from '@nestjs/common';
 import { Public } from './global/common/decorator/public.decorator';
-import { CurrentUser } from './global/common/decorator/current-user.decorator';
 
 @ApiTags('RENDER')
 @Controller()
@@ -159,14 +157,14 @@ export class AppController {
   }
 
   // 리뷰페이지
-  @Get('review')
+  @Get('mypage/review')
   @Public()
   @Render('index')
   async reviewList() {
     return { pageName: 'reviewList' };
   }
 
-  @Get('review-detail')
+  @Get('review/review-detail')
   @Public()
   @Render('index')
   async reviewDetail() {
@@ -228,5 +226,12 @@ export class AppController {
   @Render('index')
   async searchGym() {
     return { pageName: 'searchGym' };
+  }
+
+  @Get('test')
+  @Public()
+  @Render('index')
+  async test() {
+    return { pageName: 'test' };
   }
 }

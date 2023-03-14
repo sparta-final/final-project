@@ -1,3 +1,9 @@
+const userType = localStorage.getItem('type');
+if (userType !== 'user') {
+  alert('일반 로그인이 필요한 서비스입니다.');
+  window.location.href = '/user/login';
+}
+
 $(document).ready(function () {
   const now = new Date();
   let year = now.getFullYear();
@@ -26,17 +32,21 @@ const getUseGymHistory = async (year, month) => {
       accesstoken: `${localStorage.getItem('at')}`,
       refreshtoken: `${localStorage.getItem('rt')}`,
     },
-  })
+  });
   const histories = res.data;
   $('.text-gray-dark').empty();
 
   for (let i in histories) {
-    console.log('histories[i]', histories[i])
+    console.log('histories[i]', histories[i]);
     // 리뷰가 존재한다면 리뷰보기 버튼, 없다면 리뷰작성 버튼
     if (histories[i].reviewId) {
-      histories[i].reviews = `<button class="review-btn" onclick="location.href='/review-detail?reviewId=${histories[i].reviewId}'">리뷰보기</button>`;
+      histories[
+        i
+      ].reviews = `<button class="review-btn" onclick="location.href='/review/review-detail?reviewId=${histories[i].reviewId}'">리뷰보기</button>`;
     } else {
-      histories[i].reviews = `<button class="review-btn" onclick="location.href='/review/postReview?gymId=${histories[i].gymId}'">리뷰작성</button>`;
+      histories[
+        i
+      ].reviews = `<button class="review-btn" onclick="location.href='/review/postReview?gymId=${histories[i].gymId}'">리뷰작성</button>`;
     }
 
     let temp = `
@@ -48,7 +58,6 @@ const getUseGymHistory = async (year, month) => {
     `;
     $('.text-gray-dark').append(temp);
   }
-
 
   const curMonth = $('.cur-month');
   const calculateMonth = $('.admin-month-title');
@@ -68,4 +77,4 @@ const getUseGymHistory = async (year, month) => {
   $('#nextMonthBtn').on('click', function () {
     getUseGymHistory(nextYear, nextMonth);
   });
-}
+};

@@ -1,11 +1,17 @@
+const userType = localStorage.getItem('type');
+if (userType !== 'admin') {
+  alert('접근 권한이 필요합니다.');
+  window.location.href = '/';
+}
+
 $(document).ready(function () {
   const url = window.location.pathname.split('/');
   const id = url[url.length - 1];
 
   getApproveGymDetail(id);
-  const targetTextarea = document.querySelector(`.gym-detail-desc`);
-  const rowCount = targetTextarea.value.split(/\r\n|\r|\n/).length;
-  targetTextarea.style.height = rowCount * 24 + 'px'; //줄 수에 따라서 높이를 조절
+  // const targetTextarea = document.querySelector(`.gym-detail-desc`);
+  // const rowCount = targetTextarea.value.split(/\r\n|\r|\n/).length;
+  // targetTextarea.style.height = rowCount * 24 + 'px'; //줄 수에 따라서 높이를 조절
 });
 
 function getApproveGymDetail(id) {
@@ -20,16 +26,31 @@ function getApproveGymDetail(id) {
     .then((response) => {
       const data = response.data;
       console.log('✨✨✨', data, '✨✨✨');
+      let img = data[0].gymImgs;
       let name = data[0].name;
       let address = data[0].address;
       let phone = data[0].phone;
       let description = data[0].description;
       let certification = data[0].certification;
-      // 이미지 가져오는 로직 필요
-      // for (let i in data) {
-      //   let img = `<li><img src="${data[i]}" id="main-img" /></li>`;
-      //   $('.bxslider').append(img);
-      // }
+
+      for (let i = 0; i < img.length; i++) {
+        let temp_img = `
+        <li><img src="${img[i].img}" id="approve-img" /></li>
+        `;
+        $('.approve-bxslider').append(temp_img);
+      }
+
+      $(function () {
+        $('.approve-bxslider').bxSlider({
+          stopAutoOnClick: true,
+          pager: false,
+          controls: false,
+          slideWidth: 600,
+          autoControlsCombine: true,
+          keyboardEnabled: true,
+          autoHover: true,
+        });
+      });
 
       let temp = `
         <div class="gym-detail-wrap">

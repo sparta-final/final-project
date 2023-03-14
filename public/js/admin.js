@@ -1,3 +1,9 @@
+const userType = localStorage.getItem('type');
+if (userType !== 'admin') {
+  alert('접근 권한이 필요합니다.');
+  window.location.href = '/';
+}
+
 $(document).ready(function () {
   const now = new Date();
   let year = now.getFullYear();
