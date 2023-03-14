@@ -50,8 +50,6 @@ export class BusinessUserService {
 
     if (!isMatch) throw new ConflictException('현재 비밀번호가 일치하지 않습니다.');
 
-    console.log('businessUser', businessUser);
-
     if (updateBusinessUserInfo.password !== updateBusinessUserInfo.passwordCheck)
       throw new ConflictException('비밀번호가 일치하지 않습니다.');
     if (businessUser) {
@@ -60,6 +58,9 @@ export class BusinessUserService {
       businessUser.password = hashedPassword;
       file ? (businessUser.profileImage = file.location) : (businessUser.profileImage = null);
       await this.busniessUserRepo.save(businessUser);
+
+      await this.cacheManager.del(`businessUser:ID: ${user.sub}`);
+
       return businessUser;
     }
   }
@@ -78,6 +79,8 @@ export class BusinessUserService {
       await this.busniessUserRepo.save(businessUser);
       return businessUser;
     }
+
+    await this.cacheManager.del(`businessUser:ID: ${user.sub}`);
   }
 
   /**

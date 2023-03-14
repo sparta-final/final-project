@@ -1,4 +1,5 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Cache } from 'cache-manager';
+import { CACHE_MANAGER, ConflictException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/global/entities/Users';
 import { Repository } from 'typeorm';
@@ -11,7 +12,8 @@ import { UserGym } from 'src/global/entities/UserGym';
 export class UserService {
   constructor(
     @InjectRepository(Users) private readonly userRepo: Repository<Users>,
-    @InjectRepository(UserGym) private readonly userGymRepo: Repository<UserGym>
+    @InjectRepository(UserGym) private readonly userGymRepo: Repository<UserGym>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
   /**
@@ -20,10 +22,14 @@ export class UserService {
    */
 
   async getUserInfo(user: JwtPayload) {
+    const cachedUser = await this.cacheManager.get(`user:ID: ${user.sub}`);
+
     const existUser = await this.userRepo.findOne({
       where: { id: user.sub, deletedAt: null },
     });
     const { password, ...rest } = existUser;
+
+    await this.cacheManager.set(`user:ID: ${user.sub}`, rest, { ttl: 60 });
 
     return rest;
   }
@@ -56,6 +62,8 @@ export class UserService {
       await this.userRepo.save(existUser);
       return existUser;
     }
+
+    await this.cacheManager.del(`user:ID: ${user.sub}`);
   }
 
   /**
@@ -72,6 +80,8 @@ export class UserService {
       await this.userRepo.save(existUser);
       return existUser;
     }
+
+    await this.cacheManager.del(`user:ID: ${user.sub}`);
   }
 
   /**
@@ -79,6 +89,9 @@ export class UserService {
    *  @author: 김승일
    */
   async getUseGymHistory(user: JwtPayload, year: number, month: number) {
+    const cachedHistory = await this.cacheManager.get(`user:ID: ${user.sub}-History`);
+    if (cachedHistory) return cachedHistory;
+
     const existUser = await this.userRepo.findOne({
       where: { id: user.sub },
     });
@@ -96,6 +109,8 @@ export class UserService {
       const userGymDate = new Date(userGym.createdAt);
       return userGymDate.getFullYear() === year && userGymDate.getMonth() + 1 === month;
     });
+
+    await this.cacheManager.set(`user:ID: ${user.sub}-History`, useGymHistory, { ttl: 60 });
 
     return useGymHistory;
   }
