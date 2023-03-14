@@ -1,4 +1,5 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Cache } from 'cache-manager';
+import { ConflictException, Inject, Injectable, CACHE_MANAGER } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Busienssusers } from 'src/global/entities/Busienssusers';
 import { Repository } from 'typeorm';
@@ -11,7 +12,8 @@ import { JwtPayload } from '../auth/types/jwtPayload.type';
 export class BusinessUserService {
   constructor(
     @InjectRepository(Busienssusers) private readonly busniessUserRepo: Repository<Busienssusers>,
-    @InjectRepository(UserGym) private readonly userGymRepo: Repository<UserGym>
+    @InjectRepository(UserGym) private readonly userGymRepo: Repository<UserGym>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
   /**
@@ -20,10 +22,14 @@ export class BusinessUserService {
    */
 
   async getBusinessUserInfo(user: JwtPayload) {
+    const cachedBusinessUser = await this.cacheManager.get(`businessUser:ID: ${user.sub}`);
+    if (cachedBusinessUser) return cachedBusinessUser;
+
     const businessUser = await this.busniessUserRepo.findOne({
       where: { id: user.sub, deletedAt: null },
     });
     const { password, ...rest } = businessUser;
+    await this.cacheManager.set(`businessUser:ID: ${user.sub}`, rest, { ttl: 30 });
 
     return rest;
   }
@@ -80,10 +86,17 @@ export class BusinessUserService {
    */
 
   async getUserByGymId(gymId: number) {
-    return await this.userGymRepo
+    const cachedUsersOfGym = await this.cacheManager.get(`usersOfGym:ID: ${gymId}`);
+    if (cachedUsersOfGym) return cachedUsersOfGym;
+
+    const usersOfGym = await this.userGymRepo
       .createQueryBuilder('userGym')
       .leftJoinAndSelect('userGym.user', 'user')
       .where('userGym.gymId = :gymId', { gymId })
       .getMany();
+
+    await this.cacheManager.set(`usersOfGym:ID: ${gymId}`, usersOfGym, { ttl: 30 });
+
+    return usersOfGym;
   }
 }
