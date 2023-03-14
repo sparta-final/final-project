@@ -38,7 +38,7 @@ function getVisitUser(id, year, month) {
   const nextYear = month === 12 ? year + 1 : year;
 
   if (prevYear > new Date().getFullYear() || (prevYear === new Date().getFullYear() && prevMonth > new Date().getMonth())) {
-    alert('다음달 데이터는 가져올 수 없습니다.');
+    alert('이번달 이후 조회는 불가능 합니다.');
     location.reload();
     return;
   }
@@ -64,24 +64,27 @@ function getVisitUser(id, year, month) {
             `;
         $('.text-gray-dark').append(temp);
       }
-      const curMonth = $('.cur-month');
-      const calculateMonth = $('.admin-month-title');
-      if (curMonth) {
-        curMonth.remove();
-        calculateMonth.remove();
+      function removeAll() {
+        const curMonth = $('.cur-month');
+        const calculateMonth = $('.admin-month-title');
+        if (curMonth) {
+          curMonth.remove();
+          calculateMonth.remove();
+        }
       }
-
       let now = `
       <li class="cur-month">${year}.${month}</li>`;
       $('.prev-month').after(now);
 
       $('#prevMonthBtn').off('click');
       $('#prevMonthBtn').on('click', function () {
+        removeAll();
         getVisitUser(id, prevYear, prevMonth);
         caculateGym(id, prevYear, prevMonth);
       });
       $('#nextMonthBtn').off('click');
       $('#nextMonthBtn').on('click', function () {
+        removeAll();
         getVisitUser(id, nextYear, nextMonth);
         caculateGym(id, nextYear, nextMonth);
       });
@@ -102,11 +105,16 @@ function caculateGym(id, year, month) {
     })
     .then((res) => {
       const data = res.data;
+
+      if (data.length === 0) {
+        alert('이전 데이터가 없습니다');
+        location.reload();
+      }
       const paid = data[0].paid.toLocaleString();
 
       let temp = `
-      <p class='admin-month-title'>${month}월 매출 <span>${paid}</span> 원</p>
-          `;
+        <p class='admin-month-title'>${month}월 매출 <span>${paid}</span> 원</p>
+            `;
       $('.sales-month').append(temp);
     })
     .catch((err) => {

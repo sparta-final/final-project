@@ -29,11 +29,11 @@ import { AdminModule } from './domain/admin/admin.module';
     }),
     ThrottlerModule.forRoot({
       ttl: 30,
-      limit: 10,
+      limit: 999,
     }),
     ThrottlerModule.forRoot({
       ttl: 30,
-      limit: 10,
+      limit: 999,
     }),
     AuthModule,
     GymModule,
