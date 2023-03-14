@@ -1,0 +1,127 @@
+@import url(_variables.css);
+
+.header-wrap {
+  position: fixed;
+  top: 0;
+  width: 420px;
+  height: 70px;
+  z-index: 9999;
+  background-color: var(--main-color);
+  border-bottom: 1px solid var(--sub-color-4);
+}
+
+.header-wrap h1 {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--point-color);
+  cursor: pointer;
+}
+
+.header-wrap ul {
+  position: absolute;
+  top: 23px;
+  right: 0;
+  width: 88px;
+}
+
+.header-wrap li {
+  width: 24px;
+  height: 24px;
+  margin-right: 20px;
+  background-size: cover;
+  float: left;
+  text-indent: -9999px;
+  cursor: pointer;
+}
+
+.qr-code {
+  background-image: url(../images/qr-code.svg);
+}
+
+.search {
+  background-image: url(../images/search.svg);
+}
+
+.search-box {
+  position: absolute;
+  width: 150px;
+  right: 165%;
+  display: none;
+}
+
+.search-input {
+  border-top: transparent;
+  border-left: transparent;
+  border-right: transparent;
+  font-size: 14.5px;
+  height: 35px;
+  padding-left: 20px;
+}
+
+.search-input:focus {
+  outline: none; /* 선택된 input 요소의 outline을 제거합니다. */
+}
+
+.search-submit {
+  position: absolute;
+  width: 18px;
+  height: 16px;
+  top: 22%;
+  cursor: pointer;
+  border: none;
+}
+
+.search-box.show {
+  display: block;
+}
+
+.header-height {
+  height: 70px;
+}
+
+.footer-container {
+  position: fixed;
+  bottom: 0;
+  width: 420px;
+  height: 100px;
+  background-color: var(--sub-color-9);
+}
+
+.footer-wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  margin: 26px auto;
+}
+
+.footer {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+li.small-svg {
+  width: 46px;
+}
+
+.footer-height {
+  height: 100px;
+}
+
+.footer-container svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  fill: var(--sub-color-8);
+}
+
+.footer-container svg.svg-select {
+  fill: var(--point-color);
+}

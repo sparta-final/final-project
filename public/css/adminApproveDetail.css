@@ -1,0 +1,21 @@
+/* img slider */
+
+div.approve-img-slider > div.bx-wrapper {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+.approve-img-slider {
+  width: 420px;
+  height: 420px;
+}
+
+.approve-img-slider > div.bx-wrapper {
+  border: none;
+}
+
+img#approve-img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+}

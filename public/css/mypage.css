@@ -1,0 +1,159 @@
+input[type='file']::-webkit-file-upload-button {
+  background-color: var(--point-color);
+  color: white;
+  padding: 8px 20px;
+  border: none;
+  /* border-radius: 4px; */
+  cursor: pointer;
+}
+
+.info-container {
+  width: 90%;
+  margin-left: 5%;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--sub-color-9);
+}
+
+.info-container > img {
+  width: 50px;
+  height: 50px;
+  float: left;
+  margin-right: 10px;
+  border-radius: 25px;
+}
+
+#logout {
+  float: right;
+  font-weight: 600;
+  color: var(--point-color);
+  background: none;
+  border: none;
+  padding: 16px 16px 16px 0;
+}
+
+#nickname,
+#business-name {
+  font-size: 19px;
+  color: var(--point-color);
+  font-weight: 500;
+  margin-right: 5px;
+}
+
+#email {
+  font-size: 14px;
+  color: var(--sub-color-4);
+}
+
+img.my-info-btn {
+  height: 12px;
+  margin-bottom: 1px;
+}
+
+.infoForm > input {
+  width: 80%;
+  height: 40px;
+  /* margin-top: 10px; */
+  border-radius: 10px;
+  border: 3px solid var(--sub-color-1);
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper span {
+  position: absolute;
+  right: 12%;
+  top: 40%;
+  /* 필요한 스타일 추가 */
+  cursor: pointer;
+}
+
+.input-wrapper > input {
+  width: 80%;
+  height: 40px;
+  margin-top: 10px;
+  margin-bottom: -50px;
+  border-radius: 10px;
+  border: 3px solid var(--sub-color-1);
+}
+
+/* 내 멤버십 정보 */
+
+.membership-wrap {
+  width: 90%;
+  margin-left: 5%;
+}
+
+.member-start {
+  padding: 10px 0;
+  color: var(--point-color);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.membership-data-wrap {
+  border: 1px solid var(--sub-color-8);
+  padding: 15px;
+  color: var(--sub-color-4);
+}
+
+.membership-data-wrap span,
+.membership-data-wrap > div {
+  display: block;
+  border-bottom: 1px solid var(--sub-color-9);
+  padding: 15px 5px;
+}
+
+.membership-data-wrap > div {
+  position: relative;
+  cursor: pointer;
+}
+
+.membership-data-wrap > .member {
+  border-bottom: transparent;
+  margin-bottom: -15px;
+}
+
+.member-info-btn {
+  position: absolute;
+  top: 21px;
+  right: 15px;
+  height: 12px;
+}
+
+.member-close {
+  width: 90%;
+  height: 50px;
+  margin: 20px 5% 10px;
+  color: var(--point-color);
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  background: var(--sub-color-9);
+}
+
+.my-member {
+  margin-top: 15px;
+  padding: -20px;
+  color: var(--sub-color-8);
+  margin-bottom: 5px;
+}
+
+.member {
+  border-bottom: transparent;
+}
+
+.membership-data-past-wrap {
+  width: 90%;
+  border-top: 1px solid var(--sub-color-9);
+  padding: 15px;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-bottom: -20px;
+  color: var(--sub-color-4);
+}
+
+.member-createAt {
+  color: var(--point-color);
+}

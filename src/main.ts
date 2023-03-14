@@ -33,10 +33,10 @@ async function bootstrap() {
       // JSON 페이로드를 DTO 프로퍼티에 지정된 타입으로 변환
       transform: true,
       // validation 데코레이터(ex.@IsString())가 없는 모든 프로퍼티 제거
-      whitelist: true,
+      whitelist: false,
       // 알수없는 프로퍼티가 유효성 검사를 통과하는거 방지
-      forbidUnknownValues: true,
-    }),
+      forbidUnknownValues: false,
+    })
   );
   // INTERCEPTOR (undefined -> null)
   app.useGlobalInterceptors(new UndefinedToNullInterceptor());
@@ -51,6 +51,12 @@ async function bootstrap() {
   app.useStaticAssets(path.join(__dirname, '..', 'uploads'), {
     prefix: '/uploads',
   });
+
+  // ejs 관련, static 파일들 아래 코드에 저장하는걸로 수정해야 할듯?
+  app.useStaticAssets(path.join(__dirname, '..', 'public'));
+  app.setBaseViewsDir(path.join(__dirname, '..', 'views'));
+  app.setViewEngine('ejs');
+
   // SWAGGER DOCUMENT
   swaggerDocumentBuilder(app);
 

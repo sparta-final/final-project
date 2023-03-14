@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("components/head") %>
+
+  <body>
+    <div id="mobile-container">
+      <%- include("components/header") %>
+      <!---->
+      <% if (pageName==="" ) { %> <%- include("main/main") %> <% } %>
+      <!---->
+      <% if (pageName==="payment" ) { %> <%- include("main/paymentComplete") %> <% } %>
+      <!---->
+      <% if (pageName==="adminLogin" ) { %> <%- include("auth/admin-login") %> <% } %>
+      <!---->
+      <% if (pageName==="admin" ) { %> <%- include("admin/admin") %> <% } %>
+      <!---->
+      <% if (pageName==="adminApprove" ) { %> <%- include("admin/adminApprove") %> <% } %>
+      <!---->
+      <% if (pageName==="adminApproveDetail" ) { %> <%- include("admin/adminApproveDetail") %> <% } %>
+      <!---->
+      <% if (pageName==="userLogin" ) { %> <%- include("auth/user-login") %> <% } %>
+      <!---->
+      <% if (pageName==="userSignup" ) { %> <%- include("auth/user-signup") %> <% } %>
+      <!---->
+      <% if (pageName==="userQRCode" ) { %> <%- include("auth/user-qrcode") %> <% } %>
+      <!---->
+      <% if (pageName==="businessLogin" ) { %> <%- include("auth/business-login") %> <% } %>
+      <!---->
+      <% if (pageName==="businessSignup" ) { %> <%- include("auth/business-signup") %> <% } %>
+      <!---->
+      <% if (pageName==="updateGym" ) { %> <%- include("gym/updateGym") %> <% } %>
+      <!---->
+      <% if (pageName==="userList" ) { %> <%- include("gym/userList") %> <% } %>
+      <!---->
+      <% if (pageName==="mypage" ) { %> <%- include("mypage/mypage") %> <%- include("mypage/myMembership") %> <% } %>
+      <!---->
+      <% if (pageName==="myinfo" ) { %> <%- include("mypage/myinfo")%> <% } %>
+      <!---->
+      <% if (pageName==="usegymhistory" ) { %> <%- include("mypage/usegym-history")%> <% } %>
+      <!---->
+      <% if (pageName==="businessMyInfo" ) { %> <%- include("mypage/businessMyInfo") %> <% } %>
+      <!---->
+      <% if (pageName==="myinfoBusiness" ) { %> <%- include("mypage/myinfoBusiness")%> <% } %>
+      <!---->
+      <% if (pageName==="paymentDetails" ) { %> <%- include("mypage/paymentDetails")%> <% } %>
+      <!---->
+      <% if (pageName==="gymList" ) { %> <%- include("gym/gymList")%> <% } %>
+      <!---->
+      <% if (pageName==="gymDetail" ) { %> <%- include("gym/gymDetail")%> <% } %>
+      <!---->
+      <% if (pageName==="postGym" ) { %> <%- include("gym/postGym") %> <% } %>
+      <!---->
+      <% if (pageName==="feed" ) { %> <%- include("feeds/feed")%> <% } %>
+      <!---->
+      <% if (pageName==="feedCreate" ) { %> <%- include("feeds/createFeed")%> <% } %>
+      <!---->
+      <% if (pageName==="feedUpdate" ) { %> <%- include("feeds/feedUpdate")%> <% } %>
+      <!---->
+      <% if (pageName==="comments" ) { %> <%- include("feeds/comment")%> <% } %>
+      <!---->
+      <% if (pageName==="searchGym" ) { %> <%- include("gym/searchGym")%> <% } %>
+      <!---->
+      <% if (pageName==="reviewList" ) { %> <%- include("review/reviewList")%> <% } %>
+      <!---->
+      <% if (pageName==="reviewDetail" ) { %> <%- include("review/reviewDetail")%> <% } %>
+      <!---->
+      <% if (pageName==="postReview" ) { %> <%- include("review/postReview")%> <% } %>
+      <!---->
+      <% if (pageName==="gymReview" ) { %> <%- include("gym/gymReview")%> <% } %>
+      <!---->
+      <% if (pageName==="test" ) { %> <%- include("test")%> <% } %>
+      <!---->
+
+      <%- include("components/footer") %>
+    </div>
+  </body>
+</html>

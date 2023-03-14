@@ -1,0 +1,48 @@
+<script
+  type="text/javascript"
+  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9aeee9ff016fed561bbb3a8f799b3034&libraries=clusterer,services"
+></script>
+<section>
+  <div class="create-gym-wrap">
+    <h2 class="h2-create-gym">가맹점 등록하기</h2>
+    <form enctype="multipart/form-data">
+      <input type="text" class="postGymInput" placeholder="매장 이름" id="gymName" />
+
+      <input type="text" class="postGymInput" placeholder="매장 전화번호 (번호만 입력해 주세요)" id="gymPhone" />
+      <div class="address-wrap">
+        <input type="text" id="address" class="postGymInput" placeholder="주소" />
+        <input type="button" onclick="execDaumPostcode()" value="주소 검색" class="addres-btn" /><br />
+      </div>
+
+      <div id="lat" style="display: none"></div>
+      <div id="lng" style="display: none"></div>
+      <div id="map" style="width: 300px; height: 300px; margin-top: 10px; display: none"></div>
+      <div class="gym-type-wrap">
+        <input type="radio" id="type-health" name="gymType" value="헬스장" />헬스장
+        <input type="radio" id="type-health" name="gymType" value="필라테스" />필라테스
+        <input type="radio" id="type-health" name="gymType" value="크로스핏" />크로스핏
+      </div>
+      <textarea
+        name="gymDescription"
+        placeholder="매장 소개 및 영업시간"
+        id="gymDescription"
+        class="postGymInput gym-intro"
+        wrap="hard"
+      ></textarea>
+      <div class="certifi-wrap">
+        <input class="certifi-upload-name" value="" placeholder="사업자등록증 업로드 하기" />
+        <label for="gymCertification" class="gym-certifi-img">+</label>
+        <input type="file" class="postGymInput" id="gymCertification" />
+      </div>
+      <div class="gym-img-wrap">
+        <input class="gym-upload-name" value="" placeholder="매장 사진 업로드 하기" />
+        <label for="gymImgs" class="gym-imgs-upload">+</label>
+        <input type="file" class="postGymInput" id="gymImgs" multiple />
+      </div>
+
+      <input type="button" class="gym-create-btn" onclick="enrollGym()" value="가맹점 등록" />
+    </form>
+  </div>
+</section>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/js/enrollGym.js"></script>
