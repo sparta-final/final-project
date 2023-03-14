@@ -11,7 +11,7 @@ export const findMyReview = () => {
 
 export const findReviewByGymId = () => {
   return applyDecorators(
-    ApiOperation({ summary: '리뷰 조회(업체별)' }),
+    ApiOperation({ summary: '리뷰 조회(가맹점별)' }),
     ApiResponse({ status: 200, description: '리뷰조회 성공' }),
     ApiResponse({ status: 400, description: '리뷰조회 실패' })
   );

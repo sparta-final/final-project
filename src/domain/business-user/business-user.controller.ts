@@ -40,7 +40,7 @@ export class BusinessUserController {
     return await this.businessUserService.deleteBusinessUser(user);
   }
 
-  // 업체별 사용자 데이터 불러오기
+  // 가맹점별 사용자 데이터 불러오기
   @Get('gym/user/:gymId')
   @Public()
   @GetUserByGymId()

@@ -27,7 +27,7 @@ export class QRcodeService {
   }
 
   /**
-   * @description 유저의 업체 이용기록 저장
+   * @description 유저의 가맹점 이용기록 저장
    * @author 김승일
    * @argument businessUser QR코드를 스캔한 사업자의 id
    * @argument date QR코드 생성 시간

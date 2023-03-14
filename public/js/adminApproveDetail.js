@@ -15,7 +15,7 @@ function getApproveGymDetail(id) {
     headers: {
       accesstoken: `${localStorage.getItem('at')}`,
       refreshtoken: `${localStorage.getItem('rt')}`,
-    }
+    },
   })
     .then((response) => {
       const data = response.data;
@@ -45,7 +45,7 @@ function getApproveGymDetail(id) {
         <p>사업자 등록증</p>
         <img src="${certification}" alt="" />
       </div>
-      <button class="approve-btn" onclick="approveGym(${id})">제휴업체 승인하기</button>
+      <button class="approve-btn" onclick="approveGym(${id})">제휴가맹점 승인하기</button>
       `;
       $('.approveDetail-container').append(temp);
     })
@@ -56,16 +56,20 @@ function getApproveGymDetail(id) {
 
 function approveGym(id) {
   axios
-    .put('/api/admin/approve', {
-      id: id,
-    }, {
-      headers: {
-        accesstoken: `${localStorage.getItem('at')}`,
-        refreshtoken: `${localStorage.getItem('rt')}`,
+    .put(
+      '/api/admin/approve',
+      {
+        id: id,
+      },
+      {
+        headers: {
+          accesstoken: `${localStorage.getItem('at')}`,
+          refreshtoken: `${localStorage.getItem('rt')}`,
+        },
       }
-    })
+    )
     .then((response) => {
-      alert('협력업체로 등록되었습니다.');
+      alert('협력가맹점로 등록되었습니다.');
       window.location.replace(`/admin/approve`);
     })
     .catch((err) => {

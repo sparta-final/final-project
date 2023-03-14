@@ -13,7 +13,7 @@ export const CreateQRCode = () => {
 
 export const UseGym = () => {
   return applyDecorators(
-    ApiOperation({ summary: '업체 이용' }),
+    ApiOperation({ summary: '가맹점 이용' }),
     ApiSecurity('accesstoken'),
     ApiSecurity('refreshtoken'),
     ApiResponse({ status: 201, description: '성공' }),

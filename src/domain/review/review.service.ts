@@ -58,7 +58,7 @@ export class ReviewService {
   }
 
   /**
-   * @description 리뷰 조회(업체별)
+   * @description 리뷰 조회(가맹점별)
    * @author 김승일
    * @param gymId
    */

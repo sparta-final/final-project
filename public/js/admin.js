@@ -53,7 +53,7 @@ function getGym() {
       });
 
       let temp = `
-        <p class='admin-gym-all'>제휴 업체 <span>${gymAll.toLocaleString()}</span> 개</p>
+        <p class='admin-gym-all'>제휴 가맹점 <span>${gymAll.toLocaleString()}</span> 개</p>
         <ul class='admin-gym-type'>
           <li class='admin-health'>헬스장 <span>${data[0].toLocaleString()}</span> 개</li>
           <li class='admin-crossfit'>크로스핏 <span>${data[1].toLocaleString()}</span> 개</li>

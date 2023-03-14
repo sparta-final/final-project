@@ -9,7 +9,7 @@ export class Calculate {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @ApiProperty({ example: 1, description: '업체 아이디' })
+  @ApiProperty({ example: 1, description: '가맹점 아이디' })
   @Column('int', { name: 'gym_id' })
   gymId: number;
 

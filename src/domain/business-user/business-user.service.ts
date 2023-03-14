@@ -75,7 +75,7 @@ export class BusinessUserService {
   }
 
   /**
-   * 업체별 사용자 데이터 불러오기
+   * 가맹점별 사용자 데이터 불러오기
    * @author 주현진
    */
 
