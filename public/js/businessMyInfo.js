@@ -3,15 +3,15 @@ $(document).ready(function () {
 });
 
 // 내 가게 가져오기
-function getMyGym() {
-  axios
+async function getMyGym() {
+  await axios
     .get('/api/gym/my', {
       headers: {
         accesstoken: `${localStorage.getItem('at')}`,
         refreshtoken: `${localStorage.getItem('rt')}`,
       },
     })
-    .then((res) => {
+    .then(async (res) => {
       console.log(res);
 
       const data = res.data;
@@ -29,8 +29,8 @@ function getMyGym() {
                             <h2 class="mygymName">${name}</h2>
                             <p>${address}</p>
                             <div class="review-box">
-                              <p>별점</p>
-                              <button>리뷰 보기</button>
+                            <div class="gym-review-${id}"></div>
+                              <button class='review-go-btn'>리뷰 보기</button>
                             </div>
                             <div class="mybtn">
                               <button onclick="location.href='/business/userList?id=${id}'">사용자</button> 
@@ -40,6 +40,19 @@ function getMyGym() {
                           </div>
                         </div>`;
         $('#imageTextBox').append(temp_html);
+        await axios
+          .get(`/api/gym/${id}/review`)
+          .then((res) => {
+            console.log(res);
+            const reivewsLength = res.data.reviews.length;
+            let avgStar = `
+                <div class="gym-star">⭐<span>${res.data.avgStar}</span>(${reivewsLength})</div>
+                `;
+            $(`.gym-review-${id}`).append(avgStar);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     })
     .catch((err) => {
