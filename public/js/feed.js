@@ -31,13 +31,13 @@ function getGym() {
       data = res.data;
       if (postCount === 0) {
         feedContainer.innerHTML = '';
+        console.log('✨✨✨', 'data', data, '✨✨✨');
         for (let i = 0; i < limit && i < data.length; i++) {
           let feedsImg = data[i].feedsImgs[0].image;
           let id = data[i].id;
           let nickname = data[i].user.nickname;
           let profileImg = data[i].user.profileImage;
           let content = data[i].content;
-          console.log('✨✨✨', content, '✨✨✨');
           let temp = `
           <div>
             <div class="feed-user-wrap">
@@ -137,3 +137,13 @@ function feedDelete(id) {
       console.log(err);
     });
 }
+
+// 피드작성 유저타입 확인
+body.addEventListener('click', function (e) {
+  // console.log('✨✨✨', e.target.classList.value, '✨✨✨');
+  if (e.target.classList.value !== 'create-feed-btn') return;
+  if (localStorage.getItem('type') !== 'user') {
+    alert('로그인 후 이용 가능합니다.');
+    window.location.href = '/user/login';
+  }
+});

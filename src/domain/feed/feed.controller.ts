@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor, FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import { Public } from 'src/global/common/decorator/public.decorator';
@@ -28,13 +28,14 @@ export class FeedController {
   constructor(private readonly feedService: FeedService) {}
 
   @FeedPost()
-  @UseInterceptors(FileInterceptor('feedImg'))
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'feedImg', maxCount: 10 }]))
   @Post()
   async postFeeds(
-    @UploadedFile() file: Express.MulterS3.File,
+    @UploadedFiles() file: { feedImg: Express.MulterS3.File[] },
     @CurrentUser() user: JwtPayload,
     @Body() createFeedDto: CreateFeedDto
   ) {
+    console.log('✨✨✨', file, '✨✨✨');
     const feed = await this.feedService.postFeeds({ file, user, createFeedDto });
     return feed;
   }
