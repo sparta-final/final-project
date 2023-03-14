@@ -21,6 +21,7 @@ export class FeedService {
    * @author 정호준
    */
   async postFeeds({ file, user, createFeedDto }) {
+    console.log('✨✨✨', file, '✨✨✨');
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -31,10 +32,15 @@ export class FeedService {
         content: createFeedDto.content,
         userId: user.sub,
       });
-      await this.feedsImgRepository.save({
-        feedId: createFeed.id,
-        image: file.location,
-      });
+      const feedImgs = [];
+      for (let i = 0; i < file.feedImg.length; i++) {
+        feedImgs.push({ feedId: createFeed.id, image: file.feedImg[i].location });
+      }
+      const createImg = await this.feedsImgRepository.save(feedImgs);
+      // await this.feedsImgRepository.save({
+      //   feedId: createFeed.id,
+      //   image: file.location,
+      // });
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -140,11 +146,9 @@ export class FeedService {
     const findFeedImg = await this.feedsImgRepository.findOne({
       where: { feedId: id },
     });
-    console.log('✨✨✨', 'findFeedImg', findFeedImg, '✨✨✨');
     const findComment = await this.commentsRepository.findOne({
       where: { feedId: id },
     });
-    console.log('✨✨✨', 'findComment', findComment, '✨✨✨');
 
     const queryRunner = this.dataSource.createQueryRunner();
 
@@ -208,7 +212,6 @@ export class FeedService {
       .where('feeds.id = :feedId', { feedId })
       .select(['feeds', 'user.nickname', 'user.profileImage'])
       .getRawMany();
-    console.log(feedId);
   }
 
   /**
