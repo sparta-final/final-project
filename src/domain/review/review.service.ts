@@ -155,6 +155,9 @@ export class ReviewService {
       }
     );
 
+    await this.cacheManager.del(`reviews:UserID: ${user.sub}`);
+    await this.cacheManager.del(`reviews:GymID: ${gymId}`);
+
     return updateReview;
   }
 

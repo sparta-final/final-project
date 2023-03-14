@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Cache } from 'cache-manager';
+import { CACHE_MANAGER, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Comments } from 'src/global/entities/Comments';
 import { Feeds } from 'src/global/entities/Feeds';
@@ -12,6 +13,7 @@ export class FeedService {
     @InjectRepository(Feeds) private feedsRepository: Repository<Feeds>,
     @InjectRepository(FeedsImg) private feedsImgRepository: Repository<FeedsImg>,
     @InjectRepository(Comments) private commentsRepository: Repository<Comments>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private dataSource: DataSource
   ) {}
 
@@ -21,7 +23,6 @@ export class FeedService {
    * @author 정호준
    */
   async postFeeds({ file, user, createFeedDto }) {
-    console.log('✨✨✨', file, '✨✨✨');
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -42,6 +43,8 @@ export class FeedService {
       //   image: file.location,
       // });
 
+      await this.cacheManager.del('Feed:allFeed');
+
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
@@ -56,6 +59,9 @@ export class FeedService {
    * @author 정호준, 한정훈
    */
   async getAllFeed() {
+    const cachedallFeed = await this.cacheManager.get('Feed:allFeed');
+    if (cachedallFeed) return cachedallFeed;
+
     const allFeed = await this.feedsRepository
       .createQueryBuilder('feeds')
       .leftJoinAndSelect('feeds.user', 'user')
@@ -69,6 +75,8 @@ export class FeedService {
     //   relations: ['feedsImgs', 'user'],
     //   order: { id: 'DESC' },
     // });
+    await this.cacheManager.set('Feed:allFeed', allFeed, { ttl: 60 });
+
     return allFeed;
   }
 
@@ -78,10 +86,15 @@ export class FeedService {
    * @author 정호준
    */
   async getMyFeed(user: JwtPayload) {
+    const cachedMyFeed = await this.cacheManager.get(`Feed:myFeed:${user.sub}`);
+    if (cachedMyFeed) return cachedMyFeed;
+
     const myFeed = await this.feedsRepository.find({
       where: { userId: user.sub },
       relations: ['feedsImgs'],
     });
+    await this.cacheManager.set(`Feed:myFeed:${user.sub}`, myFeed, { ttl: 60 });
+
     return myFeed;
   }
 
@@ -91,10 +104,16 @@ export class FeedService {
    * @author 한정훈
    */
   async updateGetFeed(id) {
-    return await this.feedsRepository.findOne({
+    const cachedMyFeedData = await this.cacheManager.get(`Feed:myFeedData:${id}`);
+    if (cachedMyFeedData) return cachedMyFeedData;
+
+    const myfeedData = await this.feedsRepository.findOne({
       where: { id: id },
       relations: ['feedsImgs'],
     });
+    await this.cacheManager.set(`Feed:myFeedData:${id}`, myfeedData, { ttl: 60 });
+
+    return myfeedData;
   }
 
   /**
@@ -108,6 +127,9 @@ export class FeedService {
     await this.feedsRepository.update(id, {
       content: updatefeedDto.content,
     });
+
+    await this.cacheManager.del('Feed:allFeed');
+
     // 이미지 함께 수정 가능하게 하려면 위에 코드 대신 아래코드 작성
     // const existFeed = await this.feedsRepository.findOne({
     //   where: { id: feedId },
@@ -162,6 +184,9 @@ export class FeedService {
         await this.commentsRepository.delete(findComment.id);
       }
       await this.feedsRepository.delete(id);
+
+      await this.cacheManager.del('Feed:allFeed');
+
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
@@ -197,6 +222,10 @@ export class FeedService {
       userId: user.sub,
       ...createcommentDto,
     });
+
+    await this.cacheManager.del('Feed:allFeed');
+    await this.cacheManager.del(`Feed:comment:${feedId}`);
+
     return createComment;
   }
 
@@ -206,12 +235,19 @@ export class FeedService {
    * @author 정호준
    */
   async getCommentUser(feedId) {
-    return await this.feedsRepository
+    const cachedCommentUser = await this.cacheManager.get(`Feed:commentUser:${feedId}`);
+    if (cachedCommentUser) return cachedCommentUser;
+
+    const feedWriter = await this.feedsRepository
       .createQueryBuilder('feeds')
       .leftJoinAndSelect('feeds.user', 'user')
       .where('feeds.id = :feedId', { feedId })
       .select(['feeds', 'user.nickname', 'user.profileImage'])
       .getRawMany();
+
+    await this.cacheManager.set(`Feed:commentUser:${feedId}`, feedWriter, { ttl: 60 });
+
+    return feedWriter;
   }
 
   /**
@@ -220,13 +256,20 @@ export class FeedService {
    * @author  한정훈
    */
   async getAllComment(feedId) {
-    return await this.commentsRepository
+    const cachedComment = await this.cacheManager.get(`Feed:comment:${feedId}`);
+    if (cachedComment) return cachedComment;
+
+    const feedComments = await this.commentsRepository
       .createQueryBuilder('comments')
       .leftJoinAndSelect('comments.user', 'user')
       .leftJoinAndSelect('comments.feed', 'feed')
       .where('comments.feedId = :feedId', { feedId })
       .select(['comments', 'user.nickname', 'user.profileImage', 'feed.content', 'feed.userId'])
       .getRawMany();
+
+    await this.cacheManager.set(`Feed:comment:${feedId}`, feedComments, { ttl: 60 });
+
+    return feedComments;
   }
   /**
    * @description 피드 댓글 수정
@@ -242,6 +285,9 @@ export class FeedService {
     const commentUpdate = await this.commentsRepository.update(commentId, {
       comment: updatecommentDto.comment ? updatecommentDto.comment : existComment.comment,
     });
+
+    await this.cacheManager.del(`Feed:comment:${feedId}`);
+
     return commentUpdate;
   }
 
@@ -254,6 +300,9 @@ export class FeedService {
     await this.verifyUser(commentId, user);
     await this.checkFeed(feedId);
     const commentDelete = await this.commentsRepository.delete(commentId);
+
+    await this.cacheManager.del(`Feed:comment:${feedId}`);
+
     return commentDelete;
   }
 
