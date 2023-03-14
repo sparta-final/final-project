@@ -152,11 +152,18 @@ export class AppController {
   }
 
   // 리뷰페이지
-  @Get('review')
+  @Get('mypage/review')
   @Public()
   @Render('index')
   async reviewList() {
     return { pageName: 'reviewList' };
+  }
+
+  @Get('mypage/paymentDetails')
+  @Public()
+  @Render('index')
+  async paymentDetails() {
+    return { pageName: 'paymentDetails' };
   }
 
   @Get('review-detail')
@@ -209,17 +216,17 @@ export class AppController {
     return { pageName: 'gymReview' };
   }
 
+  @Get('business/postGym')
+  @Public()
+  @Render('index')
+  async postGym() {
+    return { pageName: 'postGym' };
+  }
+
   @Get('searchGym')
   @Public()
   @Render('index')
   async searchGym() {
     return { pageName: 'searchGym' };
-  }
-
-  @Get('mypage/paymentDetails')
-  @Public()
-  @Render('index')
-  async paymentDetails() {
-    return { pageName: 'paymentDetails' };
   }
 }

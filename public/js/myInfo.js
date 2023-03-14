@@ -1,6 +1,6 @@
 const userType = localStorage.getItem('type');
-if (!userType) {
-  alert('로그인이 필요한 서비스입니다.');
+if (userType !== 'user') {
+  alert('일반 로그인이 필요한 서비스입니다.');
   window.location.href = '/user/login';
 }
 

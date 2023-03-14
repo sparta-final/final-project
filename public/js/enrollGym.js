@@ -1,3 +1,9 @@
+const userType = localStorage.getItem('type');
+if (userType !== 'business') {
+  alert('사업자 로그인이 필요한 서비스입니다.');
+  window.location.href = '/business/login';
+}
+
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
   mapOption = {
     center: new daum.maps.LatLng(37.537187, 127.005476), // 지도의 중심좌표

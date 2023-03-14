@@ -1,3 +1,9 @@
+const userType = localStorage.getItem('type');
+if (userType !== 'user') {
+  alert('일반 로그인이 필요한 서비스입니다.');
+  window.location.href = '/user/login';
+}
+
 function enrollFeed() {
   const content = document.getElementsByClassName('feed-textarea')[0].value;
   console.log('✨✨✨', content, '✨✨✨');

@@ -1,6 +1,6 @@
 const userType = localStorage.getItem('type');
-if (!userType) {
-  alert('로그인이 필요한 서비스입니다.');
+if (userType !== 'user') {
+  alert('일반 로그인이 필요한 서비스입니다.');
   window.location.href = '/user/login';
 }
 
@@ -85,7 +85,7 @@ function getPaidData(data) {
         </span>
         <div class="member-paid-list" onclick="location.href='mypage/paymentDetails'" >결제 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn"  /></div>
         <div class="use-gym-list" onclick="location.href='mypage/history'">헬스장 이용 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
-        <div class="my-review" onclick="location.href='/review'" >리뷰 관리 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
+        <div class="my-review" onclick="location.href='/mypage/review'" >리뷰 관리 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
         <button class="member-close" onclick="cancelPay('${custimerUid}')">멤버십 해지</button>
       </div>
       `;
