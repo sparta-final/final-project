@@ -15,7 +15,7 @@ function getBeforeApproveGym() {
     headers: {
       accesstoken: `${localStorage.getItem('at')}`,
       refreshtoken: `${localStorage.getItem('rt')}`,
-    }
+    },
   })
     .then((response) => {
       const data = response.data;
@@ -23,7 +23,7 @@ function getBeforeApproveGym() {
       for (let i in data) {
         let temp = `
           <div class="gym-approve-wait">
-            <img src="https://www.spoany.co.kr/ActiveFile/spoany.smms/branch_img/spoany86_20210319102247.jpg" alt="" />
+            <img src="${data[i].gymImgs[0].img}" alt="" />
             <ul class="gym-info-box">
               <li class="gym-name">${data[i].name}</li>
               <li class="gym-location">${data[i].address}</li>

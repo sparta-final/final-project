@@ -6,6 +6,7 @@ import { GymImg } from 'src/global/entities/GymImg';
 import { DataSource, EntityManager, Repository } from 'typeorm';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
 import * as bcrypt from 'bcrypt';
+import { isApprove } from 'src/global/entities/common/gym.isApprove';
 
 @Injectable()
 export class GymService {
@@ -187,6 +188,19 @@ export class GymService {
       .leftJoinAndSelect('gym.gymImgs', 'gymImg')
       .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
       .where('gym.name LIKE :name', { name: `${text}%` })
+      .getMany();
+  }
+  /**
+   * 승인된 체육관만 가져오기
+   * @author 정호준
+   */
+  async approveGymGeto() {
+    return await this.gymsrepository
+      .createQueryBuilder('gym')
+      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
+      .select(['gym', 'gymImg.img'])
+      .where('gym.isApprove = :isApprove', { isApprove: 1 })
+      .andWhere('gym.deletedAt IS NULL')
       .getMany();
   }
 

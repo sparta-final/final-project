@@ -65,6 +65,7 @@ export class AdminService {
   async beforeApproveGym() {
     const beforeApprove = await this.gymRepo.find({
       where: { isApprove: 2, deletedAt: null },
+      relations: ['gymImgs'],
     });
     return beforeApprove;
   }
@@ -77,6 +78,7 @@ export class AdminService {
   async beforeApproveGymId(id) {
     const beforeApprove = await this.gymRepo.find({
       where: { id, deletedAt: null },
+      relations: ['gymImgs'],
     });
     return beforeApprove;
   }
