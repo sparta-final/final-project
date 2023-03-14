@@ -51,13 +51,11 @@ function enrollGym() {
   const description = document.getElementById('gymDescription').value;
   const certification = document.getElementById('gymCertification');
   const gymType = $('input#type-health[name=gymType]:checked').val();
-  console.log('✨✨✨', gymType, '✨✨✨');
   // const gymType = document.getElementById('gymType').value;
   const lat = document.getElementById('lat').value;
   const lng = document.getElementById('lng').value;
-  const img = document.getElementById('gymImgs');
+  const img = document.getElementById('gymImgs').files;
   const address = document.getElementById('address').value;
-
   const formData = new FormData();
   formData.append('name', name);
   formData.append('phone', phone);
@@ -66,7 +64,9 @@ function enrollGym() {
   formData.append('gymType', gymType);
   formData.append('lat', lat);
   formData.append('lng', lng);
-  formData.append('img', img.files[0]);
+  for (let i in img) {
+    formData.append('img', img[i]);
+  }
   formData.append('address', address);
 
   // for (let value of formData.values()) {
