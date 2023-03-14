@@ -38,8 +38,7 @@
 }
 
 .mybtn {
-  text-align: center;
-  display: flex;
+  margin-left: 25px;
 }
 
 .enrollMyGymBtn {
@@ -59,4 +58,8 @@
   margin: 20px;
   color: #ff710d;
   font-size: 20px;
+}
+
+.review-go-btn {
+  margin-left: 55px;
 }

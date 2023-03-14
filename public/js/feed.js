@@ -27,7 +27,7 @@ function getGym() {
         limit,
       },
     })
-    .then((res) => {
+    .then(async (res) => {
       data = res.data;
       if (postCount === 0) {
         feedContainer.innerHTML = '';
@@ -35,6 +35,8 @@ function getGym() {
         for (let i = 0; i < limit && i < data.length; i++) {
           //0
           let id = data[i].id;
+          const comments = await axios.get(`/api/feed/${id}/comment`)
+          const commentsLength = comments.data.length
           let nickname = data[i].user.nickname;
           let profileImg = data[i].user.profileImage;
           let content = data[i].content;
@@ -52,10 +54,11 @@ function getGym() {
             </div>
             <ul class="feed-bxslider"></ul>
             <div class="feed-content-wrap">
-            <p class="feed-content"><span>${nickname}</span>${content}</p>
-            <p class="feed-comments" onclick="location.href='/feed/${id}/comments'" >댓글보기</p>
-            </div>  
-            `;
+
+              <p class="feed-content"><span>${nickname}</span>${content}</p>
+              <p class="feed-comments" onclick="location.href='/feed/${id}/comments'" >댓글 ${commentsLength}개 보기</p>
+              </div>  
+              `;
           $('.feed-container').append(temp);
 
           let feedsImg = data[i].feedsImgs;
@@ -89,6 +92,8 @@ function getGym() {
         const maxFeedsToLoad = Math.min(limit, remainingFeeds.length);
         for (let i = 0; i < maxFeedsToLoad; i++) {
           let id = remainingFeeds[i].id;
+          const comments = await axios.get(`/api/feed/${id}/comment`)
+          const commentsLength = comments.data.length
           let nickname = remainingFeeds[i].user.nickname;
           let profileImg = remainingFeeds[i].user.profileImage;
           let content = remainingFeeds[i].content;
@@ -107,7 +112,7 @@ function getGym() {
             <ul class="feed-bxslider"></ul>
             <div class="feed-content-wrap">
               <p class="feed-content"><span>${nickname}</span>${content}</p>
-              <p class="feed-comments" onclick="location.href='/feed/${id}/comments'" >댓글보기</p>
+              <p class="feed-comments" onclick="location.href='/feed/${id}/comments'" >댓글 ${commentsLength}개 보기</p>
               </div>  
               </div>
               `;

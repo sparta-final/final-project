@@ -64,7 +64,7 @@ export class AppController {
     return { pageName: 'userSignup' };
   }
 
-  @Get('qrcode')
+  @Get('user/qrcode')
   @Public()
   @Render('index')
   async userQRCode() {
@@ -202,10 +202,24 @@ export class AppController {
     return { pageName: 'userList' };
   }
 
+  @Get('business/gymReview')
+  @Public()
+  @Render('index')
+  async gymReview() {
+    return { pageName: 'gymReview' };
+  }
+
   @Get('searchGym')
   @Public()
   @Render('index')
   async searchGym() {
     return { pageName: 'searchGym' };
+  }
+
+  @Get('mypage/paymentDetails')
+  @Public()
+  @Render('index')
+  async paymentDetails() {
+    return { pageName: 'paymentDetails' };
   }
 }

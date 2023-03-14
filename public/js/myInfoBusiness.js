@@ -2,6 +2,18 @@ $(document).ready(function () {
   businessUser();
 });
 
+// 사진 미리보기
+const fileInput = document.getElementById('profileImage');
+const preview = document.getElementById('image');
+fileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    preview.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
 function businessUser() {
   axios
     .get(`/api/business`, {
@@ -51,13 +63,20 @@ function putInfo() {
       },
     })
     .then((res) => {
-      window.location.replace(`/business/mypageBusiness`);
+      window.location.replace(`/business/businessMyInfo`);
     })
     .catch((err) => {
-      console.log(err);
-      console.log(err.response.data);
-      if (err.response.data[0] === 'currentPassword should not be empty') {
-        alert('현재 비밀번호를 확인해주세요.');
+      console.log('err.response.data :', err.response.data.data);
+
+      if (err.response.data.data === '현재 비밀번호가 일치하지 않습니다.') {
+        alert('현재 비밀번호가 일치하지않습니다.');
+      }
+      if (err.response.data.data[0] === 'currentPassword should not be empty') {
+        alert('현재 비밀번호를 입력해주세요.');
+      }
+
+      if (err.response.data.data === '비밀번호가 일치하지 않습니다.') {
+        alert('수정할 비밀번호가 일치하지 않습니다.');
       }
     });
 }
