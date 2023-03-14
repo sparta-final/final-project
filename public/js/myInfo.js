@@ -2,6 +2,18 @@ $(document).ready(function () {
   user();
 });
 
+// 사진 미리보기
+const fileInput = document.getElementById('profileImage');
+const preview = document.getElementById('image');
+fileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    preview.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
 function user() {
   axios
     .get(`/api/user`, {
