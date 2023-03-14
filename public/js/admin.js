@@ -152,6 +152,10 @@ function salesMonth(year, month) {
       console.log('✨✨✨', response, '✨✨✨');
       const data = response.data.toLocaleString();
 
+      if (data.length === 0) {
+        alert('데이터가 없습니다');
+      }
+
       let temp = `
       <p class='admin-month-title'>${month}월 매출 <span>${data}</span> 원</p>
           `;

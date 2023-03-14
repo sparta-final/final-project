@@ -107,8 +107,8 @@ function caculateGym(id, year, month) {
       const data = res.data;
 
       if (data.length === 0) {
-        alert('이전 데이터가 없습니다');
-        location.reload();
+        alert('데이터가 없습니다');
+        location.href = '/business/businessMyinfo';
       }
       const paid = data[0].paid.toLocaleString();
 
