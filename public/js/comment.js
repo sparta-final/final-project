@@ -41,12 +41,20 @@ function getComments(id) {
         let comments_id = data[i].comments_id;
         let commentsUserId = data[i].comments_user_id;
 
-        const token = localStorage.getItem('at');
-        const tokenPayload = token.split('.')[1];
-        const decodedPayload = atob(tokenPayload);
-        const parsedPayload = JSON.parse(decodedPayload);
+        let token = localStorage.getItem('at');
+        let tokenPayload = token ? token.split('.')[1] : null;
+        let decodedPayload = tokenPayload ? atob(tokenPayload) : null;
+        let parsedPayload = decodedPayload ? JSON.parse(decodedPayload) : null;
 
         console.log('comments_id', comments_id);
+
+        console.log('parsedPayload', parsedPayload);
+
+        if (parsedPayload === null) {
+          parsedPayload = { sub: 0 };
+        }
+
+        console.log('parsedPayload.sub', parsedPayload.sub);
 
         if (commentsUserId === parsedPayload.sub) {
           let temp = `
@@ -78,6 +86,11 @@ function getComments(id) {
 }
 
 function commentAdd() {
+  const userType = localStorage.getItem('type');
+  if (userType !== 'user') {
+    alert('일반 로그인이 필요한 서비스입니다.');
+    window.location.href = '/user/login';
+  }
   let id = window.location.pathname.split('/')[2];
 
   const comment = document.getElementById('create-comment').value;

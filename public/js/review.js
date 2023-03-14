@@ -1,3 +1,9 @@
+const userType = localStorage.getItem('type');
+if (userType !== 'user') {
+  alert('일반 로그인이 필요한 서비스입니다.');
+  window.location.href = '/user/login';
+}
+
 $(document).ready(function () {
   getMyReview();
 });
@@ -67,7 +73,7 @@ async function getMyReview() {
   for (let i = 0; i < reviewTextareas.length; i++) {
     const targetTextarea = reviewTextareas[i];
     const textLength = targetTextarea.value.length;
-    targetTextarea.style.height = textLength / 35 * 24 + 'px';
+    targetTextarea.style.height = (textLength / 35) * 24 + 'px';
   }
 }
 

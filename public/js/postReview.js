@@ -1,7 +1,13 @@
+const userType = localStorage.getItem('type');
+if (userType !== 'user') {
+  alert('일반 로그인이 필요한 서비스입니다.');
+  window.location.href = '/user/login';
+}
+
 // 별점 가져오기
 let star_rating;
-$("input[name=star_rating]").click(function () {
-  let click_star_rating = $(this).attr("value");
+$('input[name=star_rating]').click(function () {
+  let click_star_rating = $(this).attr('value');
   star_rating = Number(click_star_rating);
 });
 
@@ -32,26 +38,29 @@ textarea.addEventListener('input', (e) => {
 async function postReview(gymId) {
   const reviewImg = document.getElementById('reviewImg').files[0];
   const reviewTextarea = document.getElementsByClassName('review-textarea')[0].value;
-  const starRating = star_rating
+  const starRating = star_rating;
   const formData = new FormData();
   formData.append('reviewImg', reviewImg);
   formData.append('review', reviewTextarea);
   formData.append('star', starRating);
-  await axios.post(`/api/gym/${gymId}/review`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      accesstoken: `${localStorage.getItem('at')}`,
-      refreshtoken: `${localStorage.getItem('rt')}`,
-    },
-  }).then((res) => {
-    console.log('res', res)
-    if (res.status === 201) {
-      alert('리뷰가 작성되었습니다.');
-    } else {
+  await axios
+    .post(`/api/gym/${gymId}/review`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        accesstoken: `${localStorage.getItem('at')}`,
+        refreshtoken: `${localStorage.getItem('rt')}`,
+      },
+    })
+    .then((res) => {
+      console.log('res', res);
+      if (res.status === 201) {
+        alert('리뷰가 작성되었습니다.');
+      } else {
+        alert('리뷰 작성에 실패했습니다.');
+      }
+    })
+    .catch((err) => {
+      console.log('err', err);
       alert('리뷰 작성에 실패했습니다.');
-    }
-  }).catch((err) => {
-    console.log('err', err)
-    alert('리뷰 작성에 실패했습니다.');
-  });
+    });
 }

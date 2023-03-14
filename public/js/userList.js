@@ -1,3 +1,9 @@
+const userType = localStorage.getItem('type');
+if (userType !== 'business') {
+  alert('사업자 로그인이 필요한 서비스입니다.');
+  window.location.href = '/business/login';
+}
+
 $(document).ready(function () {
   const now = new Date();
   let year = now.getFullYear();
