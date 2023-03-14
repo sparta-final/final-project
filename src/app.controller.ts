@@ -215,4 +215,11 @@ export class AppController {
   async searchGym() {
     return { pageName: 'searchGym' };
   }
+
+  @Get('mypage/paymentDetails')
+  @Public()
+  @Render('index')
+  async paymentDetails() {
+    return { pageName: 'paymentDetails' };
+  }
 }

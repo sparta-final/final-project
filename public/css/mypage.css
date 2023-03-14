@@ -109,6 +109,11 @@ img.my-info-btn {
   cursor: pointer;
 }
 
+.membership-data-wrap > .member {
+  border-bottom: transparent;
+  margin-bottom: -15px;
+}
+
 .member-info-btn {
   position: absolute;
   top: 21px;
@@ -125,4 +130,29 @@ img.my-info-btn {
   font-weight: 500;
   border: none;
   background: var(--sub-color-9);
+}
+
+.my-member {
+  margin-top: 15px;
+  padding: -20px;
+  color: var(--sub-color-8);
+  margin-bottom: 5px;
+}
+
+.member {
+  border-bottom: transparent;
+}
+
+.membership-data-past-wrap {
+  width: 90%;
+  border-top: 1px solid var(--sub-color-9);
+  padding: 15px;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-bottom: -20px;
+  color: var(--sub-color-4);
+}
+
+.member-createAt {
+  color: var(--point-color);
 }
