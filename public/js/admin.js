@@ -73,7 +73,7 @@ function getRank(year, month) {
   const nextYear = month === 12 ? year + 1 : year;
 
   if (prevYear > new Date().getFullYear() || (prevYear === new Date().getFullYear() && prevMonth > new Date().getMonth())) {
-    alert('다음달 데이터는 가져올 수 없습니다.');
+    alert('이번달 이후 조회는 불가능 합니다.');
     location.reload();
     return;
   }
@@ -108,12 +108,13 @@ function getRank(year, month) {
           $('.text-gray-dark').append(temp);
         }
       }
-
-      const curMonth = $('.cur-month');
-      const calculateMonth = $('.admin-month-title');
-      if (curMonth.length > 0) {
-        curMonth.remove();
-        calculateMonth.remove();
+      function removeAll() {
+        const curMonth = $('.cur-month');
+        const calculateMonth = $('.admin-month-title');
+        if (curMonth.length > 0) {
+          curMonth.remove();
+          calculateMonth.remove();
+        }
       }
 
       let now = `
@@ -122,11 +123,13 @@ function getRank(year, month) {
 
       $('#prevMonthBtn').off('click');
       $('#prevMonthBtn').on('click', function () {
+        removeAll();
         getRank(prevYear, prevMonth);
         salesMonth(prevYear, prevMonth);
       });
       $('#nextMonthBtn').off('click');
       $('#nextMonthBtn').on('click', function () {
+        removeAll();
         getRank(nextYear, nextMonth);
         salesMonth(nextYear, nextMonth);
       });
@@ -152,7 +155,7 @@ function salesMonth(year, month) {
       let temp = `
       <p class='admin-month-title'>${month}월 매출 <span>${data}</span> 원</p>
           `;
-      $('.sales-month').append(temp);
+      $('.sales-month').empty().append(temp);
     })
     .catch((err) => {
       console.log(err);
