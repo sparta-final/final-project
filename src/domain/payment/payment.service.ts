@@ -165,6 +165,7 @@ export class PaymentService {
   async getPaidData(id) {
     return await this.paymentRepo.find({
       where: { userId: id },
+      order: { id: 'DESC' },
     });
   }
 }

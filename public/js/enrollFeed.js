@@ -6,17 +6,11 @@ if (userType !== 'user') {
 
 function enrollFeed() {
   const content = document.getElementsByClassName('feed-textarea')[0].value;
-  console.log('✨✨✨', content, '✨✨✨');
   const feedImg = document.getElementById('feedImg').files;
-
-  console.log(feedImg.files);
   const formData = new FormData();
   formData.append('content', content);
   for (let i in feedImg) {
     formData.append('feedImg', feedImg[i]);
-  }
-  for (let value of formData.values()) {
-    console.log(value);
   }
   axios
     .post('/api/feed', formData, {
