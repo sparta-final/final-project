@@ -75,9 +75,9 @@ function getPaidData(data) {
           <p class="member-card">${cardName} ${cardNumber} ** **** ****</p>
           <p class="member-next-paid">다음 결제일은 ${nextPay} 입니다</p>
         </span>
-        <div class="member-paid-list" >결제 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn" onclick="location.href='mypage/paymentDetails'" /></div>
-        <div class="use-gym-list">헬스장 이용 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
-        <div class="my-review">리뷰 관리 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
+        <div class="member-paid-list" onclick="location.href='mypage/paymentDetails'" >결제 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn"  /></div>
+        <div class="use-gym-list" onclick="location.href='mypage/history'">헬스장 이용 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
+        <div class="my-review" onclick="location.href='/review'" >리뷰 관리 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
         <button class="member-close" onclick="cancelPay('${custimerUid}')">멤버십 해지</button>
       </div>
       `;
