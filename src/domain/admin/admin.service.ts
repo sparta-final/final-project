@@ -105,7 +105,7 @@ export class AdminService {
   }
 
   /**
-   * @description 승인대기중인 가맹점 리스트 조회
+   * @description 승인대기중인 가맹점 상세 조회
    * @author 한정훈
    * @argument id
    */

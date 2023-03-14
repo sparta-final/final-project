@@ -35,7 +35,7 @@ function showPosition(position) {
     };
     map = new kakao.maps.Map(container, options);
     // 지도에 마커와 이름 표시
-    axios.get('/api/gym').then((res) => {
+    axios.get('/api/gym/all').then((res) => {
       const gyms = res.data;
       for (const gym of gyms) {
         const markerPosition = new kakao.maps.LatLng(gym.lat, gym.lng);
@@ -105,11 +105,12 @@ closeBtn.addEventListener('click', (e) => {
 async function getGymList() {
   const response = await axios({
     method: 'get',
-    url: '/api/gym/approve',
+    url: '/api/gym/approveGym',
   });
   const data = response.data;
   // for...of 문으로 순차적으로 처리
   for (const gym of data) {
+    console.log('✨✨✨', 'gym', gym, '✨✨✨');
     const gymImgSrc = gym.gymImgs[0].img;
     let gymId = gym.id;
     let temp = `

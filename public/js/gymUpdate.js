@@ -6,7 +6,7 @@ $(document).ready(function () {
 // 선택한 가게 수정페이지
 function getThisGym(id) {
   axios
-    .get(`/api/gym/${id}`, {
+    .get(`/api/gym/list/${id}`, {
       headers: {
         accesstoken: `${localStorage.getItem('at')}`,
         refreshtoken: `${localStorage.getItem('rt')}`,

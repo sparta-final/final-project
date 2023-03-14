@@ -234,14 +234,12 @@ export class GymService {
    * 승인된 체육관만 가져오기
    * @author 정호준
    */
-  async approveGymGeto() {
-    return await this.gymsrepository
-      .createQueryBuilder('gym')
-      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
-      .select(['gym', 'gymImg.img'])
-      .where('gym.isApprove = :isApprove', { isApprove: 1 })
-      .andWhere('gym.deletedAt IS NULL')
-      .getMany();
+  async approveGymGet() {
+    console.log('✨✨✨', '2', '✨✨✨');
+    return await this.gymsrepository.find({
+      where: { isApprove: 1, deletedAt: null },
+      relations: ['gymImgs'],
+    });
   }
 
   /**
