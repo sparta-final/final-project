@@ -1,7 +1,3 @@
-$(document).ready(function () {
-  user();
-});
-
 function user() {
   axios
     .get(`/api/user`, {
@@ -14,7 +10,12 @@ function user() {
       $('#nickname').text(res.data.nickname);
       $('#email').text(res.data.email);
       $('#profileImage').attr('src', res.data.profileImage ? res.data.profileImage : '/images/default_profile.png');
-      getPaidData(res.data);
+
+      if (window.location.href.includes('paymentDetails')) {
+        getPaymentData(res.data);
+      } else {
+        getPaidData(res.data);
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -60,7 +61,7 @@ function getPaidData(data) {
           <p class="member-card">${cardName} ${cardNumber} ** **** ****</p>
           <p class="member-next-paid">다음 결제일은 ${nextPay} 입니다</p>
         </span>
-        <div class="member-paid-list" >결제 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
+        <div class="member-paid-list" >결제 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn" onclick="location.href='mypage/paymentDetails'" /></div>
         <div class="use-gym-list">헬스장 이용 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
         <div class="my-review">리뷰 관리 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
         <button class="member-close" onclick="cancelPay('${custimerUid}')">멤버십 해지</button>
@@ -94,4 +95,84 @@ function cancelPay(custimerUid) {
   } catch (e) {
     alert(`에러 내용: ${e}`);
   }
+}
+
+function getPaymentData(data) {
+  const id = data.id;
+  axios
+    .get(`/api/payment/${id}`, {
+      headers: {
+        accesstoken: `${localStorage.getItem('at')}`,
+        refreshtoken: `${localStorage.getItem('rt')}`,
+      },
+    })
+    .then((res) => {
+      var date = new Date();
+      let y = date.getFullYear();
+      let m = date.getMonth() + 1;
+      console.log(y, m);
+      var nextPay = new Date(y, m, 1).toLocaleString().substring(0, 10);
+      const response = res.data;
+      console.log('✨✨✨', data, '✨✨✨');
+      console.log('✨✨✨', response, '✨✨✨');
+      let custimerUid = response[0].customerUid;
+      let createAt = response[0].createdAt.substring(0, 7);
+      let createAtDay = response[0].createdAt.substring(0, 10);
+      let cardName = response[0].card_name;
+      let cardNumber = response[0].card_number;
+      let membership = response[0].merchantUid.split('_')[0];
+      let amount = response[0].amount.toLocaleString();
+
+      let length = response.length;
+
+      console.log('length : ', length);
+
+      let temp = `
+      <p class="my-member">내 멤버십</p>
+      <div class="membership-data-wrap">
+        멤버십
+        <span class='member'>
+          <p class="member-level">${membership}</p>
+          <p class="member-amount">월 ${amount}원</p>
+          <br>
+          <p>다음 결제 날짜</p>
+          <p class="member-next-paid">${nextPay}</p>
+        </span>        
+      </div>
+      `;
+
+      for (let i = 0; i < length; i++) {
+        let createAtDay = response[i].createdAt.substring(0, 10);
+        let y = createAtDay.substring(0, 4);
+        let m = createAtDay.substring(5, 7);
+        let d = getLastDayOfMonth(y, m);
+        let existDay = y + '-' + m + '-' + d;
+        let cardName = response[i].card_name;
+        let cardNumber = response[i].card_number;
+        let membership = response[i].merchantUid.split('_')[0];
+        let amount = response[i].amount.toLocaleString();
+        let temp2 = `
+        <div class="membership-data-past-wrap">
+          <span class='member'>
+          <p class="member-createAt">${createAtDay}</p>
+          <p class="member-level">${membership}</p>
+          <p class="member-exist">${createAtDay} ~ ${existDay}</p>          
+          <p class="member-card">${cardName} ${cardNumber} ** **** ****</p>
+          <p class="member-amount">월 ${amount}원</p>
+          </span>
+        </div>`;
+
+        $('.membership-past-wrap').append(temp2);
+      }
+
+      $('.membership-wrap').append(temp);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+// 해당 월의 마지막 날짜 구하기
+function getLastDayOfMonth(year, month) {
+  return new Date(year, month, 0).getDate();
 }
