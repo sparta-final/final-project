@@ -1,15 +1,17 @@
 .address-bar {
+  position: relative;
   width: 100%;
+  height: 40px;
 }
 .address {
   font-weight: bold;
 }
 .map-icon {
-  position: relative;
-  top: 5px;
-  right: -110px;
-  width: 25px;
-  height: 25px;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  width: 26px;
+  height: 26px;
   cursor: pointer;
 }
 
@@ -67,4 +69,25 @@
   font-size: 12px;
   font-weight: bold;
   background-color: var(--main-color);
+}
+
+.gym-approve-wait {
+  cursor: pointer;
+}
+
+.gym-approve-wait img.gym-list-img {
+  width: 45%;
+  height: 110px;
+}
+
+.gym-star {
+  color: var(--sub-color-4);
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.gym-star > span {
+  color: var(--point-color);
+  font-size: 16px;
+  padding-right: 5px;
 }

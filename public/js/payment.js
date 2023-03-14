@@ -4,7 +4,6 @@ IMP.init('imp52616317');
 const body = document.querySelector('body');
 body.addEventListener('click', function (e) {
   if (e.target.id !== 'subscribe-btn') return;
-  console.log('✨✨✨', localStorage.getItem('type'), '✨✨✨');
   if (localStorage.getItem('type') === 'user') {
     const membership = e.target.parentElement.firstElementChild.textContent;
     const amountText = e.target.parentElement.children[1].textContent;
@@ -44,6 +43,7 @@ async function requestPay(membership, amount) {
       buyer_tel: phone,
       buyer_addr: '회원가입시 주소 안받음',
       buyer_postcode: '12345',
+      m_redirect_url: '/payments/complete',
     },
     async function (rsp) {
       console.log('✨✨✨', 'rsp: ', rsp, '✨✨✨');
