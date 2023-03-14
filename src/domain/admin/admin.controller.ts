@@ -52,8 +52,8 @@ export class AdminController {
 
   @Put('/approve')
   @approveGym()
-  async approveGym(@Body() id: ApproveDto) {
-    return await this.adminService.approveGym(id);
+  async approveGym(@Body() gym: ApproveDto) {
+    return await this.adminService.approveGym(gym.id);
   }
 
   @Get('/sales')

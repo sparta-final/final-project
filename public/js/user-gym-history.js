@@ -42,7 +42,7 @@ const getUseGymHistory = async (year, month) => {
     if (histories[i].reviewId) {
       histories[
         i
-      ].reviews = `<button class="review-btn" onclick="location.href='/review-detail?reviewId=${histories[i].reviewId}'">리뷰보기</button>`;
+      ].reviews = `<button class="review-btn" onclick="location.href='/review/review-detail?reviewId=${histories[i].reviewId}'">리뷰보기</button>`;
     } else {
       histories[
         i

@@ -1,4 +1,5 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { Cache } from 'cache-manager';
+import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, CACHE_MANAGER } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Payments } from '../../global/entities/Payments';
@@ -7,7 +8,10 @@ import { WebhookDto } from './dto/webhook.dto';
 
 @Injectable()
 export class PaymentService {
-  constructor(@InjectRepository(Payments) private paymentRepo: Repository<Payments>) {}
+  constructor(
+    @InjectRepository(Payments) private paymentRepo: Repository<Payments>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
+  ) {}
   /**
    * @description 아임포트 액세스 토큰(access token) 발급 받기
    * @author 한정훈
@@ -73,6 +77,7 @@ export class PaymentService {
       card_name: card_name,
       card_number: card_number.substring(0, 8),
     });
+    // TODO : 결제정보 저장 후, 유저 멤버쉽 업데이트 해야함 + 캐시도 삭제해야함
   }
 
   /**
@@ -163,9 +168,14 @@ export class PaymentService {
    * @argument id
    */
   async getPaidData(id) {
-    return await this.paymentRepo.find({
+    const cachedpaidData = await this.cacheManager.get(`paidData:${id}`);
+    if (cachedpaidData) return cachedpaidData;
+
+    const paidData = await this.paymentRepo.find({
       where: { userId: id },
       order: { id: 'DESC' },
     });
+    await this.cacheManager.set(`paidData:${id}`, paidData, { ttl: 60 * 60 });
+    return paidData;
   }
 }
