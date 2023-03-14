@@ -20,3 +20,10 @@ export const UseGym = () => {
     ApiResponse({ status: 400, description: '실패' })
   );
 };
+export const GetUseHistory = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '이용 정보' }),
+    ApiResponse({ status: 201, description: '성공' }),
+    ApiResponse({ status: 400, description: '실패' })
+  );
+};

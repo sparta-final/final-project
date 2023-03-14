@@ -222,4 +222,17 @@ export class AppController {
   async paymentDetails() {
     return { pageName: 'paymentDetails' };
   }
+  @Get('business/postGym')
+  @Public()
+  @Render('index')
+  async postGym() {
+    return { pageName: 'postGym' };
+  }
+
+  @Get('test')
+  @Public()
+  @Render('index')
+  async test() {
+    return { pageName: 'test' };
+  }
 }
