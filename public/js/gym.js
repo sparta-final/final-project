@@ -110,10 +110,11 @@ async function getGymList() {
   const data = response.data;
   // for...of 문으로 순차적으로 처리
   for (const gym of data) {
+    const gymImgSrc = gym.gymImgs[0].img;
     let gymId = gym.id;
     let temp = `
           <div class="gym-approve-wait" onclick="location.href='/gym/gymDetail?gym=${gymId}'">
-            <img class="gym-list-img" src="${gym.gymImgs[0].img}"  alt="" />
+            <img class="gym-list-img" src="${gymImgSrc}"  alt="" />
             <ul class="gym-info-box">
               <li class="gym-name">${gym.name}</li>
               <li class="gym-location">${gym.address}</li>
