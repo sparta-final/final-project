@@ -127,7 +127,6 @@ async function getGymList() {
   const data = response.data;
   // for...of 문으로 순차적으로 처리
   for (const gym of data) {
-    console.log('✨✨✨', 'gym', gym, '✨✨✨');
     const gymImgSrc = gym.gymImgs[0].img;
     let gymId = gym.id;
     let temp = `
