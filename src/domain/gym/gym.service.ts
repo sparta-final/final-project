@@ -133,9 +133,12 @@ export class GymService {
       });
 
       const gymImgs = [];
-      for (let i = 0; i < file.img.length; i++) {
-        gymImgs.push({ img: file.img[i].location });
+      if (file.img) {
+        for (let i = 0; i < file.img.length; i++) {
+          gymImgs.push({ img: file.img[i].location });
+        }
       }
+
       await Promise.all(
         gymImgs.map(async (img, index) => {
           const findGymImg = await this.gymImgrepository.findOne({
@@ -145,7 +148,9 @@ export class GymService {
           if (findGymImg) {
             await this.gymImgrepository.update(findGymImg.id, img);
           } else {
-            await this.gymImgrepository.create({ ...img, gymId: gymId });
+            await this.gymImgrepository.update(findGymsImage.id, {
+              img: findGymsImage.img,
+            });
           }
         })
       );
