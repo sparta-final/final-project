@@ -26,9 +26,9 @@ export class GymService {
    */
   async postGyms({ file, postgymDto, user }) {
     const existGym = await this.gymsrepository.findOne({
-      where: { name: postgymDto.name },
+      where: { address: postgymDto.address },
     });
-    if (existGym) throw new ConflictException('이미 등록된 체육관입니다.');
+    if (existGym) throw new ConflictException('이미 등록된 주소입니다. 관리자에게 문의하세요.');
     if (!file.certification && !file.img) throw new BadRequestException('파일을 등록해야 합니다.');
 
     const queryRunner = this.dataSource.createQueryRunner();
