@@ -54,7 +54,7 @@ async function postReview(usergymId) {
     .then((res) => {
       if (res.status === 201) {
         alert('리뷰가 작성되었습니다.');
-        window.location.replace(`/mypage/history`);
+        window.location.replace('/mypage/history');
       } else {
         alert('리뷰 작성에 실패했습니다.');
       }

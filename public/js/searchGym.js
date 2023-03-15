@@ -2,9 +2,18 @@ const searchBtn = document.querySelector('.search');
 const searchBox = document.querySelector('.search-box');
 const searchSubmit = document.querySelector('.search-submit');
 const searchInput = document.querySelector('.search-input');
-
 searchBtn.addEventListener('click', () => {
   searchBox.classList.toggle('show');
+});
+searchBtn.addEventListener('click', (e) => {
+  let $header = e.target.parentElement.parentElement.nextElementSibling;
+  if (e.target.nextElementSibling.classList.value === 'search-box show') {
+    $header.style.marginBottom = '35px';
+    searchInput.focus();
+  } else {
+    $header.style.marginBottom = '0px';
+    searchInput.blur();
+  }
 });
 
 searchSubmit.addEventListener('click', () => {
@@ -57,3 +66,17 @@ async function searchGymByText(text) {
     $(`.gym-review-${gymId}`).append(avgStar);
   }
 }
+
+// location.href='/user/qrcode'
+// function qrCode() {
+//   const userType = localStorage.getItem('type');
+//   if (!userType) {
+//     window.location.href = '/user/login';
+//   }
+//   if (userType === 'user') {
+//     window.location.href = '/user/qrcode';
+//   }
+//   if (userType === 'business') {
+
+//   }
+// }

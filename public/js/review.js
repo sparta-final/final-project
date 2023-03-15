@@ -62,7 +62,7 @@ async function getMyReview() {
         <button class="review-delete-btn" onclick="deleteReview(${review.reviewId})">삭제</button>
       </div>
       <div class="review-content">
-        <img class="review-img" src="${reviewImgSrc}" alt="" />
+        <img class="review-img-all" src="${reviewImgSrc}" alt="" />
         <textarea class="review-text" cols="30" disabled>${reviewContent}</textarea>
       </div>
     </div>

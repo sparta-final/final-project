@@ -29,7 +29,7 @@ function user() {
       },
     })
     .then((res) => {
-      console.log('✨✨✨', res, '✨✨✨');
+      console.log('✨✨✨', 'test', res, '✨✨✨');
       $('#nickname').val(res.data.nickname);
       $('#phone').val(res.data.phone);
       document.getElementById('image').src = res.data.profileImage ? res.data.profileImage : '/images/default_profile.png';
@@ -72,7 +72,6 @@ function putInfo() {
       },
     })
     .then((res) => {
-      alert('성공');
       window.location.replace(`/mypage`);
     })
     .catch((err) => {
@@ -96,14 +95,11 @@ function addInputs() {
   const password = document.createElement('input');
   password.type = 'password';
   password.id = 'password';
-  password.style = 'width: 80%; height: 40px; margin-bottom: 10px; border-radius: 10px; border: 3px solid var(--sub-color-1);';
   password.placeholder = '새 비밀번호를 입력해주세요.';
 
   const passwordCheck = document.createElement('input');
   passwordCheck.type = 'password';
   passwordCheck.id = 'passwordCheck';
-  passwordCheck.style =
-    'width: 80%; height: 40px; border-radius: 10px; border: 3px solid var(--sub-color-1); margin-bottom: 10px;';
   passwordCheck.placeholder = '새 비밀번호를 한번 더 입력해주세요.';
 
   const br = document.createElement('br');

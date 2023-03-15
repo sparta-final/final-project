@@ -82,7 +82,8 @@ export class UserService {
       existUser.deletedAt = new Date();
       await this.userRepo.save(existUser);
 
-      await this.cacheManager.del(`user:ID: ${user.sub}`);
+      const userCaches = await this.cacheManager.store.keys(`user:ID: ${user.sub}*`);
+      if (userCaches.length > 0) await this.cacheManager.store.del(userCaches);
 
       return existUser;
     }

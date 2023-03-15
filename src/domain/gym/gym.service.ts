@@ -133,9 +133,29 @@ export class GymService {
         description: updateDto.description ? updateDto.description : existGym.description,
         certification: file.certification ? file.certification[0].location : existGym.certification,
       });
-      await this.gymImgrepository.update(findGymsImage.id, {
-        img: file.img ? file.img[0].location : findGymsImage.img,
-      });
+
+      const gymImgs = [];
+      if (file.img) {
+        for (let i = 0; i < file.img.length; i++) {
+          gymImgs.push({ img: file.img[i].location });
+        }
+      }
+
+      await Promise.all(
+        gymImgs.map(async (img, index) => {
+          const findGymImg = await this.gymImgrepository.findOne({
+            where: { gymId: gymId, id: findGymsImage.id + index },
+          });
+
+          if (findGymImg) {
+            await this.gymImgrepository.update(findGymImg.id, img);
+          } else {
+            await this.gymImgrepository.update(findGymsImage.id, {
+              img: findGymsImage.img,
+            });
+          }
+        })
+      );
 
       // admin,gym 포함한 캐시 삭제
       const admincaches = await this.cacheManager.store.keys('admin*');
