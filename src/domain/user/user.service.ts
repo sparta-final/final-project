@@ -90,7 +90,7 @@ export class UserService {
    *  @author: 김승일
    */
   async getUseGymHistory(user: JwtPayload, year: number, month: number) {
-    const cachedHistory = await this.cacheManager.get(`user:ID: ${user.sub}-History`);
+    const cachedHistory = await this.cacheManager.get(`user:ID: ${user.sub}-History-${year}-${month}`);
     if (cachedHistory) return cachedHistory;
 
     const existUser = await this.userRepo.findOne({
@@ -111,7 +111,7 @@ export class UserService {
       return userGymDate.getFullYear() === year && userGymDate.getMonth() + 1 === month;
     });
 
-    await this.cacheManager.set(`user:ID: ${user.sub}-History`, useGymHistory, { ttl: 60 });
+    await this.cacheManager.set(`user:ID: ${user.sub}-History-${year}-${month}`, useGymHistory, { ttl: 60 });
 
     return useGymHistory;
   }
