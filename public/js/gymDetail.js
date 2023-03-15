@@ -14,7 +14,7 @@ $(document).ready(function () {
 async function getGymDetail() {
   const gymDetail = await axios({
     method: 'get',
-    url: `/api/gym/${gymId}`,
+    url: `/api/gym/list/${gymId}`,
   });
   const imgs = gymDetail.data.gymImgs;
   for (i in imgs) {
