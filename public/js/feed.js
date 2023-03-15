@@ -31,12 +31,11 @@ function getGym() {
       data = res.data;
       if (postCount === 0) {
         feedContainer.innerHTML = '';
-        console.log('✨✨✨', 'data', data, '✨✨✨');
         for (let i = 0; i < limit && i < data.length; i++) {
           //0
           let id = data[i].id;
-          const comments = await axios.get(`/api/feed/${id}/comment`)
-          const commentsLength = comments.data.length
+          const comments = await axios.get(`/api/feed/${id}/comment`);
+          const commentsLength = comments.data.length;
           let nickname = data[i].user.nickname;
           let profileImg = data[i].user.profileImage;
           let content = data[i].content;
@@ -69,7 +68,6 @@ function getGym() {
             $(document.getElementsByClassName('feed-bxslider')[i]).append(feedImg);
           }
           if (feedsImg.length > 1) {
-            console.log('✨✨✨', 'test', i, '✨✨✨');
             $(function () {
               $(document.getElementsByClassName('feed-bxslider')[i]).bxSlider({
                 auto: false,
@@ -92,8 +90,8 @@ function getGym() {
         const maxFeedsToLoad = Math.min(limit, remainingFeeds.length);
         for (let i = 0; i < maxFeedsToLoad; i++) {
           let id = remainingFeeds[i].id;
-          const comments = await axios.get(`/api/feed/${id}/comment`)
-          const commentsLength = comments.data.length
+          const comments = await axios.get(`/api/feed/${id}/comment`);
+          const commentsLength = comments.data.length;
           let nickname = remainingFeeds[i].user.nickname;
           let profileImg = remainingFeeds[i].user.profileImage;
           let content = remainingFeeds[i].content;
@@ -119,7 +117,6 @@ function getGym() {
           $('.feed-container').append(temp);
 
           let feedsImg = data[i + postCount].feedsImgs;
-          console.log('✨✨✨', feedsImg, '✨✨✨');
           for (let j = 0; j < feedsImg.length; j++) {
             let feedImg = `            
             <li><img src="${feedsImg[j].image}" alt="" class="feed-image" /></li>
@@ -196,7 +193,6 @@ function feedDelete(id) {
 
 // 피드작성 유저타입 확인
 body.addEventListener('click', function (e) {
-  // console.log('✨✨✨', e.target.classList.value, '✨✨✨');
   if (e.target.classList.value !== 'create-feed-btn') return;
   if (localStorage.getItem('type') !== 'user') {
     alert('로그인 후 이용 가능합니다.');
