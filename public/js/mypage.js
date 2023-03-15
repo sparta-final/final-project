@@ -71,6 +71,7 @@ function getPaidData(data) {
       let cardNumber = response[0].card_number;
       let email = data.email;
       let phone = data.phone;
+      // data.membership 이 null 이 아니면 아래 코드 작성, null이면 다른코드 작성
       let temp = `
       <p class="member-start">멤버십 시작일 :${createAt}</p>
       <div class="membership-data-wrap">
@@ -104,14 +105,37 @@ function cancelPay(custimerUid) {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
+          accesstoken: `${localStorage.getItem('at')}`,
+          refreshtoken: `${localStorage.getItem('rt')}`,
         },
         data: {
           // 빌링키 생성시 customer_uid 가져오거나 저장해두는 로직 필요
           customer_uid: custimerUid,
         },
       }).then((data) => {
-        // 서버 결제 API 성공시 로직
-        alert(`구독이 해지되었습니다.`);
+        alert(`${data.data.message}`);
+
+        // 다음 달 1일에 유저 멤버쉽 변경
+        const date = new Date();
+        let y = date.getFullYear();
+        let m = date.getMonth() + 1;
+        let nextPay = new Date(y, m, 1).getTime();
+        let now = new Date().getTime();
+        let time = nextPay - now;
+        setTimeout(() => {
+          axios({
+            url: '/api/payment/unsubscribe',
+            method: 'put',
+            headers: {
+              accesstoken: `${localStorage.getItem('at')}`,
+              refreshtoken: `${localStorage.getItem('rt')}`,
+            },
+          })
+        }, time);
+      }).catch((err) => {
+        // 서버 결제 API 실패시 로직
+        console.log(err);
+        alert(`구독 해지에 실패했습니다. 다시 시도해주세요.`);
       });
     }
   } catch (e) {
@@ -140,8 +164,6 @@ function getPaymentData(data) {
       console.log(y, m);
       var nextPay = new Date(y, m, 1).toLocaleString().substring(0, 10);
       const response = res.data;
-      console.log('✨✨✨', data, '✨✨✨');
-      console.log('✨✨✨', response, '✨✨✨');
       let custimerUid = response[0].customerUid;
       let createAt = response[0].createdAt.substring(0, 7);
       let createAtDay = response[0].createdAt.substring(0, 10);

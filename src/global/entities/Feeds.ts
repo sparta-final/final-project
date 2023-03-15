@@ -52,6 +52,9 @@ export class Feeds {
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: Users;
 
-  @OneToMany(() => FeedsImg, (feedsImg) => feedsImg.feed)
+  @OneToMany(() => FeedsImg, (feedsImg) => feedsImg.feed, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   feedsImgs: FeedsImg[];
 }

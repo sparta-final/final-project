@@ -58,7 +58,7 @@ export class ReviewService {
   }
 
   /**
-   * @description 리뷰 조회(업체별)
+   * @description 리뷰 조회(가맹점별)
    * @author 김승일
    * @param gymId
    */
@@ -117,6 +117,7 @@ export class ReviewService {
       // 캐시 업데이트
       await this.cacheManager.del(`reviews:UserID: ${user.sub}`);
       await this.cacheManager.del(`reviews:GymID: ${gymId}`);
+      await this.cacheManager.del(`user:ID: ${user.sub}-History`);
       return review;
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -157,6 +158,7 @@ export class ReviewService {
 
     await this.cacheManager.del(`reviews:UserID: ${user.sub}`);
     await this.cacheManager.del(`reviews:GymID: ${gymId}`);
+    await this.cacheManager.del(`user:ID: ${user.sub}-History`);
 
     return updateReview;
   }
@@ -188,6 +190,8 @@ export class ReviewService {
       await queryRunner.commitTransaction();
       await this.cacheManager.del(`reviews:UserID: ${user.sub}`);
       await this.cacheManager.del(`reviews:GymID: ${userGym.gymId}`);
+      await this.cacheManager.del(`user:ID: ${user.sub}-History`);
+
       return { message: '리뷰가 삭제되었습니다' };
     } catch (error) {
       await queryRunner.rollbackTransaction();

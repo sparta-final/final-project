@@ -6,7 +6,7 @@ import { Public } from 'src/global/common/decorator/public.decorator';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
 import { PostGymDto } from './dto/postGym.dto';
 import { UpdateGymDto } from './dto/updateGym.dto';
-import { approveGymGet, GetAllGym, GetById, GymDelete, GymSignup, GymUpdate, MyGymGet, SearchGymByText } from './gym.decorators';
+import { ApproveGymGet, GetAllGym, GetById, GymDelete, GymSignup, GymUpdate, MyGymGet, SearchGymByText } from './gym.decorators';
 import { GymService } from './gym.service';
 
 @ApiTags('GYM')
@@ -63,14 +63,14 @@ export class GymController {
 
   @GetAllGym()
   @Public()
-  @Get()
+  @Get('/all')
   async getAllGym() {
     return this.gymservice.getAllGym();
   }
 
   @GetById()
   @Public()
-  @Get('/:id')
+  @Get('/list/:id')
   async getGymById(@Param('id') gymId: number) {
     return this.gymservice.getGymsById(gymId);
   }
@@ -82,10 +82,10 @@ export class GymController {
     return this.gymservice.searchGymByText(text);
   }
 
-  @approveGymGet()
+  @ApproveGymGet()
   @Public()
-  @Get('/approve')
-  async approveGymGeto() {
-    return this.gymservice.approveGymGeto();
+  @Get('/approveGym')
+  async approveGymGet() {
+    return await this.gymservice.approveGymGet();
   }
 }

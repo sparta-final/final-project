@@ -26,9 +26,9 @@ export class GymService {
    */
   async postGyms({ file, postgymDto, user }) {
     const existGym = await this.gymsrepository.findOne({
-      where: { name: postgymDto.name },
+      where: { address: postgymDto.address },
     });
-    if (existGym) throw new ConflictException('이미 등록된 체육관입니다.');
+    if (existGym) throw new ConflictException('이미 등록된 주소입니다. 관리자에게 문의하세요.');
     if (!file.certification && !file.img) throw new BadRequestException('파일을 등록해야 합니다.');
 
     const queryRunner = this.dataSource.createQueryRunner();
@@ -57,6 +57,7 @@ export class GymService {
 
       await this.cacheManager.del(`gym:gymsOfBusinessUser:${user.sub}`);
       await this.cacheManager.del(`gym:allGym`);
+      await this.cacheManager.del(`admin:before-approve`);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -89,15 +90,6 @@ export class GymService {
    * @author 정호준
    */
   async getGymsById(gymId: number) {
-    // return await this.gymsrepository
-    //   .createQueryBuilder('gym')
-    //   .leftJoinAndSelect('gym.gymImgs', 'gymImg')
-    //   .select(['gym', 'gymImg.img'])
-    //   .where('gym.id = :id', { id: gymId })
-    //   .getOne();
-    // return await this.gymsrepository.findOne({
-    //   where: { id: gymId, deletedAt: null },
-    // });
     const cachedGymById: Gym = await this.cacheManager.get(`gym:gymById:${gymId}`);
     if (cachedGymById) return cachedGymById;
 
@@ -146,6 +138,7 @@ export class GymService {
       await this.cacheManager.del(`gym:gymById:${gymId}`);
       await this.cacheManager.del(`gym:gymsOfBusinessUser:${user.sub}`);
       await this.cacheManager.del(`gym:allGym`);
+      await this.cacheManager.del(`admin:before-approve`);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -176,6 +169,7 @@ export class GymService {
       await this.cacheManager.del(`gym:gymById:${gymId}`);
       await this.cacheManager.del(`gym:gymsOfBusinessUser:${user.sub}`);
       await this.cacheManager.del(`gym:allGym`);
+      await this.cacheManager.del(`admin:before-approve`);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -189,6 +183,7 @@ export class GymService {
   /**
    * 전체 체육관 조회
    * @author 정호준
+   * @deprecated
    */
 
   async getAllGym() {
@@ -204,11 +199,6 @@ export class GymService {
     await this.cacheManager.set(`gym:allGym`, allGym, { ttl: 60 });
 
     return allGym;
-
-    // return await this.gymsrepository.find({
-    //   where: { deletedAt: null },
-    //   relations: ['gymImgs'],
-    // });
   }
 
   /**
@@ -234,14 +224,20 @@ export class GymService {
    * 승인된 체육관만 가져오기
    * @author 정호준
    */
-  async approveGymGeto() {
-    return await this.gymsrepository
+  async approveGymGet() {
+    const cachedAllGym = await this.cacheManager.get(`gym:allGym`);
+    if (cachedAllGym) return cachedAllGym;
+
+    const allGym = await this.gymsrepository
       .createQueryBuilder('gym')
       .leftJoinAndSelect('gym.gymImgs', 'gymImg')
-      .select(['gym', 'gymImg.img'])
       .where('gym.isApprove = :isApprove', { isApprove: 1 })
-      .andWhere('gym.deletedAt IS NULL')
+      .select(['gym', 'gymImg.img'])
       .getMany();
+
+    await this.cacheManager.set(`gym:allGym`, allGym, { ttl: 60 });
+
+    return allGym;
   }
 
   /**

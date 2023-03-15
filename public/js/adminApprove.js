@@ -25,7 +25,6 @@ function getBeforeApproveGym() {
   })
     .then((response) => {
       const data = response.data;
-      console.log('✨✨✨', data, '✨✨✨');
       for (let i in data) {
         let temp = `
           <div class="gym-approve-wait">
@@ -33,7 +32,7 @@ function getBeforeApproveGym() {
             <ul class="gym-info-box">
               <li class="gym-name">${data[i].name}</li>
               <li class="gym-location">${data[i].address}</li>
-              <button onclick="location.href='/admin/approveDetail/${data[i].id}'" class="gym-detial-btn">업체 상세 정보</button>
+              <button onclick="location.href='/admin/approveDetail/${data[i].id}'" class="gym-detial-btn">가맹점 상세 정보</button>
             </ul>
           </div>`;
         $('.approve-wait').append(temp);
@@ -43,14 +42,3 @@ function getBeforeApproveGym() {
       console.log(err);
     });
 }
-
-// function getBeforeApproveGym() {
-//   axios
-//     .put('api/admin/approve', {})
-//     .then((response) => {
-//       console.log('✨✨✨', response, '✨✨✨');
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// }

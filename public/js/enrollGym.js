@@ -88,10 +88,13 @@ function enrollGym() {
       },
     })
     .then((res) => {
-      console.log(res);
-      window.location.href = '/business/businessMyInfo';
+      if (res.status === 201) {
+        alert('가맹점 등록 신청이 완료되었습니다.');
+        window.location.href = '/business/businessMyInfo';
+      }
     })
     .catch((err) => {
+      alert(err.response.data.data);
       console.log(err);
     });
 }
@@ -103,6 +106,5 @@ $('#gymCertification').on('change', function () {
 
 $('#gymImgs').on('change', function () {
   var fileName = $('#gymImgs').val();
-  console.log('✨✨✨', fileName, '✨✨✨');
   $('.gym-upload-name').val(fileName);
 });

@@ -16,7 +16,7 @@ function user() {
       },
     })
     .then((res) => {
-      $('#name').text(res.data.name);
+      $('#business-name').text(res.data.name);
       $('#email').text(res.data.email);
       $('#profileImage').attr('src', res.data.profileImage ? res.data.profileImage : '/images/default_profile.png');
     })
