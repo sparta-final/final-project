@@ -189,6 +189,7 @@ export class GymService {
   /**
    * 전체 체육관 조회
    * @author 정호준
+   * @deprecated
    */
 
   async getAllGym() {
@@ -235,11 +236,19 @@ export class GymService {
    * @author 정호준
    */
   async approveGymGet() {
-    console.log('✨✨✨', '2', '✨✨✨');
-    return await this.gymsrepository.find({
-      where: { isApprove: 1, deletedAt: null },
-      relations: ['gymImgs'],
-    });
+    const cachedAllGym = await this.cacheManager.get(`gym:allGym`);
+    if (cachedAllGym) return cachedAllGym;
+
+    const allGym = await this.gymsrepository
+      .createQueryBuilder('gym')
+      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
+      .where('gym.isApprove = :isApprove', { isApprove: 1 })
+      .select(['gym', 'gymImg.img'])
+      .getMany();
+
+    await this.cacheManager.set(`gym:allGym`, allGym, { ttl: 60 });
+
+    return allGym;
   }
 
   /**
