@@ -114,7 +114,7 @@ async function getGymDetail() {
       <div class="review-card">
         <div class="review-header">
           <span class="user-name">${reviewUserNickName}</span>
-          <img class="review-img" src="/star_rating_${starString}" alt="" />
+          <img class="review-img" src="/images/star_rating_${starString}" alt="" />
           <span class="review-date">${reviewCreatedAt}</span>
         </div>
         <div class="review-content">

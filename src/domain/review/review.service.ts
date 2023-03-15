@@ -109,7 +109,7 @@ export class ReviewService {
       const review = await queryRunner.manager.getRepository(Reviews).save({
         star: createReviewDto.star,
         review: createReviewDto.review,
-        reviewImg: file.location,
+        reviewImg: file?.location,
         userGym: { id: userGym.id },
       });
       await queryRunner.manager.getRepository(UserGym).update({ id: userGym.id }, { reviewId: review.id });

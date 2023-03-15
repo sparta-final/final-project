@@ -199,22 +199,30 @@ img.my-info-btn {
   font-weight: 500;
 }
 
-.membership-data-wrap {
+.membership-data-wrap,
+.no-membership-wrap {
   border: 1px solid var(--sub-color-8);
   padding: 15px;
   color: var(--sub-color-4);
 }
 
 .membership-data-wrap span,
-.membership-data-wrap > div {
+.membership-data-wrap > div,
+.no-membership-wrap span,
+.no-membership-wrap > div {
   display: block;
   border-bottom: 1px solid var(--sub-color-9);
   padding: 15px 5px;
 }
 
-.membership-data-wrap > div {
+.membership-data-wrap > div,
+.no-membership-wrap > div {
   position: relative;
   cursor: pointer;
+}
+
+.no-membership-wrap > div.my-review {
+  border: none;
 }
 
 .membership-data-wrap > .member {
@@ -263,4 +271,12 @@ img.my-info-btn {
 
 .member-createAt {
   color: var(--point-color);
+}
+
+.user-gym-wrap button.review-btn {
+  background: none;
+  border: none;
+  color: var(--point-color);
+  font-weight: 600;
+  cursor: pointer;
 }
