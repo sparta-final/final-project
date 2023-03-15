@@ -37,7 +37,6 @@ const getUseGymHistory = async (year, month) => {
   $('.text-gray-dark').empty();
 
   for (let i in histories) {
-    console.log('histories[i]', histories[i]);
     // 리뷰가 존재한다면 리뷰보기 버튼, 없다면 리뷰작성 버튼
     if (histories[i].reviewId) {
       histories[
@@ -46,7 +45,7 @@ const getUseGymHistory = async (year, month) => {
     } else {
       histories[
         i
-      ].reviews = `<button class="review-btn" onclick="location.href='/review/postReview?gymId=${histories[i].gymId}'">리뷰작성</button>`;
+      ].reviews = `<button class="review-btn" onclick="location.href='/review/postReview?gymId=${histories[i].id}'">리뷰작성</button>`;
     }
 
     let temp = `

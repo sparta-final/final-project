@@ -21,7 +21,6 @@ function getThisGym(id) {
       const description = data.description;
       const certification = data.certification;
       const gymImgs = data.gymImgs;
-      console.log('✨✨✨', certification, '✨✨✨');
 
       const temp_html2 = `
       <input type="text" id="gymName-up" />
@@ -62,17 +61,12 @@ function getThisGym(id) {
 
 // 가게 수정
 function updateGym(id) {
-  console.log(id);
-  // console.log(gymImgs);
   const name = document.getElementById('gymName-up').value;
   const phone = document.getElementById('gymPhone-up').value;
   const description = document.getElementById('gymDescription-up').value;
   const certification = document.getElementById('gymCertification');
   const gymType = document.getElementById('gymType').value;
-  console.log('✨✨✨', '1', certification, '✨✨✨');
-
-  const img = document.querySelectorAll('#gymImgsUrl');
-  console.log('✨✨✨', '2', img[0], '✨✨✨');
+  const imgList = document.getElementById('gymImgs').files;
 
   const formData = new FormData();
   formData.append('name', name);
@@ -80,8 +74,8 @@ function updateGym(id) {
   formData.append('description', description);
   formData.append('certification', certification.files[0]);
   formData.append('gymType', gymType);
-  for (let i in img) {
-    formData.append('img', img[i].value);
+  for (let i = 0; i < imgList.length; i++) {
+    formData.append('img', imgList[i]);
   }
 
   axios

@@ -25,7 +25,6 @@ function getBeforeApproveGym() {
   })
     .then((response) => {
       const data = response.data;
-      console.log('✨✨✨', data, '✨✨✨');
       for (let i in data) {
         let temp = `
           <div class="gym-approve-wait">
@@ -43,14 +42,3 @@ function getBeforeApproveGym() {
       console.log(err);
     });
 }
-
-// function getBeforeApproveGym() {
-//   axios
-//     .put('api/admin/approve', {})
-//     .then((response) => {
-//       console.log('✨✨✨', response, '✨✨✨');
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// }

@@ -17,6 +17,11 @@ function getLocation() {
 }
 
 let map;
+
+// 마커 클러스터러를 생성합니다
+var clusterer;
+var markers = [];
+
 function showPosition(position) {
   // 위도,경도를 주소로 변환
   const geocoder = new kakao.maps.services.Geocoder();
@@ -33,6 +38,7 @@ function showPosition(position) {
       center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
       level: 2,
     };
+
     map = new kakao.maps.Map(container, options);
     // 지도에 마커와 이름 표시
     axios.get('/api/gym/all').then((res) => {
@@ -43,6 +49,7 @@ function showPosition(position) {
           position: markerPosition,
         });
         marker.setMap(map);
+        markers.push(marker);
         // 커스텀 오버레이
         let content = `
           <div class="customoverlay">
@@ -60,7 +67,17 @@ function showPosition(position) {
         kakao.maps.event.addListener(marker, 'click', function () {
           location.href = `/gym/gymDetail?gym=${gym.id}`;
         });
+
+        // 클러스터러가 생성되어 있으면 마커를 추가하고, 없으면 생성합니다
+        if (!clusterer) {
+          clusterer = new kakao.maps.MarkerClusterer({
+            map: map,
+            averageCenter: true,
+            minLevel: 10,
+          });
+        }
       }
+      clusterer.addMarkers(markers);
     });
   });
 }
@@ -110,7 +127,6 @@ async function getGymList() {
   const data = response.data;
   // for...of 문으로 순차적으로 처리
   for (const gym of data) {
-    console.log('✨✨✨', 'gym', gym, '✨✨✨');
     const gymImgSrc = gym.gymImgs[0].img;
     let gymId = gym.id;
     let temp = `
