@@ -1,3 +1,110 @@
+#myInfoUpdateFrom {
+  width: 90%;
+  margin: 30px 0 0 5%;
+  position: relative;
+  color: var(--sub-color-4);
+}
+
+#myInfoUpdateFrom input {
+  width: 100%;
+  height: 40px;
+  background: var(--sub-color-10);
+  border: 1px solid var(--sub-color-9);
+  border-radius: 10px;
+  margin-bottom: 15px;
+  margin-top: 0;
+  padding-left: 10px;
+  color: var(--sub-color-4);
+}
+
+#myInfoUpdateFrom #nickname {
+  font-size: 13px;
+}
+
+#myInfoUpdateFrom span.modifyText {
+  position: absolute;
+  right: 5px;
+  top: 11px;
+  font-size: 13px;
+  color: var(--point-color);
+  padding: 10px;
+  cursor: pointer;
+}
+
+#inputContainer input {
+  color: var(--point-color);
+}
+
+#myInfoUpdateFrom img {
+  width: 280px;
+  height: 280px;
+  border-radius: 150px;
+  margin-top: 60px;
+}
+
+.myinfo-update-btn {
+  width: 100%;
+  height: 40px;
+  background: var(--point-color);
+  border: none;
+  border-radius: 10px;
+  margin: 15px 0;
+  color: var(--main-color);
+}
+
+.myinfo-update-btn:hover {
+  background: var(--sub-color-5);
+  color: var(--main-color);
+  transition: 0.2s;
+}
+
+.profile-img-wrap {
+  position: relative;
+}
+
+.profile-img-name {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--sub-color-9);
+  vertical-align: middle;
+  color: var(--sub-color-8);
+  background-color: var(--sub-color-10);
+  border-radius: 10px;
+  padding-left: 10px;
+}
+
+.profile-img-name,
+.profile-img {
+  top: 0;
+}
+
+.profile-img {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0);
+  color: var(--point-color);
+  text-align: right;
+  vertical-align: middle;
+  cursor: pointer;
+  height: 40px;
+  padding-right: 15px;
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 1.9;
+}
+
+#myInfoUpdateFrom input[type='file'] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+}
+
 input[type='file']::-webkit-file-upload-button {
   background-color: var(--point-color);
   color: white;

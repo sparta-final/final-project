@@ -61,10 +61,9 @@ export class UserService {
       existUser.password = hashedPassword;
       file ? (existUser.profileImage = file.location) : (existUser.profileImage = existUser.profileImage);
       await this.userRepo.save(existUser);
+      await this.cacheManager.del(`user:ID: ${user.sub}`);
       return existUser;
     }
-
-    await this.cacheManager.del(`user:ID: ${user.sub}`);
   }
 
   /**

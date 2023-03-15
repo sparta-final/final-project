@@ -4,6 +4,12 @@ const gymId = url.searchParams.get('gym');
 
 $(document).ready(function () {
   getGymDetail();
+  const targetTextarea = document.querySelector(`.gym-detail-desc`);
+  console.log('✨✨✨', '1', targetTextarea, '✨✨✨');
+  const rowCount = targetTextarea.value.split(/\r\n|\r|\n/).length;
+  console.log('✨✨✨', '2', rowCount, '✨✨✨');
+  console.log('✨✨✨', '3', rowCount * 36, '✨✨✨');
+  targetTextarea.style.height = rowCount * 36 + 'px'; //줄 수에 따라서 높이를 조절
 });
 
 /**
@@ -16,6 +22,7 @@ async function getGymDetail() {
     url: `/api/gym/list/${gymId}`,
   });
   const imgs = gymDetail.data.gymImgs;
+  console.log('✨✨✨', imgs, '✨✨✨');
   for (i in imgs) {
     const img = imgs[i];
     const imgSrc = img.img;
@@ -24,18 +31,19 @@ async function getGymDetail() {
     `;
     $('.gym-bxslider').append(imgTemp);
   }
-  $(function () {
-    $('.gym-bxslider').bxSlider({
-      stopAutoOnClick: true,
-      pager: false,
-      controls: false,
-      slideWidth: 600,
-      autoControlsCombine: true,
-      keyboardEnabled: true,
-      autoHover: true,
+  if (imgs.length > 1) {
+    $(function () {
+      $('.gym-bxslider').bxSlider({
+        stopAutoOnClick: true,
+        pager: false,
+        controls: false,
+        slideWidth: 600,
+        autoControlsCombine: true,
+        keyboardEnabled: true,
+        autoHover: true,
+      });
     });
-  });
-
+  }
   const gymData = gymDetail.data;
 
   const reviews = await axios({
@@ -44,20 +52,22 @@ async function getGymDetail() {
   });
   const reviewData = reviews.data;
   const reivewsLength = reviewData.reviews.length;
-  let avgStar = `⭐${reviewData.avgStar}(${reivewsLength}) `;
-
+  let avgStar = `⭐<span>${reviewData.avgStar}</span>(${reivewsLength}) `;
   function getStarString(reviewStarRating) {
     const starMap = {
-      1: '⭐',
-      1.5: '⭐',
-      2: '⭐⭐',
-      2.5: '⭐⭐',
-      3: '⭐⭐⭐',
-      3.5: '⭐⭐⭐',
-      4: '⭐⭐⭐⭐',
-      4.5: '⭐⭐⭐⭐',
-      5: '⭐⭐⭐⭐⭐',
+      0: '0',
+      0.5: '1',
+      1: '2',
+      1.5: '3',
+      2: '4',
+      2.5: '5',
+      3: '6',
+      3.5: '7',
+      4: '8',
+      4.5: '9',
+      5: '10',
     };
+
     return starMap[reviewStarRating] || '';
   }
   const gymName = gymData.name;
@@ -76,10 +86,11 @@ async function getGymDetail() {
   const descText = `
     ${gymDescription}
 
-    이용시간
-    평일 06:00 ~ 23:00
-    주말 07:00 ~ 21:00
-    ☎️ ${gymPhone}
+    🕓 이용시간
+            평일 06:00 ~ 23:00
+            주말 07:00 ~ 21:00
+
+    📞 ${gymPhone}
   `;
   $('.gym-detail-desc').append(descText);
 
@@ -98,11 +109,12 @@ async function getGymDetail() {
     } else {
       reviewImgSrc = reviewImg;
     }
+    // <span class="review-star">${starString}</span>
     let reviewTemp = `
       <div class="review-card">
         <div class="review-header">
           <span class="user-name">${reviewUserNickName}</span>
-          <span class="review-star">${starString}</span>
+          <img class="review-img" src="/star_rating_${starString}" alt="" />
           <span class="review-date">${reviewCreatedAt}</span>
         </div>
         <div class="review-content">
