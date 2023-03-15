@@ -103,28 +103,25 @@ async function getGymDetail() {
     let starString = getStarString(reviewStar);
     let reviewCreatedAt = review.createdAt.toString().substring(0, 10);
     let reviewImg = review.reviews[0].reviewImg;
-    let reviewImgSrc = '';
-    if (reviewImg === null || reviewImg === '') {
-      reviewImgSrc = '/images/default_profile.png';
-    } else {
-      reviewImgSrc = reviewImg;
-    }
     // <span class="review-star">${starString}</span>
     let reviewTemp = `
       <div class="review-card">
         <div class="review-header">
           <span class="user-name">${reviewUserNickName}</span>
-          <img class="review-img" src="/images/star_rating_${starString}" alt="" />
+          <img class="review-rating" src="/images/star_rating_${starString}" alt="" />
           <span class="review-date">${reviewCreatedAt}</span>
         </div>
         <div class="review-content">
-          <img class="review-img" src="${reviewImgSrc}" alt="" />
           <textarea class="review-text" cols="30" disabled>${reviewContent}</textarea>
         </div>
       </div>
 
     `;
     $('.review-wrap').append(reviewTemp);
+    // if (reviewImg) {
+    //   console.log('✨✨✨', 'i', i, '✨✨✨');
+    //   $('.review-content').eq(i).append(`<img class="review-img-all" src="${reviewImg}" alt="" />`);
+    // }
   }
   const reviewTextareas = document.querySelectorAll(`textarea.review-text`);
   for (let i = 0; i < reviewTextareas.length; i++) {
