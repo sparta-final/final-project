@@ -71,6 +71,7 @@ function getPaidData(data) {
       let cardNumber = response[0].card_number;
       let email = data.email;
       let phone = data.phone;
+      // data.membership 이 null 이 아니면 아래 코드 작성, null이면 다른코드 작성
       let temp = `
       <p class="member-start">멤버십 시작일 :${createAt}</p>
       <div class="membership-data-wrap">
@@ -135,8 +136,6 @@ function getPaymentData(data) {
       console.log(y, m);
       var nextPay = new Date(y, m, 1).toLocaleString().substring(0, 10);
       const response = res.data;
-      console.log('✨✨✨', data, '✨✨✨');
-      console.log('✨✨✨', response, '✨✨✨');
       let custimerUid = response[0].customerUid;
       let createAt = response[0].createdAt.substring(0, 7);
       let createAtDay = response[0].createdAt.substring(0, 10);

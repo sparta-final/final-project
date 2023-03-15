@@ -1,7 +1,6 @@
 // 쿼리스트링 추출
 const url = new URL(window.location.href);
-const gymId = url.searchParams.get("gym");
-
+const gymId = url.searchParams.get('gym');
 
 $(document).ready(function () {
   getGymDetail();
@@ -22,8 +21,8 @@ async function getGymDetail() {
     const imgSrc = img.img;
     const imgTemp = `
       <li><img src="${imgSrc}" id="gym-img" /></li>
-    `
-    $('.gym-bxslider').append(imgTemp)
+    `;
+    $('.gym-bxslider').append(imgTemp);
   }
   $(function () {
     $('.gym-bxslider').bxSlider({
@@ -66,7 +65,7 @@ async function getGymDetail() {
   <span class="gym-detail-name">${gymName}</span>
   <span class="gym-detail-star">${avgStar}</span>
 </div>
-  `
+  `;
   $('.gym-name-wrap').append(gymNameWrap);
 
   const gymAddress = gymData.address;
@@ -81,7 +80,7 @@ async function getGymDetail() {
     평일 06:00 ~ 23:00
     주말 07:00 ~ 21:00
     ☎️ ${gymPhone}
-  `
+  `;
   $('.gym-detail-desc').append(descText);
 
   const reveiewsdetail = reviewData.reviews;
@@ -112,13 +111,13 @@ async function getGymDetail() {
         </div>
       </div>
 
-    `
+    `;
     $('.review-wrap').append(reviewTemp);
   }
   const reviewTextareas = document.querySelectorAll(`textarea.review-text`);
   for (let i = 0; i < reviewTextareas.length; i++) {
     const targetTextarea = reviewTextareas[i];
     const textLength = targetTextarea.value.length;
-    targetTextarea.style.height = textLength / 35 * 24 + 'px';
+    targetTextarea.style.height = (textLength / 35) * 24 + 'px';
   }
 }
