@@ -102,7 +102,9 @@ export class PaymentService {
         .where('id = :id', { id: user_id })
         .execute();
 
-      await this.cacheManager.del(`paidData:${user_id}`);
+      const paidDataCaches = await this.cacheManager.store.keys(`paidData:${user_id}`);
+      if (paidDataCaches.length > 0) await this.cacheManager.store.del(`paidData:${user_id}`);
+
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();

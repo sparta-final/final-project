@@ -273,9 +273,12 @@ export class AdminService {
     const updateGym = await this.gymRepo.update(gymId, {
       isApprove: 1,
     });
-    await this.cacheManager.del('admin:before-approve');
-    await this.cacheManager.del(`admin:before-approve-${gymId}`);
-    await this.cacheManager.del('gym:allGym');
+
+    // admin,gym 포함한 캐시 삭제
+    const admincaches = await this.cacheManager.store.keys('admin*');
+    const gymcaches = await this.cacheManager.store.keys('gym*');
+    if (admincaches.length > 0) await this.cacheManager.store.del(admincaches);
+    if (gymcaches.length > 0) await this.cacheManager.store.del(gymcaches);
 
     return updateGym;
   }

@@ -115,14 +115,14 @@ export class ReviewService {
         userGym: { id: userGym.id },
       });
       await queryRunner.manager.getRepository(UserGym).update({ id: userGym.id }, { reviewId: review.id });
+
+      // review, History 캐시 삭제
+      const reviewCaches = await this.cacheManager.store.keys('review*');
+      if (reviewCaches.length > 0) await this.cacheManager.store.del(reviewCaches);
+      const historyCaches = await this.cacheManager.store.keys('*History*');
+      if (historyCaches.length > 0) await this.cacheManager.store.del(historyCaches);
+
       await queryRunner.commitTransaction();
-      // 캐시 업데이트
-      await this.cacheManager.store.keys().then((keys) => {
-        keys.forEach((key: any) => {
-          if (key.includes('review')) this.cacheManager.del(key);
-          if (key.includes('History')) this.cacheManager.del(key);
-        });
-      });
 
       return review;
     } catch (error) {
