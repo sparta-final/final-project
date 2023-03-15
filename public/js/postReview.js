@@ -35,7 +35,7 @@ textarea.addEventListener('input', (e) => {
  * @description: 리뷰 작성
  * @author: 김승일
  */
-async function postReview(gymId) {
+async function postReview(usergymId) {
   const reviewImg = document.getElementById('reviewImg').files[0];
   const reviewTextarea = document.getElementsByClassName('review-textarea')[0].value;
   const starRating = star_rating;
@@ -44,7 +44,7 @@ async function postReview(gymId) {
   formData.append('review', reviewTextarea);
   formData.append('star', starRating);
   await axios
-    .post(`/api/gym/${gymId}/review`, formData, {
+    .post(`/api/gym/${usergymId}/review`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         accesstoken: `${localStorage.getItem('at')}`,
@@ -52,7 +52,6 @@ async function postReview(gymId) {
       },
     })
     .then((res) => {
-      console.log('res', res);
       if (res.status === 201) {
         alert('리뷰가 작성되었습니다.');
         window.location.replace('/mypage/history');

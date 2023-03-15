@@ -275,6 +275,7 @@ export class AdminService {
     });
     await this.cacheManager.del('admin:before-approve');
     await this.cacheManager.del(`admin:before-approve-${gymId}`);
+    await this.cacheManager.del('gym:allGym');
 
     return updateGym;
   }
