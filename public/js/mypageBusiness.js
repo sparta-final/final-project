@@ -11,7 +11,7 @@ function user() {
       },
     })
     .then((res) => {
-      $('#name').text(res.data.name);
+      $('#business-name').text(res.data.name);
       $('#email').text(res.data.email);
       $('#profileImage').attr('src', res.data.profileImage ? res.data.profileImage : '/images/default_profile.png');
     })
@@ -28,12 +28,14 @@ function logout() {
       accesstoken: `${localStorage.getItem('at')}`,
       refreshtoken: `${localStorage.getItem('rt')}`,
     },
-  }).then((res) => {
-    localStorage.removeItem('at');
-    localStorage.removeItem('rt');
-    localStorage.removeItem('type');
-    location.href = '/';
-  }).catch((err) => {
-    console.log(err);
-  });
+  })
+    .then((res) => {
+      localStorage.removeItem('at');
+      localStorage.removeItem('rt');
+      localStorage.removeItem('type');
+      location.href = '/';
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }

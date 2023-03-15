@@ -16,7 +16,7 @@ $(document).ready(function () {
 // 헬스장 정보 가져오기
 function getThisGym(id) {
   axios
-    .get(`/api/gym/${id}`, {
+    .get(`/api/gym/list/${id}`, {
       headers: {
         accesstoken: `${localStorage.getItem('at')}`,
         refreshtoken: `${localStorage.getItem('rt')}`,

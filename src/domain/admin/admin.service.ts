@@ -58,7 +58,7 @@ export class AdminService {
   }
 
   /**
-   * @description 승인된 제휴 업체 수 조회
+   * @description 승인된 제휴 가맹점 수 조회
    * @author 한정훈
    */
   async getGym() {
@@ -88,7 +88,7 @@ export class AdminService {
   }
 
   /**
-   * @description 승인대기중인 업체 리스트 조회
+   * @description 승인대기중인 가맹점 리스트 조회
    * @author 한정훈
    */
   async beforeApproveGym() {
@@ -105,7 +105,7 @@ export class AdminService {
   }
 
   /**
-   * @description 승인대기중인 업체 리스트 조회
+   * @description 승인대기중인 가맹점 상세 조회
    * @author 한정훈
    * @argument id
    */
@@ -123,7 +123,7 @@ export class AdminService {
   }
 
   /**
-   * @description 업체 순위에 들어갈 테이터
+   * @description 가맹점 순위에 들어갈 테이터
    * @author 한정훈
    * @argument category (미구현)
    * @argument year
@@ -265,7 +265,7 @@ export class AdminService {
   };
 
   /**
-   * @description 승인 요청된 제휴업체 승인하기
+   * @description 승인 요청된 제휴가맹점 승인하기
    * @author 한정훈
    * @argument id
    */

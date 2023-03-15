@@ -65,7 +65,7 @@ export const SearchGymByText = () => {
     ApiResponse({ status: 400, description: '조회 실패' })
   );
 };
-export const approveGymGet = () => {
+export const ApproveGymGet = () => {
   return applyDecorators(
     ApiOperation({ summary: ' 승인된 체육관 조회' }),
     ApiResponse({ status: 200, description: '조회 성공' }),
