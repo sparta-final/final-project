@@ -8,6 +8,11 @@ $(document).ready(function () {
   user();
 });
 
+  /**
+   * 마이페이지 - 내 정보 수정하기
+   * @author 주현진
+   */
+
 // 사진 미리보기
 const fileInput = document.getElementById('profileImage');
 const preview = document.getElementById('image');

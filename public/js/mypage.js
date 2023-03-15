@@ -119,6 +119,11 @@ function cancelPay(custimerUid) {
   }
 }
 
+/**
+ * 결제 내역 조회 상세
+ * @author 주현진
+ */
+
 function getPaymentData(data) {
   const id = data.id;
   axios
@@ -186,14 +191,12 @@ function getPaymentData(data) {
 
         $('.membership-past-wrap').append(temp2);
       }
-
       $('.membership-wrap').append(temp);
     })
     .catch((err) => {
       console.log(err);
     });
 }
-
 // 해당 월의 마지막 날짜 구하기
 function getLastDayOfMonth(year, month) {
   return new Date(year, month, 0).getDate();

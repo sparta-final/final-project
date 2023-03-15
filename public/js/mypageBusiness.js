@@ -2,6 +2,11 @@ $(document).ready(function () {
   user();
 });
 
+/**
+ * 사업자 마이페이지
+ * @author 주현진
+ */
+
 function user() {
   axios
     .get(`/api/business`, {
@@ -28,12 +33,14 @@ function logout() {
       accesstoken: `${localStorage.getItem('at')}`,
       refreshtoken: `${localStorage.getItem('rt')}`,
     },
-  }).then((res) => {
-    localStorage.removeItem('at');
-    localStorage.removeItem('rt');
-    localStorage.removeItem('type');
-    location.href = '/';
-  }).catch((err) => {
-    console.log(err);
-  });
+  })
+    .then((res) => {
+      localStorage.removeItem('at');
+      localStorage.removeItem('rt');
+      localStorage.removeItem('type');
+      location.href = '/';
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
