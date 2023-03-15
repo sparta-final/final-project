@@ -33,10 +33,10 @@ export const DeleteBusinessUserInfo = () => {
 
 export const GetUserByGymId = () => {
   return applyDecorators(
-    ApiOperation({ summary: '업체별 사용자 데이터 불러오기' }),
+    ApiOperation({ summary: '가맹점별 사용자 데이터 불러오기' }),
     ApiSecurity('accesstoken'),
     ApiSecurity('refreshtoken'),
-    ApiResponse({ status: 200, description: '업체별 사용자 데이터 불러오기 성공' }),
-    ApiResponse({ status: 400, description: '업체별 사용자 데이터 불러오기 실패' })
+    ApiResponse({ status: 200, description: '가맹점별 사용자 데이터 불러오기 성공' }),
+    ApiResponse({ status: 400, description: '가맹점별 사용자 데이터 불러오기 실패' })
   );
 };

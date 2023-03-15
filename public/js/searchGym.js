@@ -41,7 +41,7 @@ async function searchGymByText(text) {
               <li class="gym-name">${name}</li>
               <li class="gym-location">${address}</li>
               <li class="gym-review-${gymId}"></li>
-              <button onclick="location.href='/gym/gymDetail?gym=${gymId}'" >업체 상세 정보</button>
+              <button onclick="location.href='/gym/gymDetail?gym=${gymId}'" >가맹점 상세 정보</button>
             </ul>
           </div>
           `;

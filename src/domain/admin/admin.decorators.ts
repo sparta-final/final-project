@@ -13,7 +13,7 @@ export const getMembers = () => {
 
 export const getApproveGyms = () => {
   return applyDecorators(
-    ApiOperation({ summary: '승인된 제휴 업체 수 조회' }),
+    ApiOperation({ summary: '승인된 제휴 가맹점 수 조회' }),
     ApiSecurity('accesstoken'),
     ApiSecurity('refreshtoken'),
     ApiResponse({ status: 200, description: '성공' }),
@@ -23,7 +23,7 @@ export const getApproveGyms = () => {
 
 export const getBeforeApproveGyms = () => {
   return applyDecorators(
-    ApiOperation({ summary: '승인대기중인 업체 조회' }),
+    ApiOperation({ summary: '승인대기중인 가맹점 조회' }),
     ApiSecurity('accesstoken'),
     ApiSecurity('refreshtoken'),
     ApiResponse({ status: 200, description: '성공' }),
@@ -33,7 +33,7 @@ export const getBeforeApproveGyms = () => {
 
 export const approveGym = () => {
   return applyDecorators(
-    ApiOperation({ summary: '승인 요청된 제휴업체 승인하기' }),
+    ApiOperation({ summary: '승인 요청된 제휴가맹점 승인하기' }),
     ApiSecurity('accesstoken'),
     ApiSecurity('refreshtoken'),
     ApiResponse({ status: 200, description: '성공' }),
@@ -63,7 +63,7 @@ export const salesMonth = () => {
 
 export const gymRank = () => {
   return applyDecorators(
-    ApiOperation({ summary: '카테고리별 업체 순위' }),
+    ApiOperation({ summary: '카테고리별 가맹점 순위' }),
     ApiSecurity('accesstoken'),
     ApiSecurity('refreshtoken'),
     ApiResponse({ status: 200, description: '성공' }),
