@@ -105,14 +105,37 @@ function cancelPay(custimerUid) {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
+          accesstoken: `${localStorage.getItem('at')}`,
+          refreshtoken: `${localStorage.getItem('rt')}`,
         },
         data: {
           // 빌링키 생성시 customer_uid 가져오거나 저장해두는 로직 필요
           customer_uid: custimerUid,
         },
       }).then((data) => {
-        // 서버 결제 API 성공시 로직
-        alert(`구독이 해지되었습니다.`);
+        alert(`${data.data.message}`);
+
+        // 다음 달 1일에 유저 멤버쉽 변경
+        const date = new Date();
+        let y = date.getFullYear();
+        let m = date.getMonth() + 1;
+        let nextPay = new Date(y, m, 1).getTime();
+        let now = new Date().getTime();
+        let time = nextPay - now;
+        setTimeout(() => {
+          axios({
+            url: '/api/payment/unsubscribe',
+            method: 'put',
+            headers: {
+              accesstoken: `${localStorage.getItem('at')}`,
+              refreshtoken: `${localStorage.getItem('rt')}`,
+            },
+          })
+        }, time);
+      }).catch((err) => {
+        // 서버 결제 API 실패시 로직
+        console.log(err);
+        alert(`구독 해지에 실패했습니다. 다시 시도해주세요.`);
       });
     }
   } catch (e) {
