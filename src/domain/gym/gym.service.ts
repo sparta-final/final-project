@@ -57,6 +57,7 @@ export class GymService {
 
       await this.cacheManager.del(`gym:gymsOfBusinessUser:${user.sub}`);
       await this.cacheManager.del(`gym:allGym`);
+      await this.cacheManager.del(`admin:before-approve`);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -89,15 +90,6 @@ export class GymService {
    * @author 정호준
    */
   async getGymsById(gymId: number) {
-    // return await this.gymsrepository
-    //   .createQueryBuilder('gym')
-    //   .leftJoinAndSelect('gym.gymImgs', 'gymImg')
-    //   .select(['gym', 'gymImg.img'])
-    //   .where('gym.id = :id', { id: gymId })
-    //   .getOne();
-    // return await this.gymsrepository.findOne({
-    //   where: { id: gymId, deletedAt: null },
-    // });
     const cachedGymById: Gym = await this.cacheManager.get(`gym:gymById:${gymId}`);
     if (cachedGymById) return cachedGymById;
 
@@ -146,6 +138,7 @@ export class GymService {
       await this.cacheManager.del(`gym:gymById:${gymId}`);
       await this.cacheManager.del(`gym:gymsOfBusinessUser:${user.sub}`);
       await this.cacheManager.del(`gym:allGym`);
+      await this.cacheManager.del(`admin:before-approve`);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -176,6 +169,7 @@ export class GymService {
       await this.cacheManager.del(`gym:gymById:${gymId}`);
       await this.cacheManager.del(`gym:gymsOfBusinessUser:${user.sub}`);
       await this.cacheManager.del(`gym:allGym`);
+      await this.cacheManager.del(`admin:before-approve`);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -205,11 +199,6 @@ export class GymService {
     await this.cacheManager.set(`gym:allGym`, allGym, { ttl: 60 });
 
     return allGym;
-
-    // return await this.gymsrepository.find({
-    //   where: { deletedAt: null },
-    //   relations: ['gymImgs'],
-    // });
   }
 
   /**

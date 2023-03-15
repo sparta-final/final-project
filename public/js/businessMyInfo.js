@@ -20,11 +20,12 @@ async function getMyGym() {
     .then(async (res) => {
       const data = res.data;
 
-      for (let i = 0; i < res.data.length; i++) {
+      for (let i = 0; i < data.length; i++) {
         const id = data[i].id;
         const name = data[i].name;
         const address = data[i].address;
         const img = data[i].gymImgs[0].img;
+        const isApprove = data[i].isApprove;
 
         const temp_html = `
                         <div class="image-text-box">
@@ -44,6 +45,13 @@ async function getMyGym() {
                           </div>
                         </div>`;
         $('#imageTextBox').append(temp_html);
+        let approve = '승인 대기중';
+        const approve_html = `
+          <p>${approve}</p>
+        `
+        if (isApprove === 0) {
+          $(document.getElementsByClassName('review-box')[i]).before(approve_html);
+        }
         await axios
           .get(`/api/gym/${id}/review`)
           .then((res) => {
