@@ -46,6 +46,7 @@
     "jsonwebtoken": "^9.0.0",
     "multer-s3": "^3.0.1",
     "mysql2": "^3.1.2",
+    "ngrok": "^4.3.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-kakao": "^1.0.1",
