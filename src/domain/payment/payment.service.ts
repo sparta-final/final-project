@@ -84,7 +84,7 @@ export class PaymentService {
         customerUid: customer_uid,
         amount: amount,
         card_name: card_name,
-        card_number: card_number.substring(0, 8),
+        card_number: card_number ? card_number.substring(0, 8) : '',
       });
       let membershipOptions: userMembership;
       const membershipMap = {

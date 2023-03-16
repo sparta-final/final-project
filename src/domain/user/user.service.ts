@@ -79,7 +79,6 @@ export class UserService {
       where: { id: user.sub },
     });
     if (existUser) {
-  
       await this.userRepo.softDelete(existUser.id);
 
       const userCaches = await this.cacheManager.store.keys(`user:ID: ${user.sub}*`);
@@ -95,7 +94,7 @@ export class UserService {
    */
   async getUseGymHistory(user: JwtPayload, year: number, month: number) {
     const cachedHistory = await this.cacheManager.get(`user:ID: ${user.sub}-History-${year}-${month}`);
-    if (cachedHistory) return cachedHistory;
+    // if (cachedHistory) return cachedHistory;
 
     const existUser = await this.userRepo.findOne({
       where: { id: user.sub },
@@ -107,6 +106,7 @@ export class UserService {
       .leftJoinAndSelect('userGym.gym', 'gym')
       .leftJoinAndSelect('userGym.reviews', 'reviews')
       .where('userGym.userId = :userId', { userId: existUser.id })
+      .andWhere('gym.id is not null')
       .orderBy('userGym.createdAt', 'DESC')
       .getMany();
 

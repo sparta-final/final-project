@@ -1,6 +1,6 @@
 #mobile-container {
   width: 420px;
-  height: calc(100% - 100px);
+  height: calc(100% - 50px);
   margin: auto;
   background: var(--main-color);
 }

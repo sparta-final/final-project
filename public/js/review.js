@@ -37,6 +37,7 @@ async function getMyReview() {
   }
 
   for (i in reviews) {
+    console.log('✨✨✨', reviews[i], '✨✨✨');
     let gymName = reviews[i].gym.name;
     let reviewStar = reviews[i].reviews[0].star;
     let starString = getStarString(reviewStar);

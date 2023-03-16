@@ -131,7 +131,7 @@ const observer = new IntersectionObserver((entries) => {
 const gymContainer = document.querySelector('.approve-wait');
 let postCount = 0;
 let loading = false;
-const limit = 5;
+const limit = 8;
 let data = [];
 
 async function getGymList() {
