@@ -186,20 +186,27 @@ export class AdminService {
         select: ['gymId'],
       });
 
-      const getRating = await this.reviewRepo.find({
-        where: {
-          userGym: { id: getAllGym[i].id },
-          createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
-        },
-        select: ['star'],
+      const getRating = await this.reviewRepo.sum('star', {
+        userGym: { gymId: getAllGym[i].id },
+        createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+        deletedAt: null,
       });
-      console.log('✨✨✨', '5', getRating, '✨✨✨'); // => 빈배열나옴
+
+      const getRatingCount = await this.reviewRepo.count({
+        where: {
+          userGym: { gymId: getAllGym[i].id },
+          createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+          deletedAt: null,
+        },
+      });
+
+      const calculateRating = getRating / getRatingCount;
 
       rank.push({
         name: getAllGym[i].name,
         paid: getPaid[0]?.paid ? getPaid[0].paid : 0,
         count: getUseCount,
-        rating: getRating[0]?.star ? getRating[0].star : 0,
+        rating: calculateRating,
         // Promise.all 방식
         // rank.push({
         //   gymId: getAllGym[i].id,
