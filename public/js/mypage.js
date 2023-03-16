@@ -136,6 +136,7 @@ function cancelPay(custimerUid) {
           let nextPay = new Date(y, m, 1).getTime();
           let now = new Date().getTime();
           let time = nextPay - now;
+          const schedule_at_time = Math.floor(new Date().getTime() / 1000) + 60; // 다음달 1일
           setTimeout(() => {
             axios({
               url: '/api/payment/unsubscribe',
@@ -145,7 +146,7 @@ function cancelPay(custimerUid) {
                 refreshtoken: `${localStorage.getItem('rt')}`,
               },
             });
-          }, time);
+          }, schedule_at_time);
         })
         .catch((err) => {
           // 서버 결제 API 실패시 로직
