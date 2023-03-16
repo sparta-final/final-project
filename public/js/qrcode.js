@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
   getQRCode();
 });
@@ -27,5 +26,5 @@ function getQRCode() {
         location.href = '/';
         console.log(err);
       }
-    })
+    });
 }
