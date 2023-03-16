@@ -229,9 +229,8 @@ function updateBtn(id) {
   body.addEventListener('click', async function (e) {
     if (e.target.classList.value !== 'feed-update') return;
     const userType = localStorage.getItem('type');
-    console.log(userType);
     if (userType === null) {
-      alert('일반 로그인이 필요한 서비스입니다.');
+      alert('로그인이 필요한 서비스입니다.');
       window.location.href = '/user/login';
     }
 
