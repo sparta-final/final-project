@@ -4,14 +4,15 @@ if (userType !== 'admin') {
   window.location.href = '/';
 }
 
+const now = new Date();
+const year = now.getFullYear();
+const month = now.getMonth(); // 기본으로 이전 달 데이터 가져오기
 $(document).ready(function () {
-  const now = new Date();
-  let year = now.getFullYear();
-  let month = now.getMonth(); // 기본으로 이전 달 데이터 가져오기
+  let category = '정산 금액';
   getMembers();
   getGym();
-  getRank(year, month);
-  salesMonth(year, month);
+  getRank(category, year, month);
+  salesMonth();
 });
 
 function getMembers() {
@@ -72,7 +73,7 @@ function getGym() {
     });
 }
 
-function getRank(year, month) {
+function getRank(category, year, month) {
   const prevMonth = month === 1 ? 12 : month - 1;
   const prevYear = month === 1 ? year - 1 : year;
   const nextMonth = month === 12 ? 1 : month + 1;
@@ -85,7 +86,7 @@ function getRank(year, month) {
   }
   axios({
     method: 'get',
-    url: `api/admin/rank/a/${year}/${month}`,
+    url: `api/admin/rank/${year}/${month}`,
     headers: {
       accesstoken: `${localStorage.getItem('at')}`,
       refreshtoken: `${localStorage.getItem('rt')}`,
@@ -93,20 +94,26 @@ function getRank(year, month) {
   })
     .then((response) => {
       const data = response.data;
-      console.log('✨✨✨', 'rank', data, '✨✨✨');
+      if (category === '정산 금액') {
+        const paidRank = data.sort((a, b) => b.paid - a.paid);
+      }
+      if (category === '이용자 수') {
+        const countRank = data.sort((a, b) => b.count - a.count);
+      }
+      if (category === '평점') {
+        const ratingRank = data.sort((a, b) => b.rating - a.rating);
+      }
+      // console.log('✨✨✨', 'rank', data, '✨✨✨');
+      console.log('✨✨✨', 'year', year, 'month', month, '✨✨✨');
       $('.text-gray-dark').empty();
-      // 찾는 데이터가 0일때 부터는 다른조건을 안보기 떄문에 0인뒤로 순서가 엉킴.
-      // const countRank = data.sort((a, b) => b.count - a.count);
-      const paidRank = data.sort((a, b) => b.paid - a.paid);
-      // console.log('✨✨✨', paidRank, '✨✨✨');
-      // const ratingRank = data.sort((a, b) => b.rating - a.rating);
-      // console.log('✨✨✨', ratingRank, '✨✨✨');
+      $('.cur-month').remove();
       let rating;
-      for (let i in data) {
+
+      for (let i = 0; i < 10; i++) {
         if (data[i].rating === null) {
           rating = '-';
         } else {
-          rating = data[i].rating;
+          rating = data[i].rating.toFixed(1);
         }
         if (data[i].count !== 0 || data[i].paid !== 0 || data[i].rating !== 0) {
           let temp = `
@@ -121,6 +128,7 @@ function getRank(year, month) {
           $('.text-gray-dark').append(temp);
         }
       }
+
       function removeAll() {
         const curMonth = $('.cur-month');
         const calculateMonth = $('.admin-month-title');
@@ -129,6 +137,9 @@ function getRank(year, month) {
           calculateMonth.remove();
         }
       }
+      // $('th.cursor').click((e) => {
+      //   $('.cur-month').remove();
+      // });
 
       let now = `
       <li class="cur-month">${year}.${month}</li>`;
@@ -137,14 +148,14 @@ function getRank(year, month) {
       $('#prevMonthBtn').off('click');
       $('#prevMonthBtn').on('click', function () {
         removeAll();
-        getRank(prevYear, prevMonth);
-        salesMonth(prevYear, prevMonth);
+        getRank(category, prevYear, prevMonth);
+        salesMonth(category, prevYear, prevMonth);
       });
       $('#nextMonthBtn').off('click');
       $('#nextMonthBtn').on('click', function () {
         removeAll();
-        getRank(nextYear, nextMonth);
-        salesMonth(nextYear, nextMonth);
+        getRank(category, nextYear, nextMonth);
+        salesMonth(category, nextYear, nextMonth);
       });
     })
     .catch((err) => {
@@ -152,7 +163,7 @@ function getRank(year, month) {
     });
 }
 
-function salesMonth(year, month) {
+function salesMonth() {
   axios({
     method: 'get',
     url: `api/admin/sales/${year}/${month}`,
@@ -197,3 +208,20 @@ function logout() {
       console.log(err);
     });
 }
+
+$('th.cursor').click((e) => {
+  let eCategory = e.target.innerHTML;
+  curDate = $('.cur-month')[0].innerHTML;
+  // curDate = $('.cur-month');
+  cYear = Number(curDate.split('.')[0]);
+  cMonth = Number(curDate.split('.')[1]);
+  console.log('✨✨✨', cYear, cMonth, '✨✨✨');
+  // $('.cur-month').remove();
+  getRank(eCategory, cYear, cMonth);
+});
+
+// console.log('✨✨✨', curDate, '✨✨✨');
+// console.log('✨✨✨', yaer, month, '✨✨✨');
+// onclick="getRank('이용자 수', year, month)"
+// onclick="getRank('정산 금액', year, month)"
+// onclick="getRank('평점', year, month)"

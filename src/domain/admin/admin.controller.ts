@@ -66,7 +66,7 @@ export class AdminController {
     return await this.adminService.getSalesMonth(date);
   }
 
-  @Get('rank/:category/:year/:month')
+  @Get('rank/:year/:month')
   @gymRank()
   async getRank(@Param() date: MonthDto) {
     return await this.adminService.getRank(date);

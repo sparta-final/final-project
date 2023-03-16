@@ -63,7 +63,6 @@ export class FeedService {
   async getAllFeed() {
     const cachedallFeed = await this.cacheManager.get('Feed:allFeed');
     if (cachedallFeed) return cachedallFeed;
-
     const allFeed = await this.feedsRepository
       .createQueryBuilder('feeds')
       .leftJoinAndSelect('feeds.user', 'user')
@@ -71,6 +70,8 @@ export class FeedService {
       // .select(['user.nickname'])
       .select(['feeds', 'feedsImgs.image', 'user.nickname', 'user.profileImage'])
       .orderBy({ 'feeds.id': 'DESC' })
+      // .skip(Number(data.offset))
+      // .take(Number(data.offset) + Number(data.limit))
       .getMany();
     // .getRawMany();
     // const allFeed = await this.feedsRepository.find({
