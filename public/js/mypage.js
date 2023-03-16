@@ -158,6 +158,11 @@ function cancelPay(custimerUid) {
   }
 }
 
+/**
+ * 결제 내역 조회 상세
+ * @author 주현진
+ */
+
 function getPaymentData(data) {
   const id = data.id;
   axios
@@ -173,11 +178,13 @@ function getPaymentData(data) {
       let m = date.getMonth() + 1;
       console.log(y, m);
       var nextPay = new Date(y, m, 1).toLocaleString().substring(0, 10);
+
       const response = res.data;
-      let membership = response[0].merchantUid.split('_')[0];
-      let amount = response[0].amount.toLocaleString();
 
       let length = response.length;
+
+      let membership = response[length - 1].merchantUid.split('_')[0];
+      let amount = response[length - 1].amount.toLocaleString();
 
       console.log('length : ', length);
 
@@ -219,14 +226,12 @@ function getPaymentData(data) {
 
         $('.membership-past-wrap').append(temp2);
       }
-
       $('.membership-wrap').append(temp);
     })
     .catch((err) => {
       console.log(err);
     });
 }
-
 // 해당 월의 마지막 날짜 구하기
 function getLastDayOfMonth(year, month) {
   return new Date(year, month, 0).getDate();

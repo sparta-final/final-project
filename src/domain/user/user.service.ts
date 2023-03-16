@@ -79,8 +79,8 @@ export class UserService {
       where: { id: user.sub },
     });
     if (existUser) {
-      existUser.deletedAt = new Date();
-      await this.userRepo.save(existUser);
+  
+      await this.userRepo.softDelete(existUser.id);
 
       const userCaches = await this.cacheManager.store.keys(`user:ID: ${user.sub}*`);
       if (userCaches.length > 0) await this.cacheManager.store.del(userCaches);
