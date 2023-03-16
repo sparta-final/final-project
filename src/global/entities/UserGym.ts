@@ -28,7 +28,7 @@ export class UserGym {
   userId: number;
 
   @ApiProperty({ example: 1, description: '리뷰 아이디' })
-  @Column('int', { name: 'review_id', nullable: true })
+  @Column('int', { name: 'review_id', nullable: true, default: null })
   reviewId: number;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
