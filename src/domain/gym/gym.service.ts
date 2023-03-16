@@ -256,6 +256,7 @@ export class GymService {
       .createQueryBuilder('gym')
       .leftJoinAndSelect('gym.gymImgs', 'gymImg')
       .where('gym.isApprove = :isApprove', { isApprove: 1 })
+      .andWhere('gymImg.id is not null')
       .select(['gym', 'gymImg.img'])
       .getMany();
 

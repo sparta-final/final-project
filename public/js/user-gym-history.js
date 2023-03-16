@@ -34,6 +34,7 @@ const getUseGymHistory = async (year, month) => {
     },
   });
   const histories = res.data;
+  console.log('✨✨✨', histories, '✨✨✨');
   $('.text-gray-dark').empty();
 
   for (let i in histories) {

@@ -192,16 +192,6 @@ export class AdminService {
         deletedAt: null,
       });
 
-      // const getRatingCount = await this.reviewRepo.count({
-      //   where: {
-      //     userGym: { gymId: getAllGym[i].id },
-      //     createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
-      //     deletedAt: null,
-      //   },
-      // });
-
-      // const calculateRating = getRating / getRatingCount;
-
       rank.push({
         name: getAllGym[i].name,
         paid: getPaid[0]?.paid ? getPaid[0].paid : 0,
