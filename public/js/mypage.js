@@ -178,11 +178,13 @@ function getPaymentData(data) {
       let m = date.getMonth() + 1;
       console.log(y, m);
       var nextPay = new Date(y, m, 1).toLocaleString().substring(0, 10);
+
       const response = res.data;
-      let membership = response[0].merchantUid.split('_')[0];
-      let amount = response[0].amount.toLocaleString();
 
       let length = response.length;
+
+      let membership = response[length - 1].merchantUid.split('_')[0];
+      let amount = response[length - 1].amount.toLocaleString();
 
       console.log('length : ', length);
 
