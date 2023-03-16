@@ -111,7 +111,11 @@ function commentAdd() {
       window.location.replace(`/feed/${id}/comments`);
     })
     .catch((err) => {
-      console.log(err);
+      if (err.response.status === 403) {
+        alert('로그인이 필요한 서비스입니다.');
+        window.location.href = '/user/login';
+      }
+      console.log('err', err);
     });
 }
 
