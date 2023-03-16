@@ -146,6 +146,7 @@ async function getGymList() {
     },
   });
   const responseData = response.data;
+  console.log('✨✨✨', responseData, '✨✨✨');
   data = [...data, ...responseData];
   if (postCount === 0) {
     gymContainer.innerHTML = '';
