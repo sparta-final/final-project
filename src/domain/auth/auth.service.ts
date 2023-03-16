@@ -181,45 +181,32 @@ export class AuthService {
    * @argument user @argument rt
    */
   async restoreRefreshToken(user: JwtPayload, rt: string) {
+    // user.type에 따라 적절한 repo를 선택합니다.
+    let repo;
     if (user.type === 'user') {
-      const existUser = await this.userRepo.findOne({
-        where: { id: user.sub },
-      });
-      if (!existUser) throw new NotFoundException('유저가 존재하지 않습니다.');
-      const hashedRt: string = await this.cacheManager.get(`refresh:${user.type}/${user.email}`);
-
-      const rtMatch = await bcrypt.compare(rt, hashedRt);
-      if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
-
-      const tokens = await this.getTokens(existUser.id, existUser.email, user.type);
-      return tokens;
+      repo = this.userRepo;
     } else if (user.type === 'business') {
-      const existBusinessUser = await this.businessUserRepo.findOne({
-        where: { id: user.sub },
-      });
-      if (!existBusinessUser) throw new NotFoundException('사업자가 존재하지 않습니다.');
-      const hashedRt: string = await this.cacheManager.get(`refresh:${user.type}/${user.email}`);
-
-      const rtMatch = await bcrypt.compare(rt, hashedRt);
-      if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
-
-      const tokens = await this.getTokens(existBusinessUser.id, existBusinessUser.email, user.type);
-      return tokens;
+      repo = this.businessUserRepo;
     } else if (user.type === 'admin') {
-      const existAdminUser = await this.adminUserRepo.findOne({
-        where: { id: user.sub },
-      });
-      if (!existAdminUser) throw new NotFoundException('어드민이 존재하지 않습니다.');
-      const hashedRt: string = await this.cacheManager.get(`refresh:${user.type}/${user.email}`);
-
-      const rtMatch = await bcrypt.compare(rt, hashedRt);
-      if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
-
-      const tokens = await this.getTokens(existAdminUser.id, existAdminUser.email, user.type);
-      return tokens;
+      repo = this.adminUserRepo;
     } else {
       throw new BadRequestException('잘못된 요청입니다.');
     }
+
+    // user.id로 해당 유저가 존재하는지 확인하고 없으면 NotFoundException을 던집니다.
+    const existUser = await repo.findOne({
+      where: { id: user.sub },
+    });
+    if (!existUser) throw new NotFoundException(`${user.type}가 존재하지 않습니다.`);
+
+    // 캐시에서 hashedRt를 가져오고 bcrypt.compare로 rt와 비교하고 일치하지 않으면 UnauthorizedException을 던집니다.
+    const hashedRt: string = await this.cacheManager.get(`refresh:${user.type}/${user.email}`);
+    const rtMatch = await bcrypt.compare(rt, hashedRt);
+    if (!rtMatch) throw new UnauthorizedException('RefreshToken이 일치하지 않습니다.');
+
+    // getTokens 함수를 호출하여 tokens를 반환합니다.
+    const tokens = await this.getTokens(existUser.id, existUser.email, user.type);
+    return tokens;
   }
 
   /**
