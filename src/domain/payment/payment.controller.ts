@@ -37,10 +37,7 @@ export class PaymentController {
         const createPaymentData = this.paymentService.createPaymentData(
           data,
           user_id,
-          paymentData.customer_uid,
-          paymentData.amount,
-          paymentData.card_name,
-          paymentData.card_number
+          paymentData,
         );
         const paymentReserve = await this.paymentService.paymentReserve(access_token, paymentData);
       } else {
