@@ -57,4 +57,10 @@ export class UserController {
   async getUseGymHistory(@CurrentUser() user: JwtPayload, @Param('year') year: number, @Param('month') month: number) {
     return await this.userservice.getUseGymHistory(user, year, month);
   }
+
+  // 로그인유저 아이디만 가져오기
+  @Get('loginUser/info')
+  async loginUserInfo(@CurrentUser() user: JwtPayload) {
+    return await this.userservice.loginUserInfo(user);
+  }
 }

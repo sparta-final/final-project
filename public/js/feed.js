@@ -46,7 +46,8 @@ function getGym() {
               <p class="feed-user-name">${nickname}</p>
               <div id="control-show">
                 <ul class="feed-user-control">
-                <li class="feed-update" onclick="location.href='/feed/update?id=${id}'" >수정하기</li>
+                <li class="feed-update" onclick="updateBtn(${id})" >수정하기</li>
+                <input type=hidden value="${data[i].userId}">
                   <li class="feed-delete" onclick="feedDelete(${id})" >삭제하기</li>
                 </ul>
               </div>
@@ -88,6 +89,7 @@ function getGym() {
       } else {
         const remainingFeeds = data.slice(postCount);
         const maxFeedsToLoad = Math.min(limit, remainingFeeds.length);
+        console.log(remainingFeeds);
         for (let i = 0; i < maxFeedsToLoad; i++) {
           let id = remainingFeeds[i].id;
           const comments = await axios.get(`/api/feed/${id}/comment`);
@@ -102,7 +104,8 @@ function getGym() {
             <p class="feed-user-name">${nickname}</p>
             <div id="control-show">
                 <ul class="feed-user-control">
-                  <li class="feed-update" onclick="location.href='/feed/update?id=${id}'" >수정하기</li>
+                  <li class="feed-update" onclick="updateBtn(${id})" >수정하기</li>
+                  <input type=hidden value="${remainingFeeds[i].userId}">
                   <li class="feed-delete" onclick="feedDelete(${id})" >삭제하기</li>
                 </ul>
             </div>
@@ -187,6 +190,7 @@ function feedDelete(id) {
       window.location.reload();
     })
     .catch((err) => {
+      alert('삭제 권한이 없습니다.');
       console.log(err);
     });
 }
@@ -218,4 +222,22 @@ function feedImgSlider(img) {
       });
     });
   }
+}
+
+// 업데이트 버튼 눌렀을 때
+function updateBtn(id) {
+  body.addEventListener('click', async function (e) {
+    if (e.target.classList.value !== 'feed-update') return;
+    const loginUserId = await axios.get('/api/loginUser/info', {
+      headers: {
+        accesstoken: `${localStorage.getItem('at')}`,
+        refreshtoken: `${localStorage.getItem('rt')}`,
+      },
+    });
+    if (loginUserId.data == e.target.nextElementSibling.value) {
+      location.href = `/feed/update?id=${id}`;
+    } else {
+      alert('수정 권한이 없습니다.');
+    }
+  });
 }
