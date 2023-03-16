@@ -101,7 +101,13 @@ function getRank(year, month) {
       // console.log('✨✨✨', paidRank, '✨✨✨');
       // const ratingRank = data.sort((a, b) => b.rating - a.rating);
       // console.log('✨✨✨', ratingRank, '✨✨✨');
+      let rating;
       for (let i in data) {
+        if (data[i].rating === null) {
+          rating = '-';
+        } else {
+          rating = data[i].rating;
+        }
         if (data[i].count !== 0 || data[i].paid !== 0 || data[i].rating !== 0) {
           let temp = `
           <tr class='ta-center'>
@@ -109,7 +115,7 @@ function getRank(year, month) {
             <td>${data[i].name}</td>
             <td class='fs-14'>${data[i].count.toLocaleString()}</td>
             <td>${data[i].paid.toLocaleString()}</td>
-            <td>${data[i].rating}</td>
+            <td>${rating}</td>
           </tr>
             `;
           $('.text-gray-dark').append(temp);
