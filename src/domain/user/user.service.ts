@@ -61,7 +61,10 @@ export class UserService {
       existUser.password = hashedPassword;
       file ? (existUser.profileImage = file.location) : (existUser.profileImage = existUser.profileImage);
       await this.userRepo.save(existUser);
-      await this.cacheManager.del(`user:ID: ${user.sub}`);
+
+      const userCaches = await this.cacheManager.store.keys(`user:ID: ${user.sub}*`);
+      if (userCaches.length > 0) await this.cacheManager.store.del(userCaches);
+
       return existUser;
     }
   }
@@ -78,10 +81,12 @@ export class UserService {
     if (existUser) {
       existUser.deletedAt = new Date();
       await this.userRepo.save(existUser);
+
+      const userCaches = await this.cacheManager.store.keys(`user:ID: ${user.sub}*`);
+      if (userCaches.length > 0) await this.cacheManager.store.del(userCaches);
+
       return existUser;
     }
-
-    await this.cacheManager.del(`user:ID: ${user.sub}`);
   }
 
   /**

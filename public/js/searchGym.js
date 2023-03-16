@@ -66,3 +66,17 @@ async function searchGymByText(text) {
     $(`.gym-review-${gymId}`).append(avgStar);
   }
 }
+
+// location.href='/user/qrcode'
+// function qrCode() {
+//   const userType = localStorage.getItem('type');
+//   if (!userType) {
+//     window.location.href = '/user/login';
+//   }
+//   if (userType === 'user') {
+//     window.location.href = '/user/qrcode';
+//   }
+//   if (userType === 'business') {
+
+//   }
+// }

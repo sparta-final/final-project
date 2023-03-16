@@ -115,14 +115,14 @@ export class ReviewService {
         userGym: { id: userGym.id },
       });
       await queryRunner.manager.getRepository(UserGym).update({ id: userGym.id }, { reviewId: review.id });
+
+      // review, History 캐시 삭제
+      const reviewCaches = await this.cacheManager.store.keys('review*');
+      if (reviewCaches.length > 0) await this.cacheManager.store.del(reviewCaches);
+      const historyCaches = await this.cacheManager.store.keys('*History*');
+      if (historyCaches.length > 0) await this.cacheManager.store.del(historyCaches);
+
       await queryRunner.commitTransaction();
-      // 캐시 업데이트
-      await this.cacheManager.store.keys().then((keys) => {
-        keys.forEach((key: any) => {
-          if (key.includes('review')) this.cacheManager.del(key);
-          if (key.includes('History')) this.cacheManager.del(key);
-        });
-      });
 
       return review;
     } catch (error) {
@@ -174,7 +174,6 @@ export class ReviewService {
    * @description 리뷰 삭제
    * @author 김승일
    * @param reviewId @argument user
-   * @deprecated
    */
   async removeReview(reviewId: number, user: JwtPayload) {
     const userGym = await this.userGymRepo.findOne({
@@ -195,10 +194,14 @@ export class ReviewService {
         .andWhere('userGym.id = :userGymId', { userGymId: userGym.id })
         .execute();
       await queryRunner.manager.getRepository(UserGym).update({ id: userGym.id }, { reviewId: null });
+
+      // review, History 캐시 삭제
+      const reviewCaches = await this.cacheManager.store.keys('review*');
+      if (reviewCaches.length > 0) await this.cacheManager.store.del(reviewCaches);
+      const historyCaches = await this.cacheManager.store.keys('*History*');
+      if (historyCaches.length > 0) await this.cacheManager.store.del(historyCaches);
+
       await queryRunner.commitTransaction();
-      await this.cacheManager.del(`reviews:UserID: ${user.sub}`);
-      await this.cacheManager.del(`reviews:GymID: ${userGym.gymId}`);
-      await this.cacheManager.del(`user:ID: ${user.sub}-History`);
 
       return { message: '리뷰가 삭제되었습니다' };
     } catch (error) {

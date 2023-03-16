@@ -37,8 +37,34 @@
   cursor: pointer;
 }
 
+#camera-wrap {
+  position: relative;
+  /* display: none; */
+}
+
+#camera-wrap > label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  background-image: url(../images/qr-code.svg);
+  background-size: cover;
+  cursor: pointer;
+}
+
+#qr-camera {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
 .qr-code {
   background-image: url(../images/qr-code.svg);
+  display: none;
 }
 
 .search {

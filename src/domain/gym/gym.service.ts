@@ -55,9 +55,11 @@ export class GymService {
 
       const createImg = await this.gymImgrepository.save(gymImgs);
 
-      await this.cacheManager.del(`gym:gymsOfBusinessUser:${user.sub}`);
-      await this.cacheManager.del(`gym:allGym`);
-      await this.cacheManager.del(`admin:before-approve`);
+      // admin,gym 포함한 캐시 삭제
+      const admincaches = await this.cacheManager.store.keys('admin*');
+      const gymcaches = await this.cacheManager.store.keys('gym*');
+      if (admincaches.length > 0) await this.cacheManager.store.del(admincaches);
+      if (gymcaches.length > 0) await this.cacheManager.store.del(gymcaches);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -155,10 +157,11 @@ export class GymService {
         })
       );
 
-      await this.cacheManager.del(`gym:gymById:${gymId}`);
-      await this.cacheManager.del(`gym:gymsOfBusinessUser:${user.sub}`);
-      await this.cacheManager.del(`gym:allGym`);
-      await this.cacheManager.del(`admin:before-approve`);
+      // admin,gym 포함한 캐시 삭제
+      const admincaches = await this.cacheManager.store.keys('admin*');
+      const gymcaches = await this.cacheManager.store.keys('gym*');
+      if (admincaches.length > 0) await this.cacheManager.store.del(admincaches);
+      if (gymcaches.length > 0) await this.cacheManager.store.del(gymcaches);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -186,10 +189,11 @@ export class GymService {
       await this.gymsrepository.softDelete(gymId);
       await this.gymImgrepository.softDelete({ gymId: gymId });
 
-      await this.cacheManager.del(`gym:gymById:${gymId}`);
-      await this.cacheManager.del(`gym:gymsOfBusinessUser:${user.sub}`);
-      await this.cacheManager.del(`gym:allGym`);
-      await this.cacheManager.del(`admin:before-approve`);
+      // admin,gym 포함한 캐시 삭제
+      const admincaches = await this.cacheManager.store.keys('admin*');
+      const gymcaches = await this.cacheManager.store.keys('gym*');
+      if (admincaches.length > 0) await this.cacheManager.store.del(admincaches);
+      if (gymcaches.length > 0) await this.cacheManager.store.del(gymcaches);
 
       await queryRunner.commitTransaction();
     } catch (err) {
