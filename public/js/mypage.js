@@ -63,17 +63,20 @@ function getPaidData(data) {
       let m = date.getMonth() + 1;
       var nextPay = new Date(y, m, 1).toLocaleString().substring(0, 10);
       const response = res.data;
-      console.log('✨✨✨', 'data', data, '✨✨✨');
+      console.log('✨✨✨', 'data', data.membership, '✨✨✨');
       console.log('✨✨✨', 'response', response, '✨✨✨');
       let custimerUid = response[0].customerUid;
       let createAt = response[0].createdAt.substring(0, 7);
       let cardName = response[0].card_name;
-      let cardNumber = response[0].card_number;
+      let cardNum = response[0].card_number;
+      let cardNumber = cardNum.slice(0, 4) + '-' + cardNum.slice(4, 8);
+      console.log('✨✨✨', 'cardNumber', cardNumber, '✨✨✨');
       let email = data.email;
       let phone = data.phone;
-      // data.membership 이 null 이 아니면 아래 코드 작성, null이면 다른코드 작성
-      let temp = `
-      <p class="member-start">멤버십 시작일 :${createAt}</p>
+      let temp = ``;
+      if (data.membership !== null) {
+        temp = `
+      <p class="member-start">멤버십 시작일 : ${createAt}</p>
       <div class="membership-data-wrap">
         멤버십 & 결제 정보
         <span>
@@ -81,7 +84,7 @@ function getPaidData(data) {
           <p class="member-phone">전화번호 : ${phone}</p>
         </span>
         <span>
-          <p class="member-card">${cardName} ${cardNumber} ** **** ****</p>
+          <p class="member-card">${cardName} ${cardNumber}** **** ****</p>
           <p class="member-next-paid">다음 결제일은 ${nextPay} 입니다</p>
         </span>
         <div class="member-paid-list" onclick="location.href='mypage/paymentDetails'" >결제 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn"  /></div>
@@ -90,6 +93,16 @@ function getPaidData(data) {
         <button class="member-close" onclick="cancelPay('${custimerUid}')">멤버십 해지</button>
       </div>
       `;
+      } else {
+        temp = `
+        <p class="member-start">멤버십 이용중이 아닙니다.</p>
+        <div class="no-membership-wrap">
+        <div class="member-paid-list" onclick="location.href='mypage/paymentDetails'" >결제 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn"  /></div>
+        <div class="use-gym-list" onclick="location.href='mypage/history'">헬스장 이용 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
+        <div class="my-review" onclick="location.href='/mypage/review'" >리뷰 관리 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
+        </div>
+        `;
+      }
       $('.membership-wrap').append(temp);
     })
     .catch((err) => {
@@ -112,31 +125,33 @@ function cancelPay(custimerUid) {
           // 빌링키 생성시 customer_uid 가져오거나 저장해두는 로직 필요
           customer_uid: custimerUid,
         },
-      }).then((data) => {
-        alert(`${data.data.message}`);
+      })
+        .then((data) => {
+          alert(`${data.data.message}`);
 
-        // 다음 달 1일에 유저 멤버쉽 변경
-        const date = new Date();
-        let y = date.getFullYear();
-        let m = date.getMonth() + 1;
-        let nextPay = new Date(y, m, 1).getTime();
-        let now = new Date().getTime();
-        let time = nextPay - now;
-        setTimeout(() => {
-          axios({
-            url: '/api/payment/unsubscribe',
-            method: 'put',
-            headers: {
-              accesstoken: `${localStorage.getItem('at')}`,
-              refreshtoken: `${localStorage.getItem('rt')}`,
-            },
-          })
-        }, time);
-      }).catch((err) => {
-        // 서버 결제 API 실패시 로직
-        console.log(err);
-        alert(`구독 해지에 실패했습니다. 다시 시도해주세요.`);
-      });
+          // 다음 달 1일에 유저 멤버쉽 변경
+          const date = new Date();
+          let y = date.getFullYear();
+          let m = date.getMonth() + 1;
+          let nextPay = new Date(y, m, 1).getTime();
+          let now = new Date().getTime();
+          let time = nextPay - now;
+          setTimeout(() => {
+            axios({
+              url: '/api/payment/unsubscribe',
+              method: 'put',
+              headers: {
+                accesstoken: `${localStorage.getItem('at')}`,
+                refreshtoken: `${localStorage.getItem('rt')}`,
+              },
+            });
+          }, time);
+        })
+        .catch((err) => {
+          // 서버 결제 API 실패시 로직
+          console.log(err);
+          alert(`구독 해지에 실패했습니다. 다시 시도해주세요.`);
+        });
     }
   } catch (e) {
     alert(`에러 내용: ${e}`);
@@ -164,11 +179,6 @@ function getPaymentData(data) {
       console.log(y, m);
       var nextPay = new Date(y, m, 1).toLocaleString().substring(0, 10);
       const response = res.data;
-      let custimerUid = response[0].customerUid;
-      let createAt = response[0].createdAt.substring(0, 7);
-      let createAtDay = response[0].createdAt.substring(0, 10);
-      let cardName = response[0].card_name;
-      let cardNumber = response[0].card_number;
       let membership = response[0].merchantUid.split('_')[0];
       let amount = response[0].amount.toLocaleString();
 
@@ -197,7 +207,8 @@ function getPaymentData(data) {
         let d = getLastDayOfMonth(y, m);
         let existDay = y + '-' + m + '-' + d;
         let cardName = response[i].card_name;
-        let cardNumber = response[i].card_number;
+        let cardNum = response[0].card_number;
+        let cardNumber = cardNum.slice(0, 4) + '-' + cardNum.slice(4, 8);
         let membership = response[i].merchantUid.split('_')[0];
         let amount = response[i].amount.toLocaleString();
         let temp2 = `
@@ -206,7 +217,7 @@ function getPaymentData(data) {
           <p class="member-createAt">${createAtDay}</p>
           <p class="member-level">${membership}</p>
           <p class="member-exist">${createAtDay} ~ ${existDay}</p>          
-          <p class="member-card">${cardName} ${cardNumber} ** **** ****</p>
+          <p class="member-card">${cardName} ${cardNumber}** **** ****</p>
           <p class="member-amount">월 ${amount}원</p>
           </span>
         </div>`;

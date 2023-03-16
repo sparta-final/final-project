@@ -89,15 +89,17 @@ export class ReviewService {
 
   /**
    * @description 리뷰 작성
-   * @param gymId @argument user @argument file @argument createReviewDto
+   * @param usergymId @argument user @argument file @argument createReviewDto
    * @author 김승일
    */
-  async postReview(gymId: number, user: JwtPayload, file: Express.MulterS3.File, createReviewDto: CreateReviewDto) {
-    // NOTE : 최근에 간 헬스장인지 확인하여 그 건에 대해 리뷰를 작성할 수 있도록 함
-    const userGym = await this.userGymRepo.findOne({
-      where: { gymId, userId: user.sub, reviewId: null },
-      order: { id: 'DESC' },
-    });
+  async postReview(usergymId: number, user: JwtPayload, file: Express.MulterS3.File, createReviewDto: CreateReviewDto) {
+    const userGym = await this.userGymRepo
+      .createQueryBuilder('userGym')
+      .where('userGym.id = :usergymId', { usergymId })
+      .andWhere('userGym.userId = :userId', { userId: user.sub })
+      .andWhere('userGym.reviewId IS NULL')
+      .getOne();
+
     if (!userGym) {
       throw new UnauthorizedException('리뷰를 작성할 수 없습니다');
     }
@@ -109,15 +111,19 @@ export class ReviewService {
       const review = await queryRunner.manager.getRepository(Reviews).save({
         star: createReviewDto.star,
         review: createReviewDto.review,
-        reviewImg: file.location,
+        reviewImg: file?.location,
         userGym: { id: userGym.id },
       });
       await queryRunner.manager.getRepository(UserGym).update({ id: userGym.id }, { reviewId: review.id });
+
+      // review, History 캐시 삭제
+      const reviewCaches = await this.cacheManager.store.keys('review*');
+      if (reviewCaches.length > 0) await this.cacheManager.store.del(reviewCaches);
+      const historyCaches = await this.cacheManager.store.keys('*History*');
+      if (historyCaches.length > 0) await this.cacheManager.store.del(historyCaches);
+
       await queryRunner.commitTransaction();
-      // 캐시 업데이트
-      await this.cacheManager.del(`reviews:UserID: ${user.sub}`);
-      await this.cacheManager.del(`reviews:GymID: ${gymId}`);
-      await this.cacheManager.del(`user:ID: ${user.sub}-History`);
+
       return review;
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -131,6 +137,7 @@ export class ReviewService {
    * @description 리뷰 수정
    * @param gymId @param reviewId @argument file @argument user @argument updateReviewDto
    * @author 김승일
+   * @deprecated
    */
   async updateReview(
     gymId: number,
@@ -187,10 +194,14 @@ export class ReviewService {
         .andWhere('userGym.id = :userGymId', { userGymId: userGym.id })
         .execute();
       await queryRunner.manager.getRepository(UserGym).update({ id: userGym.id }, { reviewId: null });
+
+      // review, History 캐시 삭제
+      const reviewCaches = await this.cacheManager.store.keys('review*');
+      if (reviewCaches.length > 0) await this.cacheManager.store.del(reviewCaches);
+      const historyCaches = await this.cacheManager.store.keys('*History*');
+      if (historyCaches.length > 0) await this.cacheManager.store.del(historyCaches);
+
       await queryRunner.commitTransaction();
-      await this.cacheManager.del(`reviews:UserID: ${user.sub}`);
-      await this.cacheManager.del(`reviews:GymID: ${userGym.gymId}`);
-      await this.cacheManager.del(`user:ID: ${user.sub}-History`);
 
       return { message: '리뷰가 삭제되었습니다' };
     } catch (error) {

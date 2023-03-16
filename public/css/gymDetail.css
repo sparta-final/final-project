@@ -1,33 +1,46 @@
-.gym-detail-star {
+.gym-name-wrap {
   position: relative;
-  left: 200px;
-  top: 10px;
+  padding-top: 10px;
+}
+
+.gym-detail-star {
+  position: absolute;
+  right: 30px;
+  top: 7px;
   color: var(--sub-color-4);
+  font-size: 14px;
+}
+
+.gym-detail-star > span {
+  color: var(--point-color);
+  font-size: 16px;
+  margin: 0 5px 0 2px;
 }
 
 .review-p {
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: var(--sub-color-4);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--sub-color-1);
   margin-left: 15px;
   margin-top: 10px;
 }
 
 .review-card {
+  position: relative;
   width: 95%;
   margin: 15px auto;
   border: 1px solid var(--sub-color-4);
   border-radius: 20px;
-  background: lightgrey;
   font-weight: 500;
-  padding: 10px 0;
+  padding: 15px;
 }
 
 .review-card > .review-header {
+  width: 90%;
+  margin-left: 5%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 10px;
 }
 
 .review-text {
@@ -41,9 +54,8 @@
 
 .review-card > .review-header > .user-name {
   width: 100px;
-  margin-left: 10px;
   color: var(--point-color);
-  font-size: 12px;
+  font-size: 16px;
 }
 
 .review-card > .review-header > .review-star {
@@ -64,21 +76,26 @@
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0 10px;
 }
 .review-card > .review-star-date-wrap > .reviews-star {
-  margin-left: 5px;
+  /* margin-left: 5px; */
 }
 
 .review-card > .review-star-date-wrap > .reviews-date {
+  height: 15px;
   margin-left: 15px;
-  font-size: 12px;
-  color: var(--sub-color-4);
+  font-size: 14px;
+  color: var(--sub-color-8);
 }
 .review-card > .review-star-date-wrap > .review-delete-btn {
   position: absolute;
-  right: 25px;
-  color: var(--sub-color-4);
+  right: 3px;
+  top: -18px;
+  color: var(--point-color);
+  background: none;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .review-card > .review-content {
@@ -89,12 +106,16 @@
   color: var(--sub-color-4);
 }
 
+.review-content > .review-img-all {
+  border: none;
+  width: 100%;
+}
+
 .review-content > img {
   width: 100%;
-  /* height: 200px; */
+  height: 100%;
   object-fit: cover;
-  border: 1px solid var(--sub-color-4);
-  border-radius: 20px;
+  /* border-radius: 20px; */
 }
 
 /* img slider */

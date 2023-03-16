@@ -193,6 +193,7 @@ export class AdminService {
         },
         select: ['star'],
       });
+      console.log('✨✨✨', '5', getRating, '✨✨✨'); // => 빈배열나옴
 
       rank.push({
         name: getAllGym[i].name,
@@ -273,9 +274,12 @@ export class AdminService {
     const updateGym = await this.gymRepo.update(gymId, {
       isApprove: 1,
     });
-    await this.cacheManager.del('admin:before-approve');
-    await this.cacheManager.del(`admin:before-approve-${gymId}`);
-    await this.cacheManager.del('gym:allGym');
+
+    // admin,gym 포함한 캐시 삭제
+    const admincaches = await this.cacheManager.store.keys('admin*');
+    const gymcaches = await this.cacheManager.store.keys('gym*');
+    if (admincaches.length > 0) await this.cacheManager.store.del(admincaches);
+    if (gymcaches.length > 0) await this.cacheManager.store.del(gymcaches);
 
     return updateGym;
   }
@@ -303,7 +307,6 @@ export class AdminService {
   async getSalesMonth(date) {
     const cachedSalesMonth = await this.cacheManager.get(`admin:salesMonth-${date.year}-${date.month}`);
     if (cachedSalesMonth) return cachedSalesMonth;
-    if (cachedSalesMonth === null) return 0;
 
     const salesMonth = await this.paymentRepo.sum('amount', {
       createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),

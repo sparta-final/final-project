@@ -62,7 +62,7 @@ function getGym() {
 
           let feedsImg = data[i].feedsImgs;
           for (let j = 0; j < feedsImg.length; j++) {
-            let feedImg = `            
+            let feedImg = `
             <li><img src="${feedsImg[j].image}" alt="" class="feed-image" /></li>
             `;
             $(document.getElementsByClassName('feed-bxslider')[i]).append(feedImg);

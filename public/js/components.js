@@ -1,5 +1,23 @@
 $(document).ready(function () {
+  const userType = localStorage.getItem('type');
   footerSelect();
+  const qrCode = document.querySelector('.qr-code');
+  const qrCamera = document.querySelector('#camera-wrap');
+  if (userType === null || userType === 'admin') {
+    qrCode.style.display = 'none';
+    qrCamera.style.display = 'none';
+    qrCode.parentElement.style.width = '44px';
+  }
+  if (userType === 'user') {
+    qrCode.style.display = 'block';
+    qrCamera.style.display = 'none';
+    qrCode.parentElement.style.width = '88px';
+  }
+  if (userType === 'business') {
+    qrCamera.style.display = 'block';
+    qrCode.style.display = 'none';
+    qrCode.parentElement.style.width = '88px';
+  }
 });
 
 function footerInfo() {

@@ -93,6 +93,7 @@ function getRank(year, month) {
   })
     .then((response) => {
       const data = response.data;
+      console.log('✨✨✨', 'rank', data, '✨✨✨');
       $('.text-gray-dark').empty();
       // 찾는 데이터가 0일때 부터는 다른조건을 안보기 떄문에 0인뒤로 순서가 엉킴.
       // const countRank = data.sort((a, b) => b.count - a.count);
@@ -155,7 +156,6 @@ function salesMonth(year, month) {
     },
   })
     .then((response) => {
-      console.log('✨✨✨', response, '✨✨✨');
       const data = response.data.toLocaleString();
 
       if (data.length === 0) {
@@ -166,6 +166,26 @@ function salesMonth(year, month) {
       <p class='admin-month-title'>${month}월 매출 <span>${data}</span> 원</p>
           `;
       $('.sales-month').empty().append(temp);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+function logout() {
+  axios({
+    url: '/api/auth/logout',
+    method: 'post',
+    headers: {
+      accesstoken: `${localStorage.getItem('at')}`,
+      refreshtoken: `${localStorage.getItem('rt')}`,
+    },
+  })
+    .then((res) => {
+      localStorage.removeItem('at');
+      localStorage.removeItem('rt');
+      localStorage.removeItem('type');
+      location.href = '/';
     })
     .catch((err) => {
       console.log(err);

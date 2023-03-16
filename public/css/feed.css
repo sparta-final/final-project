@@ -126,30 +126,31 @@ img.feed-image {
   display: none;
   position: absolute;
   right: 20px;
-  bottom: 120px;
-  width: 70px;
-  height: 70px;
+  bottom: 70px;
+  width: 50px;
+  height: 50px;
   border: 2px solid #b6b6b6;
-  border-radius: 35px;
+  border-radius: 20px;
   background-color: var(--point-color);
+  cursor: pointer;
 }
 
 .feed-btn-vertical {
   position: absolute;
-  top: 18px;
-  left: 32px;
+  top: 13px;
+  left: 23px;
   display: block;
   width: 2px;
-  height: 30px;
+  height: 22px;
   background-color: var(--main-color);
 }
 
 .feed-btn-horizon {
   position: absolute;
-  top: 32px;
-  left: 18px;
+  top: 23px;
+  left: 13px;
   display: block;
-  width: 30px;
+  width: 22px;
   height: 2px;
   background-color: var(--main-color);
 }

@@ -55,9 +55,11 @@ export class GymService {
 
       const createImg = await this.gymImgrepository.save(gymImgs);
 
-      await this.cacheManager.del(`gym:gymsOfBusinessUser:${user.sub}`);
-      await this.cacheManager.del(`gym:allGym`);
-      await this.cacheManager.del(`admin:before-approve`);
+      // admin,gym 포함한 캐시 삭제
+      const admincaches = await this.cacheManager.store.keys('admin*');
+      const gymcaches = await this.cacheManager.store.keys('gym*');
+      if (admincaches.length > 0) await this.cacheManager.store.del(admincaches);
+      if (gymcaches.length > 0) await this.cacheManager.store.del(gymcaches);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -131,14 +133,35 @@ export class GymService {
         description: updateDto.description ? updateDto.description : existGym.description,
         certification: file.certification ? file.certification[0].location : existGym.certification,
       });
-      await this.gymImgrepository.update(findGymsImage.id, {
-        img: file.img ? file.img[0].location : findGymsImage.img,
-      });
 
-      await this.cacheManager.del(`gym:gymById:${gymId}`);
-      await this.cacheManager.del(`gym:gymsOfBusinessUser:${user.sub}`);
-      await this.cacheManager.del(`gym:allGym`);
-      await this.cacheManager.del(`admin:before-approve`);
+      const gymImgs = [];
+      if (file.img) {
+        for (let i = 0; i < file.img.length; i++) {
+          gymImgs.push({ img: file.img[i].location });
+        }
+      }
+
+      await Promise.all(
+        gymImgs.map(async (img, index) => {
+          const findGymImg = await this.gymImgrepository.findOne({
+            where: { gymId: gymId, id: findGymsImage.id + index },
+          });
+
+          if (findGymImg) {
+            await this.gymImgrepository.update(findGymImg.id, img);
+          } else {
+            await this.gymImgrepository.update(findGymsImage.id, {
+              img: findGymsImage.img,
+            });
+          }
+        })
+      );
+
+      // admin,gym 포함한 캐시 삭제
+      const admincaches = await this.cacheManager.store.keys('admin*');
+      const gymcaches = await this.cacheManager.store.keys('gym*');
+      if (admincaches.length > 0) await this.cacheManager.store.del(admincaches);
+      if (gymcaches.length > 0) await this.cacheManager.store.del(gymcaches);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -166,10 +189,11 @@ export class GymService {
       await this.gymsrepository.softDelete(gymId);
       await this.gymImgrepository.softDelete({ gymId: gymId });
 
-      await this.cacheManager.del(`gym:gymById:${gymId}`);
-      await this.cacheManager.del(`gym:gymsOfBusinessUser:${user.sub}`);
-      await this.cacheManager.del(`gym:allGym`);
-      await this.cacheManager.del(`admin:before-approve`);
+      // admin,gym 포함한 캐시 삭제
+      const admincaches = await this.cacheManager.store.keys('admin*');
+      const gymcaches = await this.cacheManager.store.keys('gym*');
+      if (admincaches.length > 0) await this.cacheManager.store.del(admincaches);
+      if (gymcaches.length > 0) await this.cacheManager.store.del(gymcaches);
 
       await queryRunner.commitTransaction();
     } catch (err) {

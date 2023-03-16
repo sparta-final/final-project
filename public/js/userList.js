@@ -111,15 +111,10 @@ function caculateGym(id, year, month) {
     })
     .then((res) => {
       const data = res.data;
-
-      if (data.length === 0) {
-        alert('데이터가 없습니다');
-        location.href = '/business/businessMyinfo';
-      }
       const paid = data[0].paid.toLocaleString();
 
       let temp = `
-        <p class='admin-month-title'>${month}월 매출 <span>${paid}</span> 원</p>
+        <p class='admin-month-title'>${month}월 정산금액 <span>${paid}</span> 원</p>
             `;
       $('.sales-month').append(temp);
     })

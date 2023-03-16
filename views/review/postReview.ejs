@@ -9,7 +9,11 @@
         <fieldset>
           <div class="form-group">
             <img class="img-thumbnail" id="thumbnail" />
-            <input class="review_img" type="file" name="reviewImg" id="reviewImg" />
+            <div class="reviewImg-wrap">
+              <input class="review_img-name" value="" placeholder="사진 업로드 하기" />
+              <label for="reviewImg" class="review-img">+</label>
+              <input type="file" name="reviewImg" id="reviewImg" />
+            </div>
           </div>
           <textarea class="review-textarea" cols="42" maxlength="255" wrap="hard" placeholder="리뷰를 입력하세요."></textarea>
         </fieldset>

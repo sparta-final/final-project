@@ -21,11 +21,11 @@ function verifyUser(year, month) {
       console.log(eachGym);
       for (let i = 0; i < data.length; i++) {
         if (Today === data[i].createdAt.split('-')[2].split('T')[0]) {
-          alert('돌아가라');
+          alert('하루 1번만 이용 가능합니다.');
         }
         if (data[i].user.membership === 'Basic') {
           if (eachGym.length > 3) {
-            alert('돌아가라');
+            alert('이번달 타 가맹점 이용횟수가 초과되었습니다.');
           }
         }
         if (data[i].user.membership === 'Standard') {
