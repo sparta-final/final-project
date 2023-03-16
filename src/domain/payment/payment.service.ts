@@ -7,6 +7,7 @@ import axios from 'axios';
 import { WebhookDto } from './dto/webhook.dto';
 import { Users } from 'src/global/entities/Users';
 import { userMembership } from 'src/global/entities/common/user.membership';
+import { CreatePaymentDto } from './dto/createPayment.dto';
 
 @Injectable()
 export class PaymentService {
@@ -63,14 +64,7 @@ export class PaymentService {
    * @argument merchant_uid
    * @argument amount
    */
-  async createPaymentData(
-    data: WebhookDto,
-    user_id: number,
-    customer_uid: string,
-    amount: number,
-    card_name: string,
-    card_number: string
-  ) {
+  async createPaymentData(data: WebhookDto, user_id: number, paymentData: CreatePaymentDto) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -81,18 +75,18 @@ export class PaymentService {
         impUid: data.imp_uid,
         merchantUid: data.merchant_uid,
         status: data.status,
-        customerUid: customer_uid,
-        amount: amount,
-        card_name: card_name,
-        card_number: card_number.substring(0, 8),
+        customerUid: paymentData.customer_uid,
+        amount: paymentData.amount,
+        card_name: paymentData.card_name,
+        card_number: paymentData.card_number.substring(0, 8),
       });
       let membershipOptions: userMembership;
       const membershipMap = {
-        100000: userMembership.Basic,
-        200000: userMembership.Standard,
-        300000: userMembership.Premium,
+        Basic: userMembership.Basic,
+        Standard: userMembership.Standard,
+        Premium: userMembership.Premium,
       };
-      membershipOptions = membershipMap[amount];
+      membershipOptions = membershipMap[paymentData.name];
 
       await queryRunner.manager
         .getRepository(Users)
@@ -103,7 +97,10 @@ export class PaymentService {
         .execute();
 
       const paidDataCaches = await this.cacheManager.store.keys(`paidData:${user_id}`);
-      if (paidDataCaches.length > 0) await this.cacheManager.store.del(`paidData:${user_id}`);
+      if (paidDataCaches.length > 0) await this.cacheManager.store.del(paidDataCaches);
+
+      const userCaches = await this.cacheManager.store.keys(`user:ID:${user_id}*`);
+      if (userCaches.length > 0) await this.cacheManager.store.del(userCaches);
 
       await queryRunner.commitTransaction();
     } catch (error) {
@@ -142,6 +139,20 @@ export class PaymentService {
       const m = date.getMonth() + 1;
       const schedule_at_time = Math.floor(new Date().getTime() / 1000) + 60; // 다음달 1일
       // const schedule_at_time = Math.floor(new Date(y, m, 2).getTime() / 1000); // 다음달 1일
+
+      let paymentAmount = 0;
+
+      if (paymentData.name === 'Basic') {
+        paymentAmount = 100000;
+      } else if (paymentData.name === 'Standard') {
+        paymentAmount = 200000;
+      } else if (paymentData.name === 'Premium') {
+        paymentAmount = 300000;
+      }
+
+      console.log('✨✨✨', '결제금액', paymentData, '✨✨✨');
+      console.log('✨✨✨', '결제금액', paymentAmount, '✨✨✨');
+
       console.log('✨✨✨', '결제시간', new Date(now * 1000), '✨✨✨');
       console.log('✨✨✨', '다음 결제시간', new Date(schedule_at_time * 1000), '✨✨✨');
       console.log('✨✨✨', 'schedule_at_time', schedule_at_time, '✨✨✨');
@@ -155,11 +166,11 @@ export class PaymentService {
           schedules: [
             {
               // 주문 번호
-              merchant_uid: `${paymentData.name}_id_${schedule_at_time}`,
+              merchant_uid: `${paymentData.name}_${paymentData.buyer_email}_${schedule_at_time}`,
               // 결제 시도 시각 in Unix Time Stamp.
               schedule_at: schedule_at_time,
               currency: 'KRW',
-              amount: paymentData.amount,
+              amount: paymentAmount,
               name: paymentData.name,
               buyer_name: paymentData.buyer_name,
               buyer_tel: paymentData.buyer_tel,

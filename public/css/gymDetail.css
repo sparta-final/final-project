@@ -66,10 +66,12 @@
   font-size: 12px;
 }
 
-.review-card > .review-header > .review-date {
-  position: relative;
-  font-size: 12px;
-  color: var(--sub-color-4);
+.review-card > .review-content > .review-date {
+  position: absolute;
+  top: 50px;
+  right: 35px;
+  font-size: 14px;
+  color: var(--sub-color-8);
 }
 
 .review-card > .review-star-date-wrap {

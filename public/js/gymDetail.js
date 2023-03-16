@@ -5,10 +5,7 @@ const gymId = url.searchParams.get('gym');
 $(document).ready(function () {
   getGymDetail();
   const targetTextarea = document.querySelector(`.gym-detail-desc`);
-  console.log('✨✨✨', '1', targetTextarea, '✨✨✨');
   const rowCount = targetTextarea.value.split(/\r\n|\r|\n/).length;
-  console.log('✨✨✨', '2', rowCount, '✨✨✨');
-  console.log('✨✨✨', '3', rowCount * 36, '✨✨✨');
   targetTextarea.style.height = rowCount * 36 + 'px'; //줄 수에 따라서 높이를 조절
 });
 
@@ -22,7 +19,6 @@ async function getGymDetail() {
     url: `/api/gym/list/${gymId}`,
   });
   const imgs = gymDetail.data.gymImgs;
-  console.log('✨✨✨', imgs, '✨✨✨');
   for (i in imgs) {
     const img = imgs[i];
     const imgSrc = img.img;
@@ -107,10 +103,10 @@ async function getGymDetail() {
     <div class="review-card">
         <div class="review-header">
           <span class="user-name">${reviewUserNickName}</span>
-          <img class="review-rating" src="/images/star_rating_${starString}" alt="" />
+          <img class="review-rating" src="/images/star_rating_${starString}.jpg" alt="" />
+          </div>
+          <div class="review-content">
           <span class="review-date">${reviewCreatedAt}</span>
-        </div>
-        <div class="review-content">
           <textarea class="review-text" cols="30" disabled>${reviewContent}</textarea>
         </div>
       </div>

@@ -28,7 +28,7 @@ export class AdminService {
   ) {}
 
   /**
-   * @description 멤버십 별 구독 회원 수 조회
+   * @description 멤버쉽 별 구독 회원 수 조회
    * @author 한정훈
    */
   async getMember() {
@@ -192,16 +192,6 @@ export class AdminService {
         deletedAt: null,
       });
 
-      // const getRatingCount = await this.reviewRepo.count({
-      //   where: {
-      //     userGym: { gymId: getAllGym[i].id },
-      //     createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
-      //     deletedAt: null,
-      //   },
-      // });
-
-      // const calculateRating = getRating / getRatingCount;
-
       rank.push({
         name: getAllGym[i].name,
         paid: getPaid[0]?.paid ? getPaid[0].paid : 0,
@@ -264,7 +254,7 @@ export class AdminService {
         user: user,
         // 방문유저 이번달 전체 헬스장 이용 횟수 조회
         visitGym: await this.getVisitGym(user.userId, date),
-        // 방문유저 멤버십 조회
+        // 방문유저 멤버쉽 조회
         membership: await this.getMembership(user.userId),
         // 조회한 유저 조회한 헬스장 방문 횟수
         visitUserCount: await this.getVisitUserCount(id, user.userId, date),
@@ -371,7 +361,7 @@ export class AdminService {
   }
 
   /**
-   * @description 유저 멤버십 조회
+   * @description 유저 멤버쉽 조회
    * @author 한정훈
    * @param id
    */

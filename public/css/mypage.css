@@ -24,7 +24,7 @@
 #myInfoUpdateFrom span.modifyText {
   position: absolute;
   right: 5px;
-  top: 11px;
+  top: 0;
   font-size: 13px;
   color: var(--point-color);
   padding: 10px;
@@ -186,7 +186,7 @@ img.my-info-btn {
   border: 3px solid var(--sub-color-1);
 }
 
-/* 내 멤버십 정보 */
+/* 내 멤버쉽 정보 */
 
 .membership-wrap {
   width: 90%;
