@@ -16,7 +16,7 @@ if (localStorage.getItem('at') && localStorage.getItem('rt')) {
           if (e.target.id !== 'subscribe-btn') return;
 
           if (res.data.membership === 'Basic' || res.data.membership === 'Standard' || res.data.membership === 'Premium') {
-            alert('이미 멤버십을 구독중입니다. 멤버십 해지 후 기간이 만료되면 다시 구독해주세요. ');
+            alert('이미 멤버쉽을 구독중입니다. 멤버쉽 해지 후 기간이 만료되면 다시 구독해주세요. ');
           } else if (localStorage.getItem('type') === 'user') {
             const membership = e.target.parentElement.firstElementChild.textContent;
             const amountText = e.target.parentElement.children[1].textContent;
@@ -103,7 +103,7 @@ async function requestPay(membership, amount) {
         }).then((data) => {
           // 서버 결제 API 성공시 로직
           console.log('✨✨✨', data, '✨✨✨');
-          // alert(`${name} 멤버십 구독 신청이 완료되었습니다.`);
+          // alert(`${name} 멤버쉽 구독 신청이 완료되었습니다.`);
           window.location.replace(`/payment`);
         });
       } else {

@@ -1,22 +1,27 @@
 .address-bar {
   position: relative;
-  width: 100%;
-  height: 40px;
+  width: 90%;
+  height: 50px;
+  margin-left: 5%;
 }
-.address {
-  font-weight: bold;
+.address-bar > .address {
+  position: absolute;
+  top: 15px;
+  left: 5px;
+  color: var(--sub-color-8);
+  font-weight: 600;
 }
 .map-icon {
   position: absolute;
-  top: 10px;
+  top: 13px;
   right: 15px;
-  width: 26px;
-  height: 26px;
+  width: 31px;
+  height: 27px;
   cursor: pointer;
 }
 
 .modal {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -29,23 +34,29 @@
 
 .modal_body {
   position: absolute;
-  top: 345px;
-  left: 50%;
-  width: 400px;
-  z-index: 1000;
-  padding: 10px;
+  top: -70px;
+  left: -21px;
+  width: 420px;
+  height: 100vh;
+  z-index: 10000;
   text-align: center;
-  background-color: white;
-  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
-  transform: translateX(-50%) translateY(-50%);
 }
+
+#kakao-map {
+  width: 100%;
+  height: 100vh !important;
+}
+
 #modal .close-area {
-  display: inline;
-  float: right;
-  padding-right: 10px;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 30px;
+  height: 30px;
+  background-image: url(../images/close.png);
+  background-size: cover;
+  z-index: 10001;
   cursor: pointer;
-  text-shadow: 1px 1px 2px gray;
-  color: white;
 }
 
 .customoverlay {

@@ -76,9 +76,9 @@ function getPaidData(data) {
       let temp = ``;
       if (data.membership !== null) {
         temp = `
-      <p class="member-start">멤버십 시작일 : ${createAt}</p>
+      <p class="member-start">멤버쉽 시작일 : ${createAt}</p>
       <div class="membership-data-wrap">
-        멤버십 & 결제 정보
+        멤버쉽 & 결제 정보
         <span>
           <p class="member-email">${email}</p>
           <p class="member-phone">전화번호 : ${phone}</p>
@@ -90,12 +90,12 @@ function getPaidData(data) {
         <div class="member-paid-list" onclick="location.href='mypage/paymentDetails'" >결제 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn"  /></div>
         <div class="use-gym-list" onclick="location.href='mypage/history'">헬스장 이용 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
         <div class="my-review" onclick="location.href='/mypage/review'" >리뷰 관리 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
-        <button class="member-close" onclick="cancelPay('${custimerUid}')">멤버십 해지</button>
+        <button class="member-close" onclick="cancelPay('${custimerUid}')">멤버쉽 해지</button>
       </div>
       `;
       } else {
         temp = `
-        <p class="member-start">멤버십 이용중이 아닙니다.</p>
+        <p class="member-start">멤버쉽 이용중이 아닙니다.</p>
         <div class="no-membership-wrap">
         <div class="member-paid-list" onclick="location.href='mypage/paymentDetails'" >결제 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn"  /></div>
         <div class="use-gym-list" onclick="location.href='mypage/history'">헬스장 이용 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
@@ -190,9 +190,9 @@ function getPaymentData(data) {
       console.log('length : ', length);
 
       let temp = `
-      <p class="my-member">내 멤버십</p>
+      <p class="my-member">내 멤버쉽</p>
       <div class="membership-data-wrap">
-        멤버십
+        멤버쉽
         <span class='member'>
           <p class="member-level">${membership}</p>
           <p class="member-amount">월 ${amount}원</p>
