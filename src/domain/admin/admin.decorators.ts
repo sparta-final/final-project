@@ -3,7 +3,7 @@ import { ApiOperation, ApiResponse, ApiSecurity } from '@nestjs/swagger';
 
 export const getMembers = () => {
   return applyDecorators(
-    ApiOperation({ summary: '멤버십 별 구독 회원 수 조회' }),
+    ApiOperation({ summary: '멤버쉽 별 구독 회원 수 조회' }),
     ApiSecurity('accesstoken'),
     ApiSecurity('refreshtoken'),
     ApiResponse({ status: 200, description: '성공' }),

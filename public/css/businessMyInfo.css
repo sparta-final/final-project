@@ -44,6 +44,15 @@
   margin-top: 5px;
 }
 
+.text-box p.my-gym-qrcode {
+  position: absolute;
+  top: -4px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  background-image: url(../images/qr-code.svg);
+}
+
 .review-box {
   position: relative;
   display: flex;
@@ -97,9 +106,13 @@
 }
 
 .mygymName {
+  width: 80%;
   color: var(--point-color);
   font-size: 17px;
   font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .review-go-btn {
