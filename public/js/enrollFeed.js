@@ -21,12 +21,15 @@ function enrollFeed() {
       },
     })
     .then((res) => {
-      console.log(res);
+      console.log('res', res);
       window.location.replace('/feed');
     })
     .catch((err) => {
-      console.log('이미지', feedImg.files[0]);
-      console.log(err);
+      console.log('err', err);
+      if (res.status === 403) {
+        alert('로그인이 필요한 서비스입니다.');
+        window.location.href = '/mypage';
+      }
     });
 }
 

@@ -6,6 +6,7 @@ import { Public } from 'src/global/common/decorator/public.decorator';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CreateFeedDto } from './dto/create-feeds.dto';
+import { InfinityDto } from './dto/infinity.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { UpdateFeedDto } from './dto/update-feeds.dto';
 import {
@@ -43,6 +44,7 @@ export class FeedController {
   @AllFeedGet()
   @Public()
   @Get()
+  // async getAllFeed(@Param() data: InfinityDto) {
   async getAllFeed() {
     return this.feedService.getAllFeed();
   }

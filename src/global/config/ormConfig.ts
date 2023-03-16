@@ -11,6 +11,7 @@ import { Busienssusers } from '../entities/Busienssusers';
 import { Comments } from '../entities/Comments';
 import { Payments } from '../entities/Payments';
 import { Adminusers } from '../entities/adminusers';
+import { truncate } from 'fs';
 
 // TODO: TypeOrmModuleOptions의 속성들을 찾아서 채워넣기
 function ormConfig(): TypeOrmModuleOptions {

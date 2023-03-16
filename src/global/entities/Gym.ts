@@ -41,24 +41,6 @@ export class Gym {
   @Column('varchar', { name: 'phone', length: 100 })
   phone: string;
 
-  // @ApiProperty({ example: '03253', description: '헬스장 우편번호' })
-  // @IsString()
-  // @IsNotEmpty()
-  // @Column('varchar', { name: 'zipCode', length: 100 })
-  // zipCode: string;
-
-  // @ApiProperty({ example: '서울시 강남구 테헤란로 427', description: '헬스장 주소' })
-  // @IsString()
-  // @IsNotEmpty()
-  // @Column('varchar', { name: 'address', length: 100 })
-  // address: string;
-
-  // @ApiProperty({ example: '201호', description: '헬스장 상세주소' })
-  // @IsString()
-  // @IsNotEmpty()
-  // @Column('varchar', { name: 'addressDetail', length: 100 })
-  // addressDetail: string;
-
   @ApiProperty({ example: '37.4979', description: '헬스장 위도' })
   @IsString()
   @IsNotEmpty()
@@ -114,7 +96,7 @@ export class Gym {
   @JoinColumn([{ name: 'business_id', referencedColumnName: 'id' }])
   business: Busienssusers;
 
-  @OneToMany(() => GymImg, (gymImg) => gymImg.gym)
+  @OneToMany(() => GymImg, (gymImg) => gymImg.gym, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   gymImgs: GymImg[];
 
   @OneToMany(() => UserGym, (userGym) => userGym.gym)

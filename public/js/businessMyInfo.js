@@ -20,17 +20,19 @@ async function getMyGym() {
     .then(async (res) => {
       const data = res.data;
 
-      for (let i = 0; i < res.data.length; i++) {
+      for (let i = 0; i < data.length; i++) {
         const id = data[i].id;
         const name = data[i].name;
         const address = data[i].address;
         const img = data[i].gymImgs[0].img;
+        const isApprove = data[i].isApprove;
 
         const temp_html = `
                         <div class="image-text-box">
                           <img src="${img}"/>
                           <div class="text-box">
                             <h2 class="mygymName">${name}</h2>
+                            <p class="my-gym-qrcode" onclick="location.href='/qrScan?id=${id}'"></p>
                             <p>${address}</p>
                             <div class="review-box">
                             <div class="gym-review-${id}"></div>
@@ -44,6 +46,17 @@ async function getMyGym() {
                           </div>
                         </div>`;
         $('#imageTextBox').append(temp_html);
+        let approve = '승인 대기중';
+        const approve_html = `
+          <p class='before-approve'>${approve}</p>
+        `;
+        const $reviewBox = $('.review-box')[i];
+        const $reviewBtn = $reviewBox.children[1];
+        if (isApprove === 0) {
+          // $(document.getElementsByClassName('review-box')[i]).before(approve_html);
+          $(document.getElementsByClassName('review-box')[i]).append(approve_html);
+          $reviewBtn.style.display = 'none';
+        }
         await axios
           .get(`/api/gym/${id}/review`)
           .then((res) => {

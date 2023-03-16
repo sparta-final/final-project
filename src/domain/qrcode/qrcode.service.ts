@@ -34,14 +34,13 @@ export class QRcodeService {
    * @argument date QR코드 생성 시간
    * @argument userId 유저의 id
    */
-  async useGym(businessUser: JwtPayload, date: number, userId: number) {
+  async useGym(gymId: number, date: number, userId: number) {
     const now = Date.now();
     if (now - date > 1000 * 60 * 5) {
       throw new UnauthorizedException('QR코드가 만료되었습니다.');
     }
-    const gym = await this.gymRepo.findOne({ where: { businessId: businessUser.sub } });
     await this.userGymRepo.save({
-      gymId: gym.id,
+      gymId: gymId,
       userId: userId,
     });
   }

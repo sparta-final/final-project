@@ -43,7 +43,9 @@ export class FeedService {
       //   image: file.location,
       // });
 
-      await this.cacheManager.del('Feed:allFeed');
+      // Feed를 포함한 캐시 삭제
+      const FeedCaches = await this.cacheManager.store.keys('Feed*');
+      if (FeedCaches.length > 0) await this.cacheManager.store.del(FeedCaches);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -61,7 +63,6 @@ export class FeedService {
   async getAllFeed() {
     const cachedallFeed = await this.cacheManager.get('Feed:allFeed');
     if (cachedallFeed) return cachedallFeed;
-
     const allFeed = await this.feedsRepository
       .createQueryBuilder('feeds')
       .leftJoinAndSelect('feeds.user', 'user')
@@ -69,6 +70,8 @@ export class FeedService {
       // .select(['user.nickname'])
       .select(['feeds', 'feedsImgs.image', 'user.nickname', 'user.profileImage'])
       .orderBy({ 'feeds.id': 'DESC' })
+      // .skip(Number(data.offset))
+      // .take(Number(data.offset) + Number(data.limit))
       .getMany();
     // .getRawMany();
     // const allFeed = await this.feedsRepository.find({
@@ -128,7 +131,9 @@ export class FeedService {
       content: updatefeedDto.content,
     });
 
-    await this.cacheManager.del('Feed:allFeed');
+    // Feed를 포함한 캐시 삭제
+    const FeedCaches = await this.cacheManager.store.keys('Feed*');
+    if (FeedCaches.length > 0) await this.cacheManager.store.del(FeedCaches);
 
     // 이미지 함께 수정 가능하게 하려면 위에 코드 대신 아래코드 작성
     // const existFeed = await this.feedsRepository.findOne({
@@ -185,7 +190,9 @@ export class FeedService {
       }
       await this.feedsRepository.delete(id);
 
-      await this.cacheManager.del('Feed:allFeed');
+      // Feed를 포함한 캐시 삭제
+      const FeedCaches = await this.cacheManager.store.keys('Feed*');
+      if (FeedCaches.length > 0) await this.cacheManager.store.del(FeedCaches);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -223,8 +230,9 @@ export class FeedService {
       ...createcommentDto,
     });
 
-    await this.cacheManager.del('Feed:allFeed');
-    await this.cacheManager.del(`Feed:comment:${feedId}`);
+    // Feed를 포함한 캐시 삭제
+    const FeedCaches = await this.cacheManager.store.keys('Feed*');
+    if (FeedCaches.length > 0) await this.cacheManager.store.del(FeedCaches);
 
     return createComment;
   }
@@ -286,7 +294,9 @@ export class FeedService {
       comment: updatecommentDto.comment ? updatecommentDto.comment : existComment.comment,
     });
 
-    await this.cacheManager.del(`Feed:comment:${feedId}`);
+    // Feed를 포함한 캐시 삭제
+    const FeedCaches = await this.cacheManager.store.keys('Feed*');
+    if (FeedCaches.length > 0) await this.cacheManager.store.del(FeedCaches);
 
     return commentUpdate;
   }
@@ -301,7 +311,9 @@ export class FeedService {
     await this.checkFeed(feedId);
     const commentDelete = await this.commentsRepository.delete(commentId);
 
-    await this.cacheManager.del(`Feed:comment:${feedId}`);
+    // Feed를 포함한 캐시 삭제
+    const FeedCaches = await this.cacheManager.store.keys('Feed*');
+    if (FeedCaches.length > 0) await this.cacheManager.store.del(FeedCaches);
 
     return commentDelete;
   }

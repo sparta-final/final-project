@@ -27,7 +27,6 @@ export class GymController {
     @Body() postgymDto: PostGymDto,
     @CurrentUser() user: JwtPayload
   ) {
-    console.log('✨✨✨', '1', '✨✨✨');
     const gym = await this.gymservice.postGyms({ file, postgymDto, user });
     return gym;
   }
@@ -35,7 +34,6 @@ export class GymController {
   @MyGymGet()
   @Get('/my')
   async getGyms(@CurrentUser() user: JwtPayload) {
-    console.log('✨✨✨', '2', '✨✨✨');
     const getGym = await this.gymservice.getGyms(user);
     return getGym;
   }
@@ -54,14 +52,12 @@ export class GymController {
     @Body() updateDto: UpdateGymDto,
     @CurrentUser() user: JwtPayload
   ) {
-    console.log('✨✨✨', '3', '✨✨✨');
     return await this.gymservice.updateGym({ file, gymId, updateDto, user });
   }
 
   @GymDelete()
   @Delete('/:id')
   async deleteGym(@Param('id') gymId: number, @CurrentUser() user: JwtPayload) {
-    console.log('✨✨✨', '4', '✨✨✨');
     return await this.gymservice.deleteGym({ gymId, user });
   }
 
@@ -69,7 +65,6 @@ export class GymController {
   @Public()
   @Get('/all')
   async getAllGym() {
-    console.log('✨✨✨', '5', '✨✨✨');
     return this.gymservice.getAllGym();
   }
 
@@ -77,7 +72,6 @@ export class GymController {
   @Public()
   @Get('/list/:id')
   async getGymById(@Param('id') gymId: number) {
-    console.log('✨✨✨', '6', '✨✨✨');
     return this.gymservice.getGymsById(gymId);
   }
 
@@ -85,7 +79,6 @@ export class GymController {
   @Public()
   @Get('/search/:text')
   async searchGymByText(@Param('text') text: string) {
-    console.log('✨✨✨', '7', '✨✨✨');
     return this.gymservice.searchGymByText(text);
   }
 
@@ -93,7 +86,6 @@ export class GymController {
   @Public()
   @Get('/approveGym')
   async approveGymGet() {
-    console.log('✨✨✨', '8', '✨✨✨');
     return await this.gymservice.approveGymGet();
   }
 }

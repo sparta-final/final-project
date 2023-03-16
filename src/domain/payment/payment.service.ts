@@ -1,15 +1,20 @@
 import { Cache } from 'cache-manager';
 import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, CACHE_MANAGER } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Payments } from '../../global/entities/Payments';
 import axios from 'axios';
 import { WebhookDto } from './dto/webhook.dto';
+import { Users } from 'src/global/entities/Users';
+import { userMembership } from 'src/global/entities/common/user.membership';
+import { CreatePaymentDto } from './dto/createPayment.dto';
 
 @Injectable()
 export class PaymentService {
   constructor(
     @InjectRepository(Payments) private paymentRepo: Repository<Payments>,
+    @InjectRepository(Users) private userRepo: Repository<Users>,
+    private dataSource: DataSource,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
   /**
@@ -59,25 +64,52 @@ export class PaymentService {
    * @argument merchant_uid
    * @argument amount
    */
-  createPaymentData(
-    data: WebhookDto,
-    user_id: number,
-    customer_uid: string,
-    amount: number,
-    card_name: string,
-    card_number: string
-  ) {
-    this.paymentRepo.insert({
-      userId: user_id,
-      impUid: data.imp_uid,
-      merchantUid: data.merchant_uid,
-      status: data.status,
-      customerUid: customer_uid,
-      amount: amount,
-      card_name: card_name,
-      card_number: card_number.substring(0, 8),
-    });
-    // TODO : 결제정보 저장 후, 유저 멤버쉽 업데이트 해야함 + 캐시도 삭제해야함
+  async createPaymentData(data: WebhookDto, user_id: number, paymentData: CreatePaymentDto) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.getRepository(Payments).save({
+        userId: user_id,
+        impUid: data.imp_uid,
+        merchantUid: data.merchant_uid,
+        status: data.status,
+        customerUid: paymentData.customer_uid,
+        amount: paymentData.amount,
+        card_name: paymentData.card_name,
+        card_number: paymentData.card_number.substring(0, 8),
+      });
+      let membershipOptions: userMembership;
+      const membershipMap = {
+        Basic: userMembership.Basic,
+        Standard: userMembership.Standard,
+        Premium: userMembership.Premium,
+      };
+      membershipOptions = membershipMap[paymentData.name];
+
+      await queryRunner.manager
+        .getRepository(Users)
+        .createQueryBuilder()
+        .update()
+        .set({ membership: membershipOptions })
+        .where('id = :id', { id: user_id })
+        .execute();
+
+      const paidDataCaches = await this.cacheManager.store.keys(`paidData:${user_id}`);
+      if (paidDataCaches.length > 0) await this.cacheManager.store.del(paidDataCaches);
+
+      const userCaches = await this.cacheManager.store.keys(`user:ID:${user_id}*`);
+      if (userCaches.length > 0) await this.cacheManager.store.del(userCaches);
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      console.log('error', error);
+      throw new HttpException('결제정보 저장 실패', HttpStatus.BAD_REQUEST);
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   /**
@@ -107,6 +139,20 @@ export class PaymentService {
       const m = date.getMonth() + 1;
       const schedule_at_time = Math.floor(new Date().getTime() / 1000) + 60; // 다음달 1일
       // const schedule_at_time = Math.floor(new Date(y, m, 2).getTime() / 1000); // 다음달 1일
+
+      let paymentAmount = 0;
+
+      if (paymentData.name === 'Basic') {
+        paymentAmount = 100000;
+      } else if (paymentData.name === 'Standard') {
+        paymentAmount = 200000;
+      } else if (paymentData.name === 'Premium') {
+        paymentAmount = 300000;
+      }
+
+      console.log('✨✨✨', '결제금액', paymentData, '✨✨✨');
+      console.log('✨✨✨', '결제금액', paymentAmount, '✨✨✨');
+
       console.log('✨✨✨', '결제시간', new Date(now * 1000), '✨✨✨');
       console.log('✨✨✨', '다음 결제시간', new Date(schedule_at_time * 1000), '✨✨✨');
       console.log('✨✨✨', 'schedule_at_time', schedule_at_time, '✨✨✨');
@@ -120,11 +166,11 @@ export class PaymentService {
           schedules: [
             {
               // 주문 번호
-              merchant_uid: `${paymentData.name}_id_${schedule_at_time}`,
+              merchant_uid: `${paymentData.name}_${paymentData.buyer_email}_${schedule_at_time}`,
               // 결제 시도 시각 in Unix Time Stamp.
               schedule_at: schedule_at_time,
               currency: 'KRW',
-              amount: paymentData.amount,
+              amount: paymentAmount,
               name: paymentData.name,
               buyer_name: paymentData.buyer_name,
               buyer_tel: paymentData.buyer_tel,
@@ -146,7 +192,6 @@ export class PaymentService {
    * @argument customer_uid
    */
   async unsubscribe(customer_uid, access_token) {
-    console.log('✨✨✨', '2', customer_uid.customer_uid, '✨✨✨');
     try {
       const subCancel = await axios({
         url: `https://api.iamport.kr/subscribe/payments/unschedule`,
@@ -156,10 +201,23 @@ export class PaymentService {
           customer_uid: customer_uid.customer_uid,
         },
       });
-      console.log('✨✨✨', 'subCancel', subCancel, '✨✨✨');
+      if (subCancel.data.code === 0) {
+        return { message: '구독취소에 성공하였습니다.' };
+      } else {
+        return { message: '구독하신 서비스가 없습니다' };
+      }
     } catch (e) {
       throw new NotFoundException(`구독취소에 실패하였습니다. ${e}`);
     }
+  }
+
+  /**
+   * @description 구독 취소 후 멤버쉽 변경
+   * @argument userId
+   */
+  async updateMembershipAfterUnsubscribe(userId: number) {
+    await this.userRepo.createQueryBuilder().update().set({ membership: null }).where('id = :id', { id: userId }).execute();
+    return { message: '멤버쉽 변경에 성공하였습니다.' };
   }
 
   /**
@@ -175,7 +233,7 @@ export class PaymentService {
       where: { userId: id },
       order: { id: 'DESC' },
     });
-    await this.cacheManager.set(`paidData:${id}`, paidData, { ttl: 60 * 60 });
+    await this.cacheManager.set(`paidData:${id}`, paidData, { ttl: 60 });
     return paidData;
   }
 }

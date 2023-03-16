@@ -29,14 +29,14 @@ function getGym() {
     })
     .then(async (res) => {
       data = res.data;
+      console.log('✨✨✨', 'data', data, '✨✨✨');
       if (postCount === 0) {
         feedContainer.innerHTML = '';
-        console.log('✨✨✨', 'data', data, '✨✨✨');
         for (let i = 0; i < limit && i < data.length; i++) {
           //0
           let id = data[i].id;
-          const comments = await axios.get(`/api/feed/${id}/comment`)
-          const commentsLength = comments.data.length
+          const comments = await axios.get(`/api/feed/${id}/comment`);
+          const commentsLength = comments.data.length;
           let nickname = data[i].user.nickname;
           let profileImg = data[i].user.profileImage;
           let content = data[i].content;
@@ -47,7 +47,8 @@ function getGym() {
               <p class="feed-user-name">${nickname}</p>
               <div id="control-show">
                 <ul class="feed-user-control">
-                <li class="feed-update" onclick="location.href='/feed/update?id=${id}'" >수정하기</li>
+                <li class="feed-update" onclick="updateBtn(${id})" >수정하기</li>
+                <input type=hidden value="${data[i].userId}">
                   <li class="feed-delete" onclick="feedDelete(${id})" >삭제하기</li>
                 </ul>
               </div>
@@ -63,13 +64,12 @@ function getGym() {
 
           let feedsImg = data[i].feedsImgs;
           for (let j = 0; j < feedsImg.length; j++) {
-            let feedImg = `            
+            let feedImg = `
             <li><img src="${feedsImg[j].image}" alt="" class="feed-image" /></li>
             `;
             $(document.getElementsByClassName('feed-bxslider')[i]).append(feedImg);
           }
           if (feedsImg.length > 1) {
-            console.log('✨✨✨', 'test', i, '✨✨✨');
             $(function () {
               $(document.getElementsByClassName('feed-bxslider')[i]).bxSlider({
                 auto: false,
@@ -90,10 +90,11 @@ function getGym() {
       } else {
         const remainingFeeds = data.slice(postCount);
         const maxFeedsToLoad = Math.min(limit, remainingFeeds.length);
+        console.log(remainingFeeds);
         for (let i = 0; i < maxFeedsToLoad; i++) {
           let id = remainingFeeds[i].id;
-          const comments = await axios.get(`/api/feed/${id}/comment`)
-          const commentsLength = comments.data.length
+          const comments = await axios.get(`/api/feed/${id}/comment`);
+          const commentsLength = comments.data.length;
           let nickname = remainingFeeds[i].user.nickname;
           let profileImg = remainingFeeds[i].user.profileImage;
           let content = remainingFeeds[i].content;
@@ -104,7 +105,8 @@ function getGym() {
             <p class="feed-user-name">${nickname}</p>
             <div id="control-show">
                 <ul class="feed-user-control">
-                  <li class="feed-update" onclick="location.href='/feed/update?id=${id}'" >수정하기</li>
+                  <li class="feed-update" onclick="updateBtn(${id})" >수정하기</li>
+                  <input type=hidden value="${remainingFeeds[i].userId}">
                   <li class="feed-delete" onclick="feedDelete(${id})" >삭제하기</li>
                 </ul>
             </div>
@@ -119,7 +121,6 @@ function getGym() {
           $('.feed-container').append(temp);
 
           let feedsImg = data[i + postCount].feedsImgs;
-          console.log('✨✨✨', feedsImg, '✨✨✨');
           for (let j = 0; j < feedsImg.length; j++) {
             let feedImg = `            
             <li><img src="${feedsImg[j].image}" alt="" class="feed-image" /></li>
@@ -190,13 +191,13 @@ function feedDelete(id) {
       window.location.reload();
     })
     .catch((err) => {
+      alert('삭제 권한이 없습니다.');
       console.log(err);
     });
 }
 
 // 피드작성 유저타입 확인
 body.addEventListener('click', function (e) {
-  // console.log('✨✨✨', e.target.classList.value, '✨✨✨');
   if (e.target.classList.value !== 'create-feed-btn') return;
   if (localStorage.getItem('type') !== 'user') {
     alert('로그인 후 이용 가능합니다.');
@@ -222,4 +223,29 @@ function feedImgSlider(img) {
       });
     });
   }
+}
+
+// 수정하기 버튼 눌렀을 때
+function updateBtn(id) {
+  body.addEventListener('click', async function (e) {
+    if (e.target.classList.value !== 'feed-update') return;
+    const userType = localStorage.getItem('type');
+    if (userType === null) {
+      alert('로그인이 필요한 서비스입니다.');
+      window.location.href = '/user/login';
+    }
+
+    const loginUserId = await axios.get('/api/loginUser/info', {
+      headers: {
+        accesstoken: `${localStorage.getItem('at')}`,
+        refreshtoken: `${localStorage.getItem('rt')}`,
+      },
+    });
+
+    if (loginUserId.data == e.target.nextElementSibling.value) {
+      location.href = `/feed/update?id=${id}`;
+    } else {
+      alert('수정 권한이 없습니다.');
+    }
+  });
 }

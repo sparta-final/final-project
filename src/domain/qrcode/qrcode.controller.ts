@@ -19,9 +19,9 @@ export class QRcodeController {
   }
 
   @UseGym()
-  @Post('/:date/:userId')
-  async useGym(@Param('date') date: number, @Param('userId') userId: number, @CurrentUser() businessUser: JwtPayload) {
-    return await this.qrcodeService.useGym(businessUser, date, userId);
+  @Post('/:date/:userId/:gymId')
+  async useGym(@Param('date') date: number, @Param('userId') userId: number, @Param('gymId') gymId: number) {
+    return await this.qrcodeService.useGym(gymId, date, userId);
   }
 
   @GetUseHistory()

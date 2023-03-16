@@ -28,7 +28,7 @@ export class AdminService {
   ) {}
 
   /**
-   * @description 멤버십 별 구독 회원 수 조회
+   * @description 멤버쉽 별 구독 회원 수 조회
    * @author 한정훈
    */
   async getMember() {
@@ -186,19 +186,17 @@ export class AdminService {
         select: ['gymId'],
       });
 
-      const getRating = await this.reviewRepo.find({
-        where: {
-          userGym: { id: getAllGym[i].id },
-          createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
-        },
-        select: ['star'],
+      const getRating = await this.reviewRepo.average('star', {
+        userGym: { gymId: getAllGym[i].id },
+        createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+        deletedAt: null,
       });
 
       rank.push({
         name: getAllGym[i].name,
         paid: getPaid[0]?.paid ? getPaid[0].paid : 0,
         count: getUseCount,
-        rating: getRating[0]?.star ? getRating[0].star : 0,
+        rating: getRating,
         // Promise.all 방식
         // rank.push({
         //   gymId: getAllGym[i].id,
@@ -256,7 +254,7 @@ export class AdminService {
         user: user,
         // 방문유저 이번달 전체 헬스장 이용 횟수 조회
         visitGym: await this.getVisitGym(user.userId, date),
-        // 방문유저 멤버십 조회
+        // 방문유저 멤버쉽 조회
         membership: await this.getMembership(user.userId),
         // 조회한 유저 조회한 헬스장 방문 횟수
         visitUserCount: await this.getVisitUserCount(id, user.userId, date),
@@ -273,8 +271,12 @@ export class AdminService {
     const updateGym = await this.gymRepo.update(gymId, {
       isApprove: 1,
     });
-    await this.cacheManager.del('admin:before-approve');
-    await this.cacheManager.del(`admin:before-approve-${gymId}`);
+
+    // admin,gym 포함한 캐시 삭제
+    const admincaches = await this.cacheManager.store.keys('admin*');
+    const gymcaches = await this.cacheManager.store.keys('gym*');
+    if (admincaches.length > 0) await this.cacheManager.store.del(admincaches);
+    if (gymcaches.length > 0) await this.cacheManager.store.del(gymcaches);
 
     return updateGym;
   }
@@ -302,7 +304,6 @@ export class AdminService {
   async getSalesMonth(date) {
     const cachedSalesMonth = await this.cacheManager.get(`admin:salesMonth-${date.year}-${date.month}`);
     if (cachedSalesMonth) return cachedSalesMonth;
-    if (cachedSalesMonth === null) return 0;
 
     const salesMonth = await this.paymentRepo.sum('amount', {
       createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
@@ -360,7 +361,7 @@ export class AdminService {
   }
 
   /**
-   * @description 유저 멤버십 조회
+   * @description 유저 멤버쉽 조회
    * @author 한정훈
    * @param id
    */

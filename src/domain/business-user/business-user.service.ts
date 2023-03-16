@@ -56,10 +56,12 @@ export class BusinessUserService {
       businessUser.name = updateBusinessUserInfo.name;
       businessUser.phone = updateBusinessUserInfo.phone;
       businessUser.password = hashedPassword;
-      file ? (businessUser.profileImage = file.location) : (businessUser.profileImage = null);
+      file ? (businessUser.profileImage = file.location) : (businessUser.profileImage = businessUser.profileImage);
       await this.busniessUserRepo.save(businessUser);
 
-      await this.cacheManager.del(`businessUser:ID: ${user.sub}`);
+      // businessUser 포함한 캐시 삭제
+      const BusinessUserCaches = await this.cacheManager.store.keys(`businessUser:ID: ${user.sub}`);
+      if (BusinessUserCaches.length > 0) await this.cacheManager.store.del(BusinessUserCaches);
 
       return businessUser;
     }
@@ -75,12 +77,13 @@ export class BusinessUserService {
       where: { id: user.sub },
     });
     if (businessUser) {
-      businessUser.deletedAt = new Date();
-      await this.busniessUserRepo.save(businessUser);
+      await this.busniessUserRepo.softDelete(businessUser.id);
+
+      // businessUser 포함한 캐시 삭제
+      const BusinessUserCaches = await this.cacheManager.store.keys(`businessUser:ID: ${user.sub}`);
+      if (BusinessUserCaches.length > 0) await this.cacheManager.store.del(BusinessUserCaches);
       return businessUser;
     }
-
-    await this.cacheManager.del(`businessUser:ID: ${user.sub}`);
   }
 
   /**
@@ -89,7 +92,7 @@ export class BusinessUserService {
    */
 
   async getUserByGymId(gymId: number) {
-    const cachedUsersOfGym = await this.cacheManager.get(`usersOfGym:ID: ${gymId}`);
+    const cachedUsersOfGym = await this.cacheManager.get(`businessUser:usersOfGym:ID: ${gymId}`);
     if (cachedUsersOfGym) return cachedUsersOfGym;
 
     const usersOfGym = await this.userGymRepo
@@ -98,7 +101,7 @@ export class BusinessUserService {
       .where('userGym.gymId = :gymId', { gymId })
       .getMany();
 
-    await this.cacheManager.set(`usersOfGym:ID: ${gymId}`, usersOfGym, { ttl: 30 });
+    await this.cacheManager.set(`businessUser:usersOfGym:ID: ${gymId}`, usersOfGym, { ttl: 30 });
 
     return usersOfGym;
   }

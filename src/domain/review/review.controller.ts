@@ -36,14 +36,14 @@ export class ReviewController {
 
   @postReview()
   @UseInterceptors(FileInterceptor('reviewImg'))
-  @Post('/gym/:gymId/review')
+  @Post('/gym/:usergymId/review')
   postReview(
-    @Param('gymId') gymId: number,
+    @Param('usergymId') usergymId: number,
     @UploadedFile() file: Express.MulterS3.File,
     @CurrentUser() user: JwtPayload,
     @Body() createReviewDto: CreateReviewDto
   ) {
-    return this.reviewService.postReview(gymId, user, file, createReviewDto);
+    return this.reviewService.postReview(usergymId, user, file, createReviewDto);
   }
 
   @updateReview()

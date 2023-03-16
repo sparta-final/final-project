@@ -3,7 +3,7 @@ $(document).ready(function () {
   const urlParams = new URLSearchParams(queryString);
   const reviewId = urlParams.get('reviewId');
   getReviewDetail(reviewId);
-})
+});
 /**
  * @description: 리뷰상세조회
  * @param {number} reviewId
@@ -37,20 +37,14 @@ async function getReviewDetail(reviewId) {
   let starString = getStarString(reviewStar);
   let reviewCreatedAt = review.createdAt.toString().substring(0, 10);
   let reviewImg = review.reviews[0].reviewImg;
-  let reviewImgSrc = '';
-  if (reviewImg === null || reviewImg === '') {
-    reviewImgSrc = '/images/default_profile.png';
-  } else {
-    reviewImgSrc = reviewImg;
-  }
   let reviewContent = review.reviews[0].review;
 
-  let temp_img = `
-  <ul class="bxslider">
-    <img src="${reviewImgSrc}" id="main-img" />
-  </ul>
-  `
-  $('.img-slider').append(temp_img);
+  // let temp_img = `
+  // <ul>
+  //   <img src="${reviewImgSrc}" />
+  // </ul>
+  // `;
+  // $('.review-image-wrap').append(temp_img);
 
   let temp = `
   <div class="review-card">
@@ -60,6 +54,7 @@ async function getReviewDetail(reviewId) {
       <div class="review-star-date-wrap">
       <span class="reviews-star">${starString}</span><br>
       <span class="reviews-date">${reviewCreatedAt}</span>
+      <button class="review-delete-btn" onclick="deleteReview(${reviewId})">삭제</button>
     </div>
     <div class="review-content">
       <textarea class="review-text" cols="30" disabled>${reviewContent}</textarea>
@@ -67,10 +62,28 @@ async function getReviewDetail(reviewId) {
   </div>
   `;
   $('.review-wrap').append(temp);
+  if (reviewImg) {
+    $('.review-content').append(`<img class="review-img-all" src="${reviewImg}" alt="" />`);
+  }
   const reviewTextareas = document.querySelectorAll(`textarea.review-text`);
   for (let i = 0; i < reviewTextareas.length; i++) {
     const targetTextarea = reviewTextareas[i];
     const textLength = targetTextarea.value.length;
-    targetTextarea.style.height = textLength / 35 * 24 + 'px';
+    targetTextarea.style.height = (textLength / 35) * 24 + 'px';
+  }
+}
+
+async function deleteReview(reviewId) {
+  const res = await axios.delete(`/api/review/${reviewId}`, {
+    headers: {
+      accesstoken: `${localStorage.getItem('at')}`,
+      refreshtoken: `${localStorage.getItem('rt')}`,
+    },
+  });
+  if (res.status === 200) {
+    confirm('리뷰를 삭제하시겠습니까?');
+    location.replace('/mypage');
+  } else {
+    alert('리뷰 삭제에 실패했습니다.');
   }
 }

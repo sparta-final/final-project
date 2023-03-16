@@ -15,25 +15,27 @@ export class JwtAccessGuard extends AuthGuard('access') {
     if (isPublic) return true;
 
     const request = context.switchToHttp().getRequest();
-    const at = request.headers['accesstoken'];
-    const rt = request.headers['refreshtoken'];
+    const accessToken = request.headers['accesstoken'];
+    const refreshToken = request.headers['refreshtoken'];
 
-    const atCheck = await this.authService.checkAcessTokenExpired(at);
-    const rtCheck = await this.authService.checkRefreshTokenExpired(rt);
+    const isAccessTokenValid = await this.authService.checkAcessTokenExpired(accessToken);
+    const isRefreshTokenValid = await this.authService.checkRefreshTokenExpired(refreshToken);
 
-    // at 만료된 경우
-    if (!atCheck) {
-      // rt 만료된 경우
-      if (!rtCheck) {
-        return false;
-      } else {
-        // rt 유효한 경우
-        const newAccessToken = await this.authService.restoreRefreshToken(rtCheck, rt);
+    // access token이 유효한 경우
+    if (isAccessTokenValid) {
+      return super.canActivate(context) as Promise<boolean>;
+    } else {
+      // access token이 만료된 경우
+      // refresh token이 유효한 경우
+      if (isRefreshTokenValid) {
+        const newAccessToken = await this.authService.restoreRefreshToken(isRefreshTokenValid, refreshToken);
         request.headers['accesstoken'] = newAccessToken.AccessToken;
+        return super.canActivate(context) as Promise<boolean>;
+      } else {
+        // refresh token도 만료된 경우
+        return false;
       }
     }
-    return super.canActivate(context) as Promise<boolean>;
   }
 }
 export { AuthGuard };
-

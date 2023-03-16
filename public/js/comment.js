@@ -41,6 +41,11 @@ function getComments(id) {
         let comments_id = data[i].comments_id;
         let commentsUserId = data[i].comments_user_id;
 
+        /**
+         * 작성한 댓글 작성자만 삭제 버튼이 보이도록 하는 로직
+         * @author 주현진
+         */
+
         let token = localStorage.getItem('at');
         let tokenPayload = token ? token.split('.')[1] : null;
         let decodedPayload = tokenPayload ? atob(tokenPayload) : null;
@@ -111,9 +116,19 @@ function commentAdd() {
       window.location.replace(`/feed/${id}/comments`);
     })
     .catch((err) => {
-      console.log(err);
+      if (err.response.status === 403) {
+        alert('로그인이 필요한 서비스입니다.');
+        window.location.href = '/user/login';
+      }
+      console.log('err', err);
     });
 }
+
+
+  /**
+   * 댓글 삭제 버튼
+   * @author 주현진
+   */
 
 function commentDelete(id) {
   if (confirm('작성한 댓글을 삭제하시겠습니까?') === true) {

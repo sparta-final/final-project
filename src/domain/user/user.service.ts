@@ -61,10 +61,12 @@ export class UserService {
       existUser.password = hashedPassword;
       file ? (existUser.profileImage = file.location) : (existUser.profileImage = existUser.profileImage);
       await this.userRepo.save(existUser);
+
+      const userCaches = await this.cacheManager.store.keys(`user:ID: ${user.sub}*`);
+      if (userCaches.length > 0) await this.cacheManager.store.del(userCaches);
+
       return existUser;
     }
-
-    await this.cacheManager.del(`user:ID: ${user.sub}`);
   }
 
   /**
@@ -77,12 +79,13 @@ export class UserService {
       where: { id: user.sub },
     });
     if (existUser) {
-      existUser.deletedAt = new Date();
-      await this.userRepo.save(existUser);
+      await this.userRepo.softDelete(existUser.id);
+
+      const userCaches = await this.cacheManager.store.keys(`user:ID: ${user.sub}*`);
+      if (userCaches.length > 0) await this.cacheManager.store.del(userCaches);
+
       return existUser;
     }
-
-    await this.cacheManager.del(`user:ID: ${user.sub}`);
   }
 
   /**
@@ -90,8 +93,8 @@ export class UserService {
    *  @author: 김승일
    */
   async getUseGymHistory(user: JwtPayload, year: number, month: number) {
-    const cachedHistory = await this.cacheManager.get(`user:ID: ${user.sub}-History`);
-    if (cachedHistory) return cachedHistory;
+    const cachedHistory = await this.cacheManager.get(`user:ID: ${user.sub}-History-${year}-${month}`);
+    // if (cachedHistory) return cachedHistory;
 
     const existUser = await this.userRepo.findOne({
       where: { id: user.sub },
@@ -103,6 +106,7 @@ export class UserService {
       .leftJoinAndSelect('userGym.gym', 'gym')
       .leftJoinAndSelect('userGym.reviews', 'reviews')
       .where('userGym.userId = :userId', { userId: existUser.id })
+      .andWhere('gym.id is not null')
       .orderBy('userGym.createdAt', 'DESC')
       .getMany();
 
@@ -111,8 +115,17 @@ export class UserService {
       return userGymDate.getFullYear() === year && userGymDate.getMonth() + 1 === month;
     });
 
-    await this.cacheManager.set(`user:ID: ${user.sub}-History`, useGymHistory, { ttl: 60 });
+    await this.cacheManager.set(`user:ID: ${user.sub}-History-${year}-${month}`, useGymHistory, { ttl: 60 });
 
     return useGymHistory;
+  }
+
+  /**
+   *  @description: 로그인 유저 정보 보내기
+   *  @author: 정호준
+   */
+  async loginUserInfo(user) {
+    const userId = user.sub;
+    return userId;
   }
 }
