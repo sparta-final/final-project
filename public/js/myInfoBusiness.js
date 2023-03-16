@@ -8,6 +8,11 @@ $(document).ready(function () {
   businessUser();
 });
 
+/**
+ * 사업자 마이페이지 - 내 정보 수정하기
+ * @author 주현진
+ */
+
 // 사진 미리보기
 const fileInput = document.getElementById('profileImage');
 const preview = document.getElementById('image');
@@ -58,7 +63,9 @@ function putInfo() {
   formData.append('password', password);
   formData.append('passwordCheck', passwordCheck);
   formData.append('phone', phone);
-  formData.append('profileImage', profileImage.files[0]);
+  if (profileImage.files[0] !== undefined) {
+    formData.append('profileImage', profileImage.files[0]);
+  }
 
   axios
     .put('/api/business', formData, {
@@ -92,14 +99,11 @@ function addInputs() {
   const password = document.createElement('input');
   password.type = 'password';
   password.id = 'password';
-  password.style = 'width: 80%; height: 40px; margin-bottom: 10px; border-radius: 10px; border: 3px solid var(--sub-color-1);';
   password.placeholder = '새 비밀번호를 입력해주세요.';
 
   const passwordCheck = document.createElement('input');
   passwordCheck.type = 'password';
   passwordCheck.id = 'passwordCheck';
-  passwordCheck.style =
-    'width: 80%; height: 40px; border-radius: 10px; border: 3px solid var(--sub-color-1); margin-bottom: 10px;';
   passwordCheck.placeholder = '새 비밀번호를 한번 더 입력해주세요.';
 
   const br = document.createElement('br');
@@ -118,3 +122,27 @@ function addInputs() {
     }
   }
 }
+
+// // 회원 탈퇴
+// function deleteMember() {
+//   if (window.confirm('정말 회원 탈퇴하시겠습니까?')) {
+//     axios({
+//       url: '/api/business/delete',
+//       method: 'put',
+//       headers: {
+//         accesstoken: `${localStorage.getItem('at')}`,
+//         refreshtoken: `${localStorage.getItem('rt')}`,
+//       },
+//     })
+//       .then((res) => {
+//         alert('회원 탈퇴가 정상적으로 처리되었습니다.');
+//         localStorage.removeItem('at');
+//         localStorage.removeItem('rt');
+//         localStorage.removeItem('type');
+//         location.href = '/';
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   }
+// }

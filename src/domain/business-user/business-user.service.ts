@@ -56,7 +56,7 @@ export class BusinessUserService {
       businessUser.name = updateBusinessUserInfo.name;
       businessUser.phone = updateBusinessUserInfo.phone;
       businessUser.password = hashedPassword;
-      file ? (businessUser.profileImage = file.location) : (businessUser.profileImage = null);
+      file ? (businessUser.profileImage = file.location) : (businessUser.profileImage = businessUser.profileImage);
       await this.busniessUserRepo.save(businessUser);
 
       // businessUser 포함한 캐시 삭제
@@ -77,8 +77,8 @@ export class BusinessUserService {
       where: { id: user.sub },
     });
     if (businessUser) {
-      businessUser.deletedAt = new Date();
-      await this.busniessUserRepo.save(businessUser);
+      await this.busniessUserRepo.softDelete(businessUser.id);
+
       // businessUser 포함한 캐시 삭제
       const BusinessUserCaches = await this.cacheManager.store.keys(`businessUser:ID: ${user.sub}`);
       if (BusinessUserCaches.length > 0) await this.cacheManager.store.del(BusinessUserCaches);
