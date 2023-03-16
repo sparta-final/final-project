@@ -47,10 +47,14 @@ async function getMyGym() {
         $('#imageTextBox').append(temp_html);
         let approve = '승인 대기중';
         const approve_html = `
-          <p>${approve}</p>
-        `
+          <p class='before-approve'>${approve}</p>
+        `;
+        const $reviewBox = $('.review-box')[i];
+        const $reviewBtn = $reviewBox.children[1];
         if (isApprove === 0) {
-          $(document.getElementsByClassName('review-box')[i]).before(approve_html);
+          // $(document.getElementsByClassName('review-box')[i]).before(approve_html);
+          $(document.getElementsByClassName('review-box')[i]).append(approve_html);
+          $reviewBtn.style.display = 'none';
         }
         await axios
           .get(`/api/gym/${id}/review`)

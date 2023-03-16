@@ -95,37 +95,32 @@ async function getGymDetail() {
   $('.gym-detail-desc').append(descText);
 
   const reveiewsdetail = reviewData.reviews;
-  for (const review of reveiewsdetail) {
-    if (review.reviews.length === 0) continue;
-    let reviewUserNickName = review.user.nickname;
-    let reviewContent = review.reviews[0].review;
-    let reviewStar = review.reviews[0].star;
+  for (i in reveiewsdetail) {
+    let reviewUserNickName = reveiewsdetail[i].user.nickname;
+    let reviewContent = reveiewsdetail[i].reviews[0].review;
+    let reviewStar = reveiewsdetail[i].reviews[0].star;
     let starString = getStarString(reviewStar);
-    let reviewCreatedAt = review.createdAt.toString().substring(0, 10);
-    let reviewImg = review.reviews[0].reviewImg;
-    let reviewImgSrc = '';
-    if (reviewImg === null || reviewImg === '') {
-      reviewImgSrc = '/images/default_profile.png';
-    } else {
-      reviewImgSrc = reviewImg;
-    }
-    // <span class="review-star">${starString}</span>
-    let reviewTemp = `
-      <div class="review-card">
+    let reviewCreatedAt = reveiewsdetail[i].reviews[0].createdAt.slice(0, 10);
+    let reviewImg = reveiewsdetail[i].reviews[0].reviewImg;
+
+    let temp = `
+    <div class="review-card">
         <div class="review-header">
           <span class="user-name">${reviewUserNickName}</span>
-          <img class="review-img" src="/images/star_rating_${starString}" alt="" />
+          <img class="review-rating" src="/images/star_rating_${starString}" alt="" />
           <span class="review-date">${reviewCreatedAt}</span>
         </div>
         <div class="review-content">
-          <img class="review-img" src="${reviewImgSrc}" alt="" />
           <textarea class="review-text" cols="30" disabled>${reviewContent}</textarea>
         </div>
       </div>
-
     `;
-    $('.review-wrap').append(reviewTemp);
+    $('.review-wrap').append(temp);
+    if (reviewImg) {
+      $('.review-content').eq(i).append(`<img class="review-img-all" src="${reviewImg}" alt="" />`);
+    }
   }
+
   const reviewTextareas = document.querySelectorAll(`textarea.review-text`);
   for (let i = 0; i < reviewTextareas.length; i++) {
     const targetTextarea = reviewTextareas[i];

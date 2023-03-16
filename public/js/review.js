@@ -20,7 +20,7 @@ async function getMyReview() {
     },
   });
   const reviews = res.data;
-
+  console.log('✨✨✨', reviews, '✨✨✨');
   function getStarString(reviewStarRating) {
     const starMap = {
       1: '⭐',
@@ -36,20 +36,13 @@ async function getMyReview() {
     return starMap[reviewStarRating] || '';
   }
 
-  for (const review of reviews) {
-    if (review.reviews.length === 0) continue;
-    let gymName = review.gym.name;
-    let reviewStar = review.reviews[0].star;
+  for (i in reviews) {
+    let gymName = reviews[i].gym.name;
+    let reviewStar = reviews[i].reviews[0].star;
     let starString = getStarString(reviewStar);
-    let reviewCreatedAt = review.createdAt.toString().substring(0, 10);
-    let reviewImg = review.reviews[0].reviewImg;
-    let reviewImgSrc = '';
-    if (reviewImg === null || reviewImg === '') {
-      reviewImgSrc = '/images/default_profile.png';
-    } else {
-      reviewImgSrc = reviewImg;
-    }
-    let reviewContent = review.reviews[0].review;
+    let reviewCreatedAt = reviews[i].reviews[0].createdAt.slice(0, 10);
+    let reviewImg = reviews[i].reviews[0].reviewImg;
+    let reviewContent = reviews[i].reviews[0].review;
 
     let temp = `
     <div class="review-card">
@@ -59,15 +52,17 @@ async function getMyReview() {
         <div class="review-star-date-wrap">
         <span class="reviews-star">${starString}</span><br>
         <span class="reviews-date">${reviewCreatedAt}</span>
-        <button class="review-delete-btn" onclick="deleteReview(${review.reviewId})">삭제</button>
+        <button class="review-delete-btn" onclick="deleteReview(${reviews[i].reviews[0].id})">삭제</button>
       </div>
       <div class="review-content">
-        <img class="review-img-all" src="${reviewImgSrc}" alt="" />
         <textarea class="review-text" cols="30" disabled>${reviewContent}</textarea>
       </div>
     </div>
     `;
     $('.review-wrap').append(temp);
+    if (reviewImg) {
+      $('.review-content').eq(i).append(`<img class="review-img-all" src="${reviewImg}" alt="" />`);
+    }
   }
   const reviewTextareas = document.querySelectorAll(`textarea.review-text`);
   for (let i = 0; i < reviewTextareas.length; i++) {

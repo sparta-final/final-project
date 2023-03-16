@@ -193,6 +193,7 @@ export class AdminService {
         },
         select: ['star'],
       });
+      console.log('✨✨✨', '5', getRating, '✨✨✨'); // => 빈배열나옴
 
       rank.push({
         name: getAllGym[i].name,
@@ -306,7 +307,6 @@ export class AdminService {
   async getSalesMonth(date) {
     const cachedSalesMonth = await this.cacheManager.get(`admin:salesMonth-${date.year}-${date.month}`);
     if (cachedSalesMonth) return cachedSalesMonth;
-    if (cachedSalesMonth === null) return 0;
 
     const salesMonth = await this.paymentRepo.sum('amount', {
       createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),

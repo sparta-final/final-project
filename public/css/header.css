@@ -87,8 +87,8 @@
 .search-input {
   width: 100%;
   border: none;
-  border-bottom: 1px solid var(--sub-color-4);
-  color: var(--point-color);
+  border-bottom: 1px solid var(--point-color);
+  color: var(--sub-color-4);
   font-weight: 600;
   font-size: 16px;
   height: 36px;
@@ -125,7 +125,7 @@
   position: fixed;
   bottom: 0;
   width: 420px;
-  height: 100px;
+  height: 50px;
   background-color: var(--sub-color-9);
 }
 
@@ -134,23 +134,23 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 80%;
-  margin: 26px auto;
+  width: 75%;
+  margin: 13px auto;
 }
 
 .footer {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 26px;
+  height: 26px;
   cursor: pointer;
 }
 
 li.small-svg {
-  width: 46px;
+  width: 30px;
 }
 
 .footer-height {
-  height: 100px;
+  height: 50px;
 }
 
 .footer-container svg {
