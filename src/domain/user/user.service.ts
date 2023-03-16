@@ -119,4 +119,13 @@ export class UserService {
 
     return useGymHistory;
   }
+
+  /**
+   *  @description: 로그인 유저 정보 보내기
+   *  @author: 정호준
+   */
+  async loginUserInfo(user) {
+    const userId = user.sub;
+    return userId;
+  }
 }
