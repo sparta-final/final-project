@@ -234,4 +234,11 @@ export class AppController {
   async test() {
     return { pageName: 'test' };
   }
+
+  @Get('qrScan')
+  @Public()
+  @Render('index')
+  async qrSacn() {
+    return { pageName: 'qrScan' };
+  }
 }

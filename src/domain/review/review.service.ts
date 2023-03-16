@@ -54,6 +54,7 @@ export class ReviewService {
       .getMany();
 
     await this.cacheManager.set(`reviews:UserID: ${user.sub}`, reviews, { ttl: 30 });
+    console.log('✨✨✨', reviews, '✨✨✨');
     return reviews;
   }
 
