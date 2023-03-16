@@ -182,7 +182,7 @@ export class AuthService {
    */
   async restoreRefreshToken(user: JwtPayload, rt: string) {
     // user.type에 따라 적절한 repo를 선택합니다.
-    let repo;
+    let repo: Repository<Users | Busienssusers | Adminusers>;
     if (user.type === 'user') {
       repo = this.userRepo;
     } else if (user.type === 'business') {
