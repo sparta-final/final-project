@@ -125,31 +125,33 @@ function cancelPay(custimerUid) {
           // 빌링키 생성시 customer_uid 가져오거나 저장해두는 로직 필요
           customer_uid: custimerUid,
         },
-      }).then((data) => {
-        alert(`${data.data.message}`);
+      })
+        .then((data) => {
+          alert(`${data.data.message}`);
 
-        // 다음 달 1일에 유저 멤버쉽 변경
-        const date = new Date();
-        let y = date.getFullYear();
-        let m = date.getMonth() + 1;
-        let nextPay = new Date(y, m, 1).getTime();
-        let now = new Date().getTime();
-        let time = nextPay - now;
-        setTimeout(() => {
-          axios({
-            url: '/api/payment/unsubscribe',
-            method: 'put',
-            headers: {
-              accesstoken: `${localStorage.getItem('at')}`,
-              refreshtoken: `${localStorage.getItem('rt')}`,
-            },
-          })
-        }, time);
-      }).catch((err) => {
-        // 서버 결제 API 실패시 로직
-        console.log(err);
-        alert(`구독 해지에 실패했습니다. 다시 시도해주세요.`);
-      });
+          // 다음 달 1일에 유저 멤버쉽 변경
+          const date = new Date();
+          let y = date.getFullYear();
+          let m = date.getMonth() + 1;
+          let nextPay = new Date(y, m, 1).getTime();
+          let now = new Date().getTime();
+          let time = nextPay - now;
+          setTimeout(() => {
+            axios({
+              url: '/api/payment/unsubscribe',
+              method: 'put',
+              headers: {
+                accesstoken: `${localStorage.getItem('at')}`,
+                refreshtoken: `${localStorage.getItem('rt')}`,
+              },
+            });
+          }, time);
+        })
+        .catch((err) => {
+          // 서버 결제 API 실패시 로직
+          console.log(err);
+          alert(`구독 해지에 실패했습니다. 다시 시도해주세요.`);
+        });
     }
   } catch (e) {
     alert(`에러 내용: ${e}`);
@@ -172,11 +174,6 @@ function getPaymentData(data) {
       console.log(y, m);
       var nextPay = new Date(y, m, 1).toLocaleString().substring(0, 10);
       const response = res.data;
-      let custimerUid = response[0].customerUid;
-      let createAt = response[0].createdAt.substring(0, 7);
-      let createAtDay = response[0].createdAt.substring(0, 10);
-      let cardName = response[0].card_name;
-      let cardNumber = response[0].card_number;
       let membership = response[0].merchantUid.split('_')[0];
       let amount = response[0].amount.toLocaleString();
 
@@ -205,7 +202,8 @@ function getPaymentData(data) {
         let d = getLastDayOfMonth(y, m);
         let existDay = y + '-' + m + '-' + d;
         let cardName = response[i].card_name;
-        let cardNumber = response[i].card_number;
+        let cardNum = response[0].card_number;
+        let cardNumber = cardNum.slice(0, 4) + '-' + cardNum.slice(4, 8);
         let membership = response[i].merchantUid.split('_')[0];
         let amount = response[i].amount.toLocaleString();
         let temp2 = `
@@ -214,7 +212,7 @@ function getPaymentData(data) {
           <p class="member-createAt">${createAtDay}</p>
           <p class="member-level">${membership}</p>
           <p class="member-exist">${createAtDay} ~ ${existDay}</p>          
-          <p class="member-card">${cardName} ${cardNumber} ** **** ****</p>
+          <p class="member-card">${cardName} ${cardNumber}** **** ****</p>
           <p class="member-amount">월 ${amount}원</p>
           </span>
         </div>`;

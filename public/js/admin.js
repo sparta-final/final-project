@@ -93,6 +93,7 @@ function getRank(year, month) {
   })
     .then((response) => {
       const data = response.data;
+      console.log('✨✨✨', 'rank', data, '✨✨✨');
       $('.text-gray-dark').empty();
       // 찾는 데이터가 0일때 부터는 다른조건을 안보기 떄문에 0인뒤로 순서가 엉킴.
       // const countRank = data.sort((a, b) => b.count - a.count);
@@ -155,7 +156,6 @@ function salesMonth(year, month) {
     },
   })
     .then((response) => {
-      console.log('✨✨✨', response, '✨✨✨');
       const data = response.data.toLocaleString();
 
       if (data.length === 0) {

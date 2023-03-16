@@ -1,10 +1,8 @@
 $(document).ready(function () {
   const userType = localStorage.getItem('type');
-  // console.log('✨✨✨', userType, '✨✨✨');
   footerSelect();
   const qrCode = document.querySelector('.qr-code');
   const qrCamera = document.querySelector('#camera-wrap');
-  console.log('✨✨✨', qrCamera, '✨✨✨');
   if (userType === null || userType === 'admin') {
     qrCode.style.display = 'none';
     qrCamera.style.display = 'none';

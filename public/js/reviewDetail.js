@@ -37,20 +37,14 @@ async function getReviewDetail(reviewId) {
   let starString = getStarString(reviewStar);
   let reviewCreatedAt = review.createdAt.toString().substring(0, 10);
   let reviewImg = review.reviews[0].reviewImg;
-  let reviewImgSrc = '';
-  if (reviewImg === null || reviewImg === '') {
-    reviewImgSrc = '/images/default_profile.png';
-  } else {
-    reviewImgSrc = reviewImg;
-  }
   let reviewContent = review.reviews[0].review;
 
-  let temp_img = `
-  <ul>
-    <img src="${reviewImgSrc}" />
-  </ul>
-  `;
-  $('.review-image-wrap').append(temp_img);
+  // let temp_img = `
+  // <ul>
+  //   <img src="${reviewImgSrc}" />
+  // </ul>
+  // `;
+  // $('.review-image-wrap').append(temp_img);
 
   let temp = `
   <div class="review-card">
@@ -68,6 +62,9 @@ async function getReviewDetail(reviewId) {
   </div>
   `;
   $('.review-wrap').append(temp);
+  if (reviewImg) {
+    $('.review-content').append(`<img class="review-img-all" src="${reviewImg}" alt="" />`);
+  }
   const reviewTextareas = document.querySelectorAll(`textarea.review-text`);
   for (let i = 0; i < reviewTextareas.length; i++) {
     const targetTextarea = reviewTextareas[i];

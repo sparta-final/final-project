@@ -136,6 +136,7 @@ input[type='file']::-webkit-file-upload-button {
   background: none;
   border: none;
   padding: 16px 16px 16px 0;
+  cursor: pointer;
 }
 
 #nickname,
@@ -257,6 +258,10 @@ img.my-info-btn {
 
 .member {
   border-bottom: transparent;
+}
+
+.membership-past-wrap {
+  margin-bottom: 50px;
 }
 
 .membership-data-past-wrap {

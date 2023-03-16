@@ -33,6 +33,7 @@
 }
 
 .text-box {
+  position: relative;
   flex: 1;
   padding: 3px 0 0 8px;
 }
@@ -44,6 +45,7 @@
 }
 
 .review-box {
+  position: relative;
   display: flex;
   align-items: center;
   margin-bottom: 10px;
@@ -58,7 +60,7 @@
   width: 48px;
   height: 22px;
   color: var(--point-color);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   border: 1px solid var(--point-color);
   border-radius: 10px;
@@ -101,13 +103,14 @@
 }
 
 .review-go-btn {
+  position: absolute;
   background: none;
   border: none;
   font-size: 11px;
   font-weight: 600;
   color: var(--point-color);
   padding-top: 3px;
-  margin-left: 55px;
+  left: 90px;
   cursor: pointer;
 }
 
@@ -121,4 +124,12 @@ div.my-gym-star span {
   font-size: 14px;
   font-weight: 500;
   margin-right: 3px;
+}
+
+p.before-approve {
+  position: absolute;
+  right: 8px;
+  top: -2px;
+  color: var(--point-color);
+  font-size: 11px;
 }
