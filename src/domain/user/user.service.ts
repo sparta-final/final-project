@@ -2,7 +2,7 @@ import { Cache } from 'cache-manager';
 import { CACHE_MANAGER, ConflictException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/global/entities/Users';
-import { Repository } from 'typeorm';
+import { Repository, Between, MoreThanOrEqual } from 'typeorm';
 import { UpdateUserInfoDto } from './dto/updateUserInfo.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
@@ -127,5 +127,28 @@ export class UserService {
   async loginUserInfo(user) {
     const userId = user.sub;
     return userId;
+  }
+
+  /**
+   *  @description: 로그인 유저 정보 보내기
+   *  @author: 정호준
+   */
+  async qrcodeAuth(id) {
+    const qrUser = await this.userRepo.findOne({
+      where: { id: id },
+      select: ['membership'],
+    });
+
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const date = today.getDate();
+    const todayUserCount = await this.userGymRepo.count({
+      where: {
+        userId: id,
+        createdAt: MoreThanOrEqual(new Date(year, month, date)),
+      },
+    });
+    return [qrUser, todayUserCount];
   }
 }

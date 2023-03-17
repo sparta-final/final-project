@@ -27,7 +27,6 @@ function user() {
       console.log(err);
     });
 }
-
 function logout() {
   axios({
     url: '/api/auth/logout',
