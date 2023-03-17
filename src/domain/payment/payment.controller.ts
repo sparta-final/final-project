@@ -34,11 +34,7 @@ export class PaymentController {
       const user_id = Number(paymentData.customer_uid.split('_')[0]);
       if (data.status === paymentData.status && paymentData.status === 'paid') {
         // 결제 성공적으로 완료
-        const createPaymentData = this.paymentService.createPaymentData(
-          data,
-          user_id,
-          paymentData,
-        );
+        const createPaymentData = this.paymentService.createPaymentData(data, user_id, paymentData);
         const paymentReserve = await this.paymentService.paymentReserve(access_token, paymentData);
       } else {
         // 결제금액 불일치. 위/변조 된 결제

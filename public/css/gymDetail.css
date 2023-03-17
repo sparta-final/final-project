@@ -45,8 +45,7 @@
 
 .review-text {
   width: 100%;
-  min-height: 30px;
-  height: auto;
+  /* min-height: 80px; */
   overflow: visible;
   margin-top: 20px;
   word-break: break-all;
@@ -68,7 +67,7 @@
 
 .review-card > .review-content > .review-date {
   position: absolute;
-  top: 50px;
+  top: 43px;
   right: 35px;
   font-size: 14px;
   color: var(--sub-color-8);
@@ -80,7 +79,9 @@
   align-items: center;
 }
 .review-card > .review-star-date-wrap > .reviews-star {
-  /* margin-left: 5px; */
+  width: 90px;
+  margin-left: 15px;
+  padding-top: 4px;
 }
 
 .review-card > .review-star-date-wrap > .reviews-date {

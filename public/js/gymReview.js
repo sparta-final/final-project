@@ -18,33 +18,34 @@ function getGymReivew(id) {
 
       function getStarString(reviewStarRating) {
         const starMap = {
-          1: '⭐',
-          1.5: '⭐',
-          2: '⭐⭐',
-          2.5: '⭐⭐',
-          3: '⭐⭐⭐',
-          3.5: '⭐⭐⭐',
-          4: '⭐⭐⭐⭐',
-          4.5: '⭐⭐⭐⭐',
-          5: '⭐⭐⭐⭐⭐',
+          0: '0',
+          0.5: '1',
+          1: '2',
+          1.5: '3',
+          2: '4',
+          2.5: '5',
+          3: '6',
+          3.5: '7',
+          4: '8',
+          4.5: '9',
+          5: '10',
         };
         return starMap[reviewStarRating] || '';
       }
 
       const reveiewsdetail = review.reviews;
-      for (const review of reveiewsdetail) {
-        if (review.reviews.length === 0) continue;
-        let reviewUserNickName = review.user.nickname;
-        let reviewContent = review.reviews[0].review;
-        let reviewStar = review.reviews[0].star;
+      for (i in reveiewsdetail) {
+        let reviewUserNickName = reveiewsdetail[i].user.nickname;
+        let reviewContent = reveiewsdetail[i].reviews[0].review;
+        let reviewStar = reveiewsdetail[i].reviews[0].star;
         let starString = getStarString(reviewStar);
-        let reviewCreatedAt = review.createdAt.toString().substring(0, 10);
-        let reviewImg = review.reviews[0].reviewImg;
+        let reviewCreatedAt = reveiewsdetail[i].reviews[0].createdAt.slice(0, 10);
+        let reviewImg = reveiewsdetail[i].reviews[0].reviewImg;
         let reviewTemp = `
         <div class="review-card">
         <div class="review-header">
         <span class="user-name">${reviewUserNickName}</span>
-          <span class="review-star">${starString}</span>
+        <img class="review-rating" src="/images/star_rating_${starString}.jpg" alt="" />
           <span class="review-date">${reviewCreatedAt}</span>
         </div>
         <div class="review-content">
@@ -59,8 +60,8 @@ function getGymReivew(id) {
       const reviewTextareas = document.querySelectorAll(`textarea.review-text`);
       for (let i = 0; i < reviewTextareas.length; i++) {
         const targetTextarea = reviewTextareas[i];
-        const textLength = targetTextarea.value.length;
-        targetTextarea.style.height = (textLength / 35) * 24 + 'px';
+        const textLength = Math.ceil(targetTextarea.value.length / 24);
+        targetTextarea.style.height = textLength * 24 + 'px';
       }
     })
     .catch((err) => {
