@@ -55,7 +55,6 @@ async function requestPay(membership, amount) {
     },
   });
   const now = Math.floor(new Date().getTime());
-  console.log('✨✨✨', response.data.email, '✨✨✨');
   const id = response.data.id;
   const email = response.data.email;
   const nickname = response.data.nickname;
@@ -70,7 +69,6 @@ async function requestPay(membership, amount) {
 
   // 이번 달 남은 일 수 동안의 금액을 계산합니다.
   let paymentAmount = Math.floor((currentDate.getDate() / lastDayOfMonth.getDate()) * amount);
-  console.log('✨✨✨', lastDayOfMonth.getDate(), currentDate.getDate(), remainingDays, paymentAmount, '✨✨✨');
 
   // ✨✨✨ 빌링 키 요청 ✨✨✨
   IMP.request_pay(
@@ -89,7 +87,6 @@ async function requestPay(membership, amount) {
       m_redirect_url: '/payments/complete',
     },
     async function (rsp) {
-      console.log('✨✨✨', 'rsp: ', rsp, '✨✨✨');
       if (rsp.success) {
         // 빌링키 발급 성공
         // complete 에서 결제완료 알림
@@ -102,7 +99,6 @@ async function requestPay(membership, amount) {
           },
         }).then((data) => {
           // 서버 결제 API 성공시 로직
-          console.log('✨✨✨', data, '✨✨✨');
           // alert(`${name} 멤버쉽 구독 신청이 완료되었습니다.`);
           window.location.replace(`/payment`);
         });

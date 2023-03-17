@@ -29,7 +29,6 @@ function getGym() {
     })
     .then(async (res) => {
       data = res.data;
-      console.log('✨✨✨', 'data', data, '✨✨✨');
       if (postCount === 0) {
         feedContainer.innerHTML = '';
         for (let i = 0; i < limit && i < data.length; i++) {

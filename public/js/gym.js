@@ -21,6 +21,7 @@ let map;
 // 마커 클러스터러를 생성합니다
 var clusterer;
 var markers = [];
+let customOverlays = [];
 
 function showPosition(position) {
   // 위도,경도를 주소로 변환
@@ -54,15 +55,23 @@ function showPosition(position) {
         let content = `
           <div class="customoverlay">
             <a href="/gym/gymDetail?gym=${gym.id}">
-              <span class="title">${gym.name}</span>
             </a>
           </div>
           `;
-        new kakao.maps.CustomOverlay({
+        const customOverlay = new kakao.maps.CustomOverlay({
           map: map,
           position: markerPosition,
-          content: content,
         });
+
+        customOverlays.push(customOverlay);
+
+        function removeCustomOverlays() {
+          for (let i = 0; i < customOverlays.length; i++) {
+            customOverlays[i].setMap(null);
+          }
+          customOverlays.length = 0;
+        }
+
         // 마커에 클릭이벤트를 등록합니다
         kakao.maps.event.addListener(marker, 'click', function () {
           location.href = `/gym/gymDetail?gym=${gym.id}`;
@@ -75,6 +84,7 @@ function showPosition(position) {
             averageCenter: true,
             minLevel: 10,
           });
+          kakao.maps.event.addListener(clusterer, 'clustered', removeCustomOverlays);
         }
       }
       clusterer.addMarkers(markers);
@@ -146,7 +156,6 @@ async function getGymList() {
     },
   });
   const responseData = response.data;
-  console.log('✨✨✨', responseData, '✨✨✨');
   data = [...data, ...responseData];
   if (postCount === 0) {
     gymContainer.innerHTML = '';

@@ -22,7 +22,6 @@ async function getApproveGymDetail(id) {
   })
     .then((response) => {
       const data = response.data;
-      console.log('✨✨✨', data, '✨✨✨');
       let img = data[0].gymImgs;
       let name = data[0].name;
       let address = data[0].address;
@@ -68,9 +67,7 @@ async function getApproveGymDetail(id) {
       `;
       $('.approveDetail-container').append(temp);
       const targetTextarea = document.querySelector(`.gym-detail-desc`);
-      console.log('✨✨✨', '1', targetTextarea, '✨✨✨');
       const rowCount = targetTextarea.value.split(/\r\n|\r|\n/).length;
-      console.log('✨✨✨', '2', rowCount, '✨✨✨');
       targetTextarea.style.height = rowCount * 24 + 'px'; //줄 수에 따라서 높이를 조절
     })
     .catch((err) => {

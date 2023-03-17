@@ -120,7 +120,7 @@ async function getGymDetail() {
   const reviewTextareas = document.querySelectorAll(`textarea.review-text`);
   for (let i = 0; i < reviewTextareas.length; i++) {
     const targetTextarea = reviewTextareas[i];
-    const textLength = targetTextarea.value.length;
-    targetTextarea.style.height = (textLength / 35) * 24 + 'px';
+    const textLength = Math.ceil(targetTextarea.value.length / 24);
+    targetTextarea.style.height = textLength * 24 + 'px';
   }
 }

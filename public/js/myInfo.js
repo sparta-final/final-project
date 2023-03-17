@@ -34,7 +34,6 @@ function user() {
       },
     })
     .then((res) => {
-      console.log('✨✨✨', 'test', res, '✨✨✨');
       $('#nickname').val(res.data.nickname);
       $('#phone').val(res.data.phone);
       document.getElementById('image').src = res.data.profileImage ? res.data.profileImage : '/images/default_profile.png';

@@ -53,9 +53,9 @@
     </style>
   </head>
   <body>
-    <h1>jsQR Demo</h1>
+    <!-- <h1>jsQR Demo</h1>
     <a id="githubLink" href="https://github.com/cozmo/jsQR">View documentation on Github</a>
-    <p>Pure JavaScript QR code decoding library.</p>
+    <p>Pure JavaScript QR code decoding library.</p> -->
     <div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
     <canvas id="canvas" hidden></canvas>
     <div id="output" hidden>
@@ -88,7 +88,7 @@
         requestAnimationFrame(tick);
       });
 
-      function tick() {
+      async function tick() {
         loadingMessage.innerText = '⌛ Loading video...';
         if (video.readyState === video.HAVE_ENOUGH_DATA) {
           loadingMessage.hidden = true;
@@ -116,21 +116,44 @@
 
             const now = +code.data.split('=')[1].split('&')[0];
             const userId = +code.data.split('=')[2];
-
-            alert(userId);
-            axios
-              .post(
-                `/api/qrcode/${now}/${userId}/${gymId}`,
-                { userId, gymId },
-                {
-                  headers: {
-                    accesstoken: `${localStorage.getItem('at')}`,
-                    refreshtoken: `${localStorage.getItem('rt')}`,
-                  },
-                }
-              )
+            await axios
+              .get(`/api/qrcode/${userId}`, {
+                headers: {
+                  accesstoken: `${localStorage.getItem('at')}`,
+                  refreshtoken: `${localStorage.getItem('rt')}`,
+                },
+              })
               .then((res) => {
-                console.log(res);
+                console.log('✨✨✨', res.data, '✨✨✨');
+                if (res.data[0].membership && res.data[1] < 1) {
+                  axios
+                    .post(
+                      `/api/qrcode/${now}/${userId}/${gymId}`,
+                      { userId, gymId },
+                      {
+                        headers: {
+                          accesstoken: `${localStorage.getItem('at')}`,
+                          refreshtoken: `${localStorage.getItem('rt')}`,
+                        },
+                      }
+                    )
+                    .then((res) => {
+                      alert('✅✅ 식스팩 회원 인증이 완료되었습니다. ✅✅');
+                      console.log(res);
+                      return;
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                } else {
+                  alert('❌❌ 금일 이용 횟수를 초과하였습니다. ❌❌');
+                }
+                console.log('✨✨✨', 'qrcode', res.data, '✨✨✨');
+
+                if (!res.data[0].membership) {
+                  alert('❌❌ 식스팩 멤버십 회원이 아닙니다. ❌❌');
+                  return;
+                }
               })
               .catch((err) => {
                 console.log(err);
