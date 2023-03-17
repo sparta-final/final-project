@@ -103,8 +103,6 @@ function getRank(category, year, month) {
       if (category === '평점') {
         const ratingRank = data.sort((a, b) => b.rating - a.rating);
       }
-      // console.log('✨✨✨', 'rank', data, '✨✨✨');
-      console.log('✨✨✨', 'year', year, 'month', month, '✨✨✨');
       $('.text-gray-dark').empty();
       $('.cur-month').remove();
       let rating;
@@ -215,13 +213,10 @@ $('th.cursor').click((e) => {
   // curDate = $('.cur-month');
   cYear = Number(curDate.split('.')[0]);
   cMonth = Number(curDate.split('.')[1]);
-  console.log('✨✨✨', cYear, cMonth, '✨✨✨');
   // $('.cur-month').remove();
   getRank(eCategory, cYear, cMonth);
 });
 
-// console.log('✨✨✨', curDate, '✨✨✨');
-// console.log('✨✨✨', yaer, month, '✨✨✨');
 // onclick="getRank('이용자 수', year, month)"
 // onclick="getRank('정산 금액', year, month)"
 // onclick="getRank('평점', year, month)"
