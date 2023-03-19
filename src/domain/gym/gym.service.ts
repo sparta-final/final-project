@@ -46,11 +46,11 @@ export class GymService {
         address: postgymDto.address,
         gymType: postgymDto.gymType,
         description: postgymDto.description,
-        certification: file.certification[0].location,
+        certification: file.certification[0].transforms[0].location,
       });
       const gymImgs = [];
       for (let i = 0; i < file.img.length; i++) {
-        gymImgs.push({ gymId: createGym.id, img: file.img[i].location });
+        gymImgs.push({ gymId: createGym.id, img: file.img[i].transforms[0].location });
       }
 
       const createImg = await this.gymImgrepository.save(gymImgs);
@@ -131,13 +131,13 @@ export class GymService {
         phone: updateDto.phone ? updateDto.phone : existGym.phone,
         gymType: updateDto.gymType ? updateDto.gymType : existGym.gymType,
         description: updateDto.description ? updateDto.description : existGym.description,
-        certification: file.certification ? file.certification[0].location : existGym.certification,
+        certification: file.certification ? file.certification[0].transforms[0].location : existGym.certification,
       });
 
       const gymImgs = [];
       if (file.img) {
         for (let i = 0; i < file.img.length; i++) {
-          gymImgs.push({ img: file.img[i].location });
+          gymImgs.push({ img: file.img[i].transforms[0].location });
         }
       }
 

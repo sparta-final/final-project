@@ -35,12 +35,8 @@ export class FeedService {
       });
       const feedImgs = [];
       for (let i = 0; i < file.feedImg.length; i++) {
-        console.log('ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ');
-        console.log(file.feedImg[i].transforms[0].location);
-
         feedImgs.push({ feedId: createFeed.id, image: file.feedImg[i].transforms[0].location });
       }
-      console.log('feedImgs', feedImgs);
       const createImg = await this.feedsImgRepository.save(feedImgs);
       // await this.feedsImgRepository.save({
       //   feedId: createFeed.id,

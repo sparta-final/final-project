@@ -41,7 +41,7 @@ export class UserService {
    * @param UpdateUserInfoDto
    */
 
-  async updateUserInfo(user: JwtPayload, updateUserInfo: UpdateUserInfoDto, file: Express.MulterS3.File) {
+  async updateUserInfo(user: JwtPayload, updateUserInfo: UpdateUserInfoDto, file) {
     const hashedPassword = await bcrypt.hash(
       updateUserInfo.password === '' ? updateUserInfo.currentPassword : updateUserInfo.password,
       10
@@ -59,7 +59,7 @@ export class UserService {
       existUser.nickname = updateUserInfo.nickname;
       existUser.phone = updateUserInfo.phone;
       existUser.password = hashedPassword;
-      file ? (existUser.profileImage = file.location) : (existUser.profileImage = existUser.profileImage);
+      file ? (existUser.profileImage = file.transforms[0].location) : (existUser.profileImage = existUser.profileImage);
       await this.userRepo.save(existUser);
 
       const userCaches = await this.cacheManager.store.keys(`user:ID: ${user.sub}*`);
