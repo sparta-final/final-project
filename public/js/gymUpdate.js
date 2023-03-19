@@ -75,7 +75,7 @@ function updateGym(id) {
   formData.append('certification', certification.files[0]);
   formData.append('gymType', gymType);
   for (let i = 0; i < imgList.length; i++) {
-    formData.append('img', imgList[i]);
+    formData.append('gymImg', imgList[i]);
   }
 
   axios

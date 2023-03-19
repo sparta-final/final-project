@@ -19,11 +19,11 @@ export class GymController {
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'certification', maxCount: 3 },
-      { name: 'img', maxCount: 7 },
+      { name: 'gymImg', maxCount: 7 },
     ])
   )
   async postGyms(
-    @UploadedFiles() file: { certification: Express.MulterS3.File[]; img: Express.MulterS3.File[] },
+    @UploadedFiles() file: { certification: Express.MulterS3.File[]; gymImg: Express.MulterS3.File[] },
     @Body() postgymDto: PostGymDto,
     @CurrentUser() user: JwtPayload
   ) {
@@ -43,11 +43,11 @@ export class GymController {
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'certification', maxCount: 3 },
-      { name: 'img', maxCount: 7 },
+      { name: 'gymImg', maxCount: 7 },
     ])
   )
   async updateGym(
-    @UploadedFiles() file: { certification: Express.MulterS3.File[]; img: Express.MulterS3.File[] },
+    @UploadedFiles() file: { certification: Express.MulterS3.File[]; gymImg: Express.MulterS3.File[] },
     @Param('id') gymId: number,
     @Body() updateDto: UpdateGymDto,
     @CurrentUser() user: JwtPayload
