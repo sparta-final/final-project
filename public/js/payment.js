@@ -100,7 +100,7 @@ async function requestPay(membership, amount) {
         }).then((data) => {
           // 서버 결제 API 성공시 로직
           // alert(`${name} 멤버쉽 구독 신청이 완료되었습니다.`);
-          window.location.replace(`/payment`);
+          window.location.replace(`/gym`);
         });
       } else {
         // 빌링키 발급 실패
