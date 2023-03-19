@@ -34,7 +34,7 @@ function userLogin() {
       localStorage.setItem('at', res.data.at);
       localStorage.setItem('rt', res.data.rt);
       localStorage.setItem('type', res.data.type);
-      location.replace('/');
+      location.replace('/gym');
     })
     .catch((err) => {
       alert(err.response.data.data);
