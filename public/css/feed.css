@@ -179,6 +179,7 @@ img.feed-image {
   padding: 19px 0 0 52px;
   font-weight: 500;
   color: var(--sub-color-1);
+  width: 90%;
 }
 
 .comment-user-wrap {
@@ -197,14 +198,15 @@ img.feed-image {
 
 .comment-delete-btn {
   position: absolute;
-  top: 10;
-  right: 0;
-  margin-right: 10px;
+  top: 20px;
+  right: 15px;
+  width: 20px;
+  height: 20px;
   border-radius: 10px;
-  border: 1px solid transparent;
+  border: none;
   background-color: var(--point-color);
   color: var(--main-color);
-  height: 30px;
+  line-height: 0.5;
   cursor: pointer;
 }
 .comment-box {

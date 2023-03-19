@@ -10,7 +10,6 @@ function getFeedUser(id) {
   })
     .then((response) => {
       const data = response.data;
-      console.log('✨✨✨', data, '✨✨✨');
       let feedNickname = data[0].user_nickname;
       let feedUserImg = data[0].user_profileImage;
       let content = data[0].feeds_content;
@@ -33,7 +32,6 @@ function getComments(id) {
   })
     .then((response) => {
       const data = response.data;
-      console.log('✨✨✨', data, '✨✨✨');
       for (let i in data) {
         let commentNickname = data[i].user_nickname;
         let commentUserImg = data[i].user_profileImage;
@@ -65,7 +63,7 @@ function getComments(id) {
           let temp = `
           
         <div class="comment-user-wrap">
-        <button class="comment-delete-btn" onclick="commentDelete(${data[i].comments_id})">삭제</button>
+        <button class="comment-delete-btn" onclick="commentDelete(${data[i].comments_id})">x</button>
         <img src="${commentUserImg}" alt="" class="feed-profile" />
         <p class="comment-user-name">${commentNickname}</p>
         <p class="comment-content">${comments}</p>
@@ -99,7 +97,6 @@ function commentAdd() {
   let id = window.location.pathname.split('/')[2];
 
   const comment = document.getElementById('create-comment').value;
-  console.log('✨✨✨', 'comment', comment, '✨✨✨');
 
   axios
     .post(
@@ -124,11 +121,10 @@ function commentAdd() {
     });
 }
 
-
-  /**
-   * 댓글 삭제 버튼
-   * @author 주현진
-   */
+/**
+ * 댓글 삭제 버튼
+ * @author 주현진
+ */
 
 function commentDelete(id) {
   if (confirm('작성한 댓글을 삭제하시겠습니까?') === true) {

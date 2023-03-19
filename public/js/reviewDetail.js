@@ -18,15 +18,17 @@ async function getReviewDetail(reviewId) {
   });
   function getStarString(reviewStarRating) {
     const starMap = {
-      1: '⭐',
-      1.5: '⭐',
-      2: '⭐⭐',
-      2.5: '⭐⭐',
-      3: '⭐⭐⭐',
-      3.5: '⭐⭐⭐',
-      4: '⭐⭐⭐⭐',
-      4.5: '⭐⭐⭐⭐',
-      5: '⭐⭐⭐⭐⭐',
+      0: '0',
+      0.5: '1',
+      1: '2',
+      1.5: '3',
+      2: '4',
+      2.5: '5',
+      3: '6',
+      3.5: '7',
+      4: '8',
+      4.5: '9',
+      5: '10',
     };
     return starMap[reviewStarRating] || '';
   }
@@ -52,7 +54,7 @@ async function getReviewDetail(reviewId) {
       <span class="user-name">${gymName}</span>
       </div>
       <div class="review-star-date-wrap">
-      <span class="reviews-star">${starString}</span><br>
+      <img class="reviews-star" src="/images/star_rating_${starString}.jpg" alt="" />
       <span class="reviews-date">${reviewCreatedAt}</span>
       <button class="review-delete-btn" onclick="deleteReview(${reviewId})">삭제</button>
     </div>
@@ -66,11 +68,9 @@ async function getReviewDetail(reviewId) {
     $('.review-content').append(`<img class="review-img-all" src="${reviewImg}" alt="" />`);
   }
   const reviewTextareas = document.querySelectorAll(`textarea.review-text`);
-  for (let i = 0; i < reviewTextareas.length; i++) {
-    const targetTextarea = reviewTextareas[i];
-    const textLength = targetTextarea.value.length;
-    targetTextarea.style.height = (textLength / 35) * 24 + 'px';
-  }
+  const targetTextarea = reviewTextareas[0];
+  const textLength = Math.ceil(targetTextarea.value.length / 24);
+  targetTextarea.style.height = textLength * 24 + 'px';
 }
 
 async function deleteReview(reviewId) {

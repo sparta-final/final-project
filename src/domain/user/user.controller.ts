@@ -63,4 +63,9 @@ export class UserController {
   async loginUserInfo(@CurrentUser() user: JwtPayload) {
     return await this.userservice.loginUserInfo(user);
   }
+  // qrcode 인증
+  @Get('qrcode/:id')
+  async qrcodeAuth(@Param('id') id: number) {
+    return await this.userservice.qrcodeAuth(id);
+  }
 }

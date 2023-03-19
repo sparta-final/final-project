@@ -150,12 +150,9 @@ export class PaymentService {
         paymentAmount = 300000;
       }
 
-      console.log('✨✨✨', '결제금액', paymentData, '✨✨✨');
-      console.log('✨✨✨', '결제금액', paymentAmount, '✨✨✨');
-
-      console.log('✨✨✨', '결제시간', new Date(now * 1000), '✨✨✨');
-      console.log('✨✨✨', '다음 결제시간', new Date(schedule_at_time * 1000), '✨✨✨');
-      console.log('✨✨✨', 'schedule_at_time', schedule_at_time, '✨✨✨');
+      // console.log('✨✨✨', '결제시간', new Date(now * 1000), '✨✨✨');
+      // console.log('✨✨✨', '다음 결제시간', new Date(schedule_at_time * 1000), '✨✨✨');
+      // console.log('✨✨✨', 'schedule_at_time', schedule_at_time, '✨✨✨');
       const paymentReserve = await axios({
         url: `https://api.iamport.kr/subscribe/payments/schedule`,
         method: 'post',

@@ -36,7 +36,6 @@ export class FeedController {
     @CurrentUser() user: JwtPayload,
     @Body() createFeedDto: CreateFeedDto
   ) {
-    console.log('✨✨✨', file, '✨✨✨');
     const feed = await this.feedService.postFeeds({ file, user, createFeedDto });
     return feed;
   }
@@ -77,7 +76,6 @@ export class FeedController {
   @FeedDelete()
   @Delete('/:id')
   async deleteFeed(@Param('id') id: number, @CurrentUser() user: JwtPayload) {
-    console.log('✨✨✨', '1', id, user, '✨✨✨');
     return await this.feedService.deleteFeed({ id, user });
   }
 
@@ -88,7 +86,6 @@ export class FeedController {
     @Body() createcommentDto: CreateCommentDto,
     @CurrentUser() user: JwtPayload
   ) {
-    console.log('✨✨✨', feedId, createcommentDto, user, '✨✨✨');
     const comment = await this.feedService.postComment({ feedId, createcommentDto, user });
     return comment;
   }

@@ -55,14 +55,12 @@ function showPosition(position) {
         let content = `
           <div class="customoverlay">
             <a href="/gym/gymDetail?gym=${gym.id}">
-              <span class="title">${gym.name}</span>
             </a>
           </div>
           `;
         const customOverlay = new kakao.maps.CustomOverlay({
           map: map,
           position: markerPosition,
-          content: content,
         });
 
         customOverlays.push(customOverlay);
@@ -158,7 +156,6 @@ async function getGymList() {
     },
   });
   const responseData = response.data;
-  console.log('✨✨✨', responseData, '✨✨✨');
   data = [...data, ...responseData];
   if (postCount === 0) {
     gymContainer.innerHTML = '';
