@@ -53,7 +53,6 @@ function feedUpdate() {
       }
     )
     .then((response) => {
-      alert('수정.');
       window.location.replace(`/feed`);
     })
     .catch((err) => {

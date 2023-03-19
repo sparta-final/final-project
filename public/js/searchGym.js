@@ -50,7 +50,7 @@ async function searchGymByText(text) {
               <li class="gym-name">${name}</li>
               <li class="gym-location">${address}</li>
               <li class="gym-review-${gymId}"></li>
-              <button onclick="location.href='/gym/gymDetail?gym=${gymId}'" >가맹점 상세 정보</button>
+              <button class="gym-detial-btn" onclick="location.href='/gym/gymDetail?gym=${gymId}'" >가맹점 상세 정보</button>
             </ul>
           </div>
           `;

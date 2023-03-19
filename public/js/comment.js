@@ -63,7 +63,7 @@ function getComments(id) {
           let temp = `
           
         <div class="comment-user-wrap">
-        <button class="comment-delete-btn" onclick="commentDelete(${data[i].comments_id})">삭제</button>
+        <button class="comment-delete-btn" onclick="commentDelete(${data[i].comments_id})">x</button>
         <img src="${commentUserImg}" alt="" class="feed-profile" />
         <p class="comment-user-name">${commentNickname}</p>
         <p class="comment-content">${comments}</p>

@@ -86,9 +86,9 @@ export class AuthService {
   async userlogin(loginUserDto: LoginUserDto) {
     if (!loginUserDto.email || !loginUserDto.password) throw new BadRequestException('이메일과 비밀번호를 입력해주세요.');
     const existUser = await this.userRepo.findOne({ where: { email: loginUserDto.email } });
-    if (!existUser) throw new NotFoundException('이메일이 존재하지 않습니다.');
+    if (!existUser) throw new NotFoundException('이메일 또는 비밀번호를 잘못 입력했습니다.');
     const isMatch = await bcrypt.compare(loginUserDto.password, existUser.password);
-    if (!isMatch) throw new BadRequestException('비밀번호가 일치하지 않습니다.');
+    if (!isMatch) throw new BadRequestException('이메일 또는 비밀번호를 잘못 입력했습니다.');
     const tokens = await this.getTokens(existUser.id, existUser.email, 'user');
     return tokens;
   }
@@ -100,9 +100,9 @@ export class AuthService {
    */
   async businessUserlogin(loginUserDto: LoginUserDto) {
     const existUser = await this.businessUserRepo.findOne({ where: { email: loginUserDto.email } });
-    if (!existUser) throw new NotFoundException('이메일이 존재하지 않습니다.');
+    if (!existUser) throw new NotFoundException('이메일 또는 비밀번호를 잘못 입력했습니다.');
     const isMatch = await bcrypt.compare(loginUserDto.password, existUser.password);
-    if (!isMatch) throw new BadRequestException('비밀번호가 일치하지 않습니다.');
+    if (!isMatch) throw new BadRequestException('이메일 또는 비밀번호를 잘못 입력했습니다.');
     const tokens = await this.getTokens(existUser.id, existUser.email, 'business');
     return tokens;
   }

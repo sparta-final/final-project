@@ -179,7 +179,7 @@ export class AppController {
   }
 
   // 마이페이지 사업자
-  @Get('business/businessMyInfo') // 호준님 사업자 기본 페이지
+  @Get('business/businessMyInfo')
   @Public()
   @Render('index')
   async businessMyInfo() {
@@ -193,7 +193,7 @@ export class AppController {
     return { pageName: 'updateGym' };
   }
 
-  @Get('business/myinfoBusiness') // 사업자 회원 수정페이지
+  @Get('business/myinfoBusiness')
   @Public()
   @Render('index')
   async myinfoBusiness() {
@@ -226,13 +226,6 @@ export class AppController {
   @Render('index')
   async searchGym() {
     return { pageName: 'searchGym' };
-  }
-
-  @Get('test')
-  @Public()
-  @Render('index')
-  async test() {
-    return { pageName: 'test' };
   }
 
   @Get('qrScan')
