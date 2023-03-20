@@ -5,8 +5,7 @@ import { UserGym } from 'src/global/entities/UserGym';
 import { Between, Repository } from 'typeorm';
 import { Gym } from 'src/global/entities/Gym';
 import * as qrcode from 'qrcode';
-import * as bcrypt from 'bcrypt';
-import { MonthDto } from '../admin/dto/monthData.dto';
+import { endOfDay, startOfMonth } from 'date-fns';
 
 @Injectable()
 export class QRcodeService {
@@ -50,14 +49,22 @@ export class QRcodeService {
    * @author 정호준
    * @argument date 날짜
    */
-  async findUseRecord(date, user) {
-    const useRecord = await this.userGymRepo.find({
-      where: {
-        userId: user.sub,
-        createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
-      },
-      relations: ['gym'],
-    });
+  async findUseRecord(userId) {
+    const startDate = startOfMonth(new Date());
+    const endDate = endOfDay(new Date());
+
+    const useRecord = await this.userGymRepo
+      .createQueryBuilder('userGym')
+      .leftJoinAndSelect('userGym.gym', 'gym')
+      .leftJoinAndSelect('userGym.user', 'user')
+      .where('userGym.userId = :userId', { userId })
+      .andWhere('userGym.createdAt BETWEEN :startDate AND :endDate', {
+        startDate,
+        endDate,
+      })
+      .select(['userGym', 'gym.gymType', 'user.membership'])
+      .getMany();
+
     return useRecord;
   }
 }
