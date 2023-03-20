@@ -125,7 +125,7 @@
                 },
               })
               .then(async (res) => {
-                if (!res.data[0].membership) {
+                if (res.data[0] === null) {
                   alert('❌❌ 식스팩 멤버십 회원이 아닙니다. ❌❌');
                   return;
                 }
