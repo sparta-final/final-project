@@ -4,8 +4,6 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import { CreateQRCode, GetUseHistory, UseGym } from './qrcode.decorators';
 import { QRcodeService } from './qrcode.service';
-import { Public } from 'src/global/common/decorator/public.decorator';
-import { MonthDto } from '../admin/dto/monthData.dto';
 
 @ApiTags('QRCODE')
 @Controller('api/qrcode')
