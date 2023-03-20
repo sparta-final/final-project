@@ -64,7 +64,7 @@
   font-size: 16px;
   font-weight: 600;
   background: #ffeb3b;
-  background-image: url('../images/kakao-talk.png');
+  background-image: url('https://www.sixpack.pro/images/kakao-talk.png');
   background-repeat: no-repeat;
   background-position: 35px center;
   color: var(--sub-color-1);

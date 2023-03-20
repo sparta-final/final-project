@@ -48,7 +48,7 @@
   left: 0;
   width: 24px;
   height: 24px;
-  background-image: url(../images/qr-code.svg);
+  background-image: url(https://www.sixpack.pro/images/qr-code.svg);
   background-size: cover;
   cursor: pointer;
 }
@@ -63,12 +63,12 @@
 }
 
 .qr-code {
-  background-image: url(../images/qr-code.svg);
+  background-image: url(https://www.sixpack.pro/images/qr-code.svg);
   display: none;
 }
 
 .search {
-  background-image: url(../images/search.svg);
+  background-image: url(https://www.sixpack.pro/images/search.svg);
   background-size: cover;
 }
 

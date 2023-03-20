@@ -85,7 +85,7 @@ async function requestPay(membership, amount) {
       buyer_tel: phone,
       buyer_addr: '회원가입시 주소 안받음',
       buyer_postcode: '12345',
-      m_redirect_url: '/payments/complete',
+      m_redirect_url: 'http://sixpack.pro/',
     },
     async function (rsp) {
       if (rsp.success) {

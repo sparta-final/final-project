@@ -18,7 +18,10 @@ function user() {
     .then((res) => {
       $('#business-name').text(res.data.name);
       $('#email').text(res.data.email);
-      $('#profileImage').attr('src', res.data.profileImage ? res.data.profileImage : '/images/default_profile.png');
+      $('#profileImage').attr(
+        'src',
+        res.data.profileImage ? res.data.profileImage : 'https://www.sixpack.pro/images/default_profile.png'
+      );
     })
     .catch((err) => {
       console.log(err);

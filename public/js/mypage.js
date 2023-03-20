@@ -15,7 +15,10 @@ function user() {
     .then((res) => {
       $('#nickname').text(res.data.nickname);
       $('#email').text(res.data.email);
-      $('#profileImage').attr('src', res.data.profileImage ? res.data.profileImage : '/images/default_profile.png');
+      $('#profileImage').attr(
+        'src',
+        res.data.profileImage ? res.data.profileImage : 'https://www.sixpack.pro/images/default_profile.png'
+      );
 
       if (window.location.href.includes('paymentDetails')) {
         getPaymentData(res.data);
@@ -75,9 +78,9 @@ function getPaidData(data) {
         temp = `
         <p class="member-start">멤버쉽 이용중이 아닙니다.</p>
         <div class="no-membership-wrap">
-        <div class="member-paid-list" onclick="location.href='mypage/paymentDetails'" >결제 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn"  /></div>
-        <div class="use-gym-list" onclick="location.href='mypage/history'">헬스장 이용 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
-        <div class="my-review" onclick="location.href='/mypage/review'" >리뷰 관리 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
+        <div class="member-paid-list" onclick="location.href='mypage/paymentDetails'" >결제 내역 <img src="https://www.sixpack.pro/images/right-arrow.png" alt="" class="member-info-btn"  /></div>
+        <div class="use-gym-list" onclick="location.href='mypage/history'">헬스장 이용 내역 <img src="https://www.sixpack.pro/images/right-arrow.png" alt="" class="member-info-btn" /></div>
+        <div class="my-review" onclick="location.href='/mypage/review'" >리뷰 관리 <img src="https://www.sixpack.pro/images/right-arrow.png" alt="" class="member-info-btn" /></div>
         </div>
         `;
       } else {
@@ -93,9 +96,9 @@ function getPaidData(data) {
           <p class="member-card">${cardName} ${cardNumber}** **** ****</p>
           <p class="member-next-paid">다음 결제일은 ${nextPay} 입니다</p>
         </span>
-        <div class="member-paid-list" onclick="location.href='mypage/paymentDetails'" >결제 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn"  /></div>
-        <div class="use-gym-list" onclick="location.href='mypage/history'">헬스장 이용 내역 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
-        <div class="my-review" onclick="location.href='/mypage/review'" >리뷰 관리 <img src="/images/right-arrow.png" alt="" class="member-info-btn" /></div>
+        <div class="member-paid-list" onclick="location.href='mypage/paymentDetails'" >결제 내역 <img src="https://www.sixpack.pro/images/right-arrow.png" alt="" class="member-info-btn"  /></div>
+        <div class="use-gym-list" onclick="location.href='mypage/history'">헬스장 이용 내역 <img src="https://www.sixpack.pro/images/right-arrow.png" alt="" class="member-info-btn" /></div>
+        <div class="my-review" onclick="location.href='/mypage/review'" >리뷰 관리 <img src="https://www.sixpack.pro/images/right-arrow.png" alt="" class="member-info-btn" /></div>
         <button class="member-close" onclick="cancelPay('${custimerUid}')">멤버쉽 해지</button>
       </div>
       `;
