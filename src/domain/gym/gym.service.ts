@@ -53,7 +53,7 @@ export class GymService {
         gymImgs.push({ gymId: createGym.id, img: file.img[i].location });
       }
 
-      const createImg = await this.gymImgrepository.save(gymImgs);
+      const createImg = await this.gymImgrepository.insert(gymImgs);
 
       // admin,gym 포함한 캐시 삭제
       const admincaches = await this.cacheManager.store.keys('admin*');
