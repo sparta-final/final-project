@@ -196,10 +196,10 @@ async function getGymList() {
       let name = remainingGyms[i].name;
       let address = remainingGyms[i].address;
       let temp2 = `
-      <div class="gym-approve-wait" onclick="location.href='/gym/gymDetail?gym=${id}'">
-        <img class="gym-list-img" src="${gymImgSrc2}"  alt="" />
+      <div class="gym-approve-wait">
+        <img class="gym-list-img" src="${gymImgSrc2}" onclick="location.href='/gym/gymDetail?gym=${id}'" alt="" />
         <ul class="gym-info-box">
-          <li class="gym-name">${name}</li>
+          <li class="gym-name" onclick="location.href='/gym/gymDetail?gym=${id}'">${name}</li>
           <li class="all-gym-qrcode" onclick="QRCheck(${id})"></li>
           <li class="gym-location">${address}</li>
           <li class="gym-review-${id}"></li>
