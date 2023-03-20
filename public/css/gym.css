@@ -92,3 +92,13 @@
   font-size: 16px;
   padding-right: 5px;
 }
+
+.all-gym-qrcode {
+  position: absolute;
+  top: -4px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  background-image: url(../images/qr-code.svg);
+  cursor: pointer;
+}
