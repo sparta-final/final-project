@@ -71,7 +71,7 @@ function enrollGym() {
   formData.append('lat', lat);
   formData.append('lng', lng);
   for (let i in img) {
-    formData.append('img', img[i]);
+    formData.append('gymImg', img[i]);
   }
   formData.append('address', address);
 

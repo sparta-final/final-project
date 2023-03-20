@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { multerOptionsFactory } from 'src/global/common/utils/multer.options.factory';
 import { Busienssusers } from 'src/global/entities/Busienssusers';
 import { UserGym } from 'src/global/entities/UserGym';
-import { multerOptionsFactory } from 'src/global/util/multer.options';
 import { BusinessUserController } from './business-user.controller';
 import { BusinessUserService } from './business-user.service';
 

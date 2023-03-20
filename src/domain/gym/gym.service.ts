@@ -29,7 +29,7 @@ export class GymService {
       where: { address: postgymDto.address },
     });
     if (existGym) throw new ConflictException('이미 등록된 주소입니다. 관리자에게 문의하세요.');
-    if (!file.certification && !file.img) throw new BadRequestException('파일을 등록해야 합니다.');
+    if (!file.certification && !file.gymImg) throw new BadRequestException('파일을 등록해야 합니다.');
 
     const queryRunner = this.dataSource.createQueryRunner();
 
@@ -46,11 +46,12 @@ export class GymService {
         address: postgymDto.address,
         gymType: postgymDto.gymType,
         description: postgymDto.description,
-        certification: file.certification[0].location,
+        certification: file.certification[0].transforms[0].location,
       });
+
       const gymImgs = [];
-      for (let i = 0; i < file.img.length; i++) {
-        gymImgs.push({ gymId: createGym.id, img: file.img[i].location });
+      for (let i = 0; i < file.gymImg.length; i++) {
+        gymImgs.push({ gymId: createGym.id, img: file.gymImg[i].transforms[0].location });
       }
 
       const createImg = await this.gymImgrepository.save(gymImgs);
@@ -131,13 +132,13 @@ export class GymService {
         phone: updateDto.phone ? updateDto.phone : existGym.phone,
         gymType: updateDto.gymType ? updateDto.gymType : existGym.gymType,
         description: updateDto.description ? updateDto.description : existGym.description,
-        certification: file.certification ? file.certification[0].location : existGym.certification,
+        certification: file.certification ? file.certification[0].transforms[0].location : existGym.certification,
       });
 
       const gymImgs = [];
-      if (file.img) {
-        for (let i = 0; i < file.img.length; i++) {
-          gymImgs.push({ img: file.img[i].location });
+      if (file.gymImg) {
+        for (let i = 0; i < file.gymImg.length; i++) {
+          gymImgs.push({ img: file.gymImg[i].transforms[0].location });
         }
       }
 
