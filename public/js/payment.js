@@ -68,7 +68,8 @@ async function requestPay(membership, amount) {
   const remainingDays = lastDayOfMonth.getDate() - currentDate.getDate() + 1;
 
   // 이번 달 남은 일 수 동안의 금액을 계산합니다.
-  let paymentAmount = Math.floor((currentDate.getDate() / lastDayOfMonth.getDate()) * amount);
+  let paymentAmount = Math.floor((remainingDays / lastDayOfMonth.getDate()) * amount);
+
 
   // ✨✨✨ 빌링 키 요청 ✨✨✨
   IMP.request_pay(
