@@ -234,9 +234,13 @@ tr:hover {
 }
 
 .gym-name {
+  width: 90%;
   font-size: 17px;
   font-weight: 500;
   color: var(--point-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .gym-location {
