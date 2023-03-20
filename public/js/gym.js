@@ -165,10 +165,10 @@ async function getGymList() {
       let gymname = responseData[i].name;
       let gymaddress = responseData[i].address;
       let temp = `
-            <div class="gym-approve-wait" onclick="location.href='/gym/gymDetail?gym=${gymId}'">
-              <img class="gym-list-img" src="${gymImgSrc}"  alt="" />
+            <div class="gym-approve-wait">
+              <img class="gym-list-img" src="${gymImgSrc}" onclick="location.href='/gym/gymDetail?gym=${gymId}'" alt="" />
               <ul class="gym-info-box">
-                <li class="gym-name">${gymname}</li>
+                <li class="gym-name" onclick="location.href='/gym/gymDetail?gym=${gymId}'">${gymname}</li>
                 <li class="all-gym-qrcode" onclick="QRCheck(${gymId})"></li>
                 <li class="gym-location">${gymaddress}</li>
                 <li class="gym-review-${gymId}"></li>
@@ -283,14 +283,14 @@ async function QRCheck(gymId) {
             }
 
             if (res.data[i].user.membership === 'Standard') {
-              let CrossfitOrPilates = false;
+              let crossfitOrPilates = false;
               res.data.forEach((item) => {
                 if (item.gym.gymType === '크로스핏' || item.gym.gymType === '필라테스') {
-                  if (CrossfitOrPilates) {
+                  if (crossfitOrPilates === true) {
                     alert('❌❌ 이번달은 이용 불가능합니다. ❌❌');
                     return;
                   } else {
-                    CrossfitOrPilates = true;
+                    crossfitOrPilates = true;
                   }
                 }
               });

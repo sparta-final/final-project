@@ -95,8 +95,8 @@
 
 .all-gym-qrcode {
   position: absolute;
-  top: -4px;
-  right: 5px;
+  top: 5px;
+  right: -10px;
   width: 24px;
   height: 24px;
   background-image: url(../images/qr-code.svg);
