@@ -172,7 +172,7 @@ export class PaymentService {
               buyer_name: paymentData.buyer_name,
               buyer_tel: paymentData.buyer_tel,
               buyer_email: paymentData.buyer_email,
-              notice_url: `${process.env.NGROK_URL}/api/payment/webhook`,
+              notice_url: `${process.env.SIXPACK_URL}/api/payment/webhook`,
             },
           ],
         },
