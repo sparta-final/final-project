@@ -37,7 +37,7 @@ export class FeedService {
       for (let i = 0; i < file.feedImg.length; i++) {
         feedImgs.push({ feedId: createFeed.id, image: file.feedImg[i].transforms[0].location });
       }
-      const createImg = await this.feedsImgRepository.save(feedImgs);
+      const createImg = await this.feedsImgRepository.insert(feedImgs);
       // await this.feedsImgRepository.save({
       //   feedId: createFeed.id,
       //   image: file.location,
@@ -224,7 +224,7 @@ export class FeedService {
     if (!user) throw new UnauthorizedException('로그인이 필요합니다.');
     await this.checkFeed(feedId);
 
-    const createComment = await this.commentsRepository.save({
+    const createComment = await this.commentsRepository.insert({
       feedId: feedId,
       userId: user.sub,
       ...createcommentDto,
