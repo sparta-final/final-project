@@ -54,7 +54,7 @@ async function getReviewDetail(reviewId) {
       <span class="user-name">${gymName}</span>
       </div>
       <div class="review-star-date-wrap">
-      <img class="reviews-star" src="/images/star_rating_${starString}.jpg" alt="" />
+      <img class="reviews-star" src="https://www.sixpack.pro/images/star_rating_${starString}.jpg" alt="" />
       <span class="reviews-date">${reviewCreatedAt}</span>
       <button class="review-delete-btn" onclick="deleteReview(${reviewId})">삭제</button>
     </div>

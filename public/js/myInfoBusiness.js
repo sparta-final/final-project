@@ -36,7 +36,9 @@ function businessUser() {
     .then((res) => {
       $('#name').val(res.data.name);
       $('#phone').val(res.data.phone);
-      document.getElementById('image').src = res.data.profileImage ? res.data.profileImage : '/images/default_profile.png';
+      document.getElementById('image').src = res.data.profileImage
+        ? res.data.profileImage
+        : 'https://www.sixpack.pro/images/default_profile.png';
     })
     .catch((err) => {
       console.log(err);
