@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Reviews } from 'src/global/entities/Reviews';
 import { UserGym } from 'src/global/entities/UserGym';
 import { MulterModule } from '@nestjs/platform-express';
-import { multerOptionsFactory } from 'src/global/util/multer.options';
+import { multerOptionsFactory } from 'src/global/common/utils/multer.options.factory';
 
 @Module({
   imports: [

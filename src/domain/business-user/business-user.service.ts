@@ -40,11 +40,12 @@ export class BusinessUserService {
    * @param UpdateBusinessUserInfoDto
    */
 
-  async updateBusinessUserInfo(user: JwtPayload, updateBusinessUserInfo: UpdateBusinessUserInfoDto, file: Express.MulterS3.File) {
+  async updateBusinessUserInfo(user: JwtPayload, updateBusinessUserInfo: UpdateBusinessUserInfoDto, file) {
     const hashedPassword = await bcrypt.hash(updateBusinessUserInfo.password, 10);
     const businessUser = await this.busniessUserRepo.findOne({
       where: { id: user.sub },
     });
+    console.log('file', file);
 
     const isMatch = await bcrypt.compare(updateBusinessUserInfo.currentPassword, businessUser.password);
 
@@ -56,7 +57,7 @@ export class BusinessUserService {
       businessUser.name = updateBusinessUserInfo.name;
       businessUser.phone = updateBusinessUserInfo.phone;
       businessUser.password = hashedPassword;
-      file ? (businessUser.profileImage = file.location) : (businessUser.profileImage = businessUser.profileImage);
+      file ? (businessUser.profileImage = file.transforms[0].location) : (businessUser.profileImage = businessUser.profileImage);
       await this.busniessUserRepo.save(businessUser);
 
       // businessUser 포함한 캐시 삭제

@@ -92,7 +92,7 @@ export class ReviewService {
    * @param usergymId @argument user @argument file @argument createReviewDto
    * @author 김승일
    */
-  async postReview(usergymId: number, user: JwtPayload, file: Express.MulterS3.File, createReviewDto: CreateReviewDto) {
+  async postReview(usergymId: number, user: JwtPayload, file, createReviewDto: CreateReviewDto) {
     const userGym = await this.userGymRepo
       .createQueryBuilder('userGym')
       .where('userGym.id = :usergymId', { usergymId })
@@ -111,7 +111,7 @@ export class ReviewService {
       const review = await queryRunner.manager.getRepository(Reviews).save({
         star: createReviewDto.star,
         review: createReviewDto.review,
-        reviewImg: file?.location,
+        reviewImg: file?.transforms[0].location,
         userGym: { id: userGym.id },
       });
       await queryRunner.manager.getRepository(UserGym).update({ id: userGym.id }, { reviewId: review.id });
