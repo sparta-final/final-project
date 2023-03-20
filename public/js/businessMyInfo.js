@@ -31,7 +31,7 @@ async function getMyGym() {
                         <div class="image-text-box">
                           <img src="${img}"/>
                           <div class="text-box">
-                            <h2 class="mygymName">${name}</h2>
+                            <h2 class="mygymName" onclick="location.href='/gym/gymDetail?gym=${id}'">${name}</h2>
                             <p class="my-gym-qrcode" onclick="location.href='/qrScan?id=${id}'"></p>
                             <p>${address}</p>
                             <div class="review-box">

@@ -70,7 +70,7 @@ export class PaymentService {
     await queryRunner.startTransaction();
 
     try {
-      await queryRunner.manager.getRepository(Payments).save({
+      await queryRunner.manager.getRepository(Payments).insert({
         userId: user_id,
         impUid: data.imp_uid,
         merchantUid: data.merchant_uid,

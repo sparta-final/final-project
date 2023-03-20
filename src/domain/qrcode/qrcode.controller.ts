@@ -25,8 +25,8 @@ export class QRcodeController {
   }
 
   @GetUseHistory()
-  @Get('/userecord/:year/:month')
-  async findUseRecord(@Param() date: MonthDto, @CurrentUser() user: JwtPayload) {
-    return await this.qrcodeService.findUseRecord(date, user);
+  @Get('/userHistory/:userId')
+  async findUseRecord(@Param('userId') userId: number) {
+    return await this.qrcodeService.findUseRecord(userId);
   }
 }
