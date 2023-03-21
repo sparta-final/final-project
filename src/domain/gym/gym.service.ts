@@ -269,12 +269,20 @@ export class GymService {
                 isApprove: 1,
               },
             },
+          ],
+          should: [
             {
               wildcard: {
                 name: `*${text}*`,
               },
             },
+            {
+              wildcard: {
+                address: `*${text}*`,
+              },
+            },
           ],
+          minimum_should_match: 1,
         },
       },
     });
