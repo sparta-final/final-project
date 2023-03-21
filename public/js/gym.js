@@ -1,6 +1,5 @@
 $(document).ready(function () {
   getLocation();
-  getGymList();
 });
 
 /**
@@ -27,9 +26,10 @@ function showPosition(position) {
   // 위도,경도를 주소로 변환
   const geocoder = new kakao.maps.services.Geocoder();
   const coord = new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude);
-  geocoder.coord2Address(coord.getLng(), coord.getLat(), function (result, status) {
+  geocoder.coord2Address(coord.getLng(), coord.getLat(), async function (result, status) {
     if (status === kakao.maps.services.Status.OK) {
       x.innerHTML = result[0].address.address_name;
+      await getGymList(x.innerHTML);
     }
     // div id="kakao-map"에 현재 위치 기반 지도를 표시
     const container = document.getElementById('kakao-map');
@@ -144,12 +144,13 @@ let loading = false;
 const limit = 8;
 let data = [];
 
-async function getGymList() {
+async function getGymList(text) {
+  console.log(text);
   if (loading) return;
   loading = true;
   const response = await axios({
     method: 'get',
-    url: '/api/gym/approveGym',
+    url: `/api/gym/address/${text}`,
     params: {
       offset: postCount,
       limit,
@@ -165,10 +166,11 @@ async function getGymList() {
       let gymname = responseData[i].name;
       let gymaddress = responseData[i].address;
       let temp = `
-            <div class="gym-approve-wait" onclick="location.href='/gym/gymDetail?gym=${gymId}'">
-              <img class="gym-list-img" src="${gymImgSrc}"  alt="" />
+            <div class="gym-approve-wait">
+              <img class="gym-list-img" src="${gymImgSrc}" onclick="location.href='/gym/gymDetail?gym=${gymId}'" alt="" />
               <ul class="gym-info-box">
-                <li class="gym-name">${gymname}</li>
+                <li class="gym-name" onclick="location.href='/gym/gymDetail?gym=${gymId}'">${gymname}</li>
+                <li class="all-gym-qrcode" onclick="QRCheck(${gymId})"></li>
                 <li class="gym-location">${gymaddress}</li>
                 <li class="gym-review-${gymId}"></li>
               </ul>
@@ -195,10 +197,11 @@ async function getGymList() {
       let name = remainingGyms[i].name;
       let address = remainingGyms[i].address;
       let temp2 = `
-      <div class="gym-approve-wait" onclick="location.href='/gym/gymDetail?gym=${id}'">
-        <img class="gym-list-img" src="${gymImgSrc2}"  alt="" />
+      <div class="gym-approve-wait">
+        <img class="gym-list-img" src="${gymImgSrc2}" onclick="location.href='/gym/gymDetail?gym=${id}'" alt="" />
         <ul class="gym-info-box">
-          <li class="gym-name">${name}</li>
+          <li class="gym-name" onclick="location.href='/gym/gymDetail?gym=${id}'">${name}</li>
+          <li class="all-gym-qrcode" onclick="QRCheck(${id})"></li>
           <li class="gym-location">${address}</li>
           <li class="gym-review-${id}"></li>
         </ul>
@@ -219,11 +222,115 @@ async function getGymList() {
   }
   loading = false;
 }
-getGymList();
 
 window.addEventListener('scroll', () => {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
   if (scrollTop + clientHeight >= scrollHeight - 5 && !loading && postCount > 0 && postCount < data.length) {
-    getGymList();
+    getGymList(text);
   }
 });
+
+// 임시 QR 코드
+async function QRCheck(gymId) {
+  const now = Date.now();
+  const findUserId = await axios.get('/api/loginUser/info', {
+    headers: {
+      accesstoken: `${localStorage.getItem('at')}`,
+      refreshtoken: `${localStorage.getItem('rt')}`,
+    },
+  });
+  const userId = findUserId.data;
+
+  await axios
+    .get(`/api/qrcode/${userId}`, {
+      headers: {
+        accesstoken: `${localStorage.getItem('at')}`,
+        refreshtoken: `${localStorage.getItem('rt')}`,
+      },
+    })
+    .then(async (res) => {
+      if (res.data[0] === null) {
+        alert('❌❌ 식스팩 멤버십 회원이 아닙니다. ❌❌');
+        return;
+      }
+      if (res.data[1] >= 1) {
+        alert('❌❌ 금일 이용 횟수를 초과하였습니다. ❌❌');
+        return;
+      }
+
+      await axios
+        .get(`/api/qrcode/userHistory/${userId}`, {
+          headers: {
+            accesstoken: `${localStorage.getItem('at')}`,
+            refreshtoken: `${localStorage.getItem('rt')}`,
+          },
+        })
+        .then(async (res) => {
+          const useGymIds = res.data.map((data) => data.gymId);
+          const useGymId = [...new Set(useGymIds)];
+
+          for (let i = 0; i < res.data.length; i++) {
+            if (res.data[i].user.membership === 'Basic') {
+              if (res.data[i].gym.gymType !== '헬스장') {
+                alert('❌❌ 출입 가능한 가맹점이 아닙니다. ❌❌');
+                return;
+              }
+
+              if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
+                alert('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌');
+                return;
+              }
+            }
+
+            if (res.data[i].user.membership === 'Standard') {
+              let crossfitOrPilates = false;
+              res.data.forEach((item) => {
+                if (item.gym.gymType === '크로스핏' || item.gym.gymType === '필라테스') {
+                  if (crossfitOrPilates === true) {
+                    alert('❌❌ 이번달은 이용 불가능합니다. ❌❌');
+                    return;
+                  } else {
+                    crossfitOrPilates = true;
+                  }
+                }
+              });
+              if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
+                alert('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌');
+                return;
+              }
+            }
+
+            if (res.data[i].user.membership === 'Premium') {
+              if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
+                alert('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌');
+                return;
+              }
+            }
+          }
+          await axios
+            .post(
+              `/api/qrcode/${now}/${userId}/${gymId}`,
+              { userId, gymId },
+              {
+                headers: {
+                  accesstoken: `${localStorage.getItem('at')}`,
+                  refreshtoken: `${localStorage.getItem('rt')}`,
+                },
+              }
+            )
+            .then((res) => {
+              alert('✅✅ 식스팩 회원 인증이 완료되었습니다. ✅✅');
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}

@@ -45,7 +45,7 @@ function getGymReivew(id) {
         <div class="review-card">
         <div class="review-header">
         <span class="user-name">${reviewUserNickName}</span>
-        <img class="review-rating" src="/images/star_rating_${starString}.jpg" alt="" />
+        <img class="review-rating" src="/images/star_rating_${starString}.png" alt="" />
           <span class="review-date">${reviewCreatedAt}</span>
         </div>
         <div class="review-content">

@@ -1,6 +1,6 @@
 const userType = localStorage.getItem('type');
 if (userType !== 'user') {
-  alert('일반 로그인이 필요한 서비스입니다.');
+  // alert('일반 로그인이 필요한 서비스입니다.');
   window.location.href = '/user/login';
 }
 
@@ -21,21 +21,19 @@ function enrollFeed() {
       },
     })
     .then((res) => {
-      console.log('res', res);
       window.location.replace('/feed');
     })
     .catch((err) => {
       console.log('err', err);
       if (res.status === 403) {
         alert('로그인이 필요한 서비스입니다.');
-        window.location.href = '/mypage';
+        // window.location.href = '/user/login';
       }
     });
 }
 
 //  미리보기
 function readMultipleImage(input) {
-  // console.log(input.files[3]);
   const feedPreviewImg = document.getElementById('feed-preview-img');
   feedPreviewImg.innerHTML = '';
   if (input.files) {

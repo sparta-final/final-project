@@ -56,7 +56,7 @@ export class GymService {
         gymImgs.push({ gymId: createGym.id, img: file.gymImg[i].transforms[0].location });
       }
 
-      const createImg = await this.gymImgrepository.save(gymImgs);
+      const createImg = await this.gymImgrepository.insert(gymImgs);
 
       // 엘라스틱서치에 체육관 등록
       await this.elasticSearch.index({
@@ -333,26 +333,28 @@ export class GymService {
     if (!pwMatch) throw new ConflictException('비밀번호가 일치하지 않습니다.');
   }
 
-  // async indexGym(gym: Gym) {
-  //   await this.elasticSearch.index({
-  //     index: 'gyms',
-  //     document: {
-  //       address: gym.address,
-  //     },
-  //   });
-  // }
+  /**
+   * 주소로 체육관 찾기
+   * @author 정호준
+   */
+  async searchGymByAddress(text) {
+    const cachedAddressGyms = await this.cacheManager.get(`gym:findByAddressGyms:${text}`);
+    if (cachedAddressGyms) return cachedAddressGyms;
 
-  // async searchGym(text: string) {
-  //   const { hits } = await this.elasticSearch.search({
-  //     index: 'gyms',
-  //     body: {
-  //       query: {
-  //         match: {
-  //           address: text,
-  //         },
-  //       },
-  //     },
-  //   });
-  //   return hits.hits.map((hit) => hit._source);
-  // }
+    const addressSplit = text.split(' ');
+    const gu = addressSplit[1];
+    console.log(addressSplit, gu);
+
+    const findByAddressGyms = await this.gymsrepository
+      .createQueryBuilder('gym')
+      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
+      .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
+      .where('gym.address LIKE :address', { address: `%${gu}%` })
+      .andWhere('gym.isApprove = :isApprove', { isApprove: 1 })
+      .getMany();
+
+    await this.cacheManager.set(`gym:findByAddressGyms:${text}`, findByAddressGyms, { ttl: 60 });
+
+    return findByAddressGyms;
+  }
 }

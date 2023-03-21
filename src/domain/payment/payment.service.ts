@@ -70,7 +70,7 @@ export class PaymentService {
     await queryRunner.startTransaction();
 
     try {
-      await queryRunner.manager.getRepository(Payments).save({
+      await queryRunner.manager.getRepository(Payments).insert({
         userId: user_id,
         impUid: data.imp_uid,
         merchantUid: data.merchant_uid,
@@ -172,7 +172,7 @@ export class PaymentService {
               buyer_name: paymentData.buyer_name,
               buyer_tel: paymentData.buyer_tel,
               buyer_email: paymentData.buyer_email,
-              notice_url: `${process.env.NGROK_URL}/api/payment/webhook`,
+              notice_url: `${process.env.SIXPACK_URL}/api/payment/webhook`,
             },
           ],
         },

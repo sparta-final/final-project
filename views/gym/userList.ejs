@@ -3,23 +3,9 @@
   const id = +urlParams.get('id');
 </script>
 <section>
-  <div id="mobile-container" class="mobile-container">
-    <div class="info-container">
-      <img src="" alt="" id="profileImage" />
-      <button class="custom-btn btn-1" id="logout" onclick="logout()">로그아웃</button>
-      <span id="name"></span>
-      <a href="/business/myinfoBusiness"><img src="/images/right-arrow.png" alt="" height="10px" /></a>
-      <br />
-      <span id="email"></span>
-    </div>
-    <hr />
-  </div>
-
   <table class="ranking-table">
     <thead class="text-gray-light fs-12 text-uppercase">
-      <tr class="table-caption-row" id="thisGymName">
-        <!-- <td colspan="5" class="admin-gym-rank">스파르타 헬스장</td> -->
-      </tr>
+      <tr class="table-caption-row" id="thisGymName"></tr>
       <tr class="ta-center">
         <th class="fs-12-bold">순위</th>
         <th class="fs-12-bold">유저</th>
