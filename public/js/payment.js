@@ -20,7 +20,6 @@ function user(e) {
       },
     })
     .then((res) => {
-      console.log('✨✨✨', '2', res, '✨✨✨');
       if (res.data.membership === 'Basic' || res.data.membership === 'Standard' || res.data.membership === 'Premium') {
         alert('이미 멤버쉽을 구독중입니다. 멤버쉽 해지 후 기간이 만료되면 다시 구독해주세요. ');
       } else if (localStorage.getItem('type') === 'user') {

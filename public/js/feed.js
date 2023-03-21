@@ -118,7 +118,6 @@ function getGym() {
       } else {
         const remainingFeeds = data.slice(postCount);
         const maxFeedsToLoad = Math.min(limit, remainingFeeds.length);
-        console.log(remainingFeeds);
         for (let i = 0; i < maxFeedsToLoad; i++) {
           let id = remainingFeeds[i].id;
           const comments = await axios.get(`/api/feed/${id}/comment`);

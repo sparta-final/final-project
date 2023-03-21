@@ -48,16 +48,9 @@ function getComments(id) {
         let tokenPayload = token ? token.split('.')[1] : null;
         let decodedPayload = tokenPayload ? atob(tokenPayload) : null;
         let parsedPayload = decodedPayload ? JSON.parse(decodedPayload) : null;
-
-        console.log('comments_id', comments_id);
-
-        console.log('parsedPayload', parsedPayload);
-
         if (parsedPayload === null) {
           parsedPayload = { sub: 0 };
         }
-
-        console.log('parsedPayload.sub', parsedPayload.sub);
 
         if (commentsUserId === parsedPayload.sub) {
           let temp = `

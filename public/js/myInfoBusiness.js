@@ -55,8 +55,6 @@ function putInfo() {
   const phone = document.getElementById('phone').value;
   const profileImage = document.getElementById('profileImage');
 
-  console.log('profileImage: ', profileImage);
-
   const formData = new FormData();
   formData.append('name', name);
   formData.append('currentPassword', currentPassword);
