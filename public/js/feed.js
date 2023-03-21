@@ -35,6 +35,10 @@ function getGym() {
       let decodedPayload = tokenPayload ? atob(tokenPayload) : null;
       let parsedPayload = decodedPayload ? JSON.parse(decodedPayload) : null;
 
+      if (parsedPayload === null) {
+        parsedPayload = { sub: 0 };
+      }
+
       if (postCount === 0) {
         feedContainer.innerHTML = '';
         for (let i = 0; i < limit && i < data.length; i++) {
