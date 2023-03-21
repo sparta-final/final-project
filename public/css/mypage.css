@@ -50,6 +50,7 @@
   border-radius: 10px;
   margin: 15px 0;
   color: var(--main-color);
+  font-weight: 600;
 }
 
 .myinfo-update-btn:hover {
@@ -119,6 +120,10 @@ input[type='file']::-webkit-file-upload-button {
   margin-left: 5%;
   padding: 20px 0;
   border-bottom: 1px solid var(--sub-color-9);
+}
+
+.info-title {
+  color: var(--sub-color-1);
 }
 
 .info-container > img {

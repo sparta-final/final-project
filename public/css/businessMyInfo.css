@@ -50,7 +50,8 @@
   right: 5px;
   width: 24px;
   height: 24px;
-  background-image: url(../images/qr-code.svg);
+  background-image: url(../images/qr-code.png);
+  background-size: cover;
   cursor: pointer;
 }
 
@@ -114,6 +115,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .review-go-btn {
