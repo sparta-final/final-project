@@ -139,7 +139,7 @@ export class GymService {
     await queryRunner.startTransaction();
 
     try {
-      await this.gymsrepository.update(gymId, {
+      const updateGym = await this.gymsrepository.update(gymId, {
         name: updateDto.name ? updateDto.name : existGym.name,
         phone: updateDto.phone ? updateDto.phone : existGym.phone,
         gymType: updateDto.gymType ? updateDto.gymType : existGym.gymType,
@@ -169,6 +169,16 @@ export class GymService {
           }
         })
       );
+
+      // 엘라스틱서치에 체육관 수정
+      await this.elasticSearch.update({
+        index: 'gym',
+        id: gymId.toString(),
+        doc: {
+          ...updateGym,
+          gymImgs: gymImgs,
+        },
+      });
 
       // admin,gym 포함한 캐시 삭제
       const admincaches = await this.cacheManager.store.keys('admin*');
@@ -201,6 +211,12 @@ export class GymService {
     try {
       await this.gymsrepository.softDelete(gymId);
       await this.gymImgrepository.softDelete({ gymId: gymId });
+
+      // 엘라스틱서치에 체육관 삭제
+      await this.elasticSearch.delete({
+        index: 'gym',
+        id: gymId.toString(),
+      });
 
       // admin,gym 포함한 캐시 삭제
       const admincaches = await this.cacheManager.store.keys('admin*');
@@ -246,14 +262,25 @@ export class GymService {
     const searchGyms = await this.elasticSearch.search({
       index: 'gym',
       query: {
-        wildcard: {
-          name: `*${text}*`,
+        bool: {
+          must: [
+            {
+              term: {
+                isApprove: 1,
+              },
+            },
+            {
+              wildcard: {
+                name: `*${text}*`,
+              },
+            },
+          ],
         },
       },
     });
-    const hits = searchGyms.hits.hits.map((hit) => hit._source);
-    return hits;
+    return searchGyms.hits.hits.map((hit) => hit._source);
   }
+
   /**
    * 승인된 체육관만 가져오기
    * @author 정호준

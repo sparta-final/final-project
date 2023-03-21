@@ -14,6 +14,7 @@ import { UserGym } from 'src/global/entities/UserGym';
 import * as _ from 'lodash';
 import { isApprove } from 'src/global/entities/common/gym.isApprove';
 import { arrayBuffer } from 'stream/consumers';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 
 @Injectable()
 export class AdminService {
@@ -24,7 +25,8 @@ export class AdminService {
     @InjectRepository(UserGym) private userGymRepo: Repository<UserGym>,
     @InjectRepository(Calculate) private calculateRepo: Repository<Calculate>,
     @InjectRepository(Reviews) private reviewRepo: Repository<Reviews>,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private elasticSearch: ElasticsearchService
   ) {}
 
   /**
@@ -270,6 +272,15 @@ export class AdminService {
   async approveGym(gymId: number) {
     const updateGym = await this.gymRepo.update(gymId, {
       isApprove: 1,
+    });
+
+    // 엘라스틱서치 업데이트
+    await this.elasticSearch.update({
+      index: 'gym',
+      id: gymId.toString(),
+      doc: {
+        isApprove: 1,
+      },
     });
 
     // admin,gym 포함한 캐시 삭제
