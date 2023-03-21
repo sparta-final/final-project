@@ -1,6 +1,5 @@
 $(document).ready(function () {
   getLocation();
-  getGymList();
 });
 
 /**
@@ -27,9 +26,10 @@ function showPosition(position) {
   // 위도,경도를 주소로 변환
   const geocoder = new kakao.maps.services.Geocoder();
   const coord = new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude);
-  geocoder.coord2Address(coord.getLng(), coord.getLat(), function (result, status) {
+  geocoder.coord2Address(coord.getLng(), coord.getLat(), async function (result, status) {
     if (status === kakao.maps.services.Status.OK) {
       x.innerHTML = result[0].address.address_name;
+      await getGymList(x.innerHTML);
     }
     // div id="kakao-map"에 현재 위치 기반 지도를 표시
     const container = document.getElementById('kakao-map');
@@ -144,12 +144,13 @@ let loading = false;
 const limit = 8;
 let data = [];
 
-async function getGymList() {
+async function getGymList(text) {
+  console.log(text);
   if (loading) return;
   loading = true;
   const response = await axios({
     method: 'get',
-    url: '/api/gym/approveGym',
+    url: `/api/gym/address/${text}`,
     params: {
       offset: postCount,
       limit,
@@ -221,12 +222,11 @@ async function getGymList() {
   }
   loading = false;
 }
-getGymList();
 
 window.addEventListener('scroll', () => {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
   if (scrollTop + clientHeight >= scrollHeight - 5 && !loading && postCount > 0 && postCount < data.length) {
-    getGymList();
+    getGymList(text);
   }
 });
 
