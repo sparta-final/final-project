@@ -45,7 +45,6 @@ export class BusinessUserService {
     const businessUser = await this.busniessUserRepo.findOne({
       where: { id: user.sub },
     });
-    console.log('file', file);
 
     const isMatch = await bcrypt.compare(updateBusinessUserInfo.currentPassword, businessUser.password);
 

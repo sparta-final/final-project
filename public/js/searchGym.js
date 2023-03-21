@@ -36,7 +36,6 @@ async function searchGymByText(text) {
     url: `/api/gym/search/${text}`,
   });
   const data = response.data;
-  console.log(data);
 
   for (const gym of data) {
     let gymId = gym.id;

@@ -72,3 +72,10 @@ export const ApproveGymGet = () => {
     ApiResponse({ status: 400, description: '조회 실패' })
   );
 };
+export const SearchGymByAddress = () => {
+  return applyDecorators(
+    ApiOperation({ summary: ' 주소로 체육관 조회' }),
+    ApiResponse({ status: 200, description: '조회 성공' }),
+    ApiResponse({ status: 400, description: '조회 실패' })
+  );
+};

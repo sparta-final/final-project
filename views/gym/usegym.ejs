@@ -23,7 +23,6 @@
           }
         )
         .then((res) => {
-          console.log(res);
           alert('입장완료');
         })
         .catch((err) => {
@@ -39,7 +38,6 @@
           password: document.getElementById('pw').value,
         })
         .then((res) => {
-          console.log(res);
           localStorage.setItem('token', res.data.at);
         })
         .catch((err) => {

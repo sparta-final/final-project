@@ -174,7 +174,6 @@ function getPaymentData(data) {
       var date = new Date();
       let y = date.getFullYear();
       let m = date.getMonth() + 1;
-      console.log(y, m);
       var nextPay = new Date(y, m, 1).toLocaleString().substring(0, 10);
 
       const response = res.data;
@@ -183,8 +182,6 @@ function getPaymentData(data) {
 
       let membership = response[length - 1].merchantUid.split('_')[0];
       let amount = response[length - 1].amount.toLocaleString();
-
-      console.log('length : ', length);
 
       let temp = `
       <p class="my-member">내 멤버쉽</p>

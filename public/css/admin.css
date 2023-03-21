@@ -159,7 +159,7 @@ td.table-caption {
 }
 
 tr:hover {
-  background-color: #eee;
+  background-color: var(--sub-color-9);
 }
 
 .cursor {
