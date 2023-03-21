@@ -8,6 +8,7 @@ import { DataSource, EntityManager, Repository } from 'typeorm';
 import { JwtPayload } from '../auth/types/jwtPayload.type';
 import * as bcrypt from 'bcrypt';
 import { isApprove } from 'src/global/entities/common/gym.isApprove';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 
 @Injectable()
 export class GymService {
@@ -16,12 +17,13 @@ export class GymService {
     @InjectRepository(Busienssusers) private businessUserrepository: Repository<Busienssusers>,
     @InjectRepository(GymImg) private gymImgrepository: Repository<GymImg>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    private dataSource: DataSource
+    private dataSource: DataSource,
+    private elasticSearch: ElasticsearchService
   ) {}
 
   /**
-   * 체육관 생성
-   * @author 정호준
+   * 체육관 생성(엘라스틱서치 적용)
+   * @author 정호준, 김승일
    * @param PostGymDto
    */
   async postGyms({ file, postgymDto, user }) {
@@ -55,6 +57,16 @@ export class GymService {
       }
 
       const createImg = await this.gymImgrepository.save(gymImgs);
+
+      // 엘라스틱서치에 체육관 등록
+      await this.elasticSearch.index({
+        index: 'gym',
+        id: createGym.id.toString(),
+        document: {
+          gymImgs: createImg,
+          ...createGym,
+        },
+      });
 
       // admin,gym 포함한 캐시 삭제
       const admincaches = await this.cacheManager.store.keys('admin*');
@@ -230,20 +242,32 @@ export class GymService {
    * 앞글자로 체육관 찾기
    * @author 정호준
    */
-  async searchGymByText(text) {
-    const cachedSearchGyms = await this.cacheManager.get(`gym:searchGyms:${text}`);
-    if (cachedSearchGyms) return cachedSearchGyms;
+  async searchGymByText(text: string) {
+    // const cachedSearchGyms = await this.cacheManager.get(`gym:searchGyms:${text}`);
+    // if (cachedSearchGyms) return cachedSearchGyms;
 
-    const searchGyms = await this.gymsrepository
-      .createQueryBuilder('gym')
-      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
-      .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
-      .where('gym.name LIKE :name', { name: `${text}%` })
-      .getMany();
+    // const searchGyms = await this.gymsrepository
+    //   .createQueryBuilder('gym')
+    //   .leftJoinAndSelect('gym.gymImgs', 'gymImg')
+    //   .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
+    //   .where('gym.name LIKE :name', { name: `${text}%` })
+    //   .getMany();
 
-    await this.cacheManager.set(`gym:searchGyms:${text}`, searchGyms, { ttl: 60 });
+    // await this.cacheManager.set(`gym:searchGyms:${text}`, searchGyms, { ttl: 60 });
 
-    return searchGyms;
+    // return searchGyms;
+
+    // 엘라스틱서치 검색 적용(헬스장 이름 일부분으로 검색, 매핑 필요)
+    const searchGyms = await this.elasticSearch.search({
+      index: 'gym',
+      query: {
+        wildcard: {
+          name: `*${text}*`,
+        },
+      },
+    });
+    const hits = searchGyms.hits.hits.map((hit) => hit._source);
+    return hits;
   }
   /**
    * 승인된 체육관만 가져오기
@@ -288,4 +312,27 @@ export class GymService {
 
     if (!pwMatch) throw new ConflictException('비밀번호가 일치하지 않습니다.');
   }
+
+  // async indexGym(gym: Gym) {
+  //   await this.elasticSearch.index({
+  //     index: 'gyms',
+  //     document: {
+  //       address: gym.address,
+  //     },
+  //   });
+  // }
+
+  // async searchGym(text: string) {
+  //   const { hits } = await this.elasticSearch.search({
+  //     index: 'gyms',
+  //     body: {
+  //       query: {
+  //         match: {
+  //           address: text,
+  //         },
+  //       },
+  //     },
+  //   });
+  //   return hits.hits.map((hit) => hit._source);
+  // }
 }
