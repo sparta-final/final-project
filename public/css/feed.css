@@ -116,7 +116,7 @@ img.feed-image {
 
 .feed-comments {
   width: 80px;
-  color: var(--sub-color-8);
+  color: var(--sub-color-11);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -142,7 +142,7 @@ img.feed-image {
   display: block;
   width: 2px;
   height: 22px;
-  background-color: var(--main-color);
+  background-color: var(--sub-color-1);
 }
 
 .feed-btn-horizon {
@@ -152,7 +152,7 @@ img.feed-image {
   display: block;
   width: 22px;
   height: 2px;
-  background-color: var(--main-color);
+  background-color: var(--sub-color-1);
 }
 
 /* 댓글 */
@@ -222,6 +222,7 @@ img.feed-image {
   border-radius: 20px;
   padding: 5px 15px;
   margin-left: 3%;
+  color: var(--sub-color-4);
 }
 
 .comment-btn {
@@ -326,11 +327,10 @@ img.preview-img {
 
 .feed-textarea {
   min-height: 200px;
-  /* border: 1px solid var(--point-color); */
-  /* border-radius: 5px; */
   margin-left: 6px;
   margin-top: 10px;
   padding: 10px;
+  color: var(--sub-color-10);
 }
 
 .feed-upload-btn {

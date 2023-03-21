@@ -48,7 +48,7 @@
   left: 0;
   width: 24px;
   height: 24px;
-  background-image: url(../images/qr-code.svg);
+  background-image: url(../images/qr-code.png);
   background-size: cover;
   cursor: pointer;
 }
@@ -63,12 +63,12 @@
 }
 
 .qr-code {
-  background-image: url(../images/qr-code.svg);
+  background-image: url(../images/qr-code.png);
   display: none;
 }
 
 .search {
-  background-image: url(../images/search.svg);
+  background-image: url(../images/search.png);
   background-size: cover;
 }
 
@@ -87,6 +87,7 @@
 .search-input {
   width: 100%;
   border: none;
+  background: var(--main-color);
   border-bottom: 1px solid var(--point-color);
   color: var(--sub-color-4);
   font-weight: 600;
