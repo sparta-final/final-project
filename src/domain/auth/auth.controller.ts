@@ -73,7 +73,7 @@ export class AuthController {
   async KakaoLoginCallback(@CurrentUser() user: KakaoLoginUserDto, @Res() res: Response) {
     const tokens = await this.authservice.KakaoLogin(user, res);
     // 토큰 쿼리스트링으로 보내기
-    return res.redirect(`http://sixpack.pro?at=${tokens.AccessToken}&rt=${tokens.RefreshToken}`);
+    return res.redirect(`https://www.sixpack.pro?at=${tokens.AccessToken}&rt=${tokens.RefreshToken}`);
   }
 
   @Public()

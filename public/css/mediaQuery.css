@@ -1,0 +1,26 @@
+@media screen and (max-width: 1500px) {
+  .web-main-wrap {
+    left: 25%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .web-main-wrap {
+    left: 15%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .web-main-wrap {
+    display: none;
+  }
+  #mobile-container {
+    margin: auto;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  body {
+    background: #000;
+  }
+}

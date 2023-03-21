@@ -17,8 +17,6 @@ function verifyUser(year, month) {
         gymList.push(data[j].gymId);
       }
       const eachGym = [...new Set(gymList)];
-      console.log(data);
-      console.log(eachGym);
       for (let i = 0; i < data.length; i++) {
         if (Today === data[i].createdAt.split('-')[2].split('T')[0]) {
           alert('하루 1번만 이용 가능합니다.');

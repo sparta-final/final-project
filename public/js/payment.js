@@ -1,48 +1,37 @@
 const IMP = window.IMP;
 IMP.init('imp52616317');
 
-if (localStorage.getItem('at') && localStorage.getItem('rt')) {
-  function user() {
-    axios
-      .get(`/api/user`, {
-        headers: {
-          accesstoken: `${localStorage.getItem('at')}`,
-          refreshtoken: `${localStorage.getItem('rt')}`,
-        },
-      })
-      .then((res) => {
-        const body = document.querySelector('body');
-        body.addEventListener('click', function (e) {
-          if (e.target.id !== 'subscribe-btn') return;
-
-          if (res.data.membership === 'Basic' || res.data.membership === 'Standard' || res.data.membership === 'Premium') {
-            alert('이미 멤버쉽을 구독중입니다. 멤버쉽 해지 후 기간이 만료되면 다시 구독해주세요. ');
-          } else if (localStorage.getItem('type') === 'user') {
-            const membership = e.target.parentElement.firstElementChild.textContent;
-            const amountText = e.target.parentElement.children[1].textContent;
-            const amount = Number(amountText.replace(',', '').substring(0, 6));
-            requestPay(membership, amount);
-          }
-        });
-      })
-      .catch((err) => {
-        console.log('err: ', err);
-      });
+const body = document.querySelector('body');
+body.addEventListener('click', function (e) {
+  if (e.target.id !== 'subscribe-btn') return;
+  if (localStorage.getItem('at') && localStorage.getItem('rt')) {
+    user(e);
+  } else {
+    alert('일반유저로 로그인 후 진행해 주세요.');
+    window.location.replace(`/user/login`);
   }
-} else {
-  const body = document.querySelector('body');
-  body.addEventListener('click', function (e) {
-    if (e.target.id !== 'subscribe-btn') return;
-    if (localStorage.getItem('type') === 'user') {
-      const membership = e.target.parentElement.firstElementChild.textContent;
-      const amountText = e.target.parentElement.children[1].textContent;
-      const amount = Number(amountText.replace(',', '').substring(0, 6));
-      requestPay(membership, amount);
-    } else {
-      alert('일반유저로 로그인 후 진행해 주세요.');
-      window.location.replace(`/user/login`);
-    }
-  });
+});
+function user(e) {
+  axios
+    .get(`/api/user`, {
+      headers: {
+        accesstoken: `${localStorage.getItem('at')}`,
+        refreshtoken: `${localStorage.getItem('rt')}`,
+      },
+    })
+    .then((res) => {
+      if (res.data.membership === 'Basic' || res.data.membership === 'Standard' || res.data.membership === 'Premium') {
+        alert('이미 멤버쉽을 구독중입니다. 멤버쉽 해지 후 기간이 만료되면 다시 구독해주세요. ');
+      } else if (localStorage.getItem('type') === 'user') {
+        const membership = e.target.parentElement.firstElementChild.textContent;
+        const amountText = e.target.parentElement.children[1].textContent;
+        const amount = Number(amountText.replace(',', '').substring(0, 6));
+        requestPay(membership, amount);
+      }
+    })
+    .catch((err) => {
+      console.log('err: ', err);
+    });
 }
 // pg결제창 이용 빌링키 발급 요청
 async function requestPay(membership, amount) {
@@ -70,7 +59,6 @@ async function requestPay(membership, amount) {
   // 이번 달 남은 일 수 동안의 금액을 계산합니다.
   let paymentAmount = Math.floor((remainingDays / lastDayOfMonth.getDate()) * amount);
 
-
   // ✨✨✨ 빌링 키 요청 ✨✨✨
   IMP.request_pay(
     {
@@ -85,7 +73,7 @@ async function requestPay(membership, amount) {
       buyer_tel: phone,
       buyer_addr: '회원가입시 주소 안받음',
       buyer_postcode: '12345',
-      m_redirect_url: 'http://sixpack.pro/',
+      m_redirect_url: 'https://www.sixpack.pro/',
     },
     async function (rsp) {
       if (rsp.success) {

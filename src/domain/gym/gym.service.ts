@@ -288,4 +288,29 @@ export class GymService {
 
     if (!pwMatch) throw new ConflictException('비밀번호가 일치하지 않습니다.');
   }
+
+  /**
+   * 주소로 체육관 찾기
+   * @author 정호준
+   */
+  async searchGymByAddress(text) {
+    const cachedAddressGyms = await this.cacheManager.get(`gym:findByAddressGyms:${text}`);
+    if (cachedAddressGyms) return cachedAddressGyms;
+
+    const addressSplit = text.split(' ');
+    const gu = addressSplit[1];
+    console.log(addressSplit, gu);
+
+    const findByAddressGyms = await this.gymsrepository
+      .createQueryBuilder('gym')
+      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
+      .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
+      .where('gym.address LIKE :address', { address: `%${gu}%` })
+      .andWhere('gym.isApprove = :isApprove', { isApprove: 1 })
+      .getMany();
+
+    await this.cacheManager.set(`gym:findByAddressGyms:${text}`, findByAddressGyms, { ttl: 60 });
+
+    return findByAddressGyms;
+  }
 }

@@ -96,7 +96,7 @@
   border: none;
   border-radius: 10px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--main-color);
   text-align: center;
 }
@@ -122,28 +122,28 @@
   text-transform: uppercase;
 }
 .text-gray-light {
-  color: var(--sub-color-4);
+  color: var(--sub-color-10);
 }
 .text-gray-dark {
-  color: #3b4852;
+  color: var(--sub-color-4);
 }
 
 td {
   padding: 8px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--sub-color-11);
 }
 
 th {
   padding: 8px;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  border-top: 1px solid var(--sub-color-11);
+  border-bottom: 1px solid var(--sub-color-11);
 }
 
 .ranking-table {
   width: 95%;
   margin: auto;
   border: 1px solid #eee;
-  box-shadow: 0 2px 12px 2px #eee;
+  box-shadow: 0 2px 12px 2px #000;
   border-collapse: collapse;
   border-radius: 8px;
   overflow: hidden;
@@ -159,7 +159,7 @@ td.table-caption {
 }
 
 tr:hover {
-  background-color: #eee;
+  background-color: var(--sub-color-9);
 }
 
 .cursor {
@@ -259,6 +259,7 @@ tr:hover {
   border: none;
   border-radius: 15px;
   color: var(--main-color);
+  font-weight: 600;
   text-align: center;
   cursor: pointer;
 }

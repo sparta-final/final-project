@@ -8,13 +8,13 @@
   position: absolute;
   top: 15px;
   left: 5px;
-  color: var(--sub-color-8);
+  color: var(--sub-color-4);
   font-weight: 600;
 }
 .map-icon {
   position: absolute;
   top: 13px;
-  right: 15px;
+  right: 5px;
   width: 31px;
   height: 27px;
   cursor: pointer;
@@ -53,7 +53,7 @@
   right: 30px;
   width: 30px;
   height: 30px;
-  background-image: url(https://www.sixpack.pro/images/close.png);
+  background-image: url(//www.sixpack.pro/images/close.png);
   background-size: cover;
   z-index: 10001;
   cursor: pointer;
@@ -99,6 +99,7 @@
   right: -10px;
   width: 24px;
   height: 24px;
-  background-image: url(../images/qr-code.svg);
+  background-image: url(//www.sixpack.pro/images/qr-code.png);
+  background-size: cover;
   cursor: pointer;
 }

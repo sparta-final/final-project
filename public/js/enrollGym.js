@@ -29,7 +29,6 @@ function execDaumPostcode() {
       document.getElementById('address').value = addr;
       // 주소로 상세 정보를 검색
       geocoder.addressSearch(data.address, function (results, status) {
-        console.log('result', results);
         // 정상적으로 검색이 완료됐으면
         if (status === daum.maps.services.Status.OK) {
           var result = results[0]; //첫번째 결과의 값을 활용

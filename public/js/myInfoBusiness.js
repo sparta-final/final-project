@@ -38,7 +38,7 @@ function businessUser() {
       $('#phone').val(res.data.phone);
       document.getElementById('image').src = res.data.profileImage
         ? res.data.profileImage
-        : 'https://www.sixpack.pro/images/default_profile.png';
+        : '//www.sixpack.pro/images/default_profile.png';
     })
     .catch((err) => {
       console.log(err);
@@ -56,8 +56,6 @@ function putInfo() {
     : document.getElementById('currentPassword').value;
   const phone = document.getElementById('phone').value;
   const profileImage = document.getElementById('profileImage');
-
-  console.log('profileImage: ', profileImage);
 
   const formData = new FormData();
   formData.append('name', name);
