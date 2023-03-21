@@ -12,7 +12,7 @@ $(document).ready(function () {
   getMembers();
   getGym();
   getRank(category, year, month);
-  salesMonth();
+  salesMonth(category, year, month);
 });
 
 function getMembers() {
@@ -161,7 +161,7 @@ function getRank(category, year, month) {
     });
 }
 
-function salesMonth() {
+function salesMonth(category, year, month) {
   axios({
     method: 'get',
     url: `api/admin/sales/${year}/${month}`,
