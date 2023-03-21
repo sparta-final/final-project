@@ -21,7 +21,6 @@ function enrollFeed() {
       },
     })
     .then((res) => {
-      console.log('res', res);
       window.location.replace('/feed');
     })
     .catch((err) => {
@@ -35,7 +34,6 @@ function enrollFeed() {
 
 //  미리보기
 function readMultipleImage(input) {
-  // console.log(input.files[3]);
   const feedPreviewImg = document.getElementById('feed-preview-img');
   feedPreviewImg.innerHTML = '';
   if (input.files) {
