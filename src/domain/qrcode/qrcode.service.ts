@@ -21,7 +21,7 @@ export class QRcodeService {
   async createQRcode(user: JwtPayload) {
     const date = Date.now();
     // TODO : QR코드 찍으면 사업자가 유저정보 보고 이용기록 저장
-    const url = `${process.env.NGROK_URL}/usegym?date=${date}&id=${user.sub}`;
+    const url = `${process.env.SIXPACK_URL}/usegym?date=${date}&id=${user.sub}`;
     const qr = await qrcode.toDataURL(url);
     return qr;
   }

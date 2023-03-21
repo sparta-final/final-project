@@ -15,7 +15,10 @@ function user() {
     .then((res) => {
       $('#nickname').text(res.data.nickname);
       $('#email').text(res.data.email);
-      $('#profileImage').attr('src', res.data.profileImage ? res.data.profileImage : '/images/default_profile.png');
+      $('#profileImage').attr(
+        'src',
+        res.data.profileImage ? res.data.profileImage : '//www.sixpack.pro/images/default_profile.png'
+      );
 
       if (window.location.href.includes('paymentDetails')) {
         getPaymentData(res.data);
