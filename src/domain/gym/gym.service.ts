@@ -239,25 +239,10 @@ export class GymService {
   }
 
   /**
-   * 앞글자로 체육관 찾기
-   * @author 정호준
+   * 엘라스틱서치 검색 적용(헬스장 이름 일부분으로 검색)
+   * @author 정호준, 김승일
    */
   async searchGymByText(text: string) {
-    // const cachedSearchGyms = await this.cacheManager.get(`gym:searchGyms:${text}`);
-    // if (cachedSearchGyms) return cachedSearchGyms;
-
-    // const searchGyms = await this.gymsrepository
-    //   .createQueryBuilder('gym')
-    //   .leftJoinAndSelect('gym.gymImgs', 'gymImg')
-    //   .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
-    //   .where('gym.name LIKE :name', { name: `${text}%` })
-    //   .getMany();
-
-    // await this.cacheManager.set(`gym:searchGyms:${text}`, searchGyms, { ttl: 60 });
-
-    // return searchGyms;
-
-    // 엘라스틱서치 검색 적용(헬스장 이름 일부분으로 검색, 매핑 필요)
     const searchGyms = await this.elasticSearch.search({
       index: 'gym',
       query: {
