@@ -138,7 +138,6 @@ function commentDelete(id) {
       })
       .then((res) => {
         window.location.replace(`/feed/${feedId}/comments`);
-        alert('댓글이 삭제되었습니다.');
       })
       .catch((err) => {
         console.log(err);
