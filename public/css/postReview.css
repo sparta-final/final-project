@@ -26,6 +26,7 @@
   margin-left: 22px;
   margin-top: 65px;
   padding: 10px;
+  color: var(--sub-color-10);
 }
 
 .review_write_btn {
