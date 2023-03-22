@@ -15,6 +15,7 @@ import {
   GymUpdate,
   MyGymGet,
   SearchGymByAddress,
+  SearchGymByAddressWide,
   SearchGymByText,
 } from './gym.decorators';
 import { GymService } from './gym.service';
@@ -104,5 +105,12 @@ export class GymController {
   @Get('/address/:text')
   async searchGymByAddress(@Param('text') text: string) {
     return await this.gymservice.searchGymByAddress(text);
+  }
+
+  @SearchGymByAddressWide()
+  @Public()
+  @Get('/address/wide/:text')
+  async searchGymByAddressWide(@Param('text') text: string) {
+    return await this.gymservice.searchGymByAddressWide(text);
   }
 }

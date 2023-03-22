@@ -145,7 +145,6 @@ const limit = 8;
 let data = [];
 
 async function getGymList(text) {
-  console.log(text);
   if (loading) return;
   loading = true;
   const response = await axios({
@@ -156,6 +155,81 @@ async function getGymList(text) {
       limit,
     },
   });
+  if (response.data.length === 0) {
+    const response = await axios({
+      method: 'get',
+      url: `/api/gym/address/wide/${text}`,
+      params: {
+        offset: postCount,
+        limit,
+      },
+    });
+    const responseData = response.data;
+    data = [...data, ...responseData];
+    if (postCount === 0) {
+      gymContainer.innerHTML = '';
+      for (let i = 0; i < limit && i < responseData.length; i++) {
+        const gymImgSrc = responseData[i].gymImgs[0].img;
+        let gymId = responseData[i].id;
+        let gymname = responseData[i].name;
+        let gymaddress = responseData[i].address;
+        let temp = `
+            <div class="gym-approve-wait">
+              <img class="gym-list-img" src="${gymImgSrc}" onclick="location.href='/gym/gymDetail?gym=${gymId}'" alt="" />
+              <ul class="gym-info-box">
+                <li class="gym-name" onclick="location.href='/gym/gymDetail?gym=${gymId}'">${gymname}</li>
+                <li class="all-gym-qrcode" onclick="QRCheck(${gymId})"></li>
+                <li class="gym-location">${gymaddress}</li>
+                <li class="gym-review-${gymId}"></li>
+              </ul>
+            </div>
+            `;
+        $('.approve-wait').append(temp);
+        const res = await axios({
+          method: 'get',
+          url: `/api/gym/${gymId}/review`,
+        });
+        const reivewsLength = res.data.reviews.length;
+        let avgStar = `
+            <div class="gym-star">⭐<span>${res.data.avgStar}</span>(${reivewsLength})</div>
+            `;
+        $(`.gym-review-${gymId}`).append(avgStar);
+      }
+      postCount += limit;
+    } else {
+      const remainingGyms = responseData.slice(postCount);
+      const maxGymsToLoad = Math.min(limit, remainingGyms.length);
+      for (let i = 0; i < maxGymsToLoad; i++) {
+        let id = remainingGyms[i].id;
+        let gymImgSrc2 = remainingGyms[i].gymImgs[0].img;
+        let name = remainingGyms[i].name;
+        let address = remainingGyms[i].address;
+        let temp2 = `
+      <div class="gym-approve-wait">
+        <img class="gym-list-img" src="${gymImgSrc2}" onclick="location.href='/gym/gymDetail?gym=${id}'" alt="" />
+        <ul class="gym-info-box">
+          <li class="gym-name" onclick="location.href='/gym/gymDetail?gym=${id}'">${name}</li>
+          <li class="all-gym-qrcode" onclick="QRCheck(${id})"></li>
+          <li class="gym-location">${address}</li>
+          <li class="gym-review-${id}"></li>
+        </ul>
+      </div>
+      `;
+        $('.approve-wait').append(temp2);
+        const res = await axios({
+          method: 'get',
+          url: `/api/gym/${id}/review`,
+        });
+        const reivewsLength = res.data.reviews.length;
+        let avgStar2 = `
+            <div class="gym-star">⭐<span>${res.data.avgStar}</span>(${reivewsLength})</div>
+            `;
+        $(`.gym-review-${id}`).append(avgStar2);
+      }
+      postCount += maxGymsToLoad;
+    }
+    loading = false;
+  }
   const responseData = response.data;
   data = [...data, ...responseData];
   if (postCount === 0) {
