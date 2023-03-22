@@ -1,0 +1,105 @@
+.address-bar {
+  position: relative;
+  width: 90%;
+  height: 50px;
+  margin-left: 5%;
+}
+.address-bar > .address {
+  position: absolute;
+  top: 15px;
+  left: 5px;
+  color: var(--sub-color-4);
+  font-weight: 600;
+}
+.map-icon {
+  position: absolute;
+  top: 13px;
+  right: 5px;
+  width: 31px;
+  height: 27px;
+  cursor: pointer;
+}
+
+.modal {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: none;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.modal.show {
+  display: block;
+}
+
+.modal_body {
+  position: absolute;
+  top: -70px;
+  left: -21px;
+  width: 420px;
+  height: 100vh;
+  z-index: 10000;
+  text-align: center;
+}
+
+#kakao-map {
+  width: 100%;
+  height: 100vh !important;
+}
+
+#modal .close-area {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 30px;
+  height: 30px;
+  background-image: url(//www.sixpack.pro/images/close.png);
+  background-size: cover;
+  z-index: 10001;
+  cursor: pointer;
+}
+
+.customoverlay {
+  position: absolute;
+  right: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+.customoverlay .title {
+  font-size: 12px;
+  font-weight: bold;
+  background-color: var(--main-color);
+}
+
+.gym-approve-wait {
+  cursor: pointer;
+}
+
+.gym-approve-wait img.gym-list-img {
+  width: 45%;
+  height: 110px;
+}
+
+.gym-star {
+  color: var(--sub-color-4);
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.gym-star > span {
+  color: var(--point-color);
+  font-size: 16px;
+  padding-right: 5px;
+}
+
+.all-gym-qrcode {
+  position: absolute;
+  top: 5px;
+  right: -10px;
+  width: 24px;
+  height: 24px;
+  background-image: url(//www.sixpack.pro/images/qr-code.png);
+  background-size: cover;
+  cursor: pointer;
+}

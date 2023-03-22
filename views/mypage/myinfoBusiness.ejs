@@ -1,0 +1,29 @@
+<section>
+  <div>
+    <div class="info-container">
+      <p class="info-title">사업자 회원정보 수정</p>
+    </div>
+    <hr />
+    <form enctype="multipart/form-data" style="text-align: center" class="infoForm" id="myInfoUpdateFrom">
+      <input type="text" id="name" />
+
+      <div class="input-wrapper">
+        <input type="password" id="currentPassword" placeholder="현재 비밀번호를 입력해주세요" />
+        <span onclick="addInputs()" class="modifyText">수정하기</span>
+      </div>
+
+      <div id="inputContainer"></div>
+      <input type="text" id="phone" />
+      <div class="profile-img-wrap">
+        <input class="profile-img-name" value="" placeholder="프로필 사진 수정하기" />
+        <label for="profileImage" class="profile-img">+</label>
+        <input type="file" id="profileImage" />
+      </div>
+
+      <img id="image" src="" alt="" />
+
+      <button type="button" onclick="putInfo()" class="myinfo-update-btn">수정하기</button>
+    </form>
+  </div>
+</section>
+<script src="//www.sixpack.pro/js/myinfoBusiness.js"></script>

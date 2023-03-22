@@ -1,0 +1,76 @@
+.user-login-form {
+  width: 100%;
+}
+
+.email {
+  position: relative;
+  top: 100px;
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: var(--sub-color-8);
+  font-size: 16px;
+  color: var(--point-color);
+  padding: 0 10px;
+  margin-bottom: 10px;
+}
+
+.password {
+  position: relative;
+  top: 110px;
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: var(--sub-color-8);
+  font-size: 16px;
+  color: var(--point-color);
+  padding: 0 10px;
+  margin-bottom: 10px;
+}
+
+.login-btn {
+  position: relative;
+  top: 130px;
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: var(--point-color);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--main-color);
+  cursor: pointer;
+}
+
+.register-btn {
+  position: relative;
+  top: 150px;
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: var(--point-color);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--main-color);
+  cursor: pointer;
+}
+
+.kakao-login-btn {
+  position: relative;
+  top: 170px;
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  background: #ffeb3b;
+  background-image: url('//www.sixpack.pro/images/kakao-talk.png');
+  background-repeat: no-repeat;
+  background-position: 35px center;
+  color: var(--main-color);
+  cursor: pointer;
+}

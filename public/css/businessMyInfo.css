@@ -1,0 +1,151 @@
+.mygymList {
+  width: 90%;
+  margin: 20px 0 15px 5%;
+}
+
+.mygymList p {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--point-color);
+}
+
+#imageTextBox {
+  width: 90%;
+  margin-left: 5%;
+  border: 1px solid var(--sub-color-8);
+  padding: 0 10px;
+}
+
+.image-text-box {
+  display: flex;
+  width: 100%;
+  height: 150px;
+  padding: 20px 0 0;
+  border-bottom: 1px solid var(--sub-color-8);
+}
+
+.image-text-box img {
+  max-width: 100%;
+  max-height: 100%;
+  height: 110px;
+  width: 50%;
+  border-radius: 20px;
+}
+
+.text-box {
+  position: relative;
+  flex: 1;
+  padding: 3px 0 0 8px;
+}
+
+.text-box p {
+  font-size: 12px;
+  color: var(--sub-color-4);
+  margin-top: 5px;
+}
+
+.text-box p.my-gym-qrcode {
+  position: absolute;
+  top: -4px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  background-image: url(//www.sixpack.pro/images/qr-code.png);
+  background-size: cover;
+  cursor: pointer;
+}
+
+.review-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.review-box p {
+  margin-right: 10px;
+}
+
+.mybtn button {
+  background: none;
+  width: 48px;
+  height: 22px;
+  color: var(--point-color);
+  font-size: 10px;
+  font-weight: 600;
+  border: 1px solid var(--point-color);
+  border-radius: 10px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.mybtn button:hover {
+  background: var(--point-color);
+  color: var(--main-color);
+  border: none;
+  transition: 0.2s;
+}
+
+.enrollMyGymBtn {
+  position: relative;
+  width: 80%;
+  height: 36px;
+  background: none;
+  border: 1px solid var(--sub-color-4);
+  border-radius: 20px;
+  margin: 30px 10% 15px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--point-color);
+  cursor: pointer;
+}
+
+.enrollMyGymBtn:hover {
+  color: var(--main-color);
+  background-color: var(--point-color);
+  border: none;
+  transition: 0.2s;
+}
+
+.mygymName {
+  width: 80%;
+  color: var(--point-color);
+  font-size: 17px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.review-go-btn {
+  position: absolute;
+  background: none;
+  border: none;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--point-color);
+  padding-top: 3px;
+  left: 90px;
+  cursor: pointer;
+}
+
+div.my-gym-star {
+  color: var(--sub-color-4);
+  font-size: 13px;
+}
+
+div.my-gym-star span {
+  color: var(--point-color);
+  font-size: 14px;
+  font-weight: 500;
+  margin-right: 3px;
+}
+
+p.before-approve {
+  position: absolute;
+  right: 8px;
+  top: -2px;
+  color: var(--point-color);
+  font-size: 11px;
+}

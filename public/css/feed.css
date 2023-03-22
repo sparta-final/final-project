@@ -1,0 +1,348 @@
+.feed-container {
+  position: relative;
+  margin-top: 4px;
+}
+
+.feed-user-wrap {
+  position: relative;
+  height: 60px;
+  padding: 10px;
+}
+
+.feed-profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  border: 1px solid #b6b6b6;
+  float: left;
+}
+
+.feed-user-name {
+  height: 100%;
+  padding: 6px 10px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--point-color);
+  float: left;
+}
+
+#control-show {
+  position: absolute;
+  right: 5px;
+  width: 60px;
+  height: 40px;
+  padding: 18px 15px;
+  cursor: pointer;
+  background-image: url(//www.sixpack.pro/images/feed-control.png);
+  background-size: cover;
+}
+
+.feed-user-control {
+  position: relative;
+  display: none;
+}
+
+.feed-user-control > li {
+  position: absolute;
+  right: -20px;
+  width: 80px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--sub-color-4);
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: -1px 3px 2px #e6e6e6;
+  padding: 5px 0 5px 10px;
+  cursor: pointer;
+  z-index: 99;
+}
+
+/* 피드 페이지 이미지 슬라이드 */
+div.feed-container > div > div.bx-wrapper {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  margin: 0;
+  border: none;
+}
+
+div.feed-container > div {
+  width: 420px;
+  /* height: 420px;
+  z-index: 99; */
+  /* background-color: var(--sub-color-9);
+  color: var(--sub-color-4);
+  text-align: center;
+  padding: 47% 0; */
+}
+
+/* #feed-preview-img > div.bx-wrapper {
+  border: none;
+} */
+
+img.feed-image {
+  width: 100%;
+  height: 420px;
+}
+
+.feed-update {
+  top: 20px;
+  border-bottom: 1px solid var(--sub-color-4);
+}
+
+.feed-delete {
+  top: 50px;
+}
+
+.feed-image {
+  width: 100%;
+  height: 420px;
+}
+
+.feed-content-wrap {
+  position: relative;
+  height: 60px;
+  padding: 10px 20px;
+  margin-bottom: 30px;
+}
+
+.feed-content {
+  color: var(--sub-color-4);
+  font-weight: 500;
+}
+
+.feed-content span {
+  color: var(--point-color);
+  margin-right: 14px;
+}
+
+.feed-comments {
+  width: 80px;
+  color: var(--sub-color-11);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.create-feed-btn {
+  display: none;
+  position: absolute;
+  right: 20px;
+  bottom: 70px;
+  width: 50px;
+  height: 50px;
+  border: 2px solid #b6b6b6;
+  border-radius: 20px;
+  background-color: var(--point-color);
+  cursor: pointer;
+}
+
+.feed-btn-vertical {
+  position: absolute;
+  top: 13px;
+  left: 23px;
+  display: block;
+  width: 2px;
+  height: 22px;
+  background-color: var(--sub-color-1);
+}
+
+.feed-btn-horizon {
+  position: absolute;
+  top: 23px;
+  left: 13px;
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: var(--sub-color-1);
+}
+
+/* 댓글 */
+
+.comment-container {
+  font-size: 15px;
+}
+
+.content-user-wrap {
+  position: relative;
+  min-height: 60px;
+  padding: 10px;
+}
+
+.content-user-name {
+  position: absolute;
+  top: 9px;
+  left: 60px;
+  font-weight: 500;
+  color: var(--point-color);
+}
+
+.comment-content {
+  padding: 19px 0 0 52px;
+  font-weight: 500;
+  color: var(--sub-color-1);
+  width: 90%;
+}
+
+.comment-user-wrap {
+  position: relative;
+  padding: 10px;
+  min-height: 60px;
+}
+
+.comment-user-name {
+  position: absolute;
+  top: 9px;
+  left: 60px;
+  font-weight: 500;
+  color: var(--sub-color-4);
+}
+
+.comment-delete-btn {
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  padding: 5px;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--point-color);
+  color: var(--main-color);
+  line-height: 0.5;
+  cursor: pointer;
+}
+.comment-box {
+  position: fixed;
+  bottom: 50px;
+  width: 420px;
+  background-color: var(--main-color);
+}
+#create-comment {
+  width: 94%;
+  height: 40px;
+  border: 1px solid var(--sub-color-8);
+  border-radius: 20px;
+  padding: 5px 15px;
+  margin-left: 3%;
+  color: var(--sub-color-4);
+}
+
+.comment-btn {
+  position: absolute;
+  bottom: 16px;
+  right: 25px;
+  background: none;
+  border: none;
+  color: var(--point-color);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* 피드 수정 */
+
+.update-feed-wrap {
+  position: relative;
+  width: 420px;
+  font-weight: 300;
+}
+
+.update-title {
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 2.4em;
+}
+
+.update-cancel {
+  position: absolute;
+  top: 7px;
+  left: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.feed-update-btn {
+  position: absolute;
+  top: 7px;
+  right: 10px;
+  font-size: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+#update-content {
+  width: 90%;
+  min-height: 100px;
+  margin: 15px 5%;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+/* 피드작성 */
+.feed-upload-wrap {
+  position: relative;
+}
+.feed-img-upload {
+  position: absolute;
+  top: 0;
+  display: inline-block;
+  width: 100%;
+  height: 420px;
+  font-size: 40px;
+  text-align: center;
+  color: var(--point-color);
+  background-color: var(--sub-color-9);
+  padding: 42% 0;
+  cursor: pointer;
+}
+#feedImg {
+  display: none;
+}
+
+div#feed-preview-img > div.bx-wrapper {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+#feed-preview-img {
+  width: 420px;
+  height: 420px;
+  z-index: 99;
+  /* background-color: var(--sub-color-9);
+  color: var(--sub-color-4);
+  text-align: center;
+  padding: 47% 0; */
+}
+
+#feed-preview-img > div.bx-wrapper {
+  border: none;
+}
+
+img.preview-img {
+  width: 100%;
+  height: 420px;
+  padding-top: 40px;
+}
+
+.feed-textarea {
+  min-height: 200px;
+  margin-left: 6px;
+  margin-top: 10px;
+  padding: 10px;
+  color: var(--sub-color-10);
+}
+
+.feed-upload-btn {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 16%;
+  height: 40px;
+  background: none;
+  color: var(--point-color);
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}

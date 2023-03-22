@@ -1,0 +1,167 @@
+@import url(_variables.css);
+
+.header-wrap {
+  position: fixed;
+  top: 0;
+  width: 420px;
+  height: 70px;
+  z-index: 9999;
+  background-color: var(--main-color);
+  border-bottom: 1px solid var(--sub-color-4);
+}
+
+.header-wrap h1 {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--point-color);
+  cursor: pointer;
+}
+
+.header-wrap ul {
+  position: absolute;
+  top: 23px;
+  right: 0;
+  width: 88px;
+}
+
+.header-wrap li {
+  width: 24px;
+  height: 24px;
+  margin-right: 20px;
+  background-size: cover;
+  float: left;
+  text-indent: -9999px;
+  cursor: pointer;
+}
+
+#camera-wrap {
+  position: relative;
+  /* display: none; */
+}
+
+#camera-wrap > label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  background-image: url(//www.sixpack.pro/images/qr-code.png);
+  background-size: cover;
+  cursor: pointer;
+}
+
+#qr-camera {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.qr-code {
+  background-image: url(//www.sixpack.pro/images/qr-code.png);
+  display: none;
+}
+
+.search {
+  background-image: url(//www.sixpack.pro/images/search.png);
+  background-size: cover;
+}
+
+#main-container > div.search-height {
+  margin-top: 35px;
+}
+
+.search-box {
+  position: absolute;
+  width: 420px;
+  top: 46px;
+  right: 0;
+  display: none;
+}
+
+.search-input {
+  width: 100%;
+  border: none;
+  background: var(--main-color);
+  border-bottom: 1px solid var(--point-color);
+  color: var(--sub-color-4);
+  font-weight: 600;
+  font-size: 16px;
+  height: 36px;
+  padding-left: 20px;
+}
+
+.search-input:focus {
+  outline: none; /* 선택된 input 요소의 outline을 제거합니다. */
+}
+
+.search-submit {
+  position: absolute;
+  width: 60px;
+  height: 35px;
+  top: 0;
+  right: 0;
+  background: none;
+  color: var(--point-color);
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.search-box.show {
+  display: block;
+}
+
+.header-height {
+  height: 70px;
+}
+
+.footer-container {
+  position: fixed;
+  bottom: 0;
+  width: 420px;
+  height: 50px;
+  background-color: var(--sub-color-9);
+}
+
+.footer-wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 75%;
+  margin: 13px auto;
+}
+
+.footer {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+}
+
+li.small-svg {
+  width: 30px;
+}
+
+.footer-height {
+  height: 50px;
+}
+
+.footer-container svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  fill: var(--sub-color-8);
+}
+
+.footer-container svg.svg-select {
+  fill: var(--point-color);
+}

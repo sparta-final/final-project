@@ -1,0 +1,21 @@
+:root {
+  --main-color: #111111;
+  /* --main-color: #ffffff; */
+  --point-color: #ff710d;
+  --sub-color-1: #ffffff;
+  /* --sub-color-1: #020e12; */
+  --sub-color-2: #c01b0f;
+  --sub-color-3: #6a2d71;
+  --sub-color-4: #acacac;
+  /* --sub-color-4: #616a71; */
+  --sub-color-5: #cc5a0a;
+  --sub-color-6: #9a160c;
+  --sub-color-7: #55245a;
+  /* --sub-color-8: #999999;
+  --sub-color-9: #e6e6e6;
+  --sub-color-10: #fafbf7; */
+  --sub-color-8: #333333;
+  --sub-color-9: #222222;
+  --sub-color-10: #fafbf7;
+  --sub-color-11: #666666;
+}

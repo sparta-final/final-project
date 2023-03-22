@@ -1,0 +1,97 @@
+<section>
+  <div id="admin-container">
+    <button id="admin-logout" onclick="logout()">로그아웃</button>
+    <div class="admin-members"></div>
+
+    <div class="admin-gym"></div>
+
+    <div class="admin-rank">
+      <!-- <p class="admin-gym-rank">가맹점 순위</p> -->
+      <table class="ranking-table">
+        <thead class="text-gray-light fs-12 text-uppercase">
+          <tr class="table-caption-row">
+            <td colspan="5" class="admin-gym-rank">가맹점 순위</td>
+          </tr>
+          <tr class="ta-center">
+            <th class="fs-12-bold">순위</th>
+            <th class="fs-12-bold">가맹점명</th>
+            <th class="fs-12-bold cursor">이용자 수</th>
+            <th class="fs-12-bold cursor">정산 금액</th>
+            <th class="fs-12-bold cursor">평점</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-dark fs-14"></tbody>
+      </table>
+      <ul class="month-select">
+        <li class="prev-month" id="prevMonthBtn">
+          <svg
+            version="1.1"
+            id="svg4619"
+            inkscape:version="0.91+devel+osxmenu r12911"
+            sodipodi:docname="triangle-15.svg"
+            xmlns:cc="http://creativecommons.org/ns#"
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+            xmlns:svg="http://www.w3.org/2000/svg"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px"
+            y="0px"
+            width="15px"
+            height="15px"
+            viewBox="0 0 15 15"
+            style="enable-background: new 0 0 15 15"
+            xml:space="preserve"
+          >
+            <path
+              id="path21090-9"
+              inkscape:connector-curvature="0"
+              sodipodi:nodetypes="sscsssscss"
+              d="M7.5385,2
+       C7.2437,2,7.0502,2.1772,6.9231,2.3846l-5.8462,9.5385C1,12,1,12.1538,1,12.3077C1,12.8462,1.3846,13,1.6923,13h11.6154
+       C13.6923,13,14,12.8462,14,12.3077c0-0.1538,0-0.2308-0.0769-0.3846L8.1538,2.3846C8.028,2.1765,7.7882,2,7.5385,2z"
+            />
+          </svg>
+        </li>
+        <li class="next-month" id="nextMonthBtn">
+          <svg
+            version="1.1"
+            id="svg4619"
+            inkscape:version="0.91+devel+osxmenu r12911"
+            sodipodi:docname="triangle-15.svg"
+            xmlns:cc="http://creativecommons.org/ns#"
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+            xmlns:svg="http://www.w3.org/2000/svg"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px"
+            y="0px"
+            width="15px"
+            height="15px"
+            viewBox="0 0 15 15"
+            style="enable-background: new 0 0 15 15"
+            xml:space="preserve"
+          >
+            <path
+              id="path21090-9"
+              inkscape:connector-curvature="0"
+              sodipodi:nodetypes="sscsssscss"
+              d="M7.5385,2
+       C7.2437,2,7.0502,2.1772,6.9231,2.3846l-5.8462,9.5385C1,12,1,12.1538,1,12.3077C1,12.8462,1.3846,13,1.6923,13h11.6154
+       C13.6923,13,14,12.8462,14,12.3077c0-0.1538,0-0.2308-0.0769-0.3846L8.1538,2.3846C8.028,2.1765,7.7882,2,7.5385,2z"
+            />
+          </svg>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sales-month"></div>
+    <button class="approve-page-btn" onclick="location.href='/admin/approve'">가맹점등록 승인페이지 바로가기</button>
+  </div>
+</section>
+<script src="//www.sixpack.pro/js/admin.js"></script>

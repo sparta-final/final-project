@@ -1,0 +1,148 @@
+.gym-name-wrap {
+  position: relative;
+  padding-top: 10px;
+}
+
+.gym-detail-star {
+  position: absolute;
+  right: 30px;
+  top: 7px;
+  color: var(--sub-color-4);
+  font-size: 14px;
+}
+
+.gym-detail-star > span {
+  color: var(--point-color);
+  font-size: 16px;
+  margin: 0 5px 0 2px;
+}
+
+.review-p {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--sub-color-1);
+  margin-left: 15px;
+  margin-top: 10px;
+}
+
+.review-wrap > .info-title {
+  margin: 20px 5%;
+}
+
+.review-card {
+  position: relative;
+  width: 95%;
+  margin: 15px auto;
+  border: 1px solid var(--sub-color-4);
+  border-radius: 20px;
+  font-weight: 500;
+  padding: 15px;
+}
+
+.review-card > .review-header {
+  width: 90%;
+  margin-left: 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.review-text {
+  width: 100%;
+  /* min-height: 80px; */
+  overflow: visible;
+  margin-top: 20px;
+  word-break: break-all;
+}
+
+.review-card > .review-header > .user-name {
+  width: 300px;
+  color: var(--point-color);
+  font-size: 16px;
+}
+
+.review-card > .review-header > .review-star {
+  position: relative;
+  width: auto;
+  left: 52px;
+  color: var(--sub-color-4);
+  font-size: 12px;
+}
+
+.review-card > .review-content > .review-date {
+  position: absolute;
+  top: 43px;
+  right: 35px;
+  font-size: 14px;
+  color: var(--sub-color-8);
+}
+
+.review-card > .review-star-date-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.review-card > .review-star-date-wrap > .reviews-star {
+  width: 90px;
+  margin-left: 15px;
+  padding-top: 4px;
+}
+
+.review-card > .review-star-date-wrap > .reviews-date {
+  height: 15px;
+  margin-left: 15px;
+  font-size: 14px;
+  color: var(--sub-color-8);
+}
+.review-card > .review-star-date-wrap > .review-delete-btn {
+  position: absolute;
+  right: 3px;
+  top: -18px;
+  color: var(--point-color);
+  background: none;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.review-card > .review-content {
+  padding: 0 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--sub-color-4);
+}
+
+.review-content > .review-img-all {
+  border: none;
+  width: 100%;
+}
+
+.review-content > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* border-radius: 20px; */
+}
+
+/* img slider */
+
+div.gym-img-slider > div.bx-wrapper {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+.gym-img-slider {
+  width: 420px;
+  height: 420px;
+}
+
+.gym-img-slider > div.bx-wrapper {
+  border: none;
+}
+
+img#gym-img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+}

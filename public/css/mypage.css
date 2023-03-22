@@ -1,0 +1,292 @@
+#myInfoUpdateFrom {
+  width: 90%;
+  margin: 30px 0 0 5%;
+  position: relative;
+  color: var(--sub-color-4);
+}
+
+#myInfoUpdateFrom input {
+  width: 100%;
+  height: 40px;
+  background: var(--sub-color-10);
+  border: 1px solid var(--sub-color-9);
+  border-radius: 10px;
+  margin-bottom: 15px;
+  margin-top: 0;
+  padding-left: 10px;
+  color: var(--sub-color-4);
+}
+
+#myInfoUpdateFrom #nickname {
+  font-size: 13px;
+}
+
+#myInfoUpdateFrom span.modifyText {
+  position: absolute;
+  right: 5px;
+  top: 0;
+  font-size: 13px;
+  color: var(--point-color);
+  padding: 10px;
+  cursor: pointer;
+}
+
+#inputContainer input {
+  color: var(--point-color);
+}
+
+#myInfoUpdateFrom img {
+  width: 280px;
+  height: 280px;
+  border-radius: 150px;
+  margin-top: 60px;
+}
+
+.myinfo-update-btn {
+  width: 100%;
+  height: 40px;
+  background: var(--point-color);
+  border: none;
+  border-radius: 10px;
+  margin: 15px 0;
+  color: var(--main-color);
+  font-weight: 600;
+}
+
+.myinfo-update-btn:hover {
+  background: var(--sub-color-5);
+  color: var(--main-color);
+  transition: 0.2s;
+}
+
+.profile-img-wrap {
+  position: relative;
+}
+
+.profile-img-name {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--sub-color-9);
+  vertical-align: middle;
+  color: var(--sub-color-8);
+  background-color: var(--sub-color-10);
+  border-radius: 10px;
+  padding-left: 10px;
+}
+
+.profile-img-name,
+.profile-img {
+  top: 0;
+}
+
+.profile-img {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0);
+  color: var(--point-color);
+  text-align: right;
+  vertical-align: middle;
+  cursor: pointer;
+  height: 40px;
+  padding-right: 15px;
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 1.9;
+}
+
+#myInfoUpdateFrom input[type='file'] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+}
+
+input[type='file']::-webkit-file-upload-button {
+  background-color: var(--point-color);
+  color: white;
+  padding: 8px 20px;
+  border: none;
+  /* border-radius: 4px; */
+  cursor: pointer;
+}
+
+.info-container {
+  width: 90%;
+  margin-left: 5%;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--sub-color-9);
+}
+
+.info-title {
+  color: var(--sub-color-1);
+}
+
+.info-container > img {
+  width: 50px;
+  height: 50px;
+  float: left;
+  margin-right: 10px;
+  border-radius: 25px;
+}
+
+#logout {
+  float: right;
+  font-weight: 600;
+  color: var(--point-color);
+  background: none;
+  border: none;
+  padding: 16px 16px 16px 0;
+  cursor: pointer;
+}
+
+#nickname,
+#business-name {
+  font-size: 19px;
+  color: var(--point-color);
+  font-weight: 500;
+  margin-right: 5px;
+}
+
+#email {
+  font-size: 14px;
+  color: var(--sub-color-4);
+}
+
+img.my-info-btn {
+  height: 12px;
+  margin-bottom: 1px;
+}
+
+.infoForm > input {
+  width: 80%;
+  height: 40px;
+  /* margin-top: 10px; */
+  border-radius: 10px;
+  border: 3px solid var(--sub-color-1);
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper span {
+  position: absolute;
+  right: 12%;
+  top: 40%;
+  /* 필요한 스타일 추가 */
+  cursor: pointer;
+}
+
+.input-wrapper > input {
+  width: 80%;
+  height: 40px;
+  margin-top: 10px;
+  margin-bottom: -50px;
+  border-radius: 10px;
+  border: 3px solid var(--sub-color-1);
+}
+
+/* 내 멤버쉽 정보 */
+
+.membership-wrap {
+  width: 90%;
+  margin-left: 5%;
+}
+
+.member-start {
+  padding: 10px 0;
+  color: var(--point-color);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.membership-data-wrap,
+.no-membership-wrap {
+  border: 1px solid var(--sub-color-8);
+  padding: 15px;
+  color: var(--sub-color-4);
+}
+
+.membership-data-wrap span,
+.membership-data-wrap > div,
+.no-membership-wrap span,
+.no-membership-wrap > div {
+  display: block;
+  border-bottom: 1px solid var(--sub-color-9);
+  padding: 15px 5px;
+}
+
+.membership-data-wrap > div,
+.no-membership-wrap > div {
+  position: relative;
+  cursor: pointer;
+}
+
+.no-membership-wrap > div.my-review {
+  border: none;
+}
+
+.membership-data-wrap > .member {
+  border-bottom: transparent;
+  margin-bottom: -15px;
+}
+
+.member-info-btn {
+  position: absolute;
+  top: 21px;
+  right: 15px;
+  height: 12px;
+}
+
+.member-close {
+  width: 90%;
+  height: 50px;
+  margin: 20px 5% 10px;
+  color: var(--point-color);
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  background: var(--sub-color-9);
+}
+
+.my-member {
+  margin-top: 15px;
+  padding: -20px;
+  color: var(--sub-color-4);
+  margin-bottom: 5px;
+}
+
+.member {
+  border-bottom: transparent;
+}
+
+.membership-past-wrap {
+  margin-bottom: 50px;
+}
+
+.membership-data-past-wrap {
+  width: 90%;
+  border-top: 1px solid var(--sub-color-9);
+  padding: 15px;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-bottom: -20px;
+  color: var(--sub-color-4);
+}
+
+.member-createAt {
+  color: var(--point-color);
+}
+
+.user-gym-wrap button.review-btn {
+  background: none;
+  border: none;
+  color: var(--point-color);
+  font-weight: 600;
+  cursor: pointer;
+}
