@@ -63,7 +63,7 @@ export class GymService {
         index: 'gym',
         id: createGym.id.toString(),
         document: {
-          gymImgs: createImg,
+          gymImgs: gymImgs,
           ...createGym,
         },
       });
