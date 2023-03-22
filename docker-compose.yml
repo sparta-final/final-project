@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   backend:
+    image: asia.gcr.io/codecamp-377309/sixpack:1.1
     build:
       context: .
       dockerfile: Dockerfile
