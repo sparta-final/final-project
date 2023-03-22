@@ -334,50 +334,70 @@ export class GymService {
   }
 
   /**
-   * 구 로 체육관 찾기
-   * @author 정호준
+   * @description 'OO구' 로 체육관 찾기(엘라스틱서치 적용)
+   * @author 정호준, 김승일
    */
-  async searchGymByAddress(text) {
-    const cachedAddressGyms = await this.cacheManager.get(`gym:findByAddressGyms:${text}`);
-    if (cachedAddressGyms) return cachedAddressGyms;
-
+  async searchGymByAddress(text: string) {
     const addressSplit = text.split(' ');
     const gu = addressSplit[1];
+    console.log('🅰💩💩', gu);
 
-    const findByAddressGyms = await this.gymsrepository
-      .createQueryBuilder('gym')
-      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
-      .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
-      .where('gym.address LIKE :address', { address: `%${gu}%` })
-      .andWhere('gym.isApprove = :isApprove', { isApprove: 1 })
-      .getMany();
-
-    await this.cacheManager.set(`gym:findByAddressGyms:${text}`, findByAddressGyms, { ttl: 60 });
-
-    return findByAddressGyms;
+    const searchGyms = await this.elasticSearch.search({
+      index: 'gym',
+      query: {
+        bool: {
+          must: [
+            {
+              term: {
+                isApprove: 1,
+              },
+            },
+          ],
+          should: [
+            {
+              wildcard: {
+                address: `*${gu}*`,
+              },
+            },
+          ],
+          minimum_should_match: 1,
+        },
+      },
+    });
+    return searchGyms.hits.hits.map((hit) => hit._source);
   }
 
   /**
-   * 시 로 체육관 찾기
-   * @author 정호준
+   * @description 'OO시'로 체육관 찾기(엘라스틱서치 적용)
+   * @author 정호준, 김승일
    */
-  async searchGymByAddressWide(text) {
-    const cachedAddressGymsWide = await this.cacheManager.get(`gym:findByAddressGymsWide:${text}`);
-    if (cachedAddressGymsWide) return cachedAddressGymsWide;
-
+  async searchGymByAddressWide(text: string) {
     const addressSplit = text.split(' ');
     const city = addressSplit[0];
+    console.log('🅰️🅰️🅰️', city);
 
-    const findByAddressGymsWide = await this.gymsrepository
-      .createQueryBuilder('gym')
-      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
-      .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
-      .where('gym.address LIKE :address', { address: `${city}%` })
-      .andWhere('gym.isApprove = :isApprove', { isApprove: 1 })
-      .getMany();
-
-    await this.cacheManager.set(`gym:findByAddressGymsWide:${text}`, findByAddressGymsWide, { ttl: 60 });
-
-    return findByAddressGymsWide;
+    const searchGyms = await this.elasticSearch.search({
+      index: 'gym',
+      query: {
+        bool: {
+          must: [
+            {
+              term: {
+                isApprove: 1,
+              },
+            },
+          ],
+          should: [
+            {
+              wildcard: {
+                address: `*${city}*`,
+              },
+            },
+          ],
+          minimum_should_match: 1,
+        },
+      },
+    });
+    return searchGyms.hits.hits.map((hit) => hit._source);
   }
 }
