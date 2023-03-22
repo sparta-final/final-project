@@ -1,6 +1,24 @@
 version: '3.7'
 
 services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - redis
+      - elasticsearch
+    volumes:
+      - ./src:/myfoler/src
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+
   # Elasticsearch Docker Images: https://www.docker.elastic.co/
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
@@ -23,15 +41,15 @@ services:
       - 9200:9200
       - 9300:9300
 
-  kibana:
-    container_name: kibana
-    image: docker.elastic.co/kibana/kibana:8.6.2
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    ports:
-      - 5601:5601
-    depends_on:
-      - elasticsearch
+  # kibana:
+  #   container_name: kibana
+  #   image: docker.elastic.co/kibana/kibana:8.6.2
+  #   environment:
+  #     - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+  #   ports:
+  #     - 5601:5601
+  #   depends_on:
+  #     - elasticsearch
 
 volumes:
   elasticsearch-data:

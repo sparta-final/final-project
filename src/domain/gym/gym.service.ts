@@ -341,6 +341,7 @@ export class GymService {
     const addressSplit = text.split(' ');
     const gu = addressSplit[1];
     console.log('🅰💩💩', gu);
+    console.log(123);
 
     const searchGyms = await this.elasticSearch.search({
       index: 'gym',
