@@ -17,6 +17,15 @@ let loading = false;
 const limit = 5;
 let data = [];
 
+let token = localStorage.getItem('at');
+let tokenPayload = token ? token.split('.')[1] : null;
+let decodedPayload = tokenPayload ? atob(tokenPayload) : null;
+let parsedPayload = decodedPayload ? JSON.parse(decodedPayload) : null;
+
+if (parsedPayload === null) {
+  parsedPayload = { sub: 0 };
+}
+
 function getGym() {
   if (loading) return;
   loading = true;
@@ -30,15 +39,6 @@ function getGym() {
     .then(async (res) => {
       data = res.data;
 
-      let token = localStorage.getItem('at');
-      let tokenPayload = token ? token.split('.')[1] : null;
-      let decodedPayload = tokenPayload ? atob(tokenPayload) : null;
-      let parsedPayload = decodedPayload ? JSON.parse(decodedPayload) : null;
-
-      if (parsedPayload === null) {
-        parsedPayload = { sub: 0 };
-      }
-
       if (postCount === 0) {
         feedContainer.innerHTML = '';
         for (let i = 0; i < limit && i < data.length; i++) {
@@ -49,8 +49,9 @@ function getGym() {
           let nickname = data[i].user.nickname;
           let profileImg = data[i].user.profileImage;
           let content = data[i].content;
+          let userId = data[i].userId;
 
-          if (parsedPayload.sub === data[i].userId) {
+          if (parsedPayload.sub === userId) {
             let temp = `
           <div>
           <div class="feed-user-wrap">
@@ -125,7 +126,10 @@ function getGym() {
           let nickname = remainingFeeds[i].user.nickname;
           let profileImg = remainingFeeds[i].user.profileImage;
           let content = remainingFeeds[i].content;
-          let temp = `
+          let userId = remainingFeeds[i].userId;
+
+          if (parsedPayload.sub === userId) {
+            let temp = `
           <div>
             <div class="feed-user-wrap">
             <img src="${profileImg}" alt="" class="feed-profile" />
@@ -145,7 +149,23 @@ function getGym() {
               </div>  
               </div>
               `;
-          $('.feed-container').append(temp);
+            $('.feed-container').append(temp);
+          } else {
+            let temp = `
+          <div>
+            <div class="feed-user-wrap">
+            <img src="${profileImg}" alt="" class="feed-profile" />
+            <p class="feed-user-name">${nickname}</p>
+            </div>
+            <ul class="feed-bxslider"></ul>
+            <div class="feed-content-wrap">
+              <p class="feed-content"><span>${nickname}</span>${content}</p>
+              <p class="feed-comments" onclick="location.href='/feed/${id}/comments'" >댓글 ${commentsLength}개 보기</p>
+              </div>  
+              </div>
+              `;
+            $('.feed-container').append(temp);
+          }
 
           let feedsImg = data[i + postCount].feedsImgs;
           for (let j = 0; j < feedsImg.length; j++) {
