@@ -6,4 +6,4 @@ COPY ./package-lock.json /myfolder/
 RUN npm install
 
 COPY . /myfolder/
-CMD npm run start:dev
+CMD npm run start:prod
