@@ -145,7 +145,6 @@ const limit = 8;
 let data = [];
 
 async function getGymList(text) {
-  console.log(text);
   if (loading) return;
   loading = true;
   const response = await axios({
@@ -156,6 +155,17 @@ async function getGymList(text) {
       limit,
     },
   });
+  if (response.data.length === 0) {
+    const response2 = await axios({
+      method: 'get',
+      url: `/api/gym/address/wide/${text}`,
+      params: {
+        offset: postCount,
+        limit,
+      },
+    });
+    response.data = response2.data;
+  }
   const responseData = response.data;
   data = [...data, ...responseData];
   if (postCount === 0) {

@@ -74,7 +74,14 @@ export const ApproveGymGet = () => {
 };
 export const SearchGymByAddress = () => {
   return applyDecorators(
-    ApiOperation({ summary: ' 주소로 체육관 조회' }),
+    ApiOperation({ summary: ' 구 주소로 체육관 조회' }),
+    ApiResponse({ status: 200, description: '조회 성공' }),
+    ApiResponse({ status: 400, description: '조회 실패' })
+  );
+};
+export const SearchGymByAddressWide = () => {
+  return applyDecorators(
+    ApiOperation({ summary: ' 시 주소로 체육관 조회' }),
     ApiResponse({ status: 200, description: '조회 성공' }),
     ApiResponse({ status: 400, description: '조회 실패' })
   );

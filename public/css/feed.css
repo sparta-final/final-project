@@ -250,6 +250,7 @@ img.feed-image {
   font-size: 16px;
   font-weight: 600;
   line-height: 2.4em;
+  color: var(--sub-color-10);
 }
 
 .update-cancel {
@@ -258,6 +259,7 @@ img.feed-image {
   left: 10px;
   font-size: 16px;
   cursor: pointer;
+  color: var(--sub-color-10);
 }
 
 .feed-update-btn {
@@ -268,6 +270,7 @@ img.feed-image {
   background: none;
   border: none;
   cursor: pointer;
+  color: var(--sub-color-10);
 }
 
 #update-content {
@@ -276,6 +279,7 @@ img.feed-image {
   margin: 15px 5%;
   font-size: 15px;
   font-weight: 400;
+  color: var(--sub-color-10);
 }
 
 /* 피드작성 */

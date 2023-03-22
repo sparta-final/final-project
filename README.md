@@ -218,7 +218,7 @@ REFRESH_TOKEN_SECRET=
 REFRESH_TOKEN_EXPIRES_IN=7d
 KAKAO_CLIENT_ID=
 KAKAO_CLIENT_SECRET=
-KAKAO_CALLBACK_URL=http://sixpack.pro/api/auth/login/kakao/callback
+KAKAO_CALLBACK_URL=https://www.sixpack.pro/api/auth/login/kakao/callback
 KAKAO_MAP_KEY=
 REDIS_URL=redis://localhost:6379
 IMP_CODE=imp52616317
@@ -230,7 +230,7 @@ AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 ADMIN_EMAIL=
 ADMIN_PASSWORD=
-SIXPACK_URL=http://sixpack.pro
+SIXPACK_URL=https://www.sixpack.pro
 ```
 
 ### NestJS 앱 실행
