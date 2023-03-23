@@ -263,6 +263,9 @@ export class GymService {
 
     const searchGyms = await this.elasticSearch.search({
       index: 'gym',
+      // 최대 개수
+      size: 200,
+      // 검색 조건
       query: {
         bool: {
           must: [
@@ -294,6 +297,7 @@ export class GymService {
   /**
    * 승인된 체육관만 가져오기
    * @author 정호준
+   * @deprecated
    */
   async approveGymGet() {
     const cachedAllGym = await this.cacheManager.get(`gym:allGym`);
@@ -306,6 +310,20 @@ export class GymService {
       .andWhere('gymImg.id is not null')
       .select(['gym', 'gymImg.img'])
       .getMany();
+
+    // allGym 엘라스틱서치에 저장
+    await Promise.all(
+      allGym.map(async (gym) => {
+        await this.elasticSearch.index({
+          index: 'gym',
+          id: gym.id.toString(),
+          document: {
+            ...gym,
+            gymImgs: gym.gymImgs,
+          },
+        });
+      })
+    );
 
     await this.cacheManager.set(`gym:allGym`, allGym, { ttl: 60 });
 

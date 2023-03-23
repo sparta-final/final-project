@@ -42,17 +42,17 @@ services:
       - 9200:9200
       - 9300:9300
 
-  logstash:
-    image: docker.elastic.co/logstash/logstash:8.6.2
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    volumes:
-      - ./src/global/config/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      - ./src/global/config/mysql-connector-java-8.0.28.jar:/usr/share/logstash/mysql-connector-java-8.0.28.jar # mysql driver jar file
-    ports:
-      - 5000:5000
-    depends_on:
-      - elasticsearch
+  # logstash:
+  #   image: docker.elastic.co/logstash/logstash:8.6.2
+  #   environment:
+  #     - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+  #   volumes:
+  #     - ./src/global/config/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+  #     - ./src/global/config/mysql-connector-java-8.0.28.jar:/usr/share/logstash/mysql-connector-java-8.0.28.jar # mysql driver jar file
+  #   ports:
+  #     - 5000:5000
+  #   depends_on:
+  #     - elasticsearch
 
   # kibana:
   #   container_name: kibana
