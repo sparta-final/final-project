@@ -258,20 +258,39 @@ export class GymService {
    * 엘라스틱서치 검색 적용(헬스장 이름 일부분으로 검색)
    * @author 정호준, 김승일
    */
-  async searchGymByText(text, offset, limit) {
-    // const cachedSearchGyms = await this.cacheManager.get(`gym:searchGyms:${text}`);
-    // if (cachedSearchGyms) return cachedSearchGyms;
+  async searchGymByText(text: string, offset: number, limit: number) {
+    const query = {
+      bool: {
+        must: [
+          {
+            term: {
+              isApprove: 1,
+            },
+          },
+        ],
+        should: [
+          {
+            wildcard: {
+              name: `*${text}*`,
+            },
+          },
+          {
+            wildcard: {
+              address: `*${text}*`,
+            },
+          },
+        ],
+        minimum_should_match: 1,
+      },
+    };
+    const result = await this.elasticSearch.search({
+      index: 'gym',
+      size: limit,
+      from: offset,
+      query,
+    });
 
-    const searchGyms = await this.gymsrepository
-      .createQueryBuilder('gym')
-      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
-      .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
-      .where('gym.name LIKE :name', { name: `${text}%` })
-      .skip(offset)
-      .take(limit)
-      .getMany();
-
-    await this.cacheManager.set(`gym:searchGyms:${text}`, searchGyms, { ttl: 60 });
+    const searchGyms = result.hits.hits.map((hit) => hit._source);
 
     if (searchGyms.length === limit) {
       return { searchGyms, key: 'ing' };
@@ -342,24 +361,38 @@ export class GymService {
    * @description 'OO구' 로 체육관 찾기(엘라스틱서치 적용)
    * @author 정호준, 김승일
    */
-  async searchGymByAddress(text, offset, limit) {
-    // const cachedAddressGyms = await this.cacheManager.get(`gym:findByAddressGyms:${text}:${offset}:${limit}`);
-    // if (cachedAddressGyms) return cachedAddressGyms;
-
+  async searchGymByAddress(text: string, offset: number, limit: number) {
     const addressSplit = text.split(' ');
     const gu = addressSplit[1];
 
-    const findByAddressGyms = await this.gymsrepository
-      .createQueryBuilder('gym')
-      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
-      .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
-      .where('gym.address LIKE :address', { address: `%${gu}%` })
-      .andWhere('gym.isApprove = :isApprove', { isApprove: 1 })
-      .skip(offset)
-      .take(limit)
-      .getMany();
+    const query = {
+      bool: {
+        must: [
+          {
+            term: {
+              isApprove: 1,
+            },
+          },
+        ],
+        should: [
+          {
+            match: {
+              address: gu,
+            },
+          },
+        ],
+        minimum_should_match: 1,
+      },
+    };
 
-    await this.cacheManager.set(`gym:findByAddressGyms:${text}:${offset}:${limit}`, findByAddressGyms, { ttl: 60 });
+    const result = await this.elasticSearch.search({
+      index: 'gym',
+      size: limit,
+      from: offset,
+      query,
+    });
+
+    const findByAddressGyms = result.hits.hits.map((hit) => hit._source);
 
     if (findByAddressGyms.length === limit) {
       return { findByAddressGyms, key: 'ing' };
@@ -371,24 +404,38 @@ export class GymService {
    * @description 'OO시'로 체육관 찾기(엘라스틱서치 적용)
    * @author 정호준, 김승일
    */
-  async searchGymByAddressWide(text, offset, limit) {
-    // const cachedAddressGymsWide = await this.cacheManager.get(`gym:findByAddressGymsWide:${text}:${offset}:${limit}`);
-    // if (cachedAddressGymsWide) return cachedAddressGymsWide;
-
+  async searchGymByAddressWide(text: string, offset: number, limit: number) {
     const addressSplit = text.split(' ');
     const city = addressSplit[0];
 
-    const findByAddressGymsWide = await this.gymsrepository
-      .createQueryBuilder('gym')
-      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
-      .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
-      .where('gym.address LIKE :address', { address: `${city}%` })
-      .andWhere('gym.isApprove = :isApprove', { isApprove: 1 })
-      .skip(offset)
-      .take(limit)
-      .getMany();
+    const query = {
+      bool: {
+        must: [
+          {
+            term: {
+              isApprove: 1,
+            },
+          },
+        ],
+        should: [
+          {
+            match: {
+              address: city,
+            },
+          },
+        ],
+        minimum_should_match: 1,
+      },
+    };
 
-    await this.cacheManager.set(`gym:findByAddressGymsWide:${text}:${offset}:${limit}`, findByAddressGymsWide, { ttl: 60 });
+    const result = await this.elasticSearch.search({
+      index: 'gym',
+      size: limit,
+      from: offset,
+      query,
+    });
+
+    const findByAddressGymsWide = result.hits.hits.map((hit) => hit._source);
 
     if (findByAddressGymsWide.length === limit) {
       return { findByAddressGymsWide, key: 'ing' };
