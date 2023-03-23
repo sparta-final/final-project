@@ -42,7 +42,7 @@ function showPosition(position) {
 
     map = new kakao.maps.Map(container, options);
     // 지도에 마커와 이름 표시
-    axios.get('/api/gym/all').then((res) => {
+    axios.get('/api/gym/approveGym').then((res) => {
       const gyms = res.data;
       for (const gym of gyms) {
         const markerPosition = new kakao.maps.LatLng(gym.lat, gym.lng);
