@@ -1,11 +1,15 @@
 <section>
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const text = urlParams.get('text');
-    $(document).ready(function () {
-      searchGymByText(text);
-    });
-  </script>
-  <div class="approve-wait"></div>
-  <script src="/js/searchGym.js"></script>
+  <div class="approve-wait">
+    <div class="address-bar">
+      <span class="address" id="current-location"></span>
+      <div class="modal" id="modal">
+        <div class="modal_body">
+          <div class="close-area" style="color: black">X</div>
+          주변 운동시설
+          <div id="kakao-map"></div>
+        </div>
+      </div>
+    </div>
+    <script src="/js/searchGym.js"></script>
+  </div>
 </section>

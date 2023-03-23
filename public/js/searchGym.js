@@ -1,3 +1,10 @@
+$(document).ready(function () {
+  searchGymByText(text);
+});
+
+const urlParams2 = new URLSearchParams(window.location.search);
+const text = urlParams2.get('text');
+
 const searchBtn = document.querySelector('.search');
 const searchBox = document.querySelector('.search-box');
 const searchSubmit = document.querySelector('.search-submit');
@@ -30,19 +37,54 @@ searchInput.addEventListener('keydown', (event) => {
   }
 });
 
-async function searchGymByText(text) {
-  const response = await axios({
-    method: 'get',
-    url: `/api/gym/search/${text}`,
+const observer2 = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    entry.target.classList.toggle('show', entry.isIntersecting);
+    if (entry.isIntersecting) observer2.unobserve(entry.target);
   });
-  const data = response.data;
-  console.log('data', data)
+});
 
-  for (const gym of data) {
-    let gymId = gym.id;
-    let name = gym.name;
-    let address = gym.address;
-    let gymImg = gym.gymImgs[0].img;
+const gymContainer2 = document.querySelector('.approve-wait');
+let postCount2 = 0;
+let loading2 = false;
+let limit2 = 7;
+let data3 = [];
+
+async function searchGymByText(text) {
+  if (loading2) return;
+  loading2 = true;
+  await axios
+    .get(`/api/gym/search/${text}/${postCount2}/${limit2}`)
+    .then(async (response) => {
+      const data = response.data.searchGyms;
+      const ing = response.data.key;
+      if (ing === 'ing') {
+        await searchGymLimit(data);
+        loading2 = false;
+      } else {
+        await searchGymLimit(data);
+        loading2 = true;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+window.addEventListener('scroll', async () => {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+  if (scrollTop + clientHeight >= scrollHeight - 5 && !loading2) {
+    await searchGymByText(text);
+  }
+});
+
+async function searchGymLimit(data) {
+  for (let i = 0; i < limit2 - 1 && i < data.length; i++) {
+    data3.push(data[i]);
+    let gymId = data[i].id;
+    let name = data[i].name;
+    let address = data[i].address;
+    let gymImg = data[i].gymImgs[0].img;
     let temp = `
           <div class="gym-approve-wait">
             <img src="${gymImg}"   onclick="location.href='/gym/gymDetail?gym=${gymId}'" alt="" />
@@ -64,18 +106,5 @@ async function searchGymByText(text) {
           `;
     $(`.gym-review-${gymId}`).append(avgStar);
   }
+  postCount2 += limit2 - 1;
 }
-
-// location.href='/user/qrcode'
-// function qrCode() {
-//   const userType = localStorage.getItem('type');
-//   if (!userType) {
-//     window.location.href = '/user/login';
-//   }
-//   if (userType === 'user') {
-//     window.location.href = '/user/qrcode';
-//   }
-//   if (userType === 'business') {
-
-//   }
-// }

@@ -258,7 +258,7 @@ export class GymService {
    * 엘라스틱서치 검색 적용(헬스장 이름 일부분으로 검색)
    * @author 정호준, 김승일
    */
-  async searchGymByText(text: string) {
+  async searchGymByText(text: string, offset: number, limit: number) {
     const query = {
       bool: {
         must: [
@@ -283,13 +283,19 @@ export class GymService {
         minimum_should_match: 1,
       },
     };
-    const searchGyms = await this.elasticSearch.search({
+    const result = await this.elasticSearch.search({
       index: 'gym',
-      // 최대 개수
-      size: 200,
+      size: limit,
+      from: offset,
       query,
     });
-    return searchGyms.hits.hits.map((hit) => hit._source);
+
+    const searchGyms = result.hits.hits.map((hit) => hit._source);
+
+    if (searchGyms.length === limit) {
+      return { searchGyms, key: 'ing' };
+    }
+    return { searchGyms, key: 'end' };
   }
 
   /**
@@ -355,7 +361,7 @@ export class GymService {
    * @description 'OO구' 로 체육관 찾기(엘라스틱서치 적용)
    * @author 정호준, 김승일
    */
-  async searchGymByAddress(text: string) {
+  async searchGymByAddress(text: string, offset: number, limit: number) {
     const addressSplit = text.split(' ');
     const gu = addressSplit[1];
 
@@ -378,22 +384,30 @@ export class GymService {
         minimum_should_match: 1,
       },
     };
-    const approvedGymsByGu = await this.elasticSearch.search({
+
+    const result = await this.elasticSearch.search({
       index: 'gym',
+      size: limit,
+      from: offset,
       query,
     });
-    return approvedGymsByGu.hits.hits.map((hit) => hit._source);
+
+    const findByAddressGyms = result.hits.hits.map((hit) => hit._source);
+
+    if (findByAddressGyms.length === limit) {
+      return { findByAddressGyms, key: 'ing' };
+    }
+    return { findByAddressGyms, key: 'stop' };
   }
 
   /**
    * @description 'OO시'로 체육관 찾기(엘라스틱서치 적용)
    * @author 정호준, 김승일
    */
-  async searchGymByAddressWide(text: string) {
+  async searchGymByAddressWide(text: string, offset: number, limit: number) {
     const addressSplit = text.split(' ');
     const city = addressSplit[0];
 
-    // 승인된 체육관 중에서 주소가 city와 일치하는 것들을 검색하는 쿼리 객체
     const query = {
       bool: {
         must: [
@@ -414,10 +428,18 @@ export class GymService {
       },
     };
 
-    const approvedGymsByCity = await this.elasticSearch.search({
+    const result = await this.elasticSearch.search({
       index: 'gym',
+      size: limit,
+      from: offset,
       query,
     });
-    return approvedGymsByCity.hits.hits.map((hit) => hit._source);
+
+    const findByAddressGymsWide = result.hits.hits.map((hit) => hit._source);
+
+    if (findByAddressGymsWide.length === limit) {
+      return { findByAddressGymsWide, key: 'ing' };
+    }
+    return { findByAddressGymsWide, key: 'stop' };
   }
 }

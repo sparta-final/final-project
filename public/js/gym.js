@@ -37,12 +37,12 @@ function showPosition(position) {
     container.style.height = '550px';
     const options = {
       center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
-      level: 2,
+      level: 5,
     };
 
     map = new kakao.maps.Map(container, options);
     // 지도에 마커와 이름 표시
-    axios.get('/api/gym/all').then((res) => {
+    axios.get('/api/gym/approveGym').then((res) => {
       const gyms = res.data;
       for (const gym of gyms) {
         const markerPosition = new kakao.maps.LatLng(gym.lat, gym.lng);
@@ -141,41 +141,57 @@ const observer = new IntersectionObserver((entries) => {
 const gymContainer = document.querySelector('.approve-wait');
 let postCount = 0;
 let loading = false;
-const limit = 8;
-let data = [];
+const limit = 7;
+let data2 = [];
 
 async function getGymList(text) {
   if (loading) return;
   loading = true;
-  const response = await axios({
-    method: 'get',
-    url: `/api/gym/address/${text}`,
-    params: {
-      offset: postCount,
-      limit,
-    },
-  });
-  if (response.data.length === 0) {
-    const response2 = await axios({
-      method: 'get',
-      url: `/api/gym/address/wide/${text}`,
-      params: {
-        offset: postCount,
-        limit,
-      },
+  await axios
+    .get(`/api/gym/address/${text}/${postCount}/${limit}`)
+    .then(async (res) => {
+      if (res.data.length === 0) {
+        await axios
+          .get(`/api/gym/address/wide/${text}/${postCount}/${limit}`)
+          .then((res2) => {
+            res.data.findByAddressGyms = res2.data.findByAddressGymsWide;
+            res.data.key = res2.data.key;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+      const data = res.data.findByAddressGyms;
+      const ing = res.data.key;
+      if (ing === 'ing') {
+        await getGymLimit(data);
+        loading = false;
+      } else {
+        await getGymLimit(data);
+        loading = true;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
     });
-    response.data = response2.data;
+}
+
+window.addEventListener('scroll', async () => {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+  if (scrollTop + clientHeight >= scrollHeight - 5 && !loading) {
+    await getGymList(x.innerHTML);
   }
-  const responseData = response.data;
-  data = [...data, ...responseData];
-  if (postCount === 0) {
-    gymContainer.innerHTML = '';
-    for (let i = 0; i < limit && i < responseData.length; i++) {
-      const gymImgSrc = responseData[i].gymImgs[0].img;
-      let gymId = responseData[i].id;
-      let gymname = responseData[i].name;
-      let gymaddress = responseData[i].address;
-      let temp = `
+});
+
+async function getGymLimit(responseData) {
+  // gymContainer.innerHTML = '';
+  for (let i = 0; i < limit - 1 && i < responseData.length; i++) {
+    data2.push(responseData[i]);
+    const gymImgSrc = responseData[i].gymImgs[0].img;
+    let gymId = responseData[i].id;
+    let gymname = responseData[i].name;
+    let gymaddress = responseData[i].address;
+    let temp = `
             <div class="gym-approve-wait">
               <img class="gym-list-img" src="${gymImgSrc}" onclick="location.href='/gym/gymDetail?gym=${gymId}'" alt="" />
               <ul class="gym-info-box">
@@ -186,59 +202,19 @@ async function getGymList(text) {
               </ul>
             </div>
             `;
-      $('.approve-wait').append(temp);
-      const res = await axios({
-        method: 'get',
-        url: `/api/gym/${gymId}/review`,
-      });
-      const reivewsLength = res.data.reviews.length;
-      let avgStar = `
+    $('.approve-wait').append(temp);
+    const res = await axios({
+      method: 'get',
+      url: `/api/gym/${gymId}/review`,
+    });
+    const reivewsLength = res.data.reviews.length;
+    let avgStar = `
             <div class="gym-star">⭐<span>${res.data.avgStar}</span>(${reivewsLength})</div>
             `;
-      $(`.gym-review-${gymId}`).append(avgStar);
-    }
-    postCount += limit;
-  } else {
-    const remainingGyms = responseData.slice(postCount);
-    const maxGymsToLoad = Math.min(limit, remainingGyms.length);
-    for (let i = 0; i < maxGymsToLoad; i++) {
-      let id = remainingGyms[i].id;
-      let gymImgSrc2 = remainingGyms[i].gymImgs[0].img;
-      let name = remainingGyms[i].name;
-      let address = remainingGyms[i].address;
-      let temp2 = `
-      <div class="gym-approve-wait">
-        <img class="gym-list-img" src="${gymImgSrc2}" onclick="location.href='/gym/gymDetail?gym=${id}'" alt="" />
-        <ul class="gym-info-box">
-          <li class="gym-name" onclick="location.href='/gym/gymDetail?gym=${id}'">${name}</li>
-          <li class="all-gym-qrcode" onclick="QRCheck(${id})"></li>
-          <li class="gym-location">${address}</li>
-          <li class="gym-review-${id}"></li>
-        </ul>
-      </div>
-      `;
-      $('.approve-wait').append(temp2);
-      const res = await axios({
-        method: 'get',
-        url: `/api/gym/${id}/review`,
-      });
-      const reivewsLength = res.data.reviews.length;
-      let avgStar2 = `
-            <div class="gym-star">⭐<span>${res.data.avgStar}</span>(${reivewsLength})</div>
-            `;
-      $(`.gym-review-${id}`).append(avgStar2);
-    }
-    postCount += maxGymsToLoad;
+    $(`.gym-review-${gymId}`).append(avgStar);
   }
-  loading = false;
+  postCount += limit - 1;
 }
-
-window.addEventListener('scroll', () => {
-  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-  if (scrollTop + clientHeight >= scrollHeight - 5 && !loading && postCount > 0 && postCount < data.length) {
-    getGymList(x.innerHTML);
-  }
-});
 
 // 임시 QR 코드
 async function QRCheck(gymId) {
