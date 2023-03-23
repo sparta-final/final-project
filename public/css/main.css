@@ -34,6 +34,10 @@
   font-weight: 800;
 }
 
+#mobile-container .qr-form {
+  display: none;
+}
+
 /* img slider */
 
 div.img-slider > div.bx-wrapper {
@@ -155,7 +159,7 @@ img#main-img {
   border: none;
   border-radius: 8px;
   background-color: var(--point-color);
-  color: var(--main-color);
+  color: var(--sub-color-1);
 }
 
 .sub-standard > #subscribe-btn {
@@ -216,4 +220,20 @@ img#main-img {
   color: var(--main-color);
   background-color: var(--point-color);
   transition: 0.2s ease;
+}
+
+.test-payment {
+  color: var(--sub-color-1);
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.test-payment-sub {
+  color: var(--sub-color-4);
+  font-size: 15px;
+  text-align: center;
+}
+
+.test-payment-sub > span {
+  color: var(--sub-color-1);
 }
