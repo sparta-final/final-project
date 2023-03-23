@@ -258,38 +258,25 @@ export class GymService {
    * 엘라스틱서치 검색 적용(헬스장 이름 일부분으로 검색)
    * @author 정호준, 김승일
    */
-  async searchGymByText(text: string) {
-    const query = {
-      bool: {
-        must: [
-          {
-            term: {
-              isApprove: 1,
-            },
-          },
-        ],
-        should: [
-          {
-            wildcard: {
-              name: `*${text}*`,
-            },
-          },
-          {
-            wildcard: {
-              address: `*${text}*`,
-            },
-          },
-        ],
-        minimum_should_match: 1,
-      },
-    };
-    const searchGyms = await this.elasticSearch.search({
-      index: 'gym',
-      // 최대 개수
-      size: 200,
-      query,
-    });
-    return searchGyms.hits.hits.map((hit) => hit._source);
+  async searchGymByText(text, offset, limit) {
+    // const cachedSearchGyms = await this.cacheManager.get(`gym:searchGyms:${text}`);
+    // if (cachedSearchGyms) return cachedSearchGyms;
+
+    const searchGyms = await this.gymsrepository
+      .createQueryBuilder('gym')
+      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
+      .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
+      .where('gym.name LIKE :name', { name: `${text}%` })
+      .skip(offset)
+      .take(limit)
+      .getMany();
+
+    await this.cacheManager.set(`gym:searchGyms:${text}`, searchGyms, { ttl: 60 });
+
+    if (searchGyms.length === limit) {
+      return { searchGyms, key: 'ing' };
+    }
+    return { searchGyms, key: 'end' };
   }
 
   /**
@@ -355,69 +342,57 @@ export class GymService {
    * @description 'OO구' 로 체육관 찾기(엘라스틱서치 적용)
    * @author 정호준, 김승일
    */
-  async searchGymByAddress(text: string) {
+  async searchGymByAddress(text, offset, limit) {
+    // const cachedAddressGyms = await this.cacheManager.get(`gym:findByAddressGyms:${text}:${offset}:${limit}`);
+    // if (cachedAddressGyms) return cachedAddressGyms;
+
     const addressSplit = text.split(' ');
     const gu = addressSplit[1];
 
-    const query = {
-      bool: {
-        must: [
-          {
-            term: {
-              isApprove: 1,
-            },
-          },
-        ],
-        should: [
-          {
-            match: {
-              address: gu,
-            },
-          },
-        ],
-        minimum_should_match: 1,
-      },
-    };
-    const approvedGymsByGu = await this.elasticSearch.search({
-      index: 'gym',
-      query,
-    });
-    return approvedGymsByGu.hits.hits.map((hit) => hit._source);
+    const findByAddressGyms = await this.gymsrepository
+      .createQueryBuilder('gym')
+      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
+      .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
+      .where('gym.address LIKE :address', { address: `%${gu}%` })
+      .andWhere('gym.isApprove = :isApprove', { isApprove: 1 })
+      .skip(offset)
+      .take(limit)
+      .getMany();
+
+    await this.cacheManager.set(`gym:findByAddressGyms:${text}:${offset}:${limit}`, findByAddressGyms, { ttl: 60 });
+
+    if (findByAddressGyms.length === limit) {
+      return { findByAddressGyms, key: 'ing' };
+    }
+    return { findByAddressGyms, key: 'stop' };
   }
 
   /**
    * @description 'OO시'로 체육관 찾기(엘라스틱서치 적용)
    * @author 정호준, 김승일
    */
-  async searchGymByAddressWide(text: string) {
+  async searchGymByAddressWide(text, offset, limit) {
+    // const cachedAddressGymsWide = await this.cacheManager.get(`gym:findByAddressGymsWide:${text}:${offset}:${limit}`);
+    // if (cachedAddressGymsWide) return cachedAddressGymsWide;
+
     const addressSplit = text.split(' ');
     const city = addressSplit[0];
 
-    // 승인된 체육관 중에서 주소가 city와 일치하는 것들을 검색하는 쿼리 객체
-    const query = {
-      bool: {
-        must: [
-          {
-            term: {
-              isApprove: 1,
-            },
-          },
-        ],
-        should: [
-          {
-            match: {
-              address: city,
-            },
-          },
-        ],
-        minimum_should_match: 1,
-      },
-    };
+    const findByAddressGymsWide = await this.gymsrepository
+      .createQueryBuilder('gym')
+      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
+      .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
+      .where('gym.address LIKE :address', { address: `${city}%` })
+      .andWhere('gym.isApprove = :isApprove', { isApprove: 1 })
+      .skip(offset)
+      .take(limit)
+      .getMany();
 
-    const approvedGymsByCity = await this.elasticSearch.search({
-      index: 'gym',
-      query,
-    });
-    return approvedGymsByCity.hits.hits.map((hit) => hit._source);
+    await this.cacheManager.set(`gym:findByAddressGymsWide:${text}:${offset}:${limit}`, findByAddressGymsWide, { ttl: 60 });
+
+    if (findByAddressGymsWide.length === limit) {
+      return { findByAddressGymsWide, key: 'ing' };
+    }
+    return { findByAddressGymsWide, key: 'stop' };
   }
 }

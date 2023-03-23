@@ -1,5 +1,6 @@
 $(document).ready(function () {
   $('.create-feed-btn').css('display', 'block');
+  getGym();
 });
 
 // 무한스크롤
@@ -14,8 +15,8 @@ const observer = new IntersectionObserver((entries) => {
 const feedContainer = document.querySelector('.feed-container');
 let postCount = 0;
 let loading = false;
-const limit = 5;
-let data = [];
+const limit = 6;
+let data2 = [];
 
 let token = localStorage.getItem('at');
 let tokenPayload = token ? token.split('.')[1] : null;
@@ -26,190 +27,112 @@ if (parsedPayload === null) {
   parsedPayload = { sub: 0 };
 }
 
-function getGym() {
+async function getGym() {
   if (loading) return;
   loading = true;
-  axios
-    .get('/api/feed', {
-      params: {
-        offset: postCount,
-        limit,
-      },
-    })
+  await axios
+    .get(`/api/feed/${postCount}/${limit}`)
     .then(async (res) => {
-      data = res.data;
-
-      if (postCount === 0) {
-        feedContainer.innerHTML = '';
-        for (let i = 0; i < limit && i < data.length; i++) {
-          //0
-          let id = data[i].id;
-          const comments = await axios.get(`/api/feed/${id}/comment`);
-          const commentsLength = comments.data.length;
-          let nickname = data[i].user.nickname;
-          let profileImg = data[i].user.profileImage;
-          let content = data[i].content;
-          let userId = data[i].userId;
-
-          if (parsedPayload.sub === userId) {
-            let temp = `
-          <div>
-          <div class="feed-user-wrap">
-              <img src="${profileImg}" alt="" class="feed-profile" />
-              <p class="feed-user-name">${nickname}</p>
-              <div id="control-show">
-                <ul class="feed-user-control">
-                <li class="feed-update" onclick="updateBtn(${id})" >수정하기</li>
-                <input type=hidden value="${data[i].userId}">
-                  <li class="feed-delete" onclick="feedDelete(${id})" >삭제하기</li>
-                </ul>
-              </div>
-            </div>
-            <ul class="feed-bxslider"></ul>
-            <div class="feed-content-wrap">
-
-              <p class="feed-content"><span>${nickname}</span>${content}</p>
-              <p class="feed-comments" onclick="location.href='/feed/${id}/comments'" >댓글 ${commentsLength}개 보기</p>
-              </div>  
-              `;
-            $('.feed-container').append(temp);
-          } else {
-            let temp = `
-          <div>
-          <div class="feed-user-wrap">
-              <img src="${profileImg}" alt="" class="feed-profile" />
-              <p class="feed-user-name">${nickname}</p>
-              
-            </div>
-            <ul class="feed-bxslider"></ul>
-            <div class="feed-content-wrap">
-
-              <p class="feed-content"><span>${nickname}</span>${content}</p>
-              <p class="feed-comments" onclick="location.href='/feed/${id}/comments'" >댓글 ${commentsLength}개 보기</p>
-              </div>  
-              `;
-            $('.feed-container').append(temp);
-          }
-
-          let feedsImg = data[i].feedsImgs;
-          for (let j = 0; j < feedsImg.length; j++) {
-            let feedImg = `
-            <li><img src="${feedsImg[j].image}" alt="" class="feed-image" /></li>
-            `;
-            $(document.getElementsByClassName('feed-bxslider')[i]).append(feedImg);
-          }
-          if (feedsImg.length > 1) {
-            $(function () {
-              $(document.getElementsByClassName('feed-bxslider')[i]).bxSlider({
-                auto: false,
-                stopAutoOnClick: false,
-                pager: false,
-                controls: false,
-                slideWidth: 420,
-                autoControlsCombine: true,
-                keyboardEnabled: true,
-                autoHover: true,
-                // pause: 4000,
-              });
-            });
-          }
-        }
-
-        postCount += limit;
+      data = res.data.allFeed;
+      let ing = res.data.key;
+      if (ing === 'ing') {
+        await getGymLimit(data);
+        loading = false;
       } else {
-        const remainingFeeds = data.slice(postCount);
-        const maxFeedsToLoad = Math.min(limit, remainingFeeds.length);
-        for (let i = 0; i < maxFeedsToLoad; i++) {
-          let id = remainingFeeds[i].id;
-          const comments = await axios.get(`/api/feed/${id}/comment`);
-          const commentsLength = comments.data.length;
-          let nickname = remainingFeeds[i].user.nickname;
-          let profileImg = remainingFeeds[i].user.profileImage;
-          let content = remainingFeeds[i].content;
-          let userId = remainingFeeds[i].userId;
-
-          if (parsedPayload.sub === userId) {
-            let temp = `
-          <div>
-            <div class="feed-user-wrap">
-            <img src="${profileImg}" alt="" class="feed-profile" />
-            <p class="feed-user-name">${nickname}</p>
-            <div id="control-show">
-                <ul class="feed-user-control">
-                  <li class="feed-update" onclick="updateBtn(${id})" >수정하기</li>
-                  <input type=hidden value="${remainingFeeds[i].userId}">
-                  <li class="feed-delete" onclick="feedDelete(${id})" >삭제하기</li>
-                </ul>
-            </div>
-            </div>
-            <ul class="feed-bxslider"></ul>
-            <div class="feed-content-wrap">
-              <p class="feed-content"><span>${nickname}</span>${content}</p>
-              <p class="feed-comments" onclick="location.href='/feed/${id}/comments'" >댓글 ${commentsLength}개 보기</p>
-              </div>  
-              </div>
-              `;
-            $('.feed-container').append(temp);
-          } else {
-            let temp = `
-          <div>
-            <div class="feed-user-wrap">
-            <img src="${profileImg}" alt="" class="feed-profile" />
-            <p class="feed-user-name">${nickname}</p>
-            </div>
-            <ul class="feed-bxslider"></ul>
-            <div class="feed-content-wrap">
-              <p class="feed-content"><span>${nickname}</span>${content}</p>
-              <p class="feed-comments" onclick="location.href='/feed/${id}/comments'" >댓글 ${commentsLength}개 보기</p>
-              </div>  
-              </div>
-              `;
-            $('.feed-container').append(temp);
-          }
-
-          let feedsImg = data[i + postCount].feedsImgs;
-          for (let j = 0; j < feedsImg.length; j++) {
-            let feedImg = `            
-            <li><img src="${feedsImg[j].image}" alt="" class="feed-image" /></li>
-            `;
-            $(document.getElementsByClassName('feed-bxslider')[i + postCount]).append(feedImg);
-          }
-          if (feedsImg.length > 1) {
-            $(function () {
-              $(document.getElementsByClassName('feed-bxslider')[i + postCount]).bxSlider({
-                auto: false,
-                stopAutoOnClick: false,
-                pager: false,
-                controls: false,
-                slideWidth: 420,
-                autoControlsCombine: true,
-                keyboardEnabled: true,
-                autoHover: true,
-                // pause: 4000,
-              });
-            });
-          }
-          const feed = document.createElement('div.feed-user-wrap');
-          observer.observe(feed);
-        }
-        postCount += maxFeedsToLoad;
+        await getGymLimit(data);
+        loading = true;
       }
-
-      loading = false;
     })
     .catch((err) => {
       console.log(err);
     });
 }
 
-getGym();
-
 window.addEventListener('scroll', () => {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-  if (scrollTop + clientHeight >= scrollHeight - 5 && !loading && postCount > 0 && postCount < data.length) {
+  if (scrollTop + clientHeight >= scrollHeight - 5 && !loading) {
     getGym();
   }
 });
+
+// 자른 데이터 가져오기
+async function getGymLimit(data) {
+  // feedContainer.innerHTML = '';
+  for (let i = 0; i < limit - 1 && i < data.length; i++) {
+    data2.push(data[i]);
+    let id = data[i].id;
+    const comments = await axios.get(`/api/feed/hello/${id}/comment`);
+    const commentsLength = comments.data.length;
+    let nickname = data[i].user.nickname;
+    let profileImg = data[i].user.profileImage;
+    let content = data[i].content;
+    let userId = data[i].userId;
+
+    if (parsedPayload.sub === userId) {
+      let temp = `
+    <div>
+    <div class="feed-user-wrap">
+        <img src="${profileImg}" alt="" class="feed-profile" />
+        <p class="feed-user-name">${nickname}</p>
+        <div id="control-show">
+          <ul class="feed-user-control">
+          <li class="feed-update" onclick="updateBtn(${id})" >수정하기</li>
+          <input type=hidden value="${data[i].userId}">
+            <li class="feed-delete" onclick="feedDelete(${id})" >삭제하기</li>
+          </ul>
+        </div>
+      </div>
+      <ul class="feed-bxslider"></ul>
+      <div class="feed-content-wrap">
+
+        <p class="feed-content"><span>${nickname}</span>${content}</p>
+        <p class="feed-comments" onclick="location.href='/feed/${id}/comments'" >댓글 ${commentsLength}개 보기</p>
+        </div>  
+        `;
+      $('.feed-container').append(temp);
+    } else {
+      let temp = `
+    <div>
+    <div class="feed-user-wrap">
+        <img src="${profileImg}" alt="" class="feed-profile" />
+        <p class="feed-user-name">${nickname}</p>
+        
+      </div>
+      <ul class="feed-bxslider"></ul>
+      <div class="feed-content-wrap">
+
+        <p class="feed-content"><span>${nickname}</span>${content}</p>
+        <p class="feed-comments" onclick="location.href='/feed/${id}/comments'" >댓글 ${commentsLength}개 보기</p>
+        </div>  
+        `;
+      $('.feed-container').append(temp);
+    }
+
+    let feedsImg = data[i].feedsImgs;
+    for (let j = 0; j < feedsImg.length; j++) {
+      let feedImg = `
+      <li><img src="${feedsImg[j].image}" alt="" class="feed-image" /></li>
+      `;
+      $(document.getElementsByClassName('feed-bxslider')[i + postCount]).append(feedImg);
+    }
+    if (feedsImg.length > 1) {
+      $(function () {
+        $(document.getElementsByClassName('feed-bxslider')[i]).bxSlider({
+          auto: false,
+          stopAutoOnClick: false,
+          pager: false,
+          controls: false,
+          slideWidth: 420,
+          autoControlsCombine: true,
+          keyboardEnabled: true,
+          autoHover: true,
+          // pause: 4000,
+        });
+      });
+    }
+  }
+  postCount += limit - 1;
+}
 
 // 피드 수정/삭제 show & hide
 const body = document.querySelector('body');

@@ -1,8 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { IsNumber } from 'class-validator';
 
 export class InfinityDto {
   @ApiProperty({ example: 0, description: '불러온 개수', required: false })
+  @Type(() => Number)
   @IsNumber()
   offset: number;
 
