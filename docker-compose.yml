@@ -2,7 +2,6 @@ version: '3.7'
 
 services:
   backend:
-    image: asia.gcr.io/codecamp-377309/sixpack:1.1
     build:
       context: .
       dockerfile: Dockerfile
@@ -22,7 +21,6 @@ services:
     ports:
       - 6379:6379
 
-  # Elasticsearch Docker Images: https://www.docker.elastic.co/
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
     container_name: elasticsearch
@@ -43,6 +41,18 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.6.2
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    volumes:
+      - ./src/global/config/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./src/global/config/mysql-connector-java-8.0.28.jar:/usr/share/logstash/mysql-connector-java-8.0.28.jar # mysql driver jar file
+    ports:
+      - 5000:5000
+    depends_on:
+      - elasticsearch
 
   # kibana:
   #   container_name: kibana

@@ -259,6 +259,8 @@ export class GymService {
    * @author 정호준, 김승일
    */
   async searchGymByText(text: string) {
+    console.log(text);
+
     const searchGyms = await this.elasticSearch.search({
       index: 'gym',
       query: {
