@@ -22,8 +22,8 @@ export class GymService {
   ) {}
 
   /**
-   * 체육관 생성(엘라스틱서치 적용)
-   * @author 정호준, 김승일
+   * 체육관 생성
+   * @author 정호준
    * @param PostGymDto
    */
   async postGyms({ file, postgymDto, user }) {
@@ -56,7 +56,7 @@ export class GymService {
         gymImgs.push({ gymId: createGym.id, img: file.gymImg[i].transforms[0].location });
       }
 
-      const createImg = await this.gymImgrepository.insert(gymImgs);
+      await this.gymImgrepository.insert(gymImgs);
 
       // 엘라스틱서치에 체육관 등록
       await this.elasticSearch.index({
@@ -259,37 +259,35 @@ export class GymService {
    * @author 정호준, 김승일
    */
   async searchGymByText(text: string) {
-    console.log(text);
-
+    const query = {
+      bool: {
+        must: [
+          {
+            term: {
+              isApprove: 1,
+            },
+          },
+        ],
+        should: [
+          {
+            wildcard: {
+              name: `*${text}*`,
+            },
+          },
+          {
+            wildcard: {
+              address: `*${text}*`,
+            },
+          },
+        ],
+        minimum_should_match: 1,
+      },
+    };
     const searchGyms = await this.elasticSearch.search({
       index: 'gym',
       // 최대 개수
       size: 200,
-      // 검색 조건
-      query: {
-        bool: {
-          must: [
-            {
-              term: {
-                isApprove: 1,
-              },
-            },
-          ],
-          should: [
-            {
-              wildcard: {
-                name: `*${text}*`,
-              },
-            },
-            {
-              wildcard: {
-                address: `*${text}*`,
-              },
-            },
-          ],
-          minimum_should_match: 1,
-        },
-      },
+      query,
     });
     return searchGyms.hits.hits.map((hit) => hit._source);
   }
@@ -360,32 +358,31 @@ export class GymService {
   async searchGymByAddress(text: string) {
     const addressSplit = text.split(' ');
     const gu = addressSplit[1];
-    console.log('🅰💩💩', gu);
-    console.log(123);
 
-    const searchGyms = await this.elasticSearch.search({
-      index: 'gym',
-      query: {
-        bool: {
-          must: [
-            {
-              term: {
-                isApprove: 1,
-              },
+    const query = {
+      bool: {
+        must: [
+          {
+            term: {
+              isApprove: 1,
             },
-          ],
-          should: [
-            {
-              wildcard: {
-                address: `*${gu}*`,
-              },
+          },
+        ],
+        should: [
+          {
+            match: {
+              address: gu,
             },
-          ],
-          minimum_should_match: 1,
-        },
+          },
+        ],
+        minimum_should_match: 1,
       },
+    };
+    const approvedGymsByGu = await this.elasticSearch.search({
+      index: 'gym',
+      query,
     });
-    return searchGyms.hits.hits.map((hit) => hit._source);
+    return approvedGymsByGu.hits.hits.map((hit) => hit._source);
   }
 
   /**
@@ -395,30 +392,32 @@ export class GymService {
   async searchGymByAddressWide(text: string) {
     const addressSplit = text.split(' ');
     const city = addressSplit[0];
-    console.log('🅰️🅰️🅰️', city);
 
-    const searchGyms = await this.elasticSearch.search({
-      index: 'gym',
-      query: {
-        bool: {
-          must: [
-            {
-              term: {
-                isApprove: 1,
-              },
+    // 승인된 체육관 중에서 주소가 city와 일치하는 것들을 검색하는 쿼리 객체
+    const query = {
+      bool: {
+        must: [
+          {
+            term: {
+              isApprove: 1,
             },
-          ],
-          should: [
-            {
-              wildcard: {
-                address: `*${city}*`,
-              },
+          },
+        ],
+        should: [
+          {
+            match: {
+              address: city,
             },
-          ],
-          minimum_should_match: 1,
-        },
+          },
+        ],
+        minimum_should_match: 1,
       },
+    };
+
+    const approvedGymsByCity = await this.elasticSearch.search({
+      index: 'gym',
+      query,
     });
-    return searchGyms.hits.hits.map((hit) => hit._source);
+    return approvedGymsByCity.hits.hits.map((hit) => hit._source);
   }
 }
