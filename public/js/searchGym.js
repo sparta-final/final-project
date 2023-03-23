@@ -45,12 +45,11 @@ async function searchGymByText(text) {
     let gymImg = gym.gymImgs[0].img;
     let temp = `
           <div class="gym-approve-wait">
-            <img src="${gymImg}"  alt="" />
+            <img src="${gymImg}"   onclick="location.href='/gym/gymDetail?gym=${gymId}'" alt="" />
             <ul class="gym-info-box">
-              <li class="gym-name">${name}</li>
+              <li class="gym-name"  onclick="location.href='/gym/gymDetail?gym=${gymId}'">${name}</li>
               <li class="gym-location">${address}</li>
               <li class="gym-review-${gymId}"></li>
-              <button class="gym-detial-btn" onclick="location.href='/gym/gymDetail?gym=${gymId}'" >가맹점 상세 정보</button>
             </ul>
           </div>
           `;
