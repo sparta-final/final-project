@@ -28,7 +28,6 @@ if (parsedPayload === null) {
 }
 
 async function getGym() {
-  console.log(postCount, limit);
   if (loading) return;
   loading = true;
   await axios
