@@ -14,8 +14,8 @@ import { Payments } from 'src/global/entities/Payments';
   imports: [
     TypeOrmModule.forFeature([Users, Gym, Payments, UserGym, Calculate, Reviews]),
     ElasticsearchModule.register({
-      node: 'http://localhost:9200',
-      // node: 'http://elasticsearch:9200',
+      // node: 'http://localhost:9200',
+      node: 'http://elasticsearch:9200',
     }),
   ],
   controllers: [AdminController],
