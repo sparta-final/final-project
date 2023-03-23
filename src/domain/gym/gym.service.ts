@@ -230,20 +230,25 @@ export class GymService {
    * 앞글자로 체육관 찾기
    * @author 정호준
    */
-  async searchGymByText(text) {
-    const cachedSearchGyms = await this.cacheManager.get(`gym:searchGyms:${text}`);
-    if (cachedSearchGyms) return cachedSearchGyms;
+  async searchGymByText(text, offset, limit) {
+    // const cachedSearchGyms = await this.cacheManager.get(`gym:searchGyms:${text}`);
+    // if (cachedSearchGyms) return cachedSearchGyms;
 
     const searchGyms = await this.gymsrepository
       .createQueryBuilder('gym')
       .leftJoinAndSelect('gym.gymImgs', 'gymImg')
       .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
       .where('gym.name LIKE :name', { name: `${text}%` })
+      .skip(offset)
+      .take(limit)
       .getMany();
 
     await this.cacheManager.set(`gym:searchGyms:${text}`, searchGyms, { ttl: 60 });
 
-    return searchGyms;
+    if (searchGyms.length === limit) {
+      return { searchGyms, key: 'ing' };
+    }
+    return { searchGyms, key: 'end' };
   }
   /**
    * 승인된 체육관만 가져오기
@@ -293,9 +298,9 @@ export class GymService {
    * 구 로 체육관 찾기
    * @author 정호준
    */
-  async searchGymByAddress(text) {
-    const cachedAddressGyms = await this.cacheManager.get(`gym:findByAddressGyms:${text}`);
-    if (cachedAddressGyms) return cachedAddressGyms;
+  async searchGymByAddress(text, offset, limit) {
+    // const cachedAddressGyms = await this.cacheManager.get(`gym:findByAddressGyms:${text}:${offset}:${limit}`);
+    // if (cachedAddressGyms) return cachedAddressGyms;
 
     const addressSplit = text.split(' ');
     const gu = addressSplit[1];
@@ -306,20 +311,25 @@ export class GymService {
       .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
       .where('gym.address LIKE :address', { address: `%${gu}%` })
       .andWhere('gym.isApprove = :isApprove', { isApprove: 1 })
+      .skip(offset)
+      .take(limit)
       .getMany();
 
-    await this.cacheManager.set(`gym:findByAddressGyms:${text}`, findByAddressGyms, { ttl: 60 });
+    await this.cacheManager.set(`gym:findByAddressGyms:${text}:${offset}:${limit}`, findByAddressGyms, { ttl: 60 });
 
-    return findByAddressGyms;
+    if (findByAddressGyms.length === limit) {
+      return { findByAddressGyms, key: 'ing' };
+    }
+    return { findByAddressGyms, key: 'stop' };
   }
 
   /**
    * 시 로 체육관 찾기
    * @author 정호준
    */
-  async searchGymByAddressWide(text) {
-    const cachedAddressGymsWide = await this.cacheManager.get(`gym:findByAddressGymsWide:${text}`);
-    if (cachedAddressGymsWide) return cachedAddressGymsWide;
+  async searchGymByAddressWide(text, offset, limit) {
+    // const cachedAddressGymsWide = await this.cacheManager.get(`gym:findByAddressGymsWide:${text}:${offset}:${limit}`);
+    // if (cachedAddressGymsWide) return cachedAddressGymsWide;
 
     const addressSplit = text.split(' ');
     const city = addressSplit[0];
@@ -330,10 +340,15 @@ export class GymService {
       .select(['gym.id', 'gym.name', 'gym.address', 'gymImg.img'])
       .where('gym.address LIKE :address', { address: `${city}%` })
       .andWhere('gym.isApprove = :isApprove', { isApprove: 1 })
+      .skip(offset)
+      .take(limit)
       .getMany();
 
-    await this.cacheManager.set(`gym:findByAddressGymsWide:${text}`, findByAddressGymsWide, { ttl: 60 });
+    await this.cacheManager.set(`gym:findByAddressGymsWide:${text}:${offset}:${limit}`, findByAddressGymsWide, { ttl: 60 });
 
-    return findByAddressGymsWide;
+    if (findByAddressGymsWide.length === limit) {
+      return { findByAddressGymsWide, key: 'ing' };
+    }
+    return { findByAddressGymsWide, key: 'stop' };
   }
 }
