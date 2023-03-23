@@ -179,7 +179,6 @@ async function getGymList(text) {
 window.addEventListener('scroll', async () => {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
   if (scrollTop + clientHeight >= scrollHeight - 5 && !loading) {
-    console.log('zzz');
     await getGymList(x.innerHTML);
   }
 });
