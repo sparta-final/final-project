@@ -37,7 +37,7 @@ function showPosition(position) {
     container.style.height = '550px';
     const options = {
       center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
-      level: 2,
+      level: 5,
     };
 
     map = new kakao.maps.Map(container, options);

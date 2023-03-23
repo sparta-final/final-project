@@ -60,27 +60,26 @@ export class FeedService {
    * @description 모든 피드 조회
    * @author 정호준, 한정훈
    */
-  async getAllFeed() {
-    const cachedallFeed = await this.cacheManager.get('Feed:allFeed');
-    if (cachedallFeed) return cachedallFeed;
+  async getAllFeed(offset: number, limit: number) {
+    // const cachedallFeed = await this.cacheManager.get('Feed:allFeed');
+    // if (cachedallFeed) return cachedallFeed;
+
     const allFeed = await this.feedsRepository
       .createQueryBuilder('feeds')
       .leftJoinAndSelect('feeds.user', 'user')
       .leftJoinAndSelect('feeds.feedsImgs', 'feedsImgs')
-      // .select(['user.nickname'])
       .select(['feeds', 'feedsImgs.image', 'user.nickname', 'user.profileImage'])
       .orderBy({ 'feeds.id': 'DESC' })
-      // .skip(Number(data.offset))
-      // .take(Number(data.offset) + Number(data.limit))
+      .skip(offset)
+      .take(limit)
       .getMany();
-    // .getRawMany();
-    // const allFeed = await this.feedsRepository.find({
-    //   relations: ['feedsImgs', 'user'],
-    //   order: { id: 'DESC' },
-    // });
-    await this.cacheManager.set('Feed:allFeed', allFeed, { ttl: 60 });
 
-    return allFeed;
+    await this.cacheManager.set('Feed:allFeed', allFeed, { ttl: 60 });
+    if (allFeed.length === limit) {
+      return { allFeed, key: 'ing' };
+    }
+
+    return { allFeed, key: 'stop' };
   }
 
   /**
