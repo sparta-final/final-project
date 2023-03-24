@@ -20,6 +20,9 @@ async function getMyReview() {
     },
   });
   const reviews = res.data;
+  if (reviews.length === 0) {
+    $('.none-member').css('display', 'block');
+  }
   function getStarString(reviewStarRating) {
     const starMap = {
       0: '0',
@@ -86,11 +89,23 @@ async function deleteReview(reviewId) {
     },
   });
   if (res.status === 200) {
-    toastr.success('리뷰가 삭제되었습니다.', '성공', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+    toastr.success('리뷰가 삭제되었습니다.', '성공', {
+      timeOut: 1500,
+      positionClass: 'toast-top-center',
+      closeButton: true,
+      progressBar: true,
+      preventDuplicates: true,
+    });
     setTimeout(() => {
       location.reload();
     }, 1500);
   } else {
-    toastr.error('리뷰 삭제에 실패했습니다.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+    toastr.error('리뷰 삭제에 실패했습니다.', '오류', {
+      timeOut: 1500,
+      positionClass: 'toast-top-center',
+      closeButton: true,
+      progressBar: true,
+      preventDuplicates: true,
+    });
   }
 }

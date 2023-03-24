@@ -57,6 +57,9 @@ async function searchGymByText(text) {
     .get(`/api/gym/search/${text}/${postCount2}/${limit2}`)
     .then(async (response) => {
       const data = response.data.searchGyms;
+      if (data.length === 0) {
+        $('.none-search').css('display', 'block');
+      }
       const ing = response.data.key;
       if (ing === 'ing') {
         await searchGymLimit(data);
