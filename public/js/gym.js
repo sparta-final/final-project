@@ -218,6 +218,9 @@ async function getGymLimit(responseData) {
 
 // 임시 QR 코드
 async function QRCheck(gymId) {
+  if (!localStorage.getItem('at') || !localStorage.getItem('rt')) {
+    return toastr.error('로그인이 필요합니다', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
+  }
   const now = Date.now();
   const findUserId = await axios.get('/api/loginUser/info', {
     headers: {
