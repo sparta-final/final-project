@@ -10,8 +10,8 @@ if (at && rt) {
   localStorage.setItem('at', at);
   localStorage.setItem('rt', rt);
   localStorage.setItem('type', 'user');
-  toastr.info('로그인 성공', '카카오로그인', { timeOut: 5000 })
   location.replace('/');
+  toastr.info('카카오로 회원가입 시 비밀번호는 1234입니다.', '카카오로그인', { timeOut: 5000 })
 }
 
 /**
