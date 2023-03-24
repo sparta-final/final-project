@@ -28,7 +28,7 @@ function getFeedUser(id) {
 function getComments(id) {
   axios({
     method: 'get',
-    url: `/api/feed/${id}/comment`,
+    url: `/api/feed/hello/${id}/comment`,
   })
     .then((response) => {
       const data = response.data;
