@@ -95,7 +95,7 @@ export class FeedController {
 
   @CommentUserGet()
   @Public()
-  @Get('/:feedId/user')
+  @Get('/comment/:feedId/user')
   async getCommentUser(@Param('feedId') feedId: number) {
     return await this.feedService.getCommentUser(feedId);
   }

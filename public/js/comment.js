@@ -6,7 +6,7 @@ $(document).ready(function () {
 function getFeedUser(id) {
   axios({
     method: 'get',
-    url: `/api/feed/${id}/user`,
+    url: `/api/feed/comment/${id}/user`,
   })
     .then((response) => {
       const data = response.data;
