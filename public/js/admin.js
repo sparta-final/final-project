@@ -79,7 +79,9 @@ function getRank(category, year, month) {
   const nextMonth = month === 12 ? 1 : month + 1;
   const nextYear = month === 12 ? year + 1 : year;
 
-  if (prevYear > new Date().getFullYear() || (prevYear === new Date().getFullYear() && prevMonth > new Date().getMonth())) {
+  if (prevYear > new Date().getFullYear() || (prevYear === new Date().getFullYear() && prevMonth === new Date().getMonth())) {
+    alert('이번달 데이터 조회는 불가능 합니다.');
+
     location.reload();
     toastr.warning('이번달 이후 조회는 불가능 합니다.');
     return;
@@ -94,6 +96,7 @@ function getRank(category, year, month) {
   })
     .then((response) => {
       const data = response.data;
+      console.log(data);
       $('.text-gray-dark').empty();
       $('.cur-month').remove();
       let rating;
