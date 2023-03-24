@@ -149,7 +149,13 @@ function cancelPay(custimerUid) {
       })
         .then((data) => {
           cancelDb();
-          toastr.success(`${data.data.message}`, '멤버쉽 해지', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+          toastr.success(`${data.data.message}`, '멤버쉽 해지', {
+            timeOut: 1500,
+            positionClass: 'toast-top-center',
+            closeButton: true,
+            progressBar: true,
+            preventDuplicates: true,
+          });
 
           // 다음 달 1일에 유저 멤버쉽 변경
           const date = new Date();
@@ -173,11 +179,23 @@ function cancelPay(custimerUid) {
         .catch((err) => {
           // 서버 결제 API 실패시 로직
           console.log(err);
-          toastr.error(`구독 해지에 실패했습니다. 다시 시도해주세요.`, '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+          toastr.error(`구독 해지에 실패했습니다. 다시 시도해주세요.`, '오류', {
+            timeOut: 1500,
+            positionClass: 'toast-top-center',
+            closeButton: true,
+            progressBar: true,
+            preventDuplicates: true,
+          });
         });
     }
   } catch (e) {
-    toastr.error(`에러 내용: ${e}`, '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+    toastr.error(`에러 내용: ${e}`, '오류', {
+      timeOut: 1500,
+      positionClass: 'toast-top-center',
+      closeButton: true,
+      progressBar: true,
+      preventDuplicates: true,
+    });
   }
 }
 
@@ -223,7 +241,10 @@ function getPaymentData(data) {
       let lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
       var nextPay = new Date(y, m, 1).toLocaleString().substring(0, 10);
       const response = res.data;
-
+      console.log('✨✨✨', response, '✨✨✨');
+      if (response.length === 0) {
+        $('.none-member').css('display', 'block');
+      }
 
       let length = response.length;
 

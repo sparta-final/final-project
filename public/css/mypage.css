@@ -294,3 +294,9 @@ div.membership-data-wrap > div.cancel-wait {
   font-weight: 600;
   cursor: pointer;
 }
+
+.none-member {
+  display: none;
+  color: var(--sub-color-4);
+  text-align: center;
+}
