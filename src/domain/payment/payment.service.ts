@@ -207,7 +207,7 @@ export class PaymentService {
       if (subCancel.data.code === 0) {
         return { message: '구독취소에 성공하였습니다.' };
       } else {
-        return { message: '구독취소신청이 완료되었습니다.' };
+        return { message: '구독취소 신청이 완료되었습니다.' };
       }
     } catch (e) {
       throw new NotFoundException(`구독취소에 실패하였습니다. ${e}`);

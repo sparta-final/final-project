@@ -7,8 +7,10 @@ body.addEventListener('click', function (e) {
   if (localStorage.getItem('at') && localStorage.getItem('rt')) {
     user(e);
   } else {
-    alert('일반유저로 로그인 후 진행해 주세요.');
-    window.location.replace(`/user/login`);
+    toastr.error('일반유저로 로그인 후 진행해 주세요.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+    setTimeout(() => {
+      window.location.replace(`/user/login`);
+    }, 1500);
   }
 });
 function user(e) {

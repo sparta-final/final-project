@@ -7,6 +7,9 @@ if (userType !== 'user') {
 function enrollFeed() {
   const content = document.getElementsByClassName('feed-textarea')[0].value;
   const feedImg = document.getElementById('feedImg').files;
+  if (feedImg.length === 0) {
+    return toastr.error('사진을 등록해주세요.', '오류', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
+  }
   const formData = new FormData();
   formData.append('content', content);
   for (let i in feedImg) {

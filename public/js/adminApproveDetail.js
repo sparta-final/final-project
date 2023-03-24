@@ -90,8 +90,10 @@ async function approveGym(id) {
       }
     )
     .then((response) => {
-      toastr.info('협력가맹점로 등록되었습니다.');
-      window.location.replace(`/admin/approve`);
+      toastr.info('협력가맹점으로 등록되었습니다.', '알림', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+      setTimeout(() => {
+        window.location.replace(`/admin/approve`);
+      }, 1500);
     })
     .catch((err) => {
       console.log(err);
