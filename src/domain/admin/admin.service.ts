@@ -132,12 +132,12 @@ export class AdminService {
    * @argument month
    */
   async getRank(data) {
-    // const cachedRank = await this.cacheManager.get(`admin:rank-${date.year}-${date.month}`);
-    // if (cachedRank) return cachedRank;
     const year = data.year;
     const month = data.month;
-    let rank = [];
     if (data.category === '정산 금액') {
+      const cachedPaidRank = await this.cacheManager.get(`admin:paid-rank-${year}-${month}`);
+      if (cachedPaidRank) return cachedPaidRank;
+
       const paidRank = await this.calculateRepo
         .createQueryBuilder('calculate')
         .leftJoin('calculate.gym', 'gym')
@@ -151,9 +151,15 @@ export class AdminService {
         .orderBy('calculate.paid', 'DESC')
         .limit(10)
         .getRawMany();
+
+      await this.cacheManager.set(`admin:paid-rank-${year}-${month}`, paidRank, { ttl: 60 });
+
       return paidRank;
     }
     if (data.category === '이용자 수') {
+      const cachedUserCountRank = await this.cacheManager.get(`admin:user-count-rank-${year}-${month}`);
+      if (cachedUserCountRank) return cachedUserCountRank;
+
       const userVisitGym = await this.userGymRepo
         .createQueryBuilder('user_gym')
         .select('user_gym.gym_id', 'gymId')
@@ -181,9 +187,14 @@ export class AdminService {
         .limit(10)
         .getRawMany();
 
+      await this.cacheManager.set(`admin:user-count-rank-${year}-${month}`, { gymUserCounts, counts }, { ttl: 60 });
+
       return { gymUserCounts, counts };
     }
     if (data.category === '평점') {
+      const cachedStarRank = await this.cacheManager.get(`admin:rating-rank-${year}-${month}`);
+      if (cachedStarRank) return cachedStarRank;
+
       const gymStarAverages = await this.userGymRepo
         .createQueryBuilder('user_gym')
         .select('gym.name', 'gymName')
@@ -214,6 +225,8 @@ export class AdminService {
 
         ratingUserCount.push(userVisitGym);
       }
+
+      await this.cacheManager.set(`admin:rating-rank-${year}-${month}`, { gymStarAverages, ratingUserCount }, { ttl: 60 });
 
       return { gymStarAverages, ratingUserCount };
     }
