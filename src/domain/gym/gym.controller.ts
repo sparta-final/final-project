@@ -119,4 +119,10 @@ export class GymController {
     const parseLimit = parseInt(limit, 10);
     return await this.gymservice.searchGymByAddressWide(text, parseOffset, parseLimit);
   }
+
+  @Public()
+  @Get('/admin/saveElastic')
+  async saveElastic() {
+    return await this.gymservice.saveGymToElasticSearch();
+  }
 }

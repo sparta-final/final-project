@@ -283,54 +283,42 @@ export class GymService {
         minimum_should_match: 1,
       },
     };
-    const result = await this.elasticSearch.search({
+    const { hits } = await this.elasticSearch.search({
       index: 'gym',
       size: limit,
       from: offset,
       query,
     });
 
-    const searchGyms = result.hits.hits.map((hit) => hit._source);
-
-    if (searchGyms.length === limit) {
-      return { searchGyms, key: 'ing' };
-    }
-    return { searchGyms, key: 'end' };
+    const searchGyms = hits.hits.map((hit) => hit._source);
+    const key = searchGyms.length === limit ? 'ing' : 'end';
+    return { searchGyms, key };
   }
 
   /**
-   * 승인된 체육관만 가져오기
-   * @author 정호준
-   * @deprecated
+   * 승인된 체육관만 가져오기(엘라스틱서치 적용)
+   * @author 정호준,김승일
    */
   async approveGymGet() {
-    const cachedAllGym = await this.cacheManager.get(`gym:allGym`);
-    if (cachedAllGym) return cachedAllGym;
-
-    const allGym = await this.gymsrepository
-      .createQueryBuilder('gym')
-      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
-      .where('gym.isApprove = :isApprove', { isApprove: 1 })
-      .andWhere('gymImg.id is not null')
-      .select(['gym', 'gymImg.img'])
-      .getMany();
-
-    // allGym 엘라스틱서치에 저장
-    await Promise.all(
-      allGym.map(async (gym) => {
-        await this.elasticSearch.index({
-          index: 'gym',
-          id: gym.id.toString(),
-          document: {
-            ...gym,
-            gymImgs: gym.gymImgs,
+    // 엘라스틱서치에서 승인된 체육관만 가져오기
+    const query = {
+      bool: {
+        must: [
+          {
+            term: {
+              isApprove: 1,
+            },
           },
-        });
-      })
-    );
+        ],
+      },
+    };
+    const { hits } = await this.elasticSearch.search({
+      index: 'gym',
+      size: 1000,
+      query,
+    });
 
-    await this.cacheManager.set(`gym:allGym`, allGym, { ttl: 60 });
-
+    const allGym = hits.hits.map((hit) => hit._source);
     return allGym;
   }
 
@@ -385,19 +373,16 @@ export class GymService {
       },
     };
 
-    const result = await this.elasticSearch.search({
+    const { hits } = await this.elasticSearch.search({
       index: 'gym',
       size: limit,
       from: offset,
       query,
     });
 
-    const findByAddressGyms = result.hits.hits.map((hit) => hit._source);
-
-    if (findByAddressGyms.length === limit) {
-      return { findByAddressGyms, key: 'ing' };
-    }
-    return { findByAddressGyms, key: 'stop' };
+    const findByAddressGyms = hits.hits.map((hit) => hit._source);
+    const key = findByAddressGyms.length === limit ? 'ing' : 'end';
+    return { findByAddressGyms, key };
   }
 
   /**
@@ -406,40 +391,63 @@ export class GymService {
    */
   async searchGymByAddressWide(text: string, offset: number, limit: number) {
     const addressSplit = text.split(' ');
-    const city = addressSplit[0];
+    const city = addressSplit[1];
 
     const query = {
       bool: {
         must: [
           {
-            term: {
-              isApprove: 1,
-            },
+            term: { isApprove: 1 },
           },
         ],
         should: [
           {
-            match: {
-              address: city,
-            },
+            match: { address: city },
           },
         ],
         minimum_should_match: 1,
       },
     };
 
-    const result = await this.elasticSearch.search({
+    const { hits } = await this.elasticSearch.search({
       index: 'gym',
       size: limit,
       from: offset,
       query,
     });
 
-    const findByAddressGymsWide = result.hits.hits.map((hit) => hit._source);
+    const findByAddressGymsWide = hits.hits.map((hit) => hit._source);
+    const key = findByAddressGymsWide.length === limit ? 'ing' : 'stop';
+    return { findByAddressGymsWide, key };
+  }
 
-    if (findByAddressGymsWide.length === limit) {
-      return { findByAddressGymsWide, key: 'ing' };
-    }
-    return { findByAddressGymsWide, key: 'stop' };
+  /**
+   * @description 엘라스틱서치에 승인된 체육관 저장하기(관리자용)
+   * @author 김승일
+   */
+  async saveGymToElasticSearch() {
+    const allGym = await this.gymsrepository
+      .createQueryBuilder('gym')
+      .leftJoinAndSelect('gym.gymImgs', 'gymImg')
+      .where('gym.isApprove = :isApprove', { isApprove: 1 })
+      .andWhere('gymImg.id is not null')
+      .select(['gym', 'gymImg.img'])
+      .getMany();
+
+    // allGym 엘라스틱서치에 저장
+    await Promise.all(
+      allGym.map(async (gym) => {
+        await this.elasticSearch.index({
+          index: 'gym',
+          id: gym.id.toString(),
+          document: {
+            ...gym,
+            gymImgs: gym.gymImgs,
+          },
+        });
+      })
+    );
+
+    return '저장완료';
   }
 }
