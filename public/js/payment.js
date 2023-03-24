@@ -89,7 +89,8 @@ async function requestPay(membership, amount) {
         }).then((data) => {
           // 서버 결제 API 성공시 로직
           // alert(`${name} 멤버쉽 구독 신청이 완료되었습니다.`);
-          window.location.replace(`/gym`);
+          // window.location.replace(`/gym`);
+          console.log('data', data)
         }).catch((err) => {
           // 서버 결제 API 실패시 로직
           console.log('err', err)
