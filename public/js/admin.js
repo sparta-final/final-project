@@ -1,6 +1,6 @@
 const userType = localStorage.getItem('type');
 if (userType !== 'admin') {
-  alert('접근 권한이 필요합니다.');
+  toastr.warning('접근 권한이 필요합니다.');
   window.location.href = '/';
 }
 
@@ -81,7 +81,9 @@ function getRank(category, year, month) {
 
   if (prevYear > new Date().getFullYear() || (prevYear === new Date().getFullYear() && prevMonth === new Date().getMonth())) {
     alert('이번달 데이터 조회는 불가능 합니다.');
+
     location.reload();
+    toastr.warning('이번달 이후 조회는 불가능 합니다.');
     return;
   }
   axios({
@@ -192,7 +194,7 @@ function salesMonth(category, year, month) {
       const data = response.data.toLocaleString();
 
       if (data.length === 0) {
-        alert('데이터가 없습니다');
+        toastr.warning('데이터가 없습니다');
       }
 
       let temp = `

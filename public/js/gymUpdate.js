@@ -88,8 +88,10 @@ function updateGym(id) {
     })
     .then((res) => {
       console.log(res);
-      alert('수정 완료!');
-      window.location.href = '/business/businessMyInfo';
+      toastr.success('가맹점 수정이 완료되었습니다.', '성공', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+      setTimeout(() => {
+        window.location.href = '/business/businessMyInfo';
+      }, 1500);
     })
     .catch((err) => {
       console.log(err);

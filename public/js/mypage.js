@@ -63,8 +63,6 @@ function getPaidData(data) {
       let lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
       var nextPay = new Date(y, m, 1).toLocaleString().substring(0, 10);
       const response = res.data;
-      console.log('✨✨✨', response, '✨✨✨');
-      console.log('✨✨✨', response[0].cancel, '✨✨✨');
 
       let custimerUid = response[0] ? response[0].customerUid : '';
       let createAt = response[0] ? response[0].createdAt.substring(0, 7) : '';
@@ -151,7 +149,7 @@ function cancelPay(custimerUid) {
       })
         .then((data) => {
           cancelDb();
-          alert(`${data.data.message}`);
+          toastr.success(`${data.data.message}`, '멤버쉽 해지', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
 
           // 다음 달 1일에 유저 멤버쉽 변경
           const date = new Date();
@@ -175,11 +173,11 @@ function cancelPay(custimerUid) {
         .catch((err) => {
           // 서버 결제 API 실패시 로직
           console.log(err);
-          alert(`구독 해지에 실패했습니다. 다시 시도해주세요.`);
+          toastr.error(`구독 해지에 실패했습니다. 다시 시도해주세요.`, '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
         });
     }
   } catch (e) {
-    alert(`에러 내용: ${e}`);
+    toastr.error(`에러 내용: ${e}`, '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
   }
 }
 
@@ -223,11 +221,9 @@ function getPaymentData(data) {
       let y = date.getFullYear();
       let m = date.getMonth() + 1;
       let lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-      console.log('✨✨✨', lastDayOfMonth, '✨✨✨');
       var nextPay = new Date(y, m, 1).toLocaleString().substring(0, 10);
-
       const response = res.data;
-      console.log('✨✨✨', response, '✨✨✨');
+
 
       let length = response.length;
 

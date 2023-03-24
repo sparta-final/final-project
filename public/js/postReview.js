@@ -53,14 +53,16 @@ async function postReview(usergymId) {
     })
     .then((res) => {
       if (res.status === 201) {
-        alert('리뷰가 작성되었습니다.');
-        window.location.replace('/mypage/history');
+        toastr.success('리뷰가 작성되었습니다.', '성공', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+        setTimeout(() => {
+          window.location.replace('/mypage/history');
+        }, 1500);
       } else {
-        alert('리뷰 작성에 실패했습니다.');
+        toastr.error('리뷰 작성에 실패했습니다.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
       }
     })
     .catch((err) => {
       console.log('err', err);
-      alert('리뷰 작성에 실패했습니다.');
+      toastr.error('리뷰 작성에 실패했습니다.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
     });
 }

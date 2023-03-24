@@ -12,8 +12,10 @@ function getGymReivew(id) {
       const review = res.data;
 
       if (review.reviews.length === 0) {
-        alert('리뷰가 존재하지 않습니다!');
-        location.href = '/business/businessMyInfo';
+        toastr.error('리뷰가 존재하지 않습니다!', '안내', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+        setTimeout(() => {
+          location.href = '/business/businessMyInfo';
+        }, 1500);
       }
 
       function getStarString(reviewStarRating) {

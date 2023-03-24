@@ -85,12 +85,14 @@ function enrollGym() {
     })
     .then((res) => {
       if (res.status === 201) {
-        alert('가맹점 등록 신청이 완료되었습니다.');
-        window.location.href = '/business/businessMyInfo';
+        toastr.success('가맹점 등록 신청이 완료되었습니다.', '가맹점 등록 성공', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+        setTimeout(() => {
+          window.location.href = '/business/businessMyInfo';
+        }, 1500);
       }
     })
     .catch((err) => {
-      alert(err.response.data.data);
+      toastr.error(err.response.data.data, '가맹점 등록 실패', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
       console.log(err);
     });
 }

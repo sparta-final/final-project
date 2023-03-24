@@ -21,7 +21,7 @@ function user(e) {
     })
     .then((res) => {
       if (res.data.membership === 'Basic' || res.data.membership === 'Standard' || res.data.membership === 'Premium') {
-        alert('이미 멤버쉽을 구독중입니다. 멤버쉽 해지 후 기간이 만료되면 다시 구독해주세요. ');
+        toastr.error('이미 멤버쉽을 구독중입니다. 멤버쉽 해지 후 기간이 만료되면 다시 구독해주세요.', '실패', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
       } else if (localStorage.getItem('type') === 'user') {
         const membership = e.target.parentElement.firstElementChild.textContent;
         const amountText = e.target.parentElement.children[1].textContent;
@@ -89,11 +89,16 @@ async function requestPay(membership, amount) {
         }).then((data) => {
           // 서버 결제 API 성공시 로직
           // alert(`${name} 멤버쉽 구독 신청이 완료되었습니다.`);
-          window.location.replace(`/gym`);
+          // window.location.replace(`/gym`);
+          console.log('data', data)
+        }).catch((err) => {
+          // 서버 결제 API 실패시 로직
+          console.log('err', err)
+          toastr.error(`결제에 실패하였습니다. 에러 내용: ${err}`, '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
         });
       } else {
         // 빌링키 발급 실패
-        alert(`결제에 실패하였습니다. 에러 내용: ${rsp.error_msg}`);
+        toastr.error(`결제에 실패하였습니다. 에러 내용: ${rsp.error_msg}`, '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
       }
     }
   );
