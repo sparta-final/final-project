@@ -11,9 +11,9 @@ if (at && rt) {
   localStorage.setItem('rt', rt);
   localStorage.setItem('type', 'user');
   toastr.info('카카오로 회원가입 시 비밀번호는 1234입니다.', '카카오로그인', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
-  setTimeout(() => {
-    location.replace('/gym');
-  }, 3000);
+  // setTimeout(() => {
+  //   location.replace('/gym');
+  // }, 3000);
 }
 
 /**
