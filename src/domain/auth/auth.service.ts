@@ -121,8 +121,8 @@ export class AuthService {
         nickname: user.nickname,
         email: user.email,
         // TODO : 카카오 로그인은 비밀번호, 전화번호 못받아옴. 나중에 수정 후 확인 필요
-        // password: 'test',
-        // phone: 'test',
+        password: '1234',
+        phone: '01012341234',
       });
       // 3. 로그인 완료 후 토큰 발급
       const tokens = await this.getTokens(newUser.id, newUser.email, 'user');

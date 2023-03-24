@@ -10,6 +10,7 @@ if (at && rt) {
   localStorage.setItem('at', at);
   localStorage.setItem('rt', rt);
   localStorage.setItem('type', 'user');
+  toastr.info('로그인 성공', '카카오로그인', { timeOut: 5000 })
   location.replace('/');
 }
 

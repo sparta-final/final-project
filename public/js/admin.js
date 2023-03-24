@@ -123,7 +123,7 @@ function getRank(category, year, month) {
           }
         }
         if (category === '평점') {
-          gymName = data.gymStarAverages[i].gym_name;
+          gymName = data.gymStarAverages[i].gymName;
           calculatePaid = data.gymStarAverages[i].paid;
           userCount = data.ratingUserCount[i][0].count;
           if (data.gymStarAverages[i].average === null) {
