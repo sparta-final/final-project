@@ -3,6 +3,24 @@ $(document).ready(function () {
 });
 
 /**
+ * @description: 카카오 로그인 성공시 토큰 저장 및 메인페이지로 이동
+ * @author: 김승일
+ */
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const at = urlParams.get('at');
+const rt = urlParams.get('rt');
+if (at && rt) {
+  localStorage.setItem('at', at);
+  localStorage.setItem('rt', rt);
+  localStorage.setItem('type', 'user');
+  toastr.info('카카오로 회원가입 시 비밀번호는 1234입니다.', '카카오로그인', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
+  // setTimeout(() => {
+  //   location.replace('/gym');
+  // }, 3000);
+}
+
+/**
  * @description 현재 내 주소 가져오기
  * @author 김승일
  */
