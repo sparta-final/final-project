@@ -74,9 +74,6 @@ function enrollGym() {
   }
   formData.append('address', address);
 
-  // for (let value of formData.values()) {
-  //   console.log(value);
-  // }
 
   axios
     .post('/api/gym', formData, {

@@ -134,7 +134,6 @@ export class AdminService {
   async getRank(data) {
     // const cachedRank = await this.cacheManager.get(`admin:rank-${date.year}-${date.month}`);
     // if (cachedRank) return cachedRank;
-    // console.log('✨✨✨', 'category', data.category === '정산 금액', '✨✨✨');
     const year = data.year;
     const month = data.month;
     let rank = [];

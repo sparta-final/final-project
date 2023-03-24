@@ -94,7 +94,6 @@ function getRank(category, year, month) {
   })
     .then((response) => {
       const data = response.data;
-      console.log('✨✨✨', data, '✨✨✨');
       $('.text-gray-dark').empty();
       $('.cur-month').remove();
       let rating;
@@ -124,8 +123,6 @@ function getRank(category, year, month) {
           }
         }
         if (category === '평점') {
-          console.log('✨✨✨', data.ratingUserCount[i][0].count, '✨✨✨');
-          console.log('✨✨✨', '평점 데이터', '✨✨✨');
           gymName = data.gymStarAverages[i].gym_name;
           calculatePaid = data.gymStarAverages[i].paid;
           userCount = data.ratingUserCount[i][0].count;
