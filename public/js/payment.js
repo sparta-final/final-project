@@ -92,6 +92,7 @@ async function requestPay(membership, amount) {
           window.location.replace(`/gym`);
         }).catch((err) => {
           // 서버 결제 API 실패시 로직
+          console.log('err', err)
           alert(`결제에 실패하였습니다. 에러 내용: ${err}`);
         });
       } else {
