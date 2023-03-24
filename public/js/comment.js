@@ -84,8 +84,11 @@ function getComments(id) {
 function commentAdd() {
   const userType = localStorage.getItem('type');
   if (userType !== 'user') {
-    alert('일반 로그인이 필요한 서비스입니다.');
-    window.location.href = '/user/login';
+    toastr.warning('일반 로그인이 필요한 서비스입니다.', '로그인 필요', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, newestOnTop: true, preventDuplicates: true, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut" });
+    // window.location.href = '/user/login';
+    setTimeout(function () {
+      window.location.href = '/user/login';
+    }, 1500);
   }
   let id = window.location.pathname.split('/')[2];
 
@@ -107,8 +110,10 @@ function commentAdd() {
     })
     .catch((err) => {
       if (err.response.status === 403) {
-        alert('로그인이 필요한 서비스입니다.');
-        window.location.href = '/user/login';
+        toastr.warning('로그인이 필요한 서비스입니다.', '로그인 필요', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, newestOnTop: true, preventDuplicates: true, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut" });
+        setTimeout(function () {
+          window.location.href = '/user/login';
+        }, 1500);
       }
       console.log('err', err);
     });

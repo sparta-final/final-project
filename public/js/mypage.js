@@ -124,7 +124,7 @@ function cancelPay(custimerUid) {
         },
       })
         .then((data) => {
-          alert(`${data.data.message}`);
+          toastr.success(`${data.data.message}`, '멤버쉽 해지', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
 
           // 다음 달 1일에 유저 멤버쉽 변경
           const date = new Date();
@@ -148,11 +148,11 @@ function cancelPay(custimerUid) {
         .catch((err) => {
           // 서버 결제 API 실패시 로직
           console.log(err);
-          alert(`구독 해지에 실패했습니다. 다시 시도해주세요.`);
+          toastr.error(`구독 해지에 실패했습니다. 다시 시도해주세요.`, '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
         });
     }
   } catch (e) {
-    alert(`에러 내용: ${e}`);
+    toastr.error(`에러 내용: ${e}`, '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
   }
 }
 

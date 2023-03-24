@@ -10,8 +10,10 @@ if (at && rt) {
   localStorage.setItem('at', at);
   localStorage.setItem('rt', rt);
   localStorage.setItem('type', 'user');
-  location.replace('/');
-  toastr.info('카카오로 회원가입 시 비밀번호는 1234입니다.', '카카오로그인', { timeOut: 5000 })
+  toastr.info('카카오로 회원가입 시 비밀번호는 1234입니다.', '카카오로그인', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
+  setTimeout(() => {
+    location.replace('/gym');
+  }, 3000);
 }
 
 /**
@@ -22,7 +24,7 @@ function userLogin() {
   const email = document.getElementById('userEmail').value;
   const password = document.getElementById('userpw').value;
   if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
-    return alert('이메일 형식이 올바르지 않습니다.');
+    return toastr.warning('이메일 형식이 올바르지 않습니다.', '로그인 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
   }
   const loginData = {
     email: email,
@@ -38,7 +40,7 @@ function userLogin() {
       location.replace('/gym');
     })
     .catch((err) => {
-      alert(err.response.data.data);
+      toastr.error(err.response.data.data, '로그인 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
     });
 }
 
@@ -53,7 +55,7 @@ function userSignup() {
   const passwordCheck = document.getElementById('userpwCheck').value;
   const phone = document.getElementById('userPhone').value;
   if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
-    return alert('이메일 형식이 올바르지 않습니다.');
+    return toastr.warning('이메일 형식이 올바르지 않습니다.', '회원가입 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
   }
 
   const signupData = {
@@ -70,12 +72,11 @@ function userSignup() {
       localStorage.setItem('at', res.data.at);
       localStorage.setItem('rt', res.data.rt);
       localStorage.setItem('type', res.data.type);
-      toastr.success('회원가입 성공');
       location.replace('/');
     })
     .catch((err) => {
       console.log('err', err)
-      alert(err.response.data.data);
+      toastr.warning(err.response.data.data, '회원가입 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
     });
 }
 
@@ -87,7 +88,7 @@ function businessLogin() {
   const email = document.getElementById('businessEmail').value;
   const password = document.getElementById('businesspw').value;
   if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
-    return alert('이메일 형식이 올바르지 않습니다.');
+    return toastr.warning('이메일 형식이 올바르지 않습니다.', '로그인 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
   }
   const loginData = {
     email: email,
@@ -103,7 +104,7 @@ function businessLogin() {
       location.replace('/business/businessMyinfo');
     })
     .catch((err) => {
-      alert(err.response.data.data);
+      toastr.warning(err.response.data.data, '로그인 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
     });
 }
 
@@ -118,7 +119,7 @@ function businessSignup() {
   const passwordCheck = document.getElementById('businesspwCheck').value;
   const phone = document.getElementById('businessPhone').value;
   if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
-    return alert('이메일 형식이 올바르지 않습니다.');
+    return toastr.warning("이메일 형식이 올바르지 않습니다", "회원가입 실패", { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true })
   }
 
   const signupData = {
@@ -135,11 +136,10 @@ function businessSignup() {
       localStorage.setItem('at', res.data.at);
       localStorage.setItem('rt', res.data.rt);
       localStorage.setItem('type', res.data.type);
-      alert('회원가입 성공');
       location.replace('/');
     })
     .catch((err) => {
-      alert(err.response.data.data);
+      toastr.warning(err.response.data.data, '회원가입 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
     });
 }
 
@@ -165,6 +165,6 @@ function adminLogin() {
       location.replace('/admin');
     })
     .catch((err) => {
-      alert(err.response.data.data);
-    });
+      toastr.warning(err.response.data.data, '로그인 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
+    })
 }

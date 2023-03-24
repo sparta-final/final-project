@@ -80,14 +80,14 @@ function putInfo() {
       console.log('err.response.data :', err.response.data.data);
 
       if (err.response.data.data === '현재 비밀번호가 일치하지 않습니다.') {
-        alert('현재 비밀번호가 일치하지않습니다.');
+        toastr.error('현재 비밀번호가 일치하지않습니다.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
       }
       if (err.response.data.data[0] === 'currentPassword should not be empty') {
-        alert('현재 비밀번호를 입력해주세요.');
+        toastr.error('현재 비밀번호를 입력해주세요.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
       }
 
       if (err.response.data.data === '비밀번호가 일치하지 않습니다.') {
-        alert('수정할 비밀번호가 일치하지 않습니다.');
+        toastr.error('수정할 비밀번호가 일치하지 않습니다.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
       }
     });
 }

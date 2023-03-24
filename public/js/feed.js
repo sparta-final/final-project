@@ -1,7 +1,7 @@
 $(document).ready(function () {
   $('.create-feed-btn').css('display', 'block');
   getGym();
-  toastr.success('피드를 작성해보세요!');
+  toastr.success('피드를 작성해보세요!', '피드 작성', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
 });
 
 // 무한스크롤
@@ -158,8 +158,10 @@ function feedDelete(id) {
     })
     .then((res) => {
       console.log(res);
-      alert('삭제가 완료되었습니다.');
-      window.location.reload();
+      toastr.success('삭제가 완료되었습니다.', '성공', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     })
     .catch((err) => {
       alert('삭제 권한이 없습니다.');
