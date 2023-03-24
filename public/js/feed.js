@@ -1,6 +1,7 @@
 $(document).ready(function () {
   $('.create-feed-btn').css('display', 'block');
   getGym();
+  toastr.success('피드를 작성해보세요!');
 });
 
 // 무한스크롤

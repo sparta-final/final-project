@@ -70,10 +70,11 @@ function userSignup() {
       localStorage.setItem('at', res.data.at);
       localStorage.setItem('rt', res.data.rt);
       localStorage.setItem('type', res.data.type);
-      alert('회원가입 성공');
+      toastr.success('회원가입 성공');
       location.replace('/');
     })
     .catch((err) => {
+      console.log('err', err)
       alert(err.response.data.data);
     });
 }

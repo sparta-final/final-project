@@ -115,13 +115,15 @@ export class AuthService {
   async KakaoLogin(user: KakaoLoginUserDto, _res: Response) {
     // 1. 가입 확인
     const existUser = await this.userRepo.findOne({ where: { email: user.email } });
+    // 패스워드 암호화
+    const hashedPassword = await bcrypt.hash('1234', 10);
     // 2. 회원가입
     if (!existUser) {
       const newUser = await this.userRepo.save({
         nickname: user.nickname,
         email: user.email,
         // TODO : 카카오 로그인은 비밀번호, 전화번호 못받아옴. 나중에 수정 후 확인 필요
-        password: '1234',
+        password: hashedPassword,
         phone: '01012341234',
       });
       // 3. 로그인 완료 후 토큰 발급
