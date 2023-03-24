@@ -35,7 +35,9 @@ export class PaymentController {
       if (data.status === paymentData.status && paymentData.status === 'paid') {
         // 결제 성공적으로 완료
         const createPaymentData = await this.paymentService.createPaymentData(data, user_id, paymentData);
+        console.log('createPaymentData', createPaymentData);
         const paymentReserve = await this.paymentService.paymentReserve(access_token, paymentData);
+        console.log('paymentReserve', paymentReserve);
       } else {
         // 결제금액 불일치. 위/변조 된 결제
         throw new BadRequestException('결제가 승인되지 않았습니다. 다시 시도해 주세요.');
