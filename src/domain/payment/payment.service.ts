@@ -224,6 +224,22 @@ export class PaymentService {
   }
 
   /**
+   * @description 구독 취소 한 회원 확인
+   * @argument userId
+   */
+  async updateWaitCancel(userId: number) {
+    const getMyPaid = await this.paymentRepo.findOne({
+      where: { userId: userId },
+      select: ['id'],
+      order: { id: 'DESC' },
+    });
+    await this.paymentRepo.update(getMyPaid.id, {
+      cancel: 1,
+    });
+    return { message: '구독취소에 성공하였습니다.' };
+  }
+
+  /**
    * @description 내 결제정보 & 내역 가져오기
    * @author 한정훈
    * @argument id

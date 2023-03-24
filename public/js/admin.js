@@ -79,8 +79,8 @@ function getRank(category, year, month) {
   const nextMonth = month === 12 ? 1 : month + 1;
   const nextYear = month === 12 ? year + 1 : year;
 
-  if (prevYear > new Date().getFullYear() || (prevYear === new Date().getFullYear() && prevMonth > new Date().getMonth())) {
-    alert('이번달 이후 조회는 불가능 합니다.');
+  if (prevYear > new Date().getFullYear() || (prevYear === new Date().getFullYear() && prevMonth === new Date().getMonth())) {
+    alert('이번달 데이터 조회는 불가능 합니다.');
     location.reload();
     return;
   }
@@ -94,6 +94,7 @@ function getRank(category, year, month) {
   })
     .then((response) => {
       const data = response.data;
+      console.log(data);
       $('.text-gray-dark').empty();
       $('.cur-month').remove();
       let rating;
@@ -123,7 +124,7 @@ function getRank(category, year, month) {
           }
         }
         if (category === '평점') {
-          gymName = data.gymStarAverages[i].gym_name;
+          gymName = data.gymStarAverages[i].gymName;
           calculatePaid = data.gymStarAverages[i].paid;
           userCount = data.ratingUserCount[i][0].count;
           if (data.gymStarAverages[i].average === null) {

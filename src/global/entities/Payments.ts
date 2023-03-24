@@ -59,6 +59,10 @@ export class Payments {
   @Column('varchar', { name: 'card_name', length: 100, nullable: true })
   card_name: string;
 
+  @ApiProperty({ example: 1, description: '구독 취소 여부' })
+  @Column('int', { name: 'cancel', nullable: true })
+  cancel: number;
+
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
 

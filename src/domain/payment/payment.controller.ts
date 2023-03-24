@@ -59,6 +59,12 @@ export class PaymentController {
     return await this.paymentService.updateMembershipAfterUnsubscribe(user.sub);
   }
 
+  // 구독 취소 마지막 payment 데이터에 cancel 1 로 업데이트
+  @Put('/waitCancel')
+  async waitCancel(@CurrentUser() user: JwtPayload) {
+    return await this.paymentService.updateWaitCancel(user.sub);
+  }
+
   @Get('/:id')
   @PaidData()
   async getPaidData(@Param('id') id: string) {
