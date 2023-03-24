@@ -36,9 +36,9 @@ function userLogin() {
       localStorage.setItem('type', res.data.type);
       location.replace('/gym');
     })
-    .catch((err) => {
-      alert(err.response.data.data);
-    });
+  // .catch((err) => {
+  //   alert(err.response.data.data);
+
 }
 
 /**
