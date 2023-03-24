@@ -72,9 +72,9 @@ function userSignup() {
       alert('회원가입 성공');
       location.replace('/');
     })
-    .catch((err) => {
-      alert(err.response.data.data);
-    });
+  // .catch((err) => {
+  //   alert(err.response.data.data);
+  // });
 }
 
 /**
