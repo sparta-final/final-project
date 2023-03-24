@@ -90,6 +90,9 @@ async function requestPay(membership, amount) {
           // 서버 결제 API 성공시 로직
           // alert(`${name} 멤버쉽 구독 신청이 완료되었습니다.`);
           window.location.replace(`/gym`);
+        }).catch((err) => {
+          // 서버 결제 API 실패시 로직
+          alert(`결제에 실패하였습니다. 에러 내용: ${err}`);
         });
       } else {
         // 빌링키 발급 실패
