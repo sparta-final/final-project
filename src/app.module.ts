@@ -47,10 +47,10 @@ import { AdminModule } from './domain/admin/admin.module';
       provide: APP_GUARD,
       useClass: JwtAccessGuard,
     },
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard,
+    // },
   ],
 })
 export class AppModule {}
