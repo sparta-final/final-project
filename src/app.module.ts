@@ -25,7 +25,10 @@ import { AdminModule } from './domain/admin/admin.module';
     CacheModule.register<RedisClientOptions>({
       isGlobal: true,
       url: process.env.REDIS_URL,
-      store: redisStore,
+      store: redisStore.create({
+        appendonly: 'no',
+        save: ['900 1', '300 10', '60 10000'],
+      }),
     }),
     // ThrottlerModule.forRoot({
     //   ttl: 30,
