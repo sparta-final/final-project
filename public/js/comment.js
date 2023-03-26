@@ -93,6 +93,9 @@ function commentAdd() {
   let id = window.location.pathname.split('/')[2];
 
   const comment = document.getElementById('create-comment').value;
+  if (!comment) {
+    toastr.warning('댓글을 입력해주세요.', '댓글 입력', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, newestOnTop: true, preventDuplicates: true, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut" });
+  }
 
   axios
     .post(
