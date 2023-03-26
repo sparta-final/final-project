@@ -27,7 +27,7 @@ export class ReviewController {
   }
 
   @Public()
-  @SkipThrottle()
+  // @SkipThrottle()
   @findReviewByGymId()
   @Get('/gym/:gymId/review')
   findReviewByGymId(@Param('gymId') gymId: number) {
