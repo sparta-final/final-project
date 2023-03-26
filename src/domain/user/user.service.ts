@@ -22,7 +22,7 @@ export class UserService {
    */
 
   async getUserInfo(user: JwtPayload) {
-    const cachedUser = await this.cacheManager.get(`user:ID: ${user.sub}`);
+    const cachedUser = await this.cacheManager.get(`user:ID:${user.sub}`);
     if (cachedUser) return cachedUser;
 
     const existUser = await this.userRepo.findOne({
@@ -30,7 +30,7 @@ export class UserService {
     });
     const { password, ...rest } = existUser;
 
-    await this.cacheManager.set(`user:ID: ${user.sub}`, rest, { ttl: 60 });
+    await this.cacheManager.set(`user:ID:${user.sub}`, rest, { ttl: 60 });
 
     return rest;
   }
