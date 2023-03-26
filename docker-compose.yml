@@ -14,12 +14,16 @@ services:
       - elasticsearch
     volumes:
       - ./src:/myfoler/src
+    networks:
+      - sixpack
 
   redis:
     image: redis:alpine
     container_name: redis
     ports:
       - 6379:6379
+    networks:
+      - sixpack
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
@@ -41,6 +45,8 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
+    networks:
+      - sixpack
 
   # logstash:
   #   image: docker.elastic.co/logstash/logstash:8.6.2
@@ -67,3 +73,7 @@ services:
 volumes:
   elasticsearch-data:
     driver: local
+
+networks:
+  sixpack:
+    driver: bridge
