@@ -34,12 +34,24 @@ function userLogin() {
  */
 function userSignup() {
   const email = document.getElementById('userEmail').value;
-  const nickname = document.getElementById('userNickname').value;
-  const password = document.getElementById('userpw').value;
-  const passwordCheck = document.getElementById('userpwCheck').value;
-  const phone = document.getElementById('userPhone').value;
   if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
     return toastr.warning('이메일 형식이 올바르지 않습니다.', '회원가입 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
+  }
+  const nickname = document.getElementById('userNickname').value;
+  if (!nickname) {
+    return toastr.warning('닉네임을 입력해주세요.', '회원가입 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
+  }
+  const password = document.getElementById('userpw').value;
+  if (!password) {
+    return toastr.warning('비밀번호를 입력해주세요.', '회원가입 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
+  }
+  const passwordCheck = document.getElementById('userpwCheck').value;
+  if (!passwordCheck) {
+    return toastr.warning('비밀번호 확인을 입력해주세요.', '회원가입 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
+  }
+  const phone = document.getElementById('userPhone').value;
+  if (!phone) {
+    return toastr.warning('전화번호를 입력해주세요.', '회원가입 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
   }
 
   const signupData = {
@@ -98,12 +110,24 @@ function businessLogin() {
  */
 function businessSignup() {
   const email = document.getElementById('businessEmail').value;
-  const name = document.getElementById('businessNickname').value;
-  const password = document.getElementById('businesspw').value;
-  const passwordCheck = document.getElementById('businesspwCheck').value;
-  const phone = document.getElementById('businessPhone').value;
   if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
     return toastr.warning("이메일 형식이 올바르지 않습니다", "회원가입 실패", { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true })
+  }
+  const name = document.getElementById('businessNickname').value;
+  if (!name) {
+    return toastr.warning('닉네임을 입력해주세요.', '회원가입 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
+  }
+  const password = document.getElementById('businesspw').value;
+  if (!password) {
+    return toastr.warning('비밀번호를 입력해주세요.', '회원가입 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
+  }
+  const passwordCheck = document.getElementById('businesspwCheck').value;
+  if (!passwordCheck) {
+    return toastr.warning('비밀번호 확인을 입력해주세요.', '회원가입 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
+  }
+  const phone = document.getElementById('businessPhone').value;
+  if (!phone) {
+    return toastr.warning('전화번호를 입력해주세요.', '회원가입 실패', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
   }
 
   const signupData = {
@@ -133,6 +157,9 @@ function businessSignup() {
  */
 function adminLogin() {
   const email = document.getElementById('adminEmail').value;
+  if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
+    return toastr.warning("이메일 형식이 올바르지 않습니다", "회원가입 실패", { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true })
+  }
   const password = document.getElementById('adminpw').value;
 
   const loginData = {

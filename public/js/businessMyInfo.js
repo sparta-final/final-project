@@ -80,6 +80,7 @@ async function getMyGym() {
 
 // 가게 삭제
 function deleteGym(id) {
+  if (confirm('정말 삭제하시겠습니까?') === false) return;
   axios
     .delete(`/api/gym/${id}`, {
       headers: {
