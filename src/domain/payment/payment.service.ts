@@ -245,8 +245,9 @@ export class PaymentService {
    * @argument id
    */
   async getPaidData(id) {
-    const cachedpaidData = await this.cacheManager.get(`paidData:${id}`);
-    if (cachedpaidData) return cachedpaidData;
+    // FIXME : 구독, 구독취소 시 캐시 오류
+    // const cachedpaidData = await this.cacheManager.get(`paidData:${id}`);
+    // if (cachedpaidData) return cachedpaidData;
 
     const paidData = await this.paymentRepo.find({
       where: { userId: id },
