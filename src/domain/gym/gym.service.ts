@@ -270,13 +270,13 @@ export class GymService {
         ],
         should: [
           {
-            wildcard: {
-              name: `*${text}*`,
+            match: {
+              name: text,
             },
           },
           {
-            wildcard: {
-              address: `*${text}*`,
+            match: {
+              address: text,
             },
           },
         ],
