@@ -149,13 +149,13 @@ function cancelPay(custimerUid) {
       })
         .then((data) => {
           cancelDb();
-          toastr.success(`${data.data.message}`, '멤버쉽 해지', {
-            timeOut: 1500,
-            positionClass: 'toast-top-center',
-            closeButton: true,
-            progressBar: true,
-            preventDuplicates: true,
-          });
+          // toastr.success(`${data.data.message}`, '멤버쉽 해지', {
+          //   timeOut: 1500,
+          //   positionClass: 'toast-top-center',
+          //   closeButton: true,
+          //   progressBar: true,
+          //   preventDuplicates: true,
+          // });
 
           // 다음 달 1일에 유저 멤버쉽 변경
           const date = new Date();
@@ -212,8 +212,16 @@ async function cancelDb() {
       }
     )
     .then((response) => {
-      alert(`${data.data.message}`);
-      window.location.replace(`/mypage`);
+      toastr.success(`${data.data.message}`, '멤버쉽 해지', {
+        timeOut: 1500,
+        positionClass: 'toast-top-center',
+        closeButton: true,
+        progressBar: true,
+        preventDuplicates: true,
+      });
+      setTimeout(() => {
+        window.location.replace(`/mypage`);
+      }, 1500);
     })
     .catch((err) => {
       console.log(err);
