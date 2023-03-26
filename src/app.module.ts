@@ -28,6 +28,7 @@ import { AdminModule } from './domain/admin/admin.module';
       store: redisStore.create({
         appendonly: 'yes',
         appendync: 'everysec',
+        host: 'redis',
       }),
     }),
     // ThrottlerModule.forRoot({
