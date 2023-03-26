@@ -27,7 +27,7 @@ import { AdminModule } from './domain/admin/admin.module';
       url: process.env.REDIS_URL,
       store: redisStore.create({
         appendonly: 'yes',
-        appendync: 'everysec',
+        appendfsync: 'everysec',
         host: 'redis',
       }),
     }),
