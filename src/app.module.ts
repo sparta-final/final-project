@@ -26,8 +26,8 @@ import { AdminModule } from './domain/admin/admin.module';
       isGlobal: true,
       url: process.env.REDIS_URL,
       store: redisStore.create({
-        appendonly: 'no',
-        save: ['900 1', '300 10', '60 10000'],
+        appendonly: 'yes',
+        appendync: 'everysec',
       }),
     }),
     // ThrottlerModule.forRoot({
