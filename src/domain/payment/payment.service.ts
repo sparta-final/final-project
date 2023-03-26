@@ -107,7 +107,7 @@ export class PaymentService {
       const paidDataCaches = await this.cacheManager.store.keys(`paidData:${user_id}`);
       if (paidDataCaches.length > 0) await this.cacheManager.store.del(paidDataCaches);
 
-      const userCaches = await this.cacheManager.store.keys(`user:ID:${user_id}*`);
+      const userCaches = await this.cacheManager.store.keys(`user:ID:${user_id}`);
       if (userCaches.length > 0) await this.cacheManager.store.del(userCaches);
 
       await queryRunner.commitTransaction();
@@ -236,6 +236,11 @@ export class PaymentService {
     await this.paymentRepo.update(getMyPaid.id, {
       cancel: 1,
     });
+
+    // paidData 캐시 삭제
+    const paidDataCaches = await this.cacheManager.store.keys(`paidData:${userId}`);
+    if (paidDataCaches.length > 0) await this.cacheManager.store.del(paidDataCaches);
+
     return { message: '구독취소에 성공하였습니다.' };
   }
 
@@ -245,7 +250,6 @@ export class PaymentService {
    * @argument id
    */
   async getPaidData(id) {
-    // FIXME : 구독, 구독취소 시 캐시 오류
     const cachedpaidData = await this.cacheManager.get(`paidData:${id}`);
     if (cachedpaidData) return cachedpaidData;
 
