@@ -270,13 +270,23 @@ export class GymService {
         ],
         should: [
           {
-            match: {
-              name: text,
+            wildcard: {
+              name: `*${text}*`,
             },
           },
           {
-            match: {
+            wildcard: {
+              address: `*${text}*`,
+            },
+          },
+          {
+            match_phrase: {
               address: text,
+            },
+          },
+          {
+            match_phrase: {
+              name: text,
             },
           },
         ],
@@ -293,6 +303,32 @@ export class GymService {
     const searchGyms = hits.hits.map((hit) => hit._source);
     const key = searchGyms.length === limit ? 'ing' : 'end';
     return { searchGyms, key };
+  }
+
+  /**
+   * @description auto complete를 위한 모든 체육관 검색
+   * @author 김승일
+   */
+  async searchGymByTextForAutoComplete() {
+    const query = {
+      bool: {
+        must: [
+          {
+            term: {
+              isApprove: 1,
+            },
+          },
+        ],
+      },
+    };
+    const { hits } = await this.elasticSearch.search({
+      index: 'gym',
+      size: 1000,
+      query,
+    });
+
+    const searchGyms = hits.hits.map((hit) => hit._source);
+    return searchGyms;
   }
 
   /**

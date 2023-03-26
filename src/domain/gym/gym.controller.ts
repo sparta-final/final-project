@@ -95,6 +95,12 @@ export class GymController {
     return this.gymservice.searchGymByText(text, parseOffset, parseLimit);
   }
 
+  @Public()
+  @Get('/search/:text/autocomplete')
+  async searchGymByTextAutoComplete() {
+    return this.gymservice.searchGymByTextForAutoComplete();
+  }
+
   @ApproveGymGet()
   @Public()
   @Get('/approveGym')

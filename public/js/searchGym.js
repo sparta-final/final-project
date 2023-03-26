@@ -1,4 +1,27 @@
 $(document).ready(function () {
+  axios
+    .get('/api/gym/search/서울/autocomplete')
+    .then((response) => {
+      const data = response.data;
+      let inputSource = [];
+      for (let i = 0; i < data.length; i++) {
+        inputSource.push(data[i].name);
+      }
+      $('.search-input').autocomplete({
+        source: inputSource,
+        minLength: 2,
+        focus: function (_event, _ui) {
+          return false;
+        }
+      }).on('autocompleteselect', function (_e, ui) {
+        const text = ui.item.value;
+        location.href = `/searchGym?text=${text}`;
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
   searchGymByText(text);
 });
 
