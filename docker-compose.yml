@@ -22,6 +22,9 @@ services:
     container_name: redis
     environment:
       - appendonly=yes
+      - appendfsync=everysec
+      - auto-aof-rewrite-percentage=100
+      - auto-aof-rewrite-min-size=64mb
     volumes:
       - ./redis-data:/data
     ports:
