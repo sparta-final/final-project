@@ -1,0 +1,22 @@
+steps:
+  # Build the Docker Compose images
+  - name: 'docker/compose:1.29.2'
+    entrypoint: docker-compose.yml
+    args: ['build']
+
+  # Push the Docker Compose images to the Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['compose', 'push']
+
+  # SSH into the VM instance and deploy the Docker Compose application
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'compute'
+      - 'ssh'
+      - 'sixpack'
+      - '--zone'
+      - 'asia-northeast3-a'
+      - '--project'
+      - 'codecamp-377309'
+      - '--command'
+      - 'docker-compose up -d'
