@@ -54,7 +54,7 @@ async function getMyReview() {
         <span class="user-name">${gymName}</span>
         </div>
         <div class="review-star-date-wrap">
-        <img class="reviews-star" src="//www.sixpack.pro/images/star_rating_${starString}.png" alt="" />
+        <img class="reviews-star" src=" /images/star_rating_${starString}.png" alt="" />
         <span class="reviews-date">${reviewCreatedAt}</span>
         <button class="review-delete-btn" onclick="deleteReview(${reviews[i].reviews[0].id})">삭제</button>
       </div>

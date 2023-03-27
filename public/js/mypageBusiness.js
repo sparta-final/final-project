@@ -20,7 +20,7 @@ function user() {
       $('#email').text(res.data.email);
       $('#profileImage').attr(
         'src',
-        res.data.profileImage ? res.data.profileImage : '//www.sixpack.pro/images/default_profile.png'
+        res.data.profileImage ? res.data.profileImage : ' /images/default_profile.png'
       );
     })
     .catch((err) => {

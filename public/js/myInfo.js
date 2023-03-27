@@ -38,7 +38,7 @@ function user() {
       $('#phone').val(res.data.phone);
       document.getElementById('image').src = res.data.profileImage
         ? res.data.profileImage
-        : '//www.sixpack.pro/images/default_profile.png';
+        : ' /images/default_profile.png';
     })
     .catch((err) => {
       console.log(err);

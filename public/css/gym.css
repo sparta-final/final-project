@@ -53,7 +53,7 @@
   right: 30px;
   width: 30px;
   height: 30px;
-  background-image: url(//www.sixpack.pro/images/close.png);
+  background-image: url( /images/close.png);
   background-size: cover;
   z-index: 10001;
   cursor: pointer;
@@ -99,7 +99,7 @@
   right: -10px;
   width: 24px;
   height: 24px;
-  background-image: url(//www.sixpack.pro/images/qr-code.png);
+  background-image: url( /images/qr-code.png);
   background-size: cover;
   cursor: pointer;
 }
