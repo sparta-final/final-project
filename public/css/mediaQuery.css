@@ -23,4 +23,49 @@
   body {
     background: #000;
   }
+
+  #admin-container,
+  div.feed-container > div,
+  .comment-box,
+  .update-feed-wrap,
+  .modal_body,
+  .header-wrap,
+  .search-box,
+  .footer-container,
+  #mobile-container {
+    width: 100vw;
+  }
+
+  .approve-img-slider,
+  img#approve-img,
+  img.feed-image,
+  .feed-image,
+  .feed-img-upload,
+  #feed-preview-img,
+  img.preview-img,
+  .gym-img-slider,
+  img#gym-img,
+  .img-slider,
+  img#main-img {
+    width: 100vw;
+    height: 100vw;
+  }
+
+  .mybtn button {
+    width: auto;
+    padding: 0 8px;
+  }
+
+  .form-group {
+    width: 90vw;
+    height: 100vw;
+  }
+  .review-textarea {
+    margin-left: 3%;
+  }
+
+  .rating {
+    left: 3%;
+    top: 118vw;
+  }
 }
