@@ -6,7 +6,7 @@ $(document).ready(function () {
 function getFeedUser(id) {
   axios({
     method: 'get',
-    url: `/api/feed/${id}/user`,
+    url: `/api/feed/comment/${id}/user`,
   })
     .then((response) => {
       const data = response.data;
@@ -28,7 +28,7 @@ function getFeedUser(id) {
 function getComments(id) {
   axios({
     method: 'get',
-    url: `/api/feed/${id}/comment`,
+    url: `/api/feed/hello/${id}/comment`,
   })
     .then((response) => {
       const data = response.data;
@@ -84,12 +84,18 @@ function getComments(id) {
 function commentAdd() {
   const userType = localStorage.getItem('type');
   if (userType !== 'user') {
-    alert('일반 로그인이 필요한 서비스입니다.');
-    window.location.href = '/user/login';
+    toastr.warning('일반 로그인이 필요한 서비스입니다.', '로그인 필요', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, newestOnTop: true, preventDuplicates: true, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut" });
+    // window.location.href = '/user/login';
+    setTimeout(function () {
+      window.location.href = '/user/login';
+    }, 1500);
   }
   let id = window.location.pathname.split('/')[2];
 
   const comment = document.getElementById('create-comment').value;
+  if (!comment) {
+    toastr.warning('댓글을 입력해주세요.', '댓글 입력', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, newestOnTop: true, preventDuplicates: true, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut" });
+  }
 
   axios
     .post(
@@ -107,8 +113,10 @@ function commentAdd() {
     })
     .catch((err) => {
       if (err.response.status === 403) {
-        alert('로그인이 필요한 서비스입니다.');
-        window.location.href = '/user/login';
+        toastr.warning('로그인이 필요한 서비스입니다.', '로그인 필요', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, newestOnTop: true, preventDuplicates: true, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut" });
+        setTimeout(function () {
+          window.location.href = '/user/login';
+        }, 1500);
       }
       console.log('err', err);
     });

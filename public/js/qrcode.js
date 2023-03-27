@@ -1,5 +1,8 @@
 $(document).ready(function () {
-  getQRCode();
+  const userType = localStorage.getItem('type');
+  if (userType === 'user') {
+    getQRCode();
+  }
 });
 /**
  * @description: QR코드 생성

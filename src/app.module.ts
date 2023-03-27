@@ -27,10 +27,10 @@ import { AdminModule } from './domain/admin/admin.module';
       url: process.env.REDIS_URL,
       store: redisStore,
     }),
-    ThrottlerModule.forRoot({
-      ttl: 30,
-      limit: 100,
-    }),
+    // ThrottlerModule.forRoot({
+    //   ttl: 30,
+    //   limit: 100,
+    // }),
     AuthModule,
     GymModule,
     ReviewModule,
@@ -47,10 +47,10 @@ import { AdminModule } from './domain/admin/admin.module';
       provide: APP_GUARD,
       useClass: JwtAccessGuard,
     },
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard,
+    // },
   ],
 })
 export class AppModule {}

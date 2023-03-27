@@ -254,6 +254,10 @@ img.my-info-btn {
   background: var(--sub-color-9);
 }
 
+div.membership-data-wrap > div.cancel-wait {
+  color: var(--sub-color-2);
+}
+
 .my-member {
   margin-top: 15px;
   padding: -20px;
@@ -289,4 +293,10 @@ img.my-info-btn {
   color: var(--point-color);
   font-weight: 600;
   cursor: pointer;
+}
+
+.none-member {
+  display: none;
+  color: var(--sub-color-4);
+  text-align: center;
 }

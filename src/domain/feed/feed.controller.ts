@@ -42,10 +42,13 @@ export class FeedController {
 
   @AllFeedGet()
   @Public()
-  @Get()
+  @Get('/:offset/:limit')
   // async getAllFeed(@Param() data: InfinityDto) {
-  async getAllFeed() {
-    return this.feedService.getAllFeed();
+  async getAllFeed(@Param('offset') offset: string, @Param('limit') limit: string) {
+    const parseOffset = parseInt(offset, 10);
+    const parseLimit = parseInt(limit, 10);
+
+    return this.feedService.getAllFeed(parseOffset, parseLimit);
   }
 
   @MyFeedGet()
@@ -82,7 +85,7 @@ export class FeedController {
   @CommentPost()
   @Post('/:feedId/comment')
   async postComment(
-    @Param('feedId') feedId: string,
+    @Param('feedId') feedId: number,
     @Body() createcommentDto: CreateCommentDto,
     @CurrentUser() user: JwtPayload
   ) {
@@ -92,22 +95,22 @@ export class FeedController {
 
   @CommentUserGet()
   @Public()
-  @Get('/:feedId/user')
-  async getCommentUser(@Param('feedId') feedId: string) {
+  @Get('/comment/:feedId/user')
+  async getCommentUser(@Param('feedId') feedId: number) {
     return await this.feedService.getCommentUser(feedId);
   }
 
   @AllCommentGet()
   @Public()
-  @Get('/:feedId/comment')
-  async getAllComment(@Param('feedId') feedId: string) {
+  @Get('/hello/:feedId/comment')
+  async getAllComment(@Param('feedId') feedId: number) {
     return await this.feedService.getAllComment(feedId);
   }
 
   @UpdateComment()
   @Put('/:feedId/comment/:commentId')
   async updateComment(
-    @Param('feedId') feedId: string,
+    @Param('feedId') feedId: number,
     @Param('commentId') commentId: string,
     @Body() updatecommentDto: UpdateCommentDto,
     @CurrentUser() user: JwtPayload

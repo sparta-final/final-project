@@ -1,5 +1,13 @@
 import { Cache } from 'cache-manager';
-import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, CACHE_MANAGER } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  NotFoundException,
+  CACHE_MANAGER,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Payments } from '../../global/entities/Payments';
@@ -78,7 +86,7 @@ export class PaymentService {
         customerUid: paymentData.customer_uid,
         amount: paymentData.amount,
         card_name: paymentData.card_name,
-        card_number: paymentData.card_number.substring(0, 8),
+        card_number: paymentData.card_number?.substring(0, 8),
       });
       let membershipOptions: userMembership;
       const membershipMap = {
@@ -99,14 +107,15 @@ export class PaymentService {
       const paidDataCaches = await this.cacheManager.store.keys(`paidData:${user_id}`);
       if (paidDataCaches.length > 0) await this.cacheManager.store.del(paidDataCaches);
 
-      const userCaches = await this.cacheManager.store.keys(`user:ID:${user_id}*`);
+      const userCaches = await this.cacheManager.store.keys(`user:ID:${user_id}`);
       if (userCaches.length > 0) await this.cacheManager.store.del(userCaches);
 
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();
       console.log('error', error);
-      throw new HttpException('결제정보 저장 실패', HttpStatus.BAD_REQUEST);
+      // throw new HttpException('결제정보 저장 실패', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException('결제정보 저장 실패');
     } finally {
       await queryRunner.release();
     }
@@ -137,8 +146,8 @@ export class PaymentService {
       const date = new Date();
       const y = date.getFullYear();
       const m = date.getMonth() + 1;
-      const schedule_at_time = Math.floor(new Date().getTime() / 1000) + 60; // 다음달 1일
-      // const schedule_at_time = Math.floor(new Date(y, m, 2).getTime() / 1000); // 다음달 1일
+      // const schedule_at_time = Math.floor(new Date().getTime() / 1000) + 60; // 다음달 1일
+      const schedule_at_time = Math.floor(new Date(y, m, 2).getTime() / 1000); // 다음달 1일
 
       let paymentAmount = 0;
 
@@ -150,9 +159,6 @@ export class PaymentService {
         paymentAmount = 300000;
       }
 
-      // console.log('✨✨✨', '결제시간', new Date(now * 1000), '✨✨✨');
-      // console.log('✨✨✨', '다음 결제시간', new Date(schedule_at_time * 1000), '✨✨✨');
-      // console.log('✨✨✨', 'schedule_at_time', schedule_at_time, '✨✨✨');
       const paymentReserve = await axios({
         url: `https://api.iamport.kr/subscribe/payments/schedule`,
         method: 'post',
@@ -201,7 +207,7 @@ export class PaymentService {
       if (subCancel.data.code === 0) {
         return { message: '구독취소에 성공하였습니다.' };
       } else {
-        return { message: '구독하신 서비스가 없습니다' };
+        return { message: '구독취소 신청이 완료되었습니다.' };
       }
     } catch (e) {
       throw new NotFoundException(`구독취소에 실패하였습니다. ${e}`);
@@ -215,6 +221,27 @@ export class PaymentService {
   async updateMembershipAfterUnsubscribe(userId: number) {
     await this.userRepo.createQueryBuilder().update().set({ membership: null }).where('id = :id', { id: userId }).execute();
     return { message: '멤버쉽 변경에 성공하였습니다.' };
+  }
+
+  /**
+   * @description 구독 취소 한 회원 확인
+   * @argument userId
+   */
+  async updateWaitCancel(userId: number) {
+    const getMyPaid = await this.paymentRepo.findOne({
+      where: { userId: userId },
+      select: ['id'],
+      order: { id: 'DESC' },
+    });
+    await this.paymentRepo.update(getMyPaid.id, {
+      cancel: 1,
+    });
+
+    // paidData 캐시 삭제
+    const paidDataCaches = await this.cacheManager.store.keys(`paidData:${userId}`);
+    if (paidDataCaches.length > 0) await this.cacheManager.store.del(paidDataCaches);
+
+    return { message: '구독취소에 성공하였습니다.' };
   }
 
   /**

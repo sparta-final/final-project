@@ -40,6 +40,9 @@ function feedUpdate() {
   const urlParams = new URLSearchParams(window.location.search);
   const id = +urlParams.get('id');
   const content = document.getElementById('update-content').value;
+  if (content.length === 0) {
+    return toastr.error('내용을 입력해주세요.', '오류', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
+  }
   axios
     .put(
       `/api/feed/${id}`,

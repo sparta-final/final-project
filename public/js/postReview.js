@@ -37,8 +37,20 @@ textarea.addEventListener('input', (e) => {
  */
 async function postReview(usergymId) {
   const reviewImg = document.getElementById('reviewImg').files[0];
+  if (!reviewImg) {
+    toastr.error('사진을 첨부해주세요.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+    return;
+  }
   const reviewTextarea = document.getElementsByClassName('review-textarea')[0].value;
+  if (!reviewTextarea) {
+    toastr.error('리뷰를 작성해주세요.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+    return;
+  }
   const starRating = star_rating;
+  if (!starRating) {
+    toastr.error('별점을 선택해주세요.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+    return;
+  }
   const formData = new FormData();
   formData.append('reviewImg', reviewImg);
   formData.append('review', reviewTextarea);
@@ -53,14 +65,16 @@ async function postReview(usergymId) {
     })
     .then((res) => {
       if (res.status === 201) {
-        alert('리뷰가 작성되었습니다.');
-        window.location.replace('/mypage/history');
+        toastr.success('리뷰가 작성되었습니다.', '성공', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+        setTimeout(() => {
+          window.location.replace('/mypage/history');
+        }, 1500);
       } else {
-        alert('리뷰 작성에 실패했습니다.');
+        toastr.error('리뷰 작성에 실패했습니다.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
       }
     })
     .catch((err) => {
       console.log('err', err);
-      alert('리뷰 작성에 실패했습니다.');
+      toastr.error('리뷰 작성에 실패했습니다.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
     });
 }

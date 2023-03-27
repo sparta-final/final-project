@@ -22,7 +22,7 @@ export class UserService {
    */
 
   async getUserInfo(user: JwtPayload) {
-    const cachedUser = await this.cacheManager.get(`user:ID: ${user.sub}`);
+    const cachedUser = await this.cacheManager.get(`user:ID:${user.sub}`);
     if (cachedUser) return cachedUser;
 
     const existUser = await this.userRepo.findOne({
@@ -30,7 +30,7 @@ export class UserService {
     });
     const { password, ...rest } = existUser;
 
-    await this.cacheManager.set(`user:ID: ${user.sub}`, rest, { ttl: 60 });
+    await this.cacheManager.set(`user:ID:${user.sub}`, rest, { ttl: 60 });
 
     return rest;
   }
@@ -94,7 +94,7 @@ export class UserService {
    */
   async getUseGymHistory(user: JwtPayload, year: number, month: number) {
     const cachedHistory = await this.cacheManager.get(`user:ID: ${user.sub}-History-${year}-${month}`);
-    // if (cachedHistory) return cachedHistory;
+    if (cachedHistory) return cachedHistory;
 
     const existUser = await this.userRepo.findOne({
       where: { id: user.sub },

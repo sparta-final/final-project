@@ -35,6 +35,16 @@ const getUseGymHistory = async (year, month) => {
   });
   const histories = res.data;
   $('.text-gray-dark').empty();
+  if (histories.length === 0) {
+    let noneMember = `
+    <tr class="ta-center">
+      <td>-</td>
+      <td>헬스장 이용내역이 없습니다.</td>
+      <td>-</td>
+     </tr> 
+    `;
+    $('.text-gray-dark').append(noneMember);
+  }
 
   for (let i in histories) {
     // 리뷰가 존재한다면 리뷰보기 버튼, 없다면 리뷰작성 버튼

@@ -9,11 +9,13 @@
 
   <div class="main-about-wrap">
     <h2 class="h2-about">About Six Pack</h2>
-    <p class="main-about">저희 식스팩은 전국 각지의 제휴된 모든 헬스장을<br />이용할 수 있는 플랫폼 서비스 가맹점입니다.</p>
+    <p class="main-about">저희 식스팩은 전국 각지의 제휴된 모든 헬스장을<br />이용할 수 있는 플랫폼 서비스 업체입니다.</p>
   </div>
 
   <div class="main-subscribe">
     <h2 class="h2-subscribe">Six Pack 구독 선택 <span>(매월 1일 결제)</span></h2>
+    <p class="test-payment">❌ 실제 결제가 이루어지지 않습니다! ❌</p>
+    <p class="test-payment-sub">❗ 결제페이지에서 <span>신용카드</span>를 선택해서 결제해주세요! ❗</p>
     <div class="subscribe-select sub-basic">
       <p id="member">Basic</p>
       <p id="amount">100,000 원</p>
@@ -44,7 +46,12 @@
     <p class="main-amount">첫 구독 일자가 월 중간일 경우 이용하시려는 멤버쉽<br />금액의 1/30로 일할 계산됩니다.</p>
   </div>
   <div class="partner-btn" onclick="location.href='/business/login'">식스팩 파트너십 맺으러가기</div>
+  <div class="qr-form">
+    <span id="qr"></span>
+    <button class="qr-btn" type="button" onclick="getQRCode()">QR코드 새로고침</button>
+  </div>
 </section>
-<script src="//www.sixpack.pro/js/main.js"></script>
-<script src="//www.sixpack.pro/js/payment.js"></script>
-<script src="//www.sixpack.pro/js/auth.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/payment.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/qrcode.js"></script>

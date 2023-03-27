@@ -17,6 +17,7 @@ import {
 } from './admin.decorators';
 import { MonthDto } from './dto/monthData.dto';
 import * as _ from 'lodash';
+import { CategoryDto } from './dto/category.dto';
 
 // 전체 admin만 접근 권한
 @ApiTags('Admin')
@@ -66,10 +67,10 @@ export class AdminController {
     return await this.adminService.getSalesMonth(date);
   }
 
-  @Get('rank/:year/:month')
+  @Get('rank/:category/:year/:month')
   @gymRank()
-  async getRank(@Param() date: MonthDto) {
-    return await this.adminService.getRank(date);
+  async getRank(@Param() data: CategoryDto) {
+    return await this.adminService.getRank(data);
   }
 
   @Post('/calculate/:id')

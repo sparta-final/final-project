@@ -52,15 +52,39 @@ function execDaumPostcode() {
 
 function enrollGym() {
   const name = document.getElementById('gymName').value;
+  if (!name) {
+    toastr.error('가맹점 이름을 입력해주세요.', '가맹점 등록 실패', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+    return;
+  }
   const phone = document.getElementById('gymPhone').value;
+  if (!phone) {
+    toastr.error('가맹점 전화번호를 입력해주세요.', '가맹점 등록 실패', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+    return;
+  }
   const description = document.getElementById('gymDescription').value;
+  if (!description) {
+    toastr.error('가맹점 설명을 입력해주세요.', '가맹점 등록 실패', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+    return;
+  }
   const certification = document.getElementById('gymCertification');
+  if (!certification.files[0]) {
+    toastr.error('가맹점 인증서를 등록해주세요.', '가맹점 등록 실패', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+    return;
+  }
   const gymType = $('input#type-health[name=gymType]:checked').val();
-  // const gymType = document.getElementById('gymType').value;
+  if (!gymType) {
+    toastr.error('가맹점 유형을 선택해주세요.', '가맹점 등록 실패', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+    return;
+  }
   const lat = document.getElementById('lat').value;
   const lng = document.getElementById('lng').value;
   const img = document.getElementById('gymImgs').files;
+  if (img.length === 0) {
+    toastr.error('가맹점 이미지를 등록해주세요.', '가맹점 등록 실패', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+    return;
+  }
   const address = document.getElementById('address').value;
+
   const formData = new FormData();
   formData.append('name', name);
   formData.append('phone', phone);
@@ -74,9 +98,6 @@ function enrollGym() {
   }
   formData.append('address', address);
 
-  // for (let value of formData.values()) {
-  //   console.log(value);
-  // }
 
   axios
     .post('/api/gym', formData, {
@@ -88,12 +109,14 @@ function enrollGym() {
     })
     .then((res) => {
       if (res.status === 201) {
-        alert('가맹점 등록 신청이 완료되었습니다.');
-        window.location.href = '/business/businessMyInfo';
+        toastr.success('가맹점 등록 신청이 완료되었습니다.', '가맹점 등록 성공', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+        setTimeout(() => {
+          window.location.href = '/business/businessMyInfo';
+        }, 1500);
       }
     })
     .catch((err) => {
-      alert(err.response.data.data);
+      toastr.error(err.response.data.data, '가맹점 등록 실패', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
       console.log(err);
     });
 }

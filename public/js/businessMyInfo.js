@@ -1,7 +1,9 @@
 const userType = localStorage.getItem('type');
 if (userType !== 'business') {
-  alert('사업자 로그인이 필요한 서비스입니다.');
-  window.location.href = '/business/login';
+  toastr.warning('사업자 로그인이 필요한 서비스입니다.', '로그인 필요', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+  setTimeout(function () {
+    window.location.href = '/business/login';
+  }, 1500)
 }
 
 $(document).ready(function () {
@@ -78,6 +80,7 @@ async function getMyGym() {
 
 // 가게 삭제
 function deleteGym(id) {
+  if (confirm('정말 삭제하시겠습니까?') === false) return;
   axios
     .delete(`/api/gym/${id}`, {
       headers: {
@@ -86,9 +89,10 @@ function deleteGym(id) {
       },
     })
     .then((res) => {
-      console.log(res);
-      alert('삭제가 완료되었습니다.');
-      window.location.reload();
+      toastr.info('삭제가 완료되었습니다.', '삭제 완료', { timeOut: 3000, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+      setTimeout(function () {
+        location.reload();
+      }, 1500);
     })
     .catch((err) => {
       console.log(err);

@@ -310,6 +310,8 @@ tr:hover {
 .certification-wrap p {
   padding-left: 20px;
   font-size: 20px;
+  color: var(--sub-color-10);
+  margin-bottom: 15px;
 }
 
 .certification-wrap img {

@@ -88,9 +88,17 @@ export class GymController {
 
   @SearchGymByText()
   @Public()
-  @Get('/search/:text')
-  async searchGymByText(@Param('text') text: string) {
-    return this.gymservice.searchGymByText(text);
+  @Get('/search/:text/:offset/:limit')
+  async searchGymByText(@Param('text') text: string, @Param('offset') offset: string, @Param('limit') limit: string) {
+    const parseOffset = parseInt(offset, 10);
+    const parseLimit = parseInt(limit, 10);
+    return this.gymservice.searchGymByText(text, parseOffset, parseLimit);
+  }
+
+  @Public()
+  @Get('/search/:text/autocomplete')
+  async searchGymByTextAutoComplete() {
+    return this.gymservice.searchGymByTextForAutoComplete();
   }
 
   @ApproveGymGet()
@@ -102,15 +110,25 @@ export class GymController {
 
   @SearchGymByAddress()
   @Public()
-  @Get('/address/:text')
-  async searchGymByAddress(@Param('text') text: string) {
-    return await this.gymservice.searchGymByAddress(text);
+  @Get('/address/:text/:offset/:limit')
+  async searchGymByAddress(@Param('text') text: string, @Param('offset') offset: string, @Param('limit') limit: string) {
+    const parseOffset = parseInt(offset, 10);
+    const parseLimit = parseInt(limit, 10);
+    return await this.gymservice.searchGymByAddress(text, parseOffset, parseLimit);
   }
 
   @SearchGymByAddressWide()
   @Public()
-  @Get('/address/wide/:text')
-  async searchGymByAddressWide(@Param('text') text: string) {
-    return await this.gymservice.searchGymByAddressWide(text);
+  @Get('/address/wide/:text/:offset/:limit')
+  async searchGymByAddressWide(@Param('text') text: string, @Param('offset') offset: string, @Param('limit') limit: string) {
+    const parseOffset = parseInt(offset, 10);
+    const parseLimit = parseInt(limit, 10);
+    return await this.gymservice.searchGymByAddressWide(text, parseOffset, parseLimit);
+  }
+
+  @Public()
+  @Get('/admin/saveElastic')
+  async saveElastic() {
+    return await this.gymservice.saveGymToElasticSearch();
   }
 }

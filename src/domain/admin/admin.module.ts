@@ -1,3 +1,4 @@
+import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { Reviews } from './../../global/entities/Reviews';
 import { Calculate } from './../../global/entities/Calculate';
 import { UserGym } from 'src/global/entities/UserGym';
@@ -10,7 +11,13 @@ import { AdminService } from './admin.service';
 import { Payments } from 'src/global/entities/Payments';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Users, Gym, Payments, UserGym, Calculate, Reviews])],
+  imports: [
+    TypeOrmModule.forFeature([Users, Gym, Payments, UserGym, Calculate, Reviews]),
+    ElasticsearchModule.register({
+      // node: 'http://localhost:9200',
+      node: 'http://elasticsearch:9200',
+    }),
+  ],
   controllers: [AdminController],
   providers: [AdminService],
 })

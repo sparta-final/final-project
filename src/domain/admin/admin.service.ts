@@ -14,6 +14,7 @@ import { UserGym } from 'src/global/entities/UserGym';
 import * as _ from 'lodash';
 import { isApprove } from 'src/global/entities/common/gym.isApprove';
 import { arrayBuffer } from 'stream/consumers';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 
 @Injectable()
 export class AdminService {
@@ -24,7 +25,8 @@ export class AdminService {
     @InjectRepository(UserGym) private userGymRepo: Repository<UserGym>,
     @InjectRepository(Calculate) private calculateRepo: Repository<Calculate>,
     @InjectRepository(Reviews) private reviewRepo: Repository<Reviews>,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private elasticSearch: ElasticsearchService
   ) {}
 
   /**
@@ -129,87 +131,246 @@ export class AdminService {
    * @argument year
    * @argument month
    */
-  async getRank(date) {
-    const cachedRank = await this.cacheManager.get(`admin:rank-${date.year}-${date.month}`);
-    if (cachedRank) return cachedRank;
+  async getRank(data) {
+    const year = data.year;
+    const month = data.month;
+    if (data.category === '정산 금액') {
+      const cachedPaidRank = await this.cacheManager.get(`admin:paid-rank-${year}-${month}`);
+      if (cachedPaidRank) return cachedPaidRank;
 
-    let rank = [];
-    const getAllGym = await this.gymRepo.find({
-      where: {
-        isApprove: 1,
-        // createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
-        deletedAt: null,
-      },
-      select: ['id', 'name'],
-    });
+      const paidRank = await this.calculateRepo
+        .createQueryBuilder('calculate')
+        .leftJoin('calculate.gym', 'gym')
+        .select(['calculate.paid', 'gym.name'])
+        .addSelect('COUNT(DISTINCT user_gym.user_id)', 'userCount')
+        .addSelect('AVG(reviews.star)', 'averageStar')
+        .leftJoin('user_gym', 'user_gym', 'user_gym.gym_id = calculate.gym_id')
+        .leftJoin('reviews', 'reviews', 'reviews.user_gym_id = user_gym.id')
+        .where(`YEAR(calculate.created_at) = :year AND MONTH(calculate.created_at) = :month`, { year, month })
+        .groupBy('calculate.id')
+        .orderBy('calculate.paid', 'DESC')
+        .limit(10)
+        .getRawMany();
 
-    // const getAllGym = await this.calculateRepo.find({
+      await this.cacheManager.set(`admin:paid-rank-${year}-${month}`, paidRank, { ttl: 60 });
+
+      return paidRank;
+    }
+    if (data.category === '이용자 수') {
+      const cachedUserCountRank = await this.cacheManager.get(`admin:user-count-rank-${year}-${month}`);
+      if (cachedUserCountRank) return cachedUserCountRank;
+
+      const userVisitGym = await this.userGymRepo
+        .createQueryBuilder('user_gym')
+        .select('user_gym.gym_id', 'gymId')
+        .addSelect('COUNT(user_gym.user_id)', 'count')
+        .where(`YEAR(created_at) = :year AND MONTH(created_at) = :month`, { year, month })
+        .groupBy('user_gym.gym_id')
+        .orderBy('count', 'DESC')
+        .limit(10)
+        .getRawMany();
+
+      const gymIds = userVisitGym.map((gym) => gym.gymId);
+      const counts = userVisitGym.map((gym) => gym.count);
+
+      const gymUserCounts = await this.userGymRepo
+        .createQueryBuilder('user_gym')
+        .leftJoinAndSelect('user_gym.gym', 'gym')
+        .select(['calculate.paid', 'gym.name'])
+        .addSelect('AVG(reviews.star)', 'averageStar')
+        .leftJoin('calculate', 'calculate', 'calculate.gym_id = user_gym.gym_id')
+        .leftJoin('reviews', 'reviews', 'reviews.user_gym_id = user_gym.id')
+        .where(`YEAR(user_gym.created_at) = :year AND MONTH(user_gym.created_at) = :month`, { year, month })
+        .andWhere('user_gym.gym_id IN (:...gymIds)', { gymIds })
+        .groupBy('user_gym.gym_id')
+        .orderBy(`FIELD(user_gym.gym_id, ${gymIds.join(',')})`)
+        .limit(10)
+        .getRawMany();
+
+      await this.cacheManager.set(`admin:user-count-rank-${year}-${month}`, { gymUserCounts, counts }, { ttl: 60 });
+
+      return { gymUserCounts, counts };
+    }
+    if (data.category === '평점') {
+      const cachedStarRank = await this.cacheManager.get(`admin:rating-rank-${year}-${month}`);
+      if (cachedStarRank) return cachedStarRank;
+
+      const gymStarAverages = await this.userGymRepo
+        .createQueryBuilder('user_gym')
+        .select('gym.name', 'gymName')
+        .addSelect('calculate.paid', 'paid')
+        .addSelect('AVG(reviews.star)', 'average')
+        .addSelect('user_gym.gym_id', 'gymId')
+        .leftJoin('reviews', 'reviews', 'reviews.user_gym_id = user_gym.id')
+        .leftJoin('gym', 'gym', 'gym.id = user_gym.gym_id')
+        .leftJoin('calculate', 'calculate', 'calculate.gym_id = gym.id')
+        .where(`YEAR(user_gym.created_at) = :year AND MONTH(user_gym.created_at) = :month`, { year, month })
+        .groupBy('user_gym.gym_id')
+        .orderBy('average', 'DESC')
+        .limit(10)
+        .getRawMany();
+
+      const ratingGymId = gymStarAverages.map((data) => data.gymId);
+
+      let ratingUserCount = [];
+      for (let i in ratingGymId) {
+        const userVisitGym = await this.userGymRepo
+          .createQueryBuilder('user_gym')
+          .select('user_gym.gym_id', 'gymId')
+          .addSelect('COUNT(user_gym.user_id)', 'count')
+          .where(`YEAR(created_at) = :year AND MONTH(created_at) = :month`, { year, month })
+          .andWhere(`user_gym.gym_id = :count`, { count: ratingGymId[i] })
+          .groupBy('user_gym.gym_id')
+          .getRawMany();
+
+        ratingUserCount.push(userVisitGym);
+      }
+
+      await this.cacheManager.set(`admin:rating-rank-${year}-${month}`, { gymStarAverages, ratingUserCount }, { ttl: 60 });
+
+      return { gymStarAverages, ratingUserCount };
+    }
+    // 트러블 슈팅 하기 전 코드
+    // const getAllGym = await this.gymRepo.find({
     //   where: {
-    //     createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+    //     isApprove: 1,
+    //     // createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+    //     deletedAt: null,
     //   },
-    //   select: ['gymId', 'paid'],
+    //   select: ['id', 'name'],
     // });
 
-    for (let i = 0; i < getAllGym.length; i++) {
-      // Promise.all 방식 (평균 30ms)
-      // const rankData = await Promise.all([
-      //   {
-      //     paid: await this.calculateRepo.find({
-      //       where: { gymId: getAllGym[i].id },
-      //       select: ['paid'],
-      //     }),
-      //     useCount: await this.userGymRepo.count({
-      //       where: { gymId: getAllGym[i].id },
-      //       select: ['gymId'],
-      //     }),
-      //     rating: await this.reviewRepo.find({
-      //       where: { userGym: { id: getAllGym[i].id } },
-      //       select: ['star'],
-      //     }),
-      //   },
-      // ]);
+    // for (let i = 0; i < getAllGym.length; i++) {
+    //   // 평균 20ms
+    //   const getPaid = await this.calculateRepo.find({
+    //     where: {
+    //       gymId: getAllGym[i].id,
+    //       createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+    //     },
+    //     select: ['paid'],
+    //   });
 
-      // 평균 20ms
-      const getPaid = await this.calculateRepo.find({
-        where: {
-          gymId: getAllGym[i].id,
-          createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
-        },
-        select: ['paid'],
-      });
+    //   const getUseCount = await this.userGymRepo.count({
+    //     where: {
+    //       gymId: getAllGym[i].id,
+    //       createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+    //     },
+    //     select: ['gymId'],
+    //   });
 
-      const getUseCount = await this.userGymRepo.count({
-        where: {
-          gymId: getAllGym[i].id,
-          createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
-        },
-        select: ['gymId'],
-      });
+    //   const getRating = await this.reviewRepo.average('star', {
+    //     userGym: { gymId: getAllGym[i].id },
+    //     createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+    //     deletedAt: null,
+    //   });
 
-      const getRating = await this.reviewRepo.average('star', {
-        userGym: { gymId: getAllGym[i].id },
-        createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
-        deletedAt: null,
-      });
+    //   rank.push({
+    //     name: getAllGym[i].name,
+    //     paid: getPaid[0]?.paid ? getPaid[0].paid : 0,
+    //     count: getUseCount,
+    //     rating: getRating,
+    //     // Promise.all 방식
+    //     // rank.push({
+    //     //   gymId: getAllGym[i].id,
+    //     //   paid: rankData[0]?.paid[0]?.paid ? rankData[0].paid[0].paid : 0,
+    //     //   count: rankData[0].useCount,
+    //     //   rating: rankData[0]?.rating[0]?.star ? rankData[0].rating[0].star : 0,
+    //     // });
+    //   });
+    // }
+    // await this.cacheManager.set(`admin:rank-${date.year}-${date.month}`, rank, { ttl: 60 });
 
-      rank.push({
-        name: getAllGym[i].name,
-        paid: getPaid[0]?.paid ? getPaid[0].paid : 0,
-        count: getUseCount,
-        rating: getRating,
-        // Promise.all 방식
-        // rank.push({
-        //   gymId: getAllGym[i].id,
-        //   paid: rankData[0]?.paid[0]?.paid ? rankData[0].paid[0].paid : 0,
-        //   count: rankData[0].useCount,
-        //   rating: rankData[0]?.rating[0]?.star ? rankData[0].rating[0].star : 0,
-        // });
-      });
-    }
-    await this.cacheManager.set(`admin:rank-${date.year}-${date.month}`, rank, { ttl: 60 });
-
-    return rank;
+    // return rank;
   }
+
+  // /**
+  //  * @description 가맹점 순위에 들어갈 테이터
+  //  * @author 한정훈
+  //  * @argument category (미구현)
+  //  * @argument year
+  //  * @argument month
+  //  */
+  // async getRank(date) {
+  //   const cachedRank = await this.cacheManager.get(`admin:rank-${date.year}-${date.month}`);
+  //   if (cachedRank) return cachedRank;
+
+  //   let rank = [];
+  //   const getAllGym = await this.gymRepo.find({
+  //     where: {
+  //       isApprove: 1,
+  //       // createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+  //       deletedAt: null,
+  //     },
+  //     select: ['id', 'name'],
+  //   });
+
+  //   // const getAllGym = await this.calculateRepo.find({
+  //   //   where: {
+  //   //     createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+  //   //   },
+  //   //   select: ['gymId', 'paid'],
+  //   // });
+
+  //   for (let i = 0; i < getAllGym.length; i++) {
+  //     // Promise.all 방식 (평균 30ms)
+  //     // const rankData = await Promise.all([
+  //     //   {
+  //     //     paid: await this.calculateRepo.find({
+  //     //       where: { gymId: getAllGym[i].id },
+  //     //       select: ['paid'],
+  //     //     }),
+  //     //     useCount: await this.userGymRepo.count({
+  //     //       where: { gymId: getAllGym[i].id },
+  //     //       select: ['gymId'],
+  //     //     }),
+  //     //     rating: await this.reviewRepo.find({
+  //     //       where: { userGym: { id: getAllGym[i].id } },
+  //     //       select: ['star'],
+  //     //     }),
+  //     //   },
+  //     // ]);
+
+  //     // 평균 20ms
+  //     const getPaid = await this.calculateRepo.find({
+  //       where: {
+  //         gymId: getAllGym[i].id,
+  //         createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+  //       },
+  //       select: ['paid'],
+  //     });
+
+  //     const getUseCount = await this.userGymRepo.count({
+  //       where: {
+  //         gymId: getAllGym[i].id,
+  //         createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+  //       },
+  //       select: ['gymId'],
+  //     });
+
+  //     const getRating = await this.reviewRepo.average('star', {
+  //       userGym: { gymId: getAllGym[i].id },
+  //       createdAt: Between(new Date(date.year, date.month - 1), new Date(date.year, date.month)),
+  //       deletedAt: null,
+  //     });
+
+  //     rank.push({
+  //       name: getAllGym[i].name,
+  //       paid: getPaid[0]?.paid ? getPaid[0].paid : 0,
+  //       count: getUseCount,
+  //       rating: getRating,
+  //       // Promise.all 방식
+  //       // rank.push({
+  //       //   gymId: getAllGym[i].id,
+  //       //   paid: rankData[0]?.paid[0]?.paid ? rankData[0].paid[0].paid : 0,
+  //       //   count: rankData[0].useCount,
+  //       //   rating: rankData[0]?.rating[0]?.star ? rankData[0].rating[0].star : 0,
+  //       // });
+  //     });
+  //   }
+  //   await this.cacheManager.set(`admin:rank-${date.year}-${date.month}`, rank, { ttl: 60 });
+
+  //   return rank;
+  // }
 
   // ******************** 정산하기 ********************
 
@@ -270,6 +431,15 @@ export class AdminService {
   async approveGym(gymId: number) {
     const updateGym = await this.gymRepo.update(gymId, {
       isApprove: 1,
+    });
+
+    // 엘라스틱서치 업데이트
+    await this.elasticSearch.update({
+      index: 'gym',
+      id: gymId.toString(),
+      doc: {
+        isApprove: 1,
+      },
     });
 
     // admin,gym 포함한 캐시 삭제

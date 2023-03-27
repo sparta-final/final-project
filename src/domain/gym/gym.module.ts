@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { MulterModule } from '@nestjs/platform-express';
 import { multerOptionsFactory } from 'src/global/common/utils/multer.options.factory';
 import { Busienssusers } from 'src/global/entities/Busienssusers';
+import { ElasticsearchModule } from '@nestjs/elasticsearch';
 
 @Module({
   imports: [
@@ -15,6 +16,10 @@ import { Busienssusers } from 'src/global/entities/Busienssusers';
     JwtModule.register({}),
     MulterModule.registerAsync({
       useFactory: multerOptionsFactory,
+    }),
+    ElasticsearchModule.register({
+      // node: 'http://localhost:9200',
+      node: 'http://elasticsearch:9200',
     }),
   ],
   controllers: [GymController],

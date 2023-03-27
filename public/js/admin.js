@@ -1,6 +1,6 @@
 const userType = localStorage.getItem('type');
 if (userType !== 'admin') {
-  alert('접근 권한이 필요합니다.');
+  toastr.warning('접근 권한이 필요합니다.');
   window.location.href = '/';
 }
 
@@ -79,14 +79,16 @@ function getRank(category, year, month) {
   const nextMonth = month === 12 ? 1 : month + 1;
   const nextYear = month === 12 ? year + 1 : year;
 
-  if (prevYear > new Date().getFullYear() || (prevYear === new Date().getFullYear() && prevMonth > new Date().getMonth())) {
-    alert('이번달 이후 조회는 불가능 합니다.');
+  if (prevYear > new Date().getFullYear() || (prevYear === new Date().getFullYear() && prevMonth === new Date().getMonth())) {
+    alert('이번달 데이터 조회는 불가능 합니다.');
+
     location.reload();
+    toastr.warning('이번달 이후 조회는 불가능 합니다.');
     return;
   }
   axios({
     method: 'get',
-    url: `api/admin/rank/${year}/${month}`,
+    url: `api/admin/rank/${category}/${year}/${month}`,
     headers: {
       accesstoken: `${localStorage.getItem('at')}`,
       refreshtoken: `${localStorage.getItem('rt')}`,
@@ -94,37 +96,55 @@ function getRank(category, year, month) {
   })
     .then((response) => {
       const data = response.data;
-      if (category === '정산 금액') {
-        const paidRank = data.sort((a, b) => b.paid - a.paid);
-      }
-      if (category === '이용자 수') {
-        const countRank = data.sort((a, b) => b.count - a.count);
-      }
-      if (category === '평점') {
-        const ratingRank = data.sort((a, b) => b.rating - a.rating);
-      }
+      console.log(data);
       $('.text-gray-dark').empty();
       $('.cur-month').remove();
       let rating;
+      let gymName;
+      let userCount;
+      let calculatePaid;
 
       for (let i = 0; i < 10; i++) {
-        if (data[i].rating === null) {
-          rating = '-';
-        } else {
-          rating = data[i].rating.toFixed(1);
+        if (category === '정산 금액') {
+          gymName = data[i].gym_name;
+          userCount = data[i].userCount;
+          calculatePaid = data[i].calculate_paid;
+          if (data[i].averageStar === null) {
+            rating = '-';
+          } else {
+            rating = data[i].averageStar.toFixed(1);
+          }
         }
-        if (data[i].count !== 0 || data[i].paid !== 0 || data[i].rating !== 0) {
-          let temp = `
+        if (category === '이용자 수') {
+          gymName = data.gymUserCounts[i].gym_name;
+          calculatePaid = data.gymUserCounts[i].calculate_paid;
+          userCount = data.counts[i];
+          if (data.gymUserCounts[i].averageStar === null) {
+            rating = '-';
+          } else {
+            rating = data.gymUserCounts[i].averageStar.toFixed(1);
+          }
+        }
+        if (category === '평점') {
+          gymName = data.gymStarAverages[i].gymName;
+          calculatePaid = data.gymStarAverages[i].paid;
+          userCount = data.ratingUserCount[i][0].count;
+          if (data.gymStarAverages[i].average === null) {
+            rating = '-';
+          } else {
+            rating = data.gymStarAverages[i].average.toFixed(1);
+          }
+        }
+        let temp = `
           <tr class='ta-center'>
             <td>${Number(i) + 1}</td>
-            <td>${data[i].name}</td>
-            <td class='fs-14'>${data[i].count.toLocaleString()}</td>
-            <td>${data[i].paid.toLocaleString()}</td>
+            <td>${gymName}</td>
+            <td class='fs-14'>${userCount.toLocaleString()}</td>
+            <td>${calculatePaid.toLocaleString()}</td>
             <td>${rating}</td>
           </tr>
             `;
-          $('.text-gray-dark').append(temp);
-        }
+        $('.text-gray-dark').append(temp);
       }
 
       function removeAll() {
@@ -174,7 +194,7 @@ function salesMonth(category, year, month) {
       const data = response.data.toLocaleString();
 
       if (data.length === 0) {
-        alert('데이터가 없습니다');
+        toastr.warning('데이터가 없습니다');
       }
 
       let temp = `
@@ -210,13 +230,7 @@ function logout() {
 $('th.cursor').click((e) => {
   let eCategory = e.target.innerHTML;
   curDate = $('.cur-month')[0].innerHTML;
-  // curDate = $('.cur-month');
   cYear = Number(curDate.split('.')[0]);
   cMonth = Number(curDate.split('.')[1]);
-  // $('.cur-month').remove();
   getRank(eCategory, cYear, cMonth);
 });
-
-// onclick="getRank('이용자 수', year, month)"
-// onclick="getRank('정산 금액', year, month)"
-// onclick="getRank('평점', year, month)"

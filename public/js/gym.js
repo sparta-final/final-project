@@ -3,6 +3,24 @@ $(document).ready(function () {
 });
 
 /**
+ * @description: 카카오 로그인 성공시 토큰 저장 및 메인페이지로 이동
+ * @author: 김승일
+ */
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const at = urlParams.get('at');
+const rt = urlParams.get('rt');
+if (at && rt) {
+  localStorage.setItem('at', at);
+  localStorage.setItem('rt', rt);
+  localStorage.setItem('type', 'user');
+  toastr.info('카카오로 회원가입 시 비밀번호는 1234입니다.', '카카오로그인', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
+  // setTimeout(() => {
+  //   location.replace('/gym');
+  // }, 3000);
+}
+
+/**
  * @description 현재 내 주소 가져오기
  * @author 김승일
  */
@@ -37,12 +55,12 @@ function showPosition(position) {
     container.style.height = '550px';
     const options = {
       center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
-      level: 2,
+      level: 5,
     };
 
     map = new kakao.maps.Map(container, options);
     // 지도에 마커와 이름 표시
-    axios.get('/api/gym/all').then((res) => {
+    axios.get('/api/gym/approveGym').then((res) => {
       const gyms = res.data;
       for (const gym of gyms) {
         const markerPosition = new kakao.maps.LatLng(gym.lat, gym.lng);
@@ -141,41 +159,57 @@ const observer = new IntersectionObserver((entries) => {
 const gymContainer = document.querySelector('.approve-wait');
 let postCount = 0;
 let loading = false;
-const limit = 8;
-let data = [];
+const limit = 7;
+let data2 = [];
 
 async function getGymList(text) {
   if (loading) return;
   loading = true;
-  const response = await axios({
-    method: 'get',
-    url: `/api/gym/address/${text}`,
-    params: {
-      offset: postCount,
-      limit,
-    },
-  });
-  if (response.data.length === 0) {
-    const response2 = await axios({
-      method: 'get',
-      url: `/api/gym/address/wide/${text}`,
-      params: {
-        offset: postCount,
-        limit,
-      },
+  await axios
+    .get(`/api/gym/address/${text}/${postCount}/${limit}`)
+    .then(async (res) => {
+      if (res.data.length === 0) {
+        await axios
+          .get(`/api/gym/address/wide/${text}/${postCount}/${limit}`)
+          .then((res2) => {
+            res.data.findByAddressGyms = res2.data.findByAddressGymsWide;
+            res.data.key = res2.data.key;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+      const data = res.data.findByAddressGyms;
+      const ing = res.data.key;
+      if (ing === 'ing') {
+        await getGymLimit(data);
+        loading = false;
+      } else {
+        await getGymLimit(data);
+        loading = true;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
     });
-    response.data = response2.data;
+}
+
+window.addEventListener('scroll', async () => {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+  if (scrollTop + clientHeight >= scrollHeight - 5 && !loading) {
+    await getGymList(x.innerHTML);
   }
-  const responseData = response.data;
-  data = [...data, ...responseData];
-  if (postCount === 0) {
-    gymContainer.innerHTML = '';
-    for (let i = 0; i < limit && i < responseData.length; i++) {
-      const gymImgSrc = responseData[i].gymImgs[0].img;
-      let gymId = responseData[i].id;
-      let gymname = responseData[i].name;
-      let gymaddress = responseData[i].address;
-      let temp = `
+});
+
+async function getGymLimit(responseData) {
+  // gymContainer.innerHTML = '';
+  for (let i = 0; i < limit - 1 && i < responseData.length; i++) {
+    data2.push(responseData[i]);
+    const gymImgSrc = responseData[i].gymImgs[0]?.img;
+    let gymId = responseData[i].id;
+    let gymname = responseData[i].name;
+    let gymaddress = responseData[i].address;
+    let temp = `
             <div class="gym-approve-wait">
               <img class="gym-list-img" src="${gymImgSrc}" onclick="location.href='/gym/gymDetail?gym=${gymId}'" alt="" />
               <ul class="gym-info-box">
@@ -186,62 +220,25 @@ async function getGymList(text) {
               </ul>
             </div>
             `;
-      $('.approve-wait').append(temp);
-      const res = await axios({
-        method: 'get',
-        url: `/api/gym/${gymId}/review`,
-      });
-      const reivewsLength = res.data.reviews.length;
-      let avgStar = `
+    $('.approve-wait').append(temp);
+    const res = await axios({
+      method: 'get',
+      url: `/api/gym/${gymId}/review`,
+    });
+    const reivewsLength = res.data.reviews.length;
+    let avgStar = `
             <div class="gym-star">⭐<span>${res.data.avgStar}</span>(${reivewsLength})</div>
             `;
-      $(`.gym-review-${gymId}`).append(avgStar);
-    }
-    postCount += limit;
-  } else {
-    const remainingGyms = responseData.slice(postCount);
-    const maxGymsToLoad = Math.min(limit, remainingGyms.length);
-    for (let i = 0; i < maxGymsToLoad; i++) {
-      let id = remainingGyms[i].id;
-      let gymImgSrc2 = remainingGyms[i].gymImgs[0].img;
-      let name = remainingGyms[i].name;
-      let address = remainingGyms[i].address;
-      let temp2 = `
-      <div class="gym-approve-wait">
-        <img class="gym-list-img" src="${gymImgSrc2}" onclick="location.href='/gym/gymDetail?gym=${id}'" alt="" />
-        <ul class="gym-info-box">
-          <li class="gym-name" onclick="location.href='/gym/gymDetail?gym=${id}'">${name}</li>
-          <li class="all-gym-qrcode" onclick="QRCheck(${id})"></li>
-          <li class="gym-location">${address}</li>
-          <li class="gym-review-${id}"></li>
-        </ul>
-      </div>
-      `;
-      $('.approve-wait').append(temp2);
-      const res = await axios({
-        method: 'get',
-        url: `/api/gym/${id}/review`,
-      });
-      const reivewsLength = res.data.reviews.length;
-      let avgStar2 = `
-            <div class="gym-star">⭐<span>${res.data.avgStar}</span>(${reivewsLength})</div>
-            `;
-      $(`.gym-review-${id}`).append(avgStar2);
-    }
-    postCount += maxGymsToLoad;
+    $(`.gym-review-${gymId}`).append(avgStar);
   }
-  loading = false;
+  postCount += limit - 1;
 }
-
-window.addEventListener('scroll', () => {
-  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-  if (scrollTop + clientHeight >= scrollHeight - 5 && !loading && postCount > 0 && postCount < data.length) {
-    getGymList(text);
-  }
-});
 
 // 임시 QR 코드
 async function QRCheck(gymId) {
+  if (!localStorage.getItem('at') || !localStorage.getItem('rt')) {
+    return toastr.error('로그인이 필요합니다', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
+  }
   const now = Date.now();
   const findUserId = await axios.get('/api/loginUser/info', {
     headers: {
@@ -260,11 +257,11 @@ async function QRCheck(gymId) {
     })
     .then(async (res) => {
       if (res.data[0] === null) {
-        alert('❌❌ 식스팩 멤버십 회원이 아닙니다. ❌❌');
+        toastr.error('❌❌ 식스팩 멤버십 회원이 아닙니다. ❌❌', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
         return;
       }
       if (res.data[1] >= 1) {
-        alert('❌❌ 금일 이용 횟수를 초과하였습니다. ❌❌');
+        toastr.error('❌❌ 금일 이용 횟수를 초과하였습니다. ❌❌', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
         return;
       }
 
@@ -282,12 +279,12 @@ async function QRCheck(gymId) {
           for (let i = 0; i < res.data.length; i++) {
             if (res.data[i].user.membership === 'Basic') {
               if (res.data[i].gym.gymType !== '헬스장') {
-                alert('❌❌ 출입 가능한 가맹점이 아닙니다. ❌❌');
+                toastr.error('❌❌ 출입 가능한 가맹점이 아닙니다. ❌❌', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
                 return;
               }
 
               if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
-                alert('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌');
+                toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
                 return;
               }
             }
@@ -297,7 +294,7 @@ async function QRCheck(gymId) {
               res.data.forEach((item) => {
                 if (item.gym.gymType === '크로스핏' || item.gym.gymType === '필라테스') {
                   if (crossfitOrPilates === true) {
-                    alert('❌❌ 이번달은 이용 불가능합니다. ❌❌');
+                    toastr.error('❌❌ 이번달은 이용 불가능합니다. ❌❌', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
                     return;
                   } else {
                     crossfitOrPilates = true;
@@ -305,14 +302,14 @@ async function QRCheck(gymId) {
                 }
               });
               if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
-                alert('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌');
+                toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
                 return;
               }
             }
 
             if (res.data[i].user.membership === 'Premium') {
               if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
-                alert('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌');
+                toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
                 return;
               }
             }
@@ -329,7 +326,7 @@ async function QRCheck(gymId) {
               }
             )
             .then((res) => {
-              alert('✅✅ 식스팩 회원 인증이 완료되었습니다. ✅✅');
+              toastr.success('✅✅ 식스팩 회원 인증이 완료되었습니다. ✅✅', '성공', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
               console.log(res);
             })
             .catch((err) => {

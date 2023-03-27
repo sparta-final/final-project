@@ -67,6 +67,21 @@
   display: none;
 }
 
+.ui-autocomplete {
+  background: var(--sub-color-8);
+  color: var(--sub-color-10);
+  padding: 15px;
+  font-size: 14px;
+  height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.ui-autocomplete li {
+  padding: 3px 0;
+  cursor: pointer;
+}
+
 .search {
   background-image: url(//www.sixpack.pro/images/search.png);
   background-size: cover;
@@ -159,7 +174,7 @@ li.small-svg {
   top: 0;
   left: 0;
   width: 100%;
-  fill: var(--sub-color-8);
+  fill: var(--sub-color-4);
 }
 
 .footer-container svg.svg-select {

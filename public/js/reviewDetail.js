@@ -84,6 +84,6 @@ async function deleteReview(reviewId) {
     confirm('리뷰를 삭제하시겠습니까?');
     location.replace('/mypage');
   } else {
-    alert('리뷰 삭제에 실패했습니다.');
+    toastr.error('리뷰 삭제에 실패했습니다.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
   }
 }
