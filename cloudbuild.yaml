@@ -1,5 +1,5 @@
 steps:
-  # Build the Docker Compose images
+  # Build the Docker Compose images test
   - name: 'docker/compose:1.29.2'
     args: ['docker-compose', 'build']
     env:
