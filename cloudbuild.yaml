@@ -1,7 +1,6 @@
 steps:
   # Build the Docker Compose images
   - name: 'docker/compose:1.29.2'
-    entrypoint: 'sudo'
     args: ['docker-compose', 'build']
 
   # Push the Docker Compose images to the Container Registry
