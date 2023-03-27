@@ -5,6 +5,10 @@ if (userType !== 'user') {
 }
 
 $(document).ready(function () {
+  const userOauth = localStorage.getItem('oAuth');
+  if (userOauth === 'kakao') {
+    $('#currentPassword').attr('placeholder', '카카오 로그인 초기 비밀번호는 1234입니다.');
+  }
   user();
 });
 
@@ -36,9 +40,7 @@ function user() {
     .then((res) => {
       $('#nickname').val(res.data.nickname);
       $('#phone').val(res.data.phone);
-      document.getElementById('image').src = res.data.profileImage
-        ? res.data.profileImage
-        : ' /images/default_profile.png';
+      document.getElementById('image').src = res.data.profileImage ? res.data.profileImage : ' /images/default_profile.png';
     })
     .catch((err) => {
       console.log(err);
@@ -82,14 +84,32 @@ function putInfo() {
       console.log('err.response.data :', err.response.data.data);
 
       if (err.response.data.data === '현재 비밀번호가 일치하지 않습니다.') {
-        toastr.error('현재 비밀번호가 일치하지않습니다.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+        toastr.error('현재 비밀번호가 일치하지않습니다.', '오류', {
+          timeOut: 1500,
+          positionClass: 'toast-top-center',
+          closeButton: true,
+          progressBar: true,
+          preventDuplicates: true,
+        });
       }
       if (err.response.data.data[0] === 'currentPassword should not be empty') {
-        toastr.error('현재 비밀번호를 입력해주세요.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+        toastr.error('현재 비밀번호를 입력해주세요.', '오류', {
+          timeOut: 1500,
+          positionClass: 'toast-top-center',
+          closeButton: true,
+          progressBar: true,
+          preventDuplicates: true,
+        });
       }
 
       if (err.response.data.data === '비밀번호가 일치하지 않습니다.') {
-        toastr.error('수정할 비밀번호가 일치하지 않습니다.', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, preventDuplicates: true });
+        toastr.error('수정할 비밀번호가 일치하지 않습니다.', '오류', {
+          timeOut: 1500,
+          positionClass: 'toast-top-center',
+          closeButton: true,
+          progressBar: true,
+          preventDuplicates: true,
+        });
       }
     });
 }
