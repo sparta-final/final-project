@@ -2,6 +2,8 @@ steps:
   # Build the Docker Compose images
   - name: 'docker/compose:1.29.2'
     args: ['docker-compose', 'build']
+    env:
+      - 'COMPOSE_ENV_PATH=./.env'
 
   # Push the Docker Compose images to the Container Registry
   - name: 'gcr.io/cloud-builders/docker'
