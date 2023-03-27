@@ -14,7 +14,14 @@ if (at && rt) {
   localStorage.setItem('at', at);
   localStorage.setItem('rt', rt);
   localStorage.setItem('type', 'user');
-  toastr.info('카카오로 회원가입 시 비밀번호는 1234입니다.', '카카오로그인', { timeOut: 3000, positionClass: 'toast-top-center', closeButton: true, progressBar: true, preventDuplicates: true });
+  localStorage.setItem('oAuth', 'kakao');
+  // toastr.info('카카오로 회원가입 시 초기 비밀번호는 1234입니다.', '카카오로그인', {
+  //   timeOut: 3000,
+  //   positionClass: 'toast-top-center',
+  //   closeButton: true,
+  //   progressBar: true,
+  //   preventDuplicates: true,
+  // });
   // setTimeout(() => {
   //   location.replace('/gym');
   // }, 3000);
@@ -237,7 +244,12 @@ async function getGymLimit(responseData) {
 // 임시 QR 코드
 async function QRCheck(gymId) {
   if (!localStorage.getItem('at') || !localStorage.getItem('rt')) {
-    return toastr.error('로그인이 필요합니다', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
+    return toastr.error('로그인이 필요합니다', '오류', {
+      timeOut: 1500,
+      positionClass: 'toast-top-center',
+      closeButton: true,
+      progressBar: true,
+    });
   }
   const now = Date.now();
   const findUserId = await axios.get('/api/loginUser/info', {
@@ -257,11 +269,21 @@ async function QRCheck(gymId) {
     })
     .then(async (res) => {
       if (res.data[0] === null) {
-        toastr.error('❌❌ 식스팩 멤버십 회원이 아닙니다. ❌❌', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
+        toastr.error('❌❌ 식스팩 멤버십 회원이 아닙니다. ❌❌', '오류', {
+          timeOut: 1500,
+          positionClass: 'toast-top-center',
+          closeButton: true,
+          progressBar: true,
+        });
         return;
       }
       if (res.data[1] >= 1) {
-        toastr.error('❌❌ 금일 이용 횟수를 초과하였습니다. ❌❌', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
+        toastr.error('❌❌ 금일 이용 횟수를 초과하였습니다. ❌❌', '오류', {
+          timeOut: 1500,
+          positionClass: 'toast-top-center',
+          closeButton: true,
+          progressBar: true,
+        });
         return;
       }
 
@@ -279,12 +301,22 @@ async function QRCheck(gymId) {
           for (let i = 0; i < res.data.length; i++) {
             if (res.data[i].user.membership === 'Basic') {
               if (res.data[i].gym.gymType !== '헬스장') {
-                toastr.error('❌❌ 출입 가능한 가맹점이 아닙니다. ❌❌', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
+                toastr.error('❌❌ 출입 가능한 가맹점이 아닙니다. ❌❌', '오류', {
+                  timeOut: 1500,
+                  positionClass: 'toast-top-center',
+                  closeButton: true,
+                  progressBar: true,
+                });
                 return;
               }
 
               if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
-                toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
+                toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', {
+                  timeOut: 1500,
+                  positionClass: 'toast-top-center',
+                  closeButton: true,
+                  progressBar: true,
+                });
                 return;
               }
             }
@@ -294,7 +326,12 @@ async function QRCheck(gymId) {
               res.data.forEach((item) => {
                 if (item.gym.gymType === '크로스핏' || item.gym.gymType === '필라테스') {
                   if (crossfitOrPilates === true) {
-                    toastr.error('❌❌ 이번달은 이용 불가능합니다. ❌❌', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
+                    toastr.error('❌❌ 이번달은 이용 불가능합니다. ❌❌', '오류', {
+                      timeOut: 1500,
+                      positionClass: 'toast-top-center',
+                      closeButton: true,
+                      progressBar: true,
+                    });
                     return;
                   } else {
                     crossfitOrPilates = true;
@@ -302,14 +339,24 @@ async function QRCheck(gymId) {
                 }
               });
               if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
-                toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
+                toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', {
+                  timeOut: 1500,
+                  positionClass: 'toast-top-center',
+                  closeButton: true,
+                  progressBar: true,
+                });
                 return;
               }
             }
 
             if (res.data[i].user.membership === 'Premium') {
               if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
-                toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
+                toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', {
+                  timeOut: 1500,
+                  positionClass: 'toast-top-center',
+                  closeButton: true,
+                  progressBar: true,
+                });
                 return;
               }
             }
@@ -326,7 +373,12 @@ async function QRCheck(gymId) {
               }
             )
             .then((res) => {
-              toastr.success('✅✅ 식스팩 회원 인증이 완료되었습니다. ✅✅', '성공', { timeOut: 1500, positionClass: "toast-top-center", closeButton: true, progressBar: true, });
+              toastr.success('✅✅ 식스팩 회원 인증이 완료되었습니다. ✅✅', '성공', {
+                timeOut: 1500,
+                positionClass: 'toast-top-center',
+                closeButton: true,
+                progressBar: true,
+              });
               console.log(res);
             })
             .catch((err) => {

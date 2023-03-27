@@ -1,5 +1,10 @@
+.login-wrap {
+  position: relative;
+}
+
 .user-login-form {
-  width: 100%;
+  width: 90%;
+  margin: 30px auto;
 }
 
 .email {
@@ -73,4 +78,13 @@
   background-position: 35px center;
   color: var(--main-color);
   cursor: pointer;
+}
+
+.login-info {
+  position: absolute;
+  top: 44px;
+  width: 100%;
+  font-size: 20px;
+  color: var(--sub-color-4);
+  text-align: center;
 }
