@@ -1,6 +1,14 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes, ApiSecurity } from '@nestjs/swagger';
 
+export const findReviewById = () => {
+  return applyDecorators(
+    ApiOperation({ summary: '리뷰 조회(상세조회)' }),
+    ApiResponse({ status: 200, description: '리뷰조회 성공' }),
+    ApiResponse({ status: 400, description: '리뷰조회 실패' })
+  );
+};
+
 export const findMyReview = () => {
   return applyDecorators(
     ApiOperation({ summary: '리뷰 조회(회원별)' }),

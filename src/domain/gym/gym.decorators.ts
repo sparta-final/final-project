@@ -65,6 +65,14 @@ export const SearchGymByText = () => {
     ApiResponse({ status: 400, description: '조회 실패' })
   );
 };
+export const searchGymByTextAutoComplete = () => {
+  return applyDecorators(
+    ApiOperation({ summary: ' 자동완성기능을 위한 리스트 조회' }),
+    ApiResponse({ status: 200, description: '조회 성공' }),
+    ApiResponse({ status: 400, description: '조회 실패' })
+  );
+};
+
 export const ApproveGymGet = () => {
   return applyDecorators(
     ApiOperation({ summary: ' 승인된 체육관 조회' }),
@@ -72,6 +80,7 @@ export const ApproveGymGet = () => {
     ApiResponse({ status: 400, description: '조회 실패' })
   );
 };
+
 export const SearchGymByAddress = () => {
   return applyDecorators(
     ApiOperation({ summary: ' 구 주소로 체육관 조회' }),
@@ -79,9 +88,18 @@ export const SearchGymByAddress = () => {
     ApiResponse({ status: 400, description: '조회 실패' })
   );
 };
+
 export const SearchGymByAddressWide = () => {
   return applyDecorators(
     ApiOperation({ summary: ' 시 주소로 체육관 조회' }),
+    ApiResponse({ status: 200, description: '조회 성공' }),
+    ApiResponse({ status: 400, description: '조회 실패' })
+  );
+};
+
+export const saveElastic = () => {
+  return applyDecorators(
+    ApiOperation({ summary: ' 엘라스틱서치에 데이터 동기화하기위한 함수(처음1회만)' }),
     ApiResponse({ status: 200, description: '조회 성공' }),
     ApiResponse({ status: 400, description: '조회 실패' })
   );

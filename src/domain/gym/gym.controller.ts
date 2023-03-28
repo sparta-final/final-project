@@ -14,9 +14,11 @@ import {
   GymSignup,
   GymUpdate,
   MyGymGet,
+  saveElastic,
   SearchGymByAddress,
   SearchGymByAddressWide,
   SearchGymByText,
+  searchGymByTextAutoComplete,
 } from './gym.decorators';
 import { GymService } from './gym.service';
 
@@ -95,6 +97,7 @@ export class GymController {
     return this.gymservice.searchGymByText(text, parseOffset, parseLimit);
   }
 
+  @searchGymByTextAutoComplete()
   @Public()
   @Get('/search/:text/autocomplete')
   async searchGymByTextAutoComplete() {
@@ -126,7 +129,7 @@ export class GymController {
     return await this.gymservice.searchGymByAddressWide(text, parseOffset, parseLimit);
   }
 
-  @Public()
+  @saveElastic()
   @Get('/admin/saveElastic')
   async saveElastic() {
     return await this.gymservice.saveGymToElasticSearch();

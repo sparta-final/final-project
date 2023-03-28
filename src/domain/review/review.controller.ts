@@ -4,7 +4,7 @@ import { Controller, Get, Post, Body, Param, Delete, Put, UploadedFile, UseInter
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
-import { deleteReview, findMyReview, findReviewByGymId, postReview, updateReview } from './review.decorators';
+import { deleteReview, findMyReview, findReviewByGymId, findReviewById, postReview, updateReview } from './review.decorators';
 import { CurrentUser } from 'src/global/common/decorator/current-user.decorator';
 import { JwtPayload } from 'src/domain/auth/types/jwtPayload.type';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -15,6 +15,7 @@ import { SkipThrottle } from '@nestjs/throttler';
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
+  @findReviewById()
   @Get('/review/:reviewId')
   findReviewById(@Param('reviewId') reviewId: number) {
     return this.reviewService.findReviewById(reviewId);
@@ -27,7 +28,6 @@ export class ReviewController {
   }
 
   @Public()
-  // @SkipThrottle()
   @findReviewByGymId()
   @Get('/gym/:gymId/review')
   findReviewByGymId(@Param('gymId') gymId: number) {

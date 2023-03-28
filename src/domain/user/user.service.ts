@@ -62,7 +62,7 @@ export class UserService {
       file ? (existUser.profileImage = file.transforms[0].location) : (existUser.profileImage = existUser.profileImage);
       await this.userRepo.save(existUser);
 
-      const userCaches = await this.cacheManager.store.keys(`user:ID: ${user.sub}*`);
+      const userCaches = await this.cacheManager.store.keys(`user:ID:${user.sub}*`);
       if (userCaches.length > 0) await this.cacheManager.store.del(userCaches);
 
       return existUser;
@@ -81,7 +81,7 @@ export class UserService {
     if (existUser) {
       await this.userRepo.softDelete(existUser.id);
 
-      const userCaches = await this.cacheManager.store.keys(`user:ID: ${user.sub}*`);
+      const userCaches = await this.cacheManager.store.keys(`user:ID:${user.sub}*`);
       if (userCaches.length > 0) await this.cacheManager.store.del(userCaches);
 
       return existUser;
@@ -93,7 +93,7 @@ export class UserService {
    *  @author: 김승일
    */
   async getUseGymHistory(user: JwtPayload, year: number, month: number) {
-    const cachedHistory = await this.cacheManager.get(`user:ID: ${user.sub}-History-${year}-${month}`);
+    const cachedHistory = await this.cacheManager.get(`user:ID:${user.sub}-History-${year}-${month}`);
     if (cachedHistory) return cachedHistory;
 
     const existUser = await this.userRepo.findOne({
@@ -115,7 +115,7 @@ export class UserService {
       return userGymDate.getFullYear() === year && userGymDate.getMonth() + 1 === month;
     });
 
-    await this.cacheManager.set(`user:ID: ${user.sub}-History-${year}-${month}`, useGymHistory, { ttl: 60 });
+    await this.cacheManager.set(`user:ID:${user.sub}-History-${year}-${month}`, useGymHistory, { ttl: 60 });
 
     return useGymHistory;
   }
