@@ -2,11 +2,17 @@
   .web-main-wrap {
     left: 25%;
   }
+  .toast-top-center {
+    right: -17% !important;
+  }
 }
 
 @media screen and (max-width: 1200px) {
   .web-main-wrap {
     left: 15%;
+  }
+  .toast-top-center {
+    right: -21% !important;
   }
 }
 
@@ -16,6 +22,9 @@
   }
   #mobile-container {
     margin: auto;
+  }
+  .toast-top-center {
+    right: 0 !important;
   }
 }
 

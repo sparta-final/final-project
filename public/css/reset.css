@@ -16,10 +16,11 @@ body {
 
 .toast-top-center {
   top: 40% !important;
+  right: -14% !important;
 }
 
 body {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url( /images/web-bg.jpg);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(/images/web-bg.jpg);
   background-size: cover;
   background-attachment: fixed;
   font-family: 'Noto Sans KR', sans-serif;
