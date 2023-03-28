@@ -108,11 +108,20 @@
 	<img src="https://img.shields.io/badge/TypeORM-010101?style=flat&logo=TypeORM&logoColor=white" />
 	<img src="https://img.shields.io/badge/Redis-DC382D?style=flat&logo=Redis&4a154b=white" />
   <br/>
+        <img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=Docker&logoColor=white"/>
+	<img src="https://img.shields.io/badge/JWT-000000?style=flat&logo=JSON%20web%20tokens&logoColor=white"/>
+	
   <br/>
-  <p>♻ AWS ♻</p>
+  <br/>
+  <p>♻ AWS & GCP♻</p>
 	<img src="https://img.shields.io/badge/Amazon-S3-569A31?style=flat&logo=Amazon-S3&4a154b=white" />
-	<img src="https://img.shields.io/badge/Amazon-EC2-FF9900?style=flat&logo=Amazon-EC2&4a154b=white" />
 	<img src="https://img.shields.io/badge/Amazon-RDS-527FFF?style=flat&logo=Amazon-RDS&4a154b=white" />
+	<img src="https://img.shields.io/badge/Google Cloud-4285F4?style=flat&logo=Google Cloud&logoColor=white"/>
+  <br/>
+  <br/>
+  <p>💻 OS 💻</p>
+  	<img src="https://img.shields.io/badge/Windows-0078D6?style=flat&logo=windows&logoColor=white"/>
+  	<img src="https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black"/>
   <br/>
   <br/>
   <p>🛠 Tools 🛠</p>
@@ -120,6 +129,7 @@
 	<img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=GitHub&181717=white" />
 	<img src="https://img.shields.io/badge/slack-4a154b?style=flat&logo=slack&4a154b=white" />
 	<img src="https://img.shields.io/badge/Notion-000000?style=flat&logo=Notion&4a154b=white" />
+	<img src="https://img.shields.io/badge/Postman-FF6C37?style=flat&logo=Postman&logoColor=white"/>
 </div>
 <br>
 
