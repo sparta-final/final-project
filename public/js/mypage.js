@@ -43,7 +43,8 @@ function logout() {
       localStorage.removeItem('at');
       localStorage.removeItem('rt');
       localStorage.removeItem('type');
-      if (localStorage.getItem('kakao')) {
+      const kakao = localStorage.getItem('oAuth');
+      if (kakao) {
         localStorage.removeItem('kakao');
       }
       location.href = '/';
