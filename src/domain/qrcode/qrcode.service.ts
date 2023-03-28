@@ -62,7 +62,7 @@ export class QRcodeService {
         startDate,
         endDate,
       })
-      .select(['userGym', 'gym.gymType', 'user.membership'])
+      // .select(['userGym', 'gym.gymType', 'user.membership'])
       .getMany();
 
     return useRecord;

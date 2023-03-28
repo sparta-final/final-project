@@ -63,211 +63,207 @@
       <div hidden><b>Data:</b> <span id="outputData"></span></div>
     </div>
     <script>
-        var video = document.createElement('video');
-        var canvasElement = document.getElementById('canvas');
-        var canvas = canvasElement.getContext('2d');
-        var loadingMessage = document.getElementById('loadingMessage');
-        var outputContainer = document.getElementById('output');
-        var outputMessage = document.getElementById('outputMessage');
-        var outputData = document.getElementById('outputData');
+      var video = document.createElement('video');
+      var canvasElement = document.getElementById('canvas');
+      var canvas = canvasElement.getContext('2d');
+      var loadingMessage = document.getElementById('loadingMessage');
+      var outputContainer = document.getElementById('output');
+      var outputMessage = document.getElementById('outputMessage');
+      var outputData = document.getElementById('outputData');
+      let urlParams = new URLSearchParams(window.location.search);
+      let gymId = +urlParams.get('id');
 
-        function drawLine(begin, end, color) {
-          canvas.beginPath();
-          canvas.moveTo(begin.x, begin.y);
-          canvas.lineTo(end.x, end.y);
-          canvas.lineWidth = 4;
-          canvas.strokeStyle = color;
-          canvas.stroke();
-        }
+      function drawLine(begin, end, color) {
+        canvas.beginPath();
+        canvas.moveTo(begin.x, begin.y);
+        canvas.lineTo(end.x, end.y);
+        canvas.lineWidth = 4;
+        canvas.strokeStyle = color;
+        canvas.stroke();
+      }
 
-        // Use facingMode: environment to attemt to get the front camera on phones
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then(function (stream) {
-          video.srcObject = stream;
-          video.setAttribute('playsinline', true); // required to tell iOS safari we don't want fullscreen
-          video.play();
-          // requestAnimationFrame(tick);
-          setInterval(tick, 5000);
-        });
+      // Use facingMode: environment to attemt to get the front camera on phones
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then(function (stream) {
+        video.srcObject = stream;
+        video.setAttribute('playsinline', true); // required to tell iOS safari we don't want fullscreen
+        video.play();
+        // requestAnimationFrame(tick);
+        setInterval(tick, 1000);
+      });
 
-        async function tick() {
-          loadingMessage.innerText = '⌛ Loading video...';
-          if (video.readyState === video.HAVE_ENOUGH_DATA) {
-            loadingMessage.hidden = true;
-            canvasElement.hidden = false;
-            outputContainer.hidden = false;
+      async function tick() {
+        loadingMessage.innerText = '⌛ Loading video...';
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+          loadingMessage.hidden = true;
+          canvasElement.hidden = false;
+          outputContainer.hidden = false;
 
-            canvasElement.height = video.videoHeight;
-            canvasElement.width = video.videoWidth;
-            canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-            var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
-            var code = jsQR(imageData.data, imageData.width, imageData.height, {
-              inversionAttempts: 'dontInvert',
-            });
-            if (code) {
-              drawLine(code.location.topLeftCorner, code.location.topRightCorner, '#FF3B58');
-              drawLine(code.location.topRightCorner, code.location.bottomRightCorner, '#FF3B58');
-              drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, '#FF3B58');
-              drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, '#FF3B58');
-              outputMessage.hidden = true;
-              outputData.parentElement.hidden = false;
-              outputData.innerText = code.data;
-              return memberVerified(code)
-
-            }else {
-          outputMessage.hidden = false;
-          outputData.parentElement.hidden = true;
-        }
-            // requestAnimationFrame(tick);
+          canvasElement.height = video.videoHeight;
+          canvasElement.width = video.videoWidth;
+          canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+          var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+          var code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: 'dontInvert',
+          });
+          if (code) {
+            drawLine(code.location.topLeftCorner, code.location.topRightCorner, '#FF3B58');
+            drawLine(code.location.topRightCorner, code.location.bottomRightCorner, '#FF3B58');
+            drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, '#FF3B58');
+            drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, '#FF3B58');
+            outputMessage.hidden = true;
+            outputData.parentElement.hidden = false;
+            outputData.innerText = code.data;
+            return await memberVerified(code);
+          } else {
+            outputMessage.hidden = false;
+            outputData.parentElement.hidden = true;
           }
-          function memberVerified(code) {
+          // requestAnimationFrame(tick);
+        }
+      }
+      async function memberVerified(code) {
+        const now = +code.data.split('=')[1].split('&')[0];
+        const userId = +code.data.split('=')[2];
 
+        await axios
+          .get(`/api/qrcode/${userId}`, {
+            headers: {
+              accesstoken: `${localStorage.getItem('at')}`,
+              refreshtoken: `${localStorage.getItem('rt')}`,
+            },
+          })
+          .then(async (res) => {
+            if (res.data[0] === null) {
+              toastr.error('❌❌ 식스팩 멤버십 회원이 아닙니다. ❌❌', '오류', {
+                timeOut: 1500,
+                positionClass: 'toast-top-center',
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+              });
+              return;
+            }
+            if (res.data[1] >= 1) {
+              toastr.error('❌❌ 금일 이용 횟수를 초과하였습니다. ❌❌', '오류', {
+                timeOut: 1500,
+                positionClass: 'toast-top-center',
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+              });
+              return;
+            }
 
-          const urlParams = new URLSearchParams(window.location.search);
-          const gymId = +urlParams.get('id');
+            await axios
+              .get(`/api/qrcode/userHistory/${userId}`, {
+                headers: {
+                  accesstoken: `${localStorage.getItem('at')}`,
+                  refreshtoken: `${localStorage.getItem('rt')}`,
+                },
+              })
+              .then((res) => {
+                const useGymIds = res.data.map((data) => data.gymId);
+                const useGymId = [...new Set(useGymIds)];
 
-          const now = +code.data.split('=')[1].split('&')[0];
-          const userId = +code.data.split('=')[2];
-
-          await axios
-            .get(`/api/qrcode/${userId}`, {
-              headers: {
-                accesstoken: `${localStorage.getItem('at')}`,
-                refreshtoken: `${localStorage.getItem('rt')}`,
-              },
-            })
-            .then(async (res) => {
-              if (res.data[0] === null) {
-                toastr.error('❌❌ 식스팩 멤버십 회원이 아닙니다. ❌❌', '오류', {
-                  timeOut: 1500,
-                  positionClass: 'toast-top-center',
-                  closeButton: true,
-                  progressBar: true,
-                  preventDuplicates: true,
-                });
-                return;
-              }
-              if (res.data[1] >= 1) {
-                toastr.error('❌❌ 금일 이용 횟수를 초과하였습니다. ❌❌', '오류', {
-                  timeOut: 1500,
-                  positionClass: 'toast-top-center',
-                  closeButton: true,
-                  progressBar: true,
-                  preventDuplicates: true,
-                });
-                return;
-              }
-
-              await axios
-                .get(`/api/qrcode/userHistory/${userId}`, {
-                  headers: {
-                    accesstoken: `${localStorage.getItem('at')}`,
-                    refreshtoken: `${localStorage.getItem('rt')}`,
-                  },
-                })
-                .then((res) => {
-                  const useGymIds = res.data.map((data) => data.gymId);
-                  const useGymId = [...new Set(useGymIds)];
-
-                  for (let i = 0; i < res.data.length; i++) {
-                    if (res.data[i].user.membership === 'Basic') {
-                      if (res.data[i].gym.gymType !== '헬스장') {
-                        toastr.error('❌❌ 출입 가능한 가맹점이 아닙니다. ❌❌', '오류', {
-                          timeOut: 1500,
-                          positionClass: 'toast-top-center',
-                          closeButton: true,
-                          progressBar: true,
-                          preventDuplicates: true,
-                        });
-                        return;
-                      }
-
-                      if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
-                        toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', {
-                          timeOut: 1500,
-                          positionClass: 'toast-top-center',
-                          closeButton: true,
-                          progressBar: true,
-                          preventDuplicates: true,
-                        });
-                        return;
-                      }
-                    }
-
-                    if (res.data[i].user.membership === 'Standard') {
-                      let CrossfitOrPilates = false;
-                      res.data.forEach((item) => {
-                        if (item.gym.gymType === '크로스핏' || item.gym.gymType === '필라테스') {
-                          if (CrossfitOrPilates) {
-                            toastr.error('❌❌ 이번달은 이용 불가능합니다. ❌❌', '오류', {
-                              timeOut: 1500,
-                              positionClass: 'toast-top-center',
-                              closeButton: true,
-                              progressBar: true,
-                              preventDuplicates: true,
-                            });
-                            return;
-                          } else {
-                            CrossfitOrPilates = true;
-                          }
-                        }
-                      });
-                      if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
-                        toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', {
-                          timeOut: 1500,
-                          positionClass: 'toast-top-center',
-                          closeButton: true,
-                          progressBar: true,
-                          preventDuplicates: true,
-                        });
-                        return;
-                      }
-                    }
-
-                    if (res.data[i].user.membership === 'Premium') {
-                      if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
-                        toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', {
-                          timeOut: 1500,
-                          positionClass: 'toast-top-center',
-                          closeButton: true,
-                          progressBar: true,
-                          preventDuplicates: true,
-                        });
-                        return;
-                      }
-                    }
-                  }
-                  axios
-                    .post(
-                      `/api/qrcode/${now}/${userId}/${gymId}`,
-                      { userId, gymId },
-                      {
-                        headers: {
-                          accesstoken: `${localStorage.getItem('at')}`,
-                          refreshtoken: `${localStorage.getItem('rt')}`,
-                        },
-                      }
-                    )
-                    .then((res) => {
-                      toastr.success('✅✅ 식스팩 회원 인증이 완료되었습니다. ✅✅', '출입완료', {
+                for (let i = 0; i < res.data.length; i++) {
+                  if (res.data[i].user.membership === 'Basic') {
+                    if (res.data[i].gym.gymType !== '헬스장') {
+                      toastr.error('❌❌ 출입 가능한 가맹점이 아닙니다. ❌❌', '오류', {
                         timeOut: 1500,
                         positionClass: 'toast-top-center',
                         closeButton: true,
                         progressBar: true,
                         preventDuplicates: true,
                       });
-                    })
-                    .catch((err) => {
-                      console.log(err);
+                      return;
+                    }
+
+                    if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
+                      toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', {
+                        timeOut: 1500,
+                        positionClass: 'toast-top-center',
+                        closeButton: true,
+                        progressBar: true,
+                        preventDuplicates: true,
+                      });
+                      return;
+                    }
+                  }
+
+                  if (res.data[i].user.membership === 'Standard') {
+                    let CrossfitOrPilates = false;
+                    res.data.forEach((item) => {
+                      if (item.gym.gymType === '크로스핏' || item.gym.gymType === '필라테스') {
+                        if (CrossfitOrPilates) {
+                          toastr.error('❌❌ 이번달은 이용 불가능합니다. ❌❌', '오류', {
+                            timeOut: 1500,
+                            positionClass: 'toast-top-center',
+                            closeButton: true,
+                            progressBar: true,
+                            preventDuplicates: true,
+                          });
+                          return;
+                        } else {
+                          CrossfitOrPilates = true;
+                        }
+                      }
                     });
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
+                    if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
+                      toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', {
+                        timeOut: 1500,
+                        positionClass: 'toast-top-center',
+                        closeButton: true,
+                        progressBar: true,
+                        preventDuplicates: true,
+                      });
+                      return;
+                    }
+                  }
+
+                  if (res.data[i].user.membership === 'Premium') {
+                    if (useGymId.length >= 3 && !useGymId.includes(gymId)) {
+                      toastr.error('❌❌ 이번달은 더 이상 새로운 가맹점을 이용하실 수 없습니다. ❌❌', '오류', {
+                        timeOut: 1500,
+                        positionClass: 'toast-top-center',
+                        closeButton: true,
+                        progressBar: true,
+                        preventDuplicates: true,
+                      });
+                      return;
+                    }
+                  }
+                }
+                axios
+                  .post(
+                    `/api/qrcode/${now}/${userId}/${gymId}`,
+                    { userId, gymId },
+                    {
+                      headers: {
+                        accesstoken: `${localStorage.getItem('at')}`,
+                        refreshtoken: `${localStorage.getItem('rt')}`,
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    toastr.success('✅✅ 식스팩 회원 인증이 완료되었습니다. ✅✅', '출입완료', {
+                      timeOut: 1500,
+                      positionClass: 'toast-top-center',
+                      closeButton: true,
+                      progressBar: true,
+                      preventDuplicates: true,
+                    });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     </script>
   </body>
