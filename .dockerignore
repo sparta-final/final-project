@@ -1,2 +1,8 @@
 node_modules
-redis-data/dumb.rdb
+.git
+.gitignore
+.vscode
+.idea
+DockerFile
+docker-compose.yml
+.env

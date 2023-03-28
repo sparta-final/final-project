@@ -16,6 +16,7 @@ services:
       - ./src:/myfolder/src
     networks:
       - sixpack
+    restart: always
 
   redis:
     image: redis:alpine
@@ -31,6 +32,7 @@ services:
       - 6379:6379
     networks:
       - sixpack
+    restart: always
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
@@ -54,6 +56,7 @@ services:
       - 9300:9300
     networks:
       - sixpack
+    restart: always
 
   # logstash:
   #   image: docker.elastic.co/logstash/logstash:8.6.2
