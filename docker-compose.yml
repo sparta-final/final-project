@@ -13,7 +13,7 @@ services:
       - redis
       - elasticsearch
     volumes:
-      - ./src:/myfoler/src
+      - ./src:/myfolder/src
     networks:
       - sixpack
 

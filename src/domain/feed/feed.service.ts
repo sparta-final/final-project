@@ -74,7 +74,7 @@ export class FeedService {
       .take(limit)
       .getMany();
 
-    await this.cacheManager.set('Feed:allFeed', allFeed, { ttl: 60 });
+    // await this.cacheManager.set('Feed:allFeed', allFeed, { ttl: 60 });
     if (allFeed.length === limit) {
       return { allFeed, key: 'ing' };
     }
