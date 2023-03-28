@@ -117,7 +117,7 @@ async function getGymLimit(data) {
     }
     if (feedsImg.length > 1) {
       $(function () {
-        $(document.getElementsByClassName('feed-bxslider')[i]).bxSlider({
+        $(document.getElementsByClassName('feed-bxslider')[i + postCount]).bxSlider({
           auto: false,
           stopAutoOnClick: false,
           pager: false,
