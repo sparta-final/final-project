@@ -43,6 +43,9 @@ function logout() {
       localStorage.removeItem('at');
       localStorage.removeItem('rt');
       localStorage.removeItem('type');
+      if (localStorage.getItem('kakao')) {
+        localStorage.removeItem('kakao');
+      }
       location.href = '/';
     })
     .catch((err) => {

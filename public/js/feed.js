@@ -33,13 +33,13 @@ async function getGym() {
   await axios
     .get(`/api/feed/${postCount}/${limit}`)
     .then(async (res) => {
-      data = res.data.allFeed;
+      data2 = res.data.allFeed;
       let ing = res.data.key;
       if (ing === 'ing') {
-        await getGymLimit(data);
+        await getGymLimit(data2);
         loading = false;
       } else {
-        await getGymLimit(data);
+        await getGymLimit(data2);
         loading = true;
       }
     })

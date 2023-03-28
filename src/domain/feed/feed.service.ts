@@ -61,20 +61,16 @@ export class FeedService {
    * @author 정호준, 한정훈
    */
   async getAllFeed(offset: number, limit: number) {
-    // const cachedallFeed = await this.cacheManager.get('Feed:allFeed');
-    // if (cachedallFeed) return cachedallFeed;
-
     const allFeed = await this.feedsRepository
       .createQueryBuilder('feeds')
       .leftJoinAndSelect('feeds.user', 'user')
       .leftJoinAndSelect('feeds.feedsImgs', 'feedsImgs')
-      .select(['feeds', 'feedsImgs.image', 'user.nickname', 'user.profileImage'])
+      .select(['feeds', 'feedsImgs', 'user.nickname', 'user.profileImage'])
       .orderBy({ 'feeds.id': 'DESC' })
       .skip(offset)
       .take(limit)
       .getMany();
 
-    // await this.cacheManager.set('Feed:allFeed', allFeed, { ttl: 60 });
     if (allFeed.length === limit) {
       return { allFeed, key: 'ing' };
     }
