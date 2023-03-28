@@ -1,8 +1,9 @@
+import { Cache } from 'cache-manager';
 import { JwtPayload } from 'src/domain/auth/types/jwtPayload.type';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserGym } from 'src/global/entities/UserGym';
-import { Between, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Gym } from 'src/global/entities/Gym';
 import * as qrcode from 'qrcode';
 import { endOfDay, startOfMonth } from 'date-fns';
@@ -11,7 +12,8 @@ import { endOfDay, startOfMonth } from 'date-fns';
 export class QRcodeService {
   constructor(
     @InjectRepository(UserGym) private userGymRepo: Repository<UserGym>,
-    @InjectRepository(Gym) private gymRepo: Repository<Gym>
+    @InjectRepository(Gym) private gymRepo: Repository<Gym>,
+    private cacheManager: Cache
   ) {}
   /**
    * @description 유저의 QR코드 생성
@@ -42,6 +44,10 @@ export class QRcodeService {
       gymId: gymId,
       userId: userId,
     });
+
+    // businessUser 포함한 캐시 삭제
+    const BusinessUserCaches = await this.cacheManager.store.keys(`businessUser*`);
+    if (BusinessUserCaches.length > 0) await this.cacheManager.store.del(BusinessUserCaches);
   }
 
   /**
