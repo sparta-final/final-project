@@ -133,7 +133,7 @@
 
 
 ## 🖼️Six Pack 미리보기
-![미리보기 최종](https://user-images.githubusercontent.com/118158825/228528601-31b529ac-1e27-457b-9588-9d77eb0682f3.png)
+![깃허브 이미지](https://user-images.githubusercontent.com/118158825/228535543-cdd0312b-764c-4b3b-b857-1e11fa2ac169.png)
 
 
 <br />
