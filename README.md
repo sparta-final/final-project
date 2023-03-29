@@ -83,7 +83,7 @@
 
 ### ✅Swagger
 
-- [Swagger-openAPI](https://www.sixpack.pro/api)
+- [Swagger-openAPI](https://sixpack.pro/api)
 
 <br>
 
