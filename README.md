@@ -1,5 +1,7 @@
 # 최종프로젝트 [Six Pack]
 
+<img src="https://file.notion.so/f/s/2ffe3d4b-c00f-44b7-b711-9b752086f432/%EB%B8%8C%EB%A1%9C%EC%85%94-%EC%8D%B8%EB%84%A4%EC%9D%BC-%EC%88%98%EC%A0%95.jpg?id=5bd230fa-ff21-4859-bc76-fe632cdf9d43&table=block&spaceId=b433d277-904c-4c13-abde-13717c41df4a&expirationTimestamp=1680172075003&signature=eaJ-la9TQ5tlPbhewFZh-UYNFvTrkWmF1EdKnNS6HDk&downloadName=%EB%B8%8C%EB%A1%9C%EC%85%94-%EC%8D%B8%EB%84%A4%EC%9D%BC-%EC%88%98%EC%A0%95.jpg">
+
 ## **프로젝트 소개**
 
 ```
