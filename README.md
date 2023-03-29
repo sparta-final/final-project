@@ -127,13 +127,16 @@
 
 ### 🖼️ERD
 
-<img src="./public/images/erd.png" style="width:100%" />
+![스크린샷(645)](https://user-images.githubusercontent.com/118158825/228525121-1b1be48d-3a4c-4e66-b34d-685a6bd0d6b9.png)
 
 <br />
 
-### 🖼️API
 
-[API 명세서 링크](https://www.notion.so/API-f10d0029614e4b68bc74fb133560245d)
+## 🖼️Six Pack 미리보기
+![미리보기 최종](https://user-images.githubusercontent.com/118158825/228528601-31b529ac-1e27-457b-9588-9d77eb0682f3.png)
+
+
+<br />
 
 ## 😊프로젝트 시작 방법
 
