@@ -146,8 +146,8 @@ export class PaymentService {
       const date = new Date();
       const y = date.getFullYear();
       const m = date.getMonth() + 1;
-      // const schedule_at_time = Math.floor(new Date().getTime() / 1000) + 60; // 다음달 1일
-      const schedule_at_time = Math.floor(new Date(y, m, 2).getTime() / 1000); // 다음달 1일
+      const schedule_at_time = Math.floor(new Date().getTime() / 1000) + 60; // 다음달 1일
+      // const schedule_at_time = Math.floor(new Date(y, m, 2).getTime() / 1000); // 다음달 1일
 
       let paymentAmount = 0;
 
