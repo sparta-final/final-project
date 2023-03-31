@@ -1,5 +1,7 @@
 # 최종프로젝트 [Six Pack]
 
+<img src="https://file.notion.so/f/s/2ffe3d4b-c00f-44b7-b711-9b752086f432/%EB%B8%8C%EB%A1%9C%EC%85%94-%EC%8D%B8%EB%84%A4%EC%9D%BC-%EC%88%98%EC%A0%95.jpg?id=5bd230fa-ff21-4859-bc76-fe632cdf9d43&table=block&spaceId=b433d277-904c-4c13-abde-13717c41df4a&expirationTimestamp=1680172075003&signature=eaJ-la9TQ5tlPbhewFZh-UYNFvTrkWmF1EdKnNS6HDk&downloadName=%EB%B8%8C%EB%A1%9C%EC%85%94-%EC%8D%B8%EB%84%A4%EC%9D%BC-%EC%88%98%EC%A0%95.jpg">
+
 ## **프로젝트 소개**
 
 ```
@@ -8,21 +10,16 @@
 
 ## **서비스 기획 배경**
 
-❓ 우리가 제공하고자 하는 ‘식스팩’ 서비스는
+#### ‘식스팩‘ 은 전국의 운동시설을 중개하는 구독형 플랫폼 서비스 입니다.
 
-내 현재 위치에서 쉽게 운동하러 갈 수 있는 공간을 중개하는 플랫폼입니다.
+📢 **헬스장, 필라테스, 크로스핏 모두 하고싶은 사람 모여라!**
 
-많은 분들이 공감하실 텐데 여행이나 출장 등 타 지역에 갔을 때 헬스장 당일권 외에는 운동할 수단이 마땅치 않습니다. 운동은 하고 싶지만 당일권을 사기엔 부담이 됩니다. ‘식스팩’은 이러한 고민을 완전히 해소해 줍니다.
+어제는 회사 앞 필라테스, 오늘은 집 앞 헬스장, 내일은 새로생긴 크로스핏을 해볼까!?
 
-그리고 내 활동 반경 안에 여러 개의 헬스장을 이용할 수 있다는 건 생각보다 굉장한 만족감과 편안함을 줍니다. 식스팩은 전국 각지에 있는 하이 퀄리티 체육관들과 제휴하고 있고, 구독만 한다면 당신이 어디에 있든 당신과 가장 가까운 체육관에 가서 운동할 수 있습니다.
+아직도 매일 똑같은 곳에서 똑같은 운동을 한다고? 🤦‍♀️
+출장이 잦아서 운동을 하고싶어도 못 한다고?🤷‍♀️
 
-또한 우리 동네 어느 체육관을 다녀야 할지 고민된다면 주저 말고 한 달만 구독해보세요!
-
-직접 가서 체험해보시고 선택해도 늦지 않습니다.
-
-게다가 전국 헬스장 어디와 비교해도 합리적인 가격대를 자랑합니다.
-
-지금 당장 신청해 보세요!
+지금 당장 **식스팩**에서 하고싶은 운동 마음껏 하자! 💪💪💪
 
 ### **서비스 기획 아이데이션**
 
@@ -83,7 +80,7 @@
 
 ### ✅Swagger
 
-- [Swagger-openAPI](https://www.sixpack.pro/api)
+- [Swagger-openAPI](https://sixpack.pro/api)
 
 <br>
 
@@ -98,12 +95,10 @@
 	<img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=TypeScript&logoColor=white" />
 	<img src="https://img.shields.io/badge/Axios-5A29E4?style=flat&logo=Axios&5A29E4=white" />
 	<img src="https://img.shields.io/badge/jQuery-0769ad?style=flat&logo=jQuery&logoColor=white" />
-	<img src="https://img.shields.io/badge/.env-ecd53f?style=flat&logo=.env&logoColor=white" />
   <br/>
 	<img src="https://img.shields.io/badge/Node.js-339933?style=flat&logo=Node.js&logoColor=white" />
 	<img src="https://img.shields.io/badge/MySQL-4479a1?style=flat&logo=.env&logoColor=white" />
 	<img src="https://img.shields.io/badge/NestJS-E0234E?style=flat&logo=NestJS&logoColor=white" />
-	<img src="https://img.shields.io/badge/JSON-000000?style=flat&logo=JSON&logoColor=white" />
 	<img src="https://img.shields.io/badge/Elasticsearch-005571?style=flat&logo=Elasticsearch&4a154b=white" />
 	<img src="https://img.shields.io/badge/TypeORM-010101?style=flat&logo=TypeORM&logoColor=white" />
 	<img src="https://img.shields.io/badge/Redis-DC382D?style=flat&logo=Redis&4a154b=white" />
@@ -114,14 +109,9 @@
   <br/>
   <br/>
   <p>♻ AWS & GCP♻</p>
-	<img src="https://img.shields.io/badge/Amazon-S3-569A31?style=flat&logo=Amazon-S3&4a154b=white" />
 	<img src="https://img.shields.io/badge/Amazon-RDS-527FFF?style=flat&logo=Amazon-RDS&4a154b=white" />
+	<img src="https://img.shields.io/badge/Amazon-S3-569A31?style=flat&logo=Amazon-S3&4a154b=white" />
 	<img src="https://img.shields.io/badge/Google Cloud-4285F4?style=flat&logo=Google Cloud&logoColor=white"/>
-  <br/>
-  <br/>
-  <p>💻 OS 💻</p>
-  	<img src="https://img.shields.io/badge/Windows-0078D6?style=flat&logo=windows&logoColor=white"/>
-  	<img src="https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black"/>
   <br/>
   <br/>
   <p>🛠 Tools 🛠</p>
@@ -133,76 +123,20 @@
 </div>
 <br>
 
-### 🗂️폴더 구조
-
-```
-📦public
- ┣ 📂css
- ┣ 📂images
- ┗ 📂js
- 📦src
- ┣ 📂domain
- ┃ ┣ 📂admin
- ┃ ┃ ┗ 📂dto
- ┃ ┣ 📂auth
- ┃ ┃ ┣ 📂dto
- ┃ ┃ ┣ 📂guard
- ┃ ┃ ┣ 📂strategy
- ┃ ┃ ┣ 📂types
- ┃ ┃ ┗ 📂__test__
- ┃ ┣ 📂business-user
- ┃ ┃ ┣ 📂dto
- ┃ ┃ ┗ 📂__test__
- ┃ ┣ 📂feed
- ┃ ┃ ┗ 📂dto
- ┃ ┣ 📂gym
- ┃ ┃ ┗ 📂dto
- ┃ ┣ 📂payment
- ┃ ┃ ┗ 📂dto
- ┃ ┣ 📂qrcode
- ┃ ┃ ┗ 📂__test__
- ┃ ┣ 📂review
- ┃ ┃ ┣ 📂dto
- ┃ ┃ ┗ 📂__test__
- ┃ ┗ 📂user
- ┃ ┃ ┣ 📂dto
- ┃ ┃ ┗ 📂__test__
- ┗ 📂global
-   ┣ 📂common
-   ┃ ┣ 📂decorator
-   ┃ ┣ 📂interceptor
-   ┃ ┗ 📂utils
-   ┣ 📂config
-   ┣ 📂entities
-   ┃ ┗ 📂common
-   ┣ 📂exception
-   ┣ 📂logger
-   ┣ 📂swagger
-   ┗ 📂util
-📦test
-📦views
- ┣ 📂admin
- ┣ 📂auth
- ┣ 📂components
- ┣ 📂feeds
- ┣ 📂gym
- ┣ 📂main
- ┣ 📂mypage
- ┗ 📂review
-
-```
-
 <br>
 
 ### 🖼️ERD
 
-<img src="./public/images/erd.png" style="width:100%" />
+![스크린샷(645)](https://user-images.githubusercontent.com/118158825/228525121-1b1be48d-3a4c-4e66-b34d-685a6bd0d6b9.png)
 
 <br />
 
-### 🖼️API
 
-[API 명세서 링크](https://www.notion.so/API-f10d0029614e4b68bc74fb133560245d)
+## 🖼️Six Pack 미리보기
+![깃허브 이미지](https://user-images.githubusercontent.com/118158825/228535543-cdd0312b-764c-4b3b-b857-1e11fa2ac169.png)
+
+
+<br />
 
 ## 😊프로젝트 시작 방법
 
@@ -230,7 +164,7 @@ KAKAO_CLIENT_ID=
 KAKAO_CLIENT_SECRET=
 KAKAO_CALLBACK_URL=https://www.sixpack.pro/api/auth/login/kakao/callback
 KAKAO_MAP_KEY=
-REDIS_URL=redis://localhost:6379
+REDIS_URL=
 IMP_CODE=imp52616317
 IMP_REST_API_KEY=
 IMP_REST_API_SECRET_KEY=
@@ -243,8 +177,8 @@ ADMIN_PASSWORD=
 SIXPACK_URL=https://www.sixpack.pro
 ```
 
-### NestJS 앱 실행
+### 서버 실행
 
 ```
-npm run start
+docker-compose up --build
 ```
