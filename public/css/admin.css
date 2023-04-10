@@ -88,7 +88,8 @@
   color: #888888;
 }
 
-.approve-page-btn {
+.approve-page-btn,
+.auto-paid > button {
   width: 80%;
   height: 40px;
   margin: 25px 10%;
@@ -101,7 +102,8 @@
   text-align: center;
 }
 
-.approve-page-btn:hover {
+.approve-page-btn:hover,
+.auto-paid > button:hover {
   background-color: var(--sub-color-5);
   transition: 0.2s ease;
 }

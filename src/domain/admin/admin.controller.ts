@@ -73,9 +73,14 @@ export class AdminController {
     return await this.adminService.getRank(data);
   }
 
-  @Post('/calculate/:id')
+  @Get('/calculateGym/:year/:month')
+  async calculateGym(@Param() date: MonthDto) {
+    return await this.adminService.calculateGym(date);
+  }
+
+  @Post('/calculate/:id/:year/:month')
   @calculate()
-  async calculate(@Param('id') id: CalculateDto, @Body() date: MonthDto) {
+  async calculate(@Param('id') id: CalculateDto, @Param() date: MonthDto) {
     const calculatePaid = await this.adminService.calculatePaid(id, date);
     return calculatePaid;
   }

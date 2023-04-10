@@ -232,7 +232,22 @@ export class AdminService {
     }
   }
 
-  // ******************** 정산하기 ********************
+  /**
+   * @description 이전달 정산해야할 헬스장 리스트 조회
+   * @author 한정훈
+   * @argument year
+   * @argument month
+   */
+  async calculateGym(date) {
+    const year = date.year;
+    const month = date.month;
+
+    return await this.userGymRepo
+      .createQueryBuilder('userGym')
+      .select('DISTINCT(userGym.gym_id)', 'gym_id')
+      .where(`YEAR(created_at) = :year AND MONTH(created_at) = :month`, { year, month })
+      .getRawMany();
+  }
 
   /**
    * @description 정산하기

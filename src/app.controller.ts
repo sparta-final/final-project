@@ -41,11 +41,19 @@ export class AppController {
   async adminApprove() {
     return { pageName: 'adminApprove' };
   }
+
   @Get('admin/approveDetail/:id')
   @Public()
   @Render('index')
   async adminApproveDetail() {
     return { pageName: 'adminApproveDetail' };
+  }
+
+  @Get('admin/calculate')
+  @Public()
+  @Render('index')
+  async calculateAuto() {
+    return { pageName: 'calculateAuto' };
   }
 
   // 로그인 관련
