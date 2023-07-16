@@ -78,6 +78,7 @@ export class PaymentService {
     await queryRunner.startTransaction();
 
     try {
+      console.log('결제정보 저장 시작');
       await queryRunner.manager.getRepository(Payments).insert({
         userId: user_id,
         impUid: data.imp_uid,
@@ -88,6 +89,8 @@ export class PaymentService {
         card_name: paymentData.card_name,
         card_number: paymentData.card_number?.substring(0, 8),
       });
+      console.log('결제정보 저장 완료');
+
       let membershipOptions: userMembership;
       const membershipMap = {
         Basic: userMembership.Basic,

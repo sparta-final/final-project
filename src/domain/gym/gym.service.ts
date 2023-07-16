@@ -56,7 +56,11 @@ export class GymService {
         gymImgs.push({ gymId: createGym.id, img: file.gymImg[i].transforms[0].location });
       }
 
+      console.log('여기까지 완료??');
+
       await this.gymImgrepository.insert(gymImgs);
+
+      console.log('여기까지 완료');
 
       // 엘라스틱서치에 체육관 등록
       await this.elasticSearch.index({

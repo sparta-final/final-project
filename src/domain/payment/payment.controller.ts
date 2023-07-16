@@ -31,6 +31,7 @@ export class PaymentController {
 
       const getPaymentData = await this.paymentService.getPaymentData(data.imp_uid, access_token);
       const paymentData = getPaymentData.data.response; // 조회한 결제 정보
+      console.log('paymentData', paymentData);
       const user_id = Number(paymentData.customer_uid.split('_')[0]);
       if (data.status === paymentData.status && paymentData.status === 'paid') {
         // 결제 성공적으로 완료

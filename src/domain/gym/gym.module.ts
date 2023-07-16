@@ -18,8 +18,8 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
       useFactory: multerOptionsFactory,
     }),
     ElasticsearchModule.register({
-      // node: 'http://localhost:9200',
-      node: 'http://elasticsearch:9200',
+      // node: process.env.ELASTICSEARCH_URL,
+      node: 'http://localhost:9200',
     }),
   ],
   controllers: [GymController],

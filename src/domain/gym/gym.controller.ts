@@ -130,6 +130,7 @@ export class GymController {
   }
 
   @saveElastic()
+  @Public()
   @Get('/admin/saveElastic')
   async saveElastic() {
     return await this.gymservice.saveGymToElasticSearch();

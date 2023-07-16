@@ -141,9 +141,8 @@ export class AuthService {
   async adminLogin(admin: LoginUserDto) {
     const existAdmin = await this.adminUserRepo.findOne({ where: { email: admin.email } });
     if (!existAdmin) throw new NotFoundException('잘못된 접근입니다.');
-    if (admin.email !== process.env.ADMIN_EMAIL) throw new UnauthorizedException('이메일 또는 비밀번호를 잘못 입력했습니다.');
-    if (admin.password !== process.env.ADMIN_PASSWORD)
-      throw new UnauthorizedException('이메일 또는 비밀번호를 잘못 입력했습니다.');
+    if (admin.email !== process.env.ADMIN_EMAIL) throw new UnauthorizedException('이메일을 잘못 입력했습니다.');
+    if (admin.password !== process.env.ADMIN_PASSWORD) throw new UnauthorizedException('비밀번호를 잘못 입력했습니다.');
     const tokens = await this.getTokens(existAdmin.id, existAdmin.email, 'admin');
     return tokens;
   }

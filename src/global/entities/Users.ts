@@ -40,7 +40,7 @@ export class Users {
   // 프로필 사진 컬럼 추가했습니다.
   @ApiProperty({ example: '', description: '프로필 사진', required: true })
   @IsString()
-  @Column('varchar', { name: 'profileImage', length: 255, default: ' /images/default_profile.png' })
+  @Column('varchar', { name: 'profileImage', length: 500, default: ' /images/default_profile.png' })
   profileImage: string;
 
   @ApiProperty({ example: 'Basic', description: '일반유저 구독등급' })

@@ -18,6 +18,19 @@ services:
       - sixpack
     restart: always
 
+  mysql:
+    image: mysql:8.0.28
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - sixpack
+    restart: always
+
   redis:
     image: redis:alpine
     container_name: redis
@@ -29,7 +42,7 @@ services:
     volumes:
       - ./redis-data:/data
     ports:
-      - 6379:6379
+      - "6379:6379"
     networks:
       - sixpack
     restart: always
@@ -38,25 +51,19 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
     container_name: elasticsearch
     environment:
-      - xpack.security.enabled=false
       - discovery.type=single-node
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536
-        hard: 65536
-    cap_add:
-      - IPC_LOCK
+      - cluster.name=docker-cluster
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
     volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
+        - elasticsearch-data:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
-      - 9300:9300
+        - "9200:9200"
+        - "9300:9300"
     networks:
-      - sixpack
+        - sixpack
     restart: always
+
 
   # logstash:
   #   image: docker.elastic.co/logstash/logstash:8.6.2
