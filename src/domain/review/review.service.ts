@@ -89,7 +89,7 @@ export class ReviewService {
 
   /**
    * @description 리뷰 작성
-   * @param usergymId @argument user @argument file @argument createReviewDto
+   * @param usergymId, user, file, createReviewDto
    * @author 김승일
    */
   async postReview(usergymId: number, user: JwtPayload, file, createReviewDto: CreateReviewDto) {

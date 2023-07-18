@@ -22,7 +22,7 @@ export class QRcodeService {
     const date = Date.now();
     // TODO : QR코드 찍으면 사업자가 유저정보 보고 이용기록 저장
     const url = `${process.env.SIXPACK_URL}/usegym?date=${date}&id=${user.sub}`;
-    const qr = await qrcode.toDataURL(url);
+    const qr = qrcode.toDataURL(url);
     return qr;
   }
 
